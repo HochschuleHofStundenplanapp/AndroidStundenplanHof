@@ -1,0 +1,94 @@
+<!--
+  ~ Copyright (c) 2016 Lars Gaidzik & Lukas Mahr
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="de">
+
+    <string name="navigation_drawer_open">Öffne Navigation</string>
+    <string name="navigation_drawer_close">Schließe Navigation</string>
+
+    <string name="studiengang">Studiengang</string>
+    <string name="studium">Studium</string>
+    <string name="semester">Semester</string>
+
+
+    <string name="notenbekanntgabe">Notenbekanntgabe</string>
+    <string name="notenblatt">Notenblatt</string>
+    <string name="raumsuche">Raumsuche</string>
+    <string name="einstellungen">Einstellungen</string>
+    <string name="stundenplan">Stundenplan</string>
+    <string name="speiseplan">Speiseplan</string>
+    <string name="loginFailed">Anmelden fehlgeschlagen!</string>
+    <string name="from">Von:</string>
+    <string name="to">Bis:</string>
+    <string name="date">Datum:</string>
+    <string name="edvraum">EDV-Raum</string>
+    <string name="search">Suchen</string>
+    <string name="hauptgerichte">Hauptgerichte</string>
+    <string name="beilagen">Beilagen</string>
+    <string name="desserts">Desserts</string>
+    <string name="salat">Salat</string>
+    <string name="pasta">Pasta</string>
+    <string name="tariff">Tarif</string>
+    <string name="keineraeume">Es wurden keine freien Räume gefunden.</string>
+    <string name="lesenotenblattfehler">Es ist ein Fehler beim Laden des Notenblatts aufgetreten.</string>
+    <string name="lesenotenbekanntgabefehler">Es ist ein Fehler beim Laden der Notenbekanntgabe aufgetreten.</string>
+    <string name="raumsuchefehler">Es ist ein Fehler beim Suchen der Räume aufgetreten.</string>
+
+
+    <string name="language">de</string>
+
+    <string name="addToMySchedule">Hinzufügen</string>
+    <string name="deleteFromMySchedule">Löschen</string>
+    <string name="myScheduleInfo">Du kannst unter Stundenplan durch langes Drücken auf einen Eintrag diesen zu Mein Stundenplan hinzufügen.</string>
+
+    <string name="experimental">Experimentell</string>
+
+    <string name="noCourseSelected">Kein Studiengang ausgewählt!</string>
+    <string name="noSemesterSelected">Kein Semester ausgewählt!</string>
+    <string name="aenderung">Stundenplanänderung</string>
+    <string name="timeFrom">Startzeitpunkt</string>
+    <string name="timeTo">Endzeitpunkt</string>
+    <string name="action_refresh">Aktualisieren</string>
+    <string name="onclick_refresh">Studiengänge werden aktualisiert…</string>
+    <string name="myschedule">Mein Stundenplan</string>
+    <string name="SHOW_PASSWORD">Kennwort anzeigen</string>
+    <string name="USERNAME">Benutzername</string>
+    <string name="PASSWORD">Kennwort</string>
+    <string name="LOGIN_DIALOG">Primuss Login</string>
+    <string name="SAVE_PASSWORD">Kennwort speichern</string>
+    <string name="impressum">Impressum</string>
+    <string name="term_time">Studienhalbjahr</string>
+    <string name="noTermTimeSelected">Kein Semesterhalbjahr ausgewählt!</string>
+    <string name="aboutus">Über uns</string>
+    <string name="datenschutz">Datenschutzerklärung</string>
+    <string name="experimental_features">Experimentelle Funktionen</string>
+    <string name="enableExperimental">Experimentelle Funktionen</string>
+    <string name="enableExperimentalSure">Experimentelle Funktionen können zum Absturz der App führen. Nutzung auf eigene Gefahr! Passwörter werden in Klartext gespeichert!</string>
+    <string name="gewaehrAusschluss">Für die Korrektheit der bereitgestellten Daten wird keinerlei Verantwortung übernommen. Bitte wenden Sie sich für verbindliche Informationen an die jeweils zuständige Stelle.</string>
+    <string name="danksagung">Die Hochschule Hof sagt Dankeschön an die folgenden Mitwirkenden bei der Erstellung der App für Android sowie der Zuarbeit bei den Webservices, Layout, Design und Ratgeber: \n \n
+                               - Lukas Mahr\n
+                               - Lars Gaidzik\n
+                               - Peter Rill\n
+                               - Victor Dienstbier\n
+                               - Michael Stepping\n
+                               - Theresa Vogel</string>
+    <string name="toImpressum">Zum Impressum</string>
+    <!--URLs -->
+    <string name="aboutusURL">http://www.hof-university.de/ueber-uns.html</string>
+    <string name="impressumURL">http://www.hof-university.de/impressum.html</string>
+    <string name="datenschutzURL">http://www.hof-university.de/datenschutz.html</string>
+</resources>

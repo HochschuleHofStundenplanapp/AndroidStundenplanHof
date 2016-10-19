@@ -1,0 +1,93 @@
+<!--
+  ~ Copyright (c) 2016 Lars Gaidzik & Lukas Mahr
+  ~ This program is free software: you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation, either version 3 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="">
+    <string name="app_name" translatable="false">Hochschule Hof</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="notenbekanntgabe">Mark announcement</string>
+    <string name="notenblatt">Mark sheet</string>
+    <string name="raumsuche">Room search</string>
+    <string name="einstellungen">Settings</string>
+    <string name="stundenplan">Schedule</string>
+    <string name="speiseplan">Menu plan</string>
+    <string name="loginFailed">Login failed!</string>
+    <string name="from">From:</string>
+    <string name="date">Date:</string>
+    <string name="edvraum">Computer room</string>
+    <string name="search">Search</string>
+    <string name="hauptgerichte">Main course</string>
+    <string name="beilagen">Side dishes</string>
+    <string name="desserts">Desserts</string>
+    <string name="salat">Salad</string>
+    <string name="pasta">Pasta</string>
+    <string name="tariff">Tariff</string>
+    <string name="keineraeume">No free rooms found</string>
+    <string name="lesenotenblattfehler">An error occurred while loading the mark sheet.</string>
+    <string name="lesenotenbekanntgabefehler">An error occurred in the Mark Announcement sheet</string>
+    <string name="raumsuchefehler">An error occurred in the room search.</string>
+
+
+    <string name="language">en</string>
+
+    <string name="addToMySchedule">Add</string>
+    <string name="deleteFromMySchedule">Delete</string>
+    <string name="myScheduleInfo">If you press an entry long time, it is added to My Schedule.</string>
+
+    <string name="experimental">Experimental</string>
+
+    <string name="studiengang">Degree program</string>
+    <string name="studium">Study</string>
+    <string name="semester">Semester</string>
+
+    <string name="noSemesterSelected">No semester chosen!</string>
+    <string name="aenderung">Schedule changes</string>
+    <string name="timeFrom">Start time</string>
+    <string name="timeTo">Ending time</string>
+    <string name="action_refresh">Update</string>
+    <string name="onclick_refresh">Study courses are updated ....</string>
+    <string name="myschedule">My Schedule</string>
+    <string name="SHOW_PASSWORD">Display password</string>
+    <string name="USERNAME">User name</string>
+    <string name="PASSWORD">Password</string>
+    <string name="LOGIN_DIALOG">Primuss Login</string>
+    <string name="SAVE_PASSWORD">Save password</string>
+    <string name="impressum">Imprint</string>
+    <string name="term_time">Study term</string>
+    <string name="noTermTimeSelected">No study term selected!</string>
+    <string name="aboutus">About us</string>
+    <string name="datenschutz">Privacy policy</string>
+    <string name="experimental_features">Experimental features</string>
+    <string name="enableExperimental">Experimental features</string>
+    <string name="enableExperimentalSure">Experimental features may cause the app to crash. Use at your own risk! Passwords are saved in clear text!</string>
+    <string name="gewaehrAusschluss">For the correctness of the provided data no responsibility is taken. Please contact for reliable information to the official body or institution.</string>
+    <string name="danksagung">Hof University says thank you to the following contributors in the creation of the app for Android as well the preparatory work in web service, layout, design and consultance: \n \n
+                               - Lukas Mahr\n
+                               - Lars Gaidzik\n
+                               - Peter Rill\n
+                               - Victor Dienstbier\n
+                               - Michael Stepping\n
+                               - Theresa Vogel</string>
+    <string name="toImpressum">Go to the Imprint</string>
+    <!--URLs -->
+    <string name="aboutusURL">http://www.hof-university.de/ueber-uns.html</string>
+    <string name="impressumURL">http://www.hof-university.de/impressum.html</string>
+    <string name="datenschutzURL">http://www.hof-university.de/datenschutz.html</string>
+    <string name="noCourseSelected">No course of studies selected!</string>
+    <string name="to">To:</string>
+</resources>

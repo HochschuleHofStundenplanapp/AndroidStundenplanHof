@@ -1,0 +1,97 @@
+/*
+ * Copyright (c) 2016 Lars Gaidzik & Lukas Mahr
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package de.hof.university.app.fragment.schedule;
+
+import android.support.design.widget.NavigationView;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Toast;
+
+import java.util.List;
+
+import de.hof.university.app.MainActivity;
+import de.hof.university.app.R;
+import de.hof.university.app.data.DataManager;
+import de.hof.university.app.model.schedule.Schedule;
+
+/**
+ * Created by Lukas on 22.06.2016.
+ */
+public class MyScheduleFragment extends ScheduleFragment{
+    @Override
+    protected final Void background(String[] params) {
+        if(DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext())>0)
+        {
+            final String course = params[0];
+            final String semester = params[1];
+            final String termTime = params[2];
+            List<Object> scheduleList = DataManager.getInstance().getMySchedule(getActivity().getApplicationContext(), course, semester, termTime, Boolean.valueOf(params[3]));
+            super.updateListView(scheduleList);
+        }
+        return null;
+    }
+
+    @Override
+    public final void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+
+        if(v.getId()==R.id.listView){
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+            Schedule schedule = (Schedule) listView.getItemAtPosition(info.position);
+
+            DataManager dm = DataManager.getInstance();
+
+            //Wenn in Mein Stundenplan enthalten -> löschen anzeigen
+            if(dm.myScheduleContains(v.getContext(), schedule)) {
+                menu.setHeaderTitle(R.string.myschedule);
+                menu.add(Menu.NONE, 0, 0, R.string.deleteFromMySchedule);
+            }
+        }
+    }
+
+	
+    @Override
+    public final void onResume() {
+        super.onResume();
+        final MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.getSupportActionBar().setTitle(R.string.myschedule);
+
+        final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+        navigationView.getMenu().findItem(R.id.nav_mySchedule).setChecked(true);
+
+        if(DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext())==0) {
+            Toast.makeText(getView().getContext(), getString(R.string.myScheduleInfo), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public final boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        final Schedule schedule = (Schedule) listView.getItemAtPosition(info.position);
+
+        if(item.getTitle().equals(getString(R.string.deleteFromMySchedule))) {
+            DataManager.getInstance().deleteFromMySchedule(info.targetView.getContext(), schedule);
+            dataList.remove(schedule);
+            adapter.notifyDataSetChanged();
+        }
+        return true;
+
+    }
+
+}
