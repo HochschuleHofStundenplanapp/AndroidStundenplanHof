@@ -90,4 +90,5 @@
     <string name="datenschutzURL">http://www.hof-university.de/datenschutz.html</string>
     <string name="noCourseSelected">No course of studies selected!</string>
     <string name="to">To:</string>
+    <string name="doubleBackOnClose">To close press back again</string>
 </resources>

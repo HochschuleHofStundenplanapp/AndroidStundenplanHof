@@ -33,6 +33,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
 import de.hof.university.app.data.DataManager;
@@ -64,6 +65,9 @@ public class MainActivity extends AppCompatActivity
 
     private NavigationView navigationView;
 
+    // für Navigation
+    private boolean backButtonPressedOnce = false;
+    private boolean firstStart = true;
 
     @Override
     protected final void onCreate(Bundle savedInstanceState) {
@@ -134,10 +138,21 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if (getFragmentManager().getBackStackEntryCount() > 1) {
+            if (getFragmentManager().getBackStackEntryCount() >= 1) {
                 getFragmentManager().popBackStack();
             } else {
-                super.onBackPressed();
+                if (!backButtonPressedOnce) {
+                    backButtonPressedOnce = true;
+                    Toast.makeText(getApplication(), R.string.doubleBackOnClose, Toast.LENGTH_SHORT).show();
+                    getWindow().getDecorView().getHandler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            backButtonPressedOnce = false;
+                        }
+                    }, 2000);
+                } else {
+                    super.onBackPressed();
+                }
             }
         }
     }
@@ -201,7 +216,11 @@ public class MainActivity extends AppCompatActivity
                     scheduleFragment = new ScheduleFragment();
                 }
                 FragmentTransaction trans = manager.beginTransaction();
-                trans.addToBackStack(ScheduleFragment.class.getName());
+                if (firstStart) {
+                    firstStart = false;
+                } else {
+                    trans.addToBackStack(ScheduleFragment.class.getName());
+                }
                 trans.replace(R.id.content_main, scheduleFragment);
                 trans.commit();
             }
@@ -212,7 +231,11 @@ public class MainActivity extends AppCompatActivity
                     myScheduleFragment = new MyScheduleFragment();
                 }
                 FragmentTransaction trans = manager.beginTransaction();
-                trans.addToBackStack(MyScheduleFragment.class.getName());
+                if (firstStart) {
+                    firstStart = false;
+                } else {
+                    trans.addToBackStack(MyScheduleFragment.class.getName());
+                }
                 trans.replace(R.id.content_main, myScheduleFragment);
                 trans.commit();
             }
@@ -235,7 +258,11 @@ public class MainActivity extends AppCompatActivity
             if (!manager.popBackStackImmediate(SettingsFragment.class.getName(), 0)) {
 
                 FragmentTransaction trans = manager.beginTransaction();
-                trans.addToBackStack(SettingsFragment.class.getName());
+                if (firstStart) {
+                    firstStart = false;
+                } else {
+                    trans.addToBackStack(SettingsFragment.class.getName());
+                }
                 trans.replace(R.id.content_main, new SettingsFragment());
                 trans.commit();
             }
