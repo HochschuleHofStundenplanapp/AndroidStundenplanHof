@@ -133,14 +133,21 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    // Idee: Wir wollen beim Rückwärtsgehen in den Activities nicht aus Versehen die App
+    // verlassen.
     public final void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+
+            // Bis zum letzten Fenster ganz normal zurückgehen,
+            // aber in der Haupt-Activity wollen wir ja eben noch mal nachfragen.
             if (getFragmentManager().getBackStackEntryCount() >= 1) {
                 getFragmentManager().popBackStack();
             } else {
+
+                // Wurde der Zurück-Button zwei Mal gedrückt? Dann verlassen wir erst die App
                 if (!backButtonPressedOnce) {
                     backButtonPressedOnce = true;
                     Toast.makeText(getApplication(), R.string.doubleBackOnClose, Toast.LENGTH_SHORT).show();
@@ -151,6 +158,9 @@ public class MainActivity extends AppCompatActivity
                         }
                     }, 2000);
                 } else {
+
+                    // Weitergeben an die Parent-Klasse, dann wird erst wirklcih an die App
+                    // der Zurück-Button gesendet und das ist dann ggf. das Schließen der App
                     super.onBackPressed();
                 }
             }
@@ -215,6 +225,8 @@ public class MainActivity extends AppCompatActivity
                 if (scheduleFragment == null) {
                     scheduleFragment = new ScheduleFragment();
                 }
+	            // starting ist ein leerer Bildschirm
+	            // deswegen wollen wir beim Zurückgehen diesen Bildschirm nicht auf den BackStack... legen
                 FragmentTransaction trans = manager.beginTransaction();
                 if (firstStart) {
                     firstStart = false;
@@ -224,12 +236,14 @@ public class MainActivity extends AppCompatActivity
                 trans.replace(R.id.content_main, scheduleFragment);
                 trans.commit();
             }
-        }else if( R.id.nav_mySchedule == id ){
+        } else if( R.id.nav_mySchedule == id ){
             FragmentManager manager = getFragmentManager();
             if (!manager.popBackStackImmediate(MyScheduleFragment.class.getName(), 0)) {
                 if (myScheduleFragment == null) {
                     myScheduleFragment = new MyScheduleFragment();
                 }
+	            // starting ist ein leerer Bildschirm
+	            // deswegen wollen wir beim Zurückgehen diesen Bildschirm nicht auf den BackStack... legen
                 FragmentTransaction trans = manager.beginTransaction();
                 if (firstStart) {
                     firstStart = false;
@@ -257,6 +271,8 @@ public class MainActivity extends AppCompatActivity
             FragmentManager manager = getFragmentManager();
             if (!manager.popBackStackImmediate(SettingsFragment.class.getName(), 0)) {
 
+	            // starting ist ein leerer Bildschirm
+	            // deswegen wollen wir beim Zurückgehen diesen Bildschirm nicht auf den BackStack... legen
                 FragmentTransaction trans = manager.beginTransaction();
                 if (firstStart) {
                     firstStart = false;
@@ -278,15 +294,15 @@ public class MainActivity extends AppCompatActivity
                 trans.replace(R.id.content_main, impressumFragment);
                 trans.commit();
             }
-        }else if ( R.id.nav_aboutus == id ) {
+        } else if ( R.id.nav_aboutus == id ) {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.aboutusURL)));
             startActivity(browserIntent);
-        }else if( R.id.nav_datenschutz == id ){
+        } else if( R.id.nav_datenschutz == id ){
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.datenschutzURL)));
             startActivity(browserIntent);
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
