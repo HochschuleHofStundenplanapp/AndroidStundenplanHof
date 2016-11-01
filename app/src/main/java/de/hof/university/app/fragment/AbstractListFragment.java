@@ -27,10 +27,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import de.hof.university.app.R;
+import de.hof.university.app.fragment.schedule.ChangesFragment;
 
 /**
  * Created by larsg on 20.06.2016.
@@ -99,7 +101,7 @@ public abstract class AbstractListFragment extends Fragment {
         }
     }
 
-    private class Task extends AsyncTask<String, Void, Void> {
+    private class Task extends AsyncTask<String, Void, Boolean> {
         @Override
         protected final void onPreExecute() {
             swipeContainer.post(new Runnable() {
@@ -108,31 +110,44 @@ public abstract class AbstractListFragment extends Fragment {
                     swipeContainer.setRefreshing(true);
                 }
             });
-            dataList.clear();
-            adapter.notifyDataSetChanged();
+            // TODO auskommentiert damit nicht immer die Daten gelöscht werden,
+            // sondern nur wenn es wirklich neue Daten gibt.
+            //dataList.clear();
+            //adapter.notifyDataSetChanged();
         }
 
         @Override
-        protected final Void doInBackground(String... params) {
+        protected final Boolean doInBackground(String... params) {
             return background(params);
         }
 
         @Override
-        protected final void onPostExecute(Void aVoid) {
+        protected final void onPostExecute(Boolean result) {
             swipeContainer.post(new Runnable() {
                 @Override
                 public void run() {
                     swipeContainer.setRefreshing(false);
                 }
             });
-            adapter.notifyDataSetChanged();
-            modifyListViewAfterDataSetChanged();
-            super.onPostExecute(aVoid);
+            if (result) {
+                adapter.notifyDataSetChanged();
+                modifyListViewAfterDataSetChanged();
+
+                // Damit man unter Änderungen ein Feedback bekommt.
+                ChangesFragment changesFragment = (ChangesFragment)getFragmentManager().findFragmentByTag("CHANGES_FRAGMENT");
+                if (changesFragment != null && changesFragment.isVisible() && dataList.size() == 0) {
+                    Toast.makeText(getContext(), getString(R.string.noChanges), Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(getContext(), getString(R.string.refreshFailed), Toast.LENGTH_SHORT).show();
+            }
+
+            super.onPostExecute(result);
         }
     }
 
     protected void modifyListViewAfterDataSetChanged(){}
 
-    protected abstract Void background(String[] params);
+    protected abstract Boolean background(String[] params);
 
 }

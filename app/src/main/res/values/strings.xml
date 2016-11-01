@@ -91,4 +91,6 @@
     <string name="noCourseSelected">No course of studies selected!</string>
     <string name="to">To:</string>
     <string name="doubleBackOnClose">To close press back again</string>
+    <string name="noChanges">There are no changes</string>
+    <string name="refreshFailed">Refrash failed</string>
 </resources>

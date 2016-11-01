@@ -81,6 +81,11 @@ public class DataManager {
         Calendar calendar = Calendar.getInstance();
         String url = DataManager.CONNECTION.MENU.getUrl()+ calendar.get(Calendar.YEAR) + '-' + (calendar.get(Calendar.MONTH) + 1) + '-' + calendar.get(Calendar.DAY_OF_MONTH);
         String xmlString = this.getData(context,forceRefresh,url,DataManager.CONNECTION.MENU.getCache());
+
+        if (xmlString == ""){
+            return null;
+        }
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String[] params ={xmlString, sharedPreferences.getString("speiseplan_tarif", "1")};
 	    assert parser != null;
@@ -94,6 +99,11 @@ public class DataManager {
                                                String termTime, boolean forceRefresh){
         final Parser parser = ParserFactory.create(EParser.SCHEDULE);
         final String jsonString = this.getData(context, forceRefresh, String.format(DataManager.CONNECTION.SCHEDULE.getUrl(), DataManager.replaceWhitespace(course), DataManager.replaceWhitespace(semester), DataManager.replaceWhitespace(termTime)) ,DataManager.CONNECTION.SCHEDULE.getCache());
+
+        if (jsonString == ""){
+            return null;
+        }
+
         String[] params ={jsonString};
 	    assert parser != null;
 
@@ -112,6 +122,11 @@ public class DataManager {
         }
         Parser parser = ParserFactory.create(EParser.MYSCHEDULE);
         String jsonString = this.getData(context,forceRefresh,url,DataManager.CONNECTION.SCHEDULE.getCache());
+
+        if (jsonString == ""){
+            return null;
+        }
+
         String[] params ={jsonString};
 	    assert parser != null;
 
@@ -124,6 +139,11 @@ public class DataManager {
                                               String termTime, boolean forceRefresh){
         Parser parser = ParserFactory.create(EParser.CHANGES);
         String jsonString = this.getData(context,forceRefresh,String.format(DataManager.CONNECTION.CHANGES.getUrl(), DataManager.replaceWhitespace(course), DataManager.replaceWhitespace(semester), DataManager.replaceWhitespace(termTime)),DataManager.CONNECTION.CHANGES.getCache());
+
+        if (jsonString == ""){
+            return null;
+        }
+
         String[] params ={jsonString};
 	    assert parser != null;
 

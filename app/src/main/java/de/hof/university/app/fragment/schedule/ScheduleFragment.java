@@ -55,6 +55,10 @@ public class ScheduleFragment extends AbstractListFragment {
 
     @Override
     public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO Versuch den Fehler mit alten Fragment im Hintergrund zu beheben
+        /*if (container != null) {
+            container.removeAllViews();
+        }*/
         View v = super.onCreateView(inflater, container, savedInstanceState);
         registerForContextMenu(listView);
         return v;
@@ -164,12 +168,17 @@ public class ScheduleFragment extends AbstractListFragment {
     }
 
     @Override
-    protected Void background(String[] params) {
+    protected Boolean background(String[] params) {
         final String course = params[0];
         final String semester = params[1];
         final String termTime = params[2];
         List<Object> scheduleList = DataManager.getInstance().getSchedule(getActivity().getApplicationContext(), course, semester, termTime, Boolean.valueOf(params[3]));
-        updateListView(scheduleList);
-        return null;
+
+        if (scheduleList != null) {
+            updateListView(scheduleList);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

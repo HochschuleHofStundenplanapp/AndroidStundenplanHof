@@ -199,24 +199,30 @@ public class RaumlisteFragment extends Fragment {
 
             raumList.add(new Suchdetails(getString(R.string.date)+ ' ' +prettyDate,getString(R.string.timeFrom)+": "+ timeFrom,getString(R.string.timeTo)+": "+ timeTo));
 
-            Connection.Response loginForm;
+            Connection.Response loginForm = null;
             Document document;
 
-            try {
-                loginForm = Jsoup
-                        .connect("https://www.hof-university.de/anmelden.html")
-                        .data("user", user, "pass", password)
-                        .data("logintype", "login")
-                        .data("pid", "27")
-                        .data("redirect_url",
-                                "http://www.hof-university.de/anmeldung-erfolgreich.html")
-                        .data("tx_felogin_pi1[noredirect]", "0")
-                        .method(Connection.Method.POST).execute();
-            } catch (IOException e) {
-                errorText="Fehler beim Login aufgetreten";
-                return null;
-            }
+            // TODO Temporäre Lösung durch gleich mehrere Versuche.
+            int tryes = 5;
 
+            while (tryes > 0) {
+                try {
+                    loginForm = Jsoup
+                            .connect("https://www.hof-university.de/anmelden.html")
+                            .data("user", user, "pass", password)
+                            .data("logintype", "login")
+                            .data("pid", "27")
+                            .data("redirect_url",
+                                    "http://www.hof-university.de/anmeldung-erfolgreich.html")
+                            .data("tx_felogin_pi1[noredirect]", "0")
+                            .method(Connection.Method.POST).execute();
+                    tryes = 0;
+                } catch (IOException e) {
+                    errorText = getString(R.string.loginFailed);
+                    return null;
+                }
+                tryes--;
+            }
 
             // Daten lesen
             try {

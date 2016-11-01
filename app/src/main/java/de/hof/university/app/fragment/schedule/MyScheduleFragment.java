@@ -36,19 +36,6 @@ import de.hof.university.app.model.schedule.Schedule;
  */
 public class MyScheduleFragment extends ScheduleFragment{
     @Override
-    protected final Void background(String[] params) {
-        if(DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext())>0)
-        {
-            final String course = params[0];
-            final String semester = params[1];
-            final String termTime = params[2];
-            List<Object> scheduleList = DataManager.getInstance().getMySchedule(getActivity().getApplicationContext(), course, semester, termTime, Boolean.valueOf(params[3]));
-            super.updateListView(scheduleList);
-        }
-        return null;
-    }
-
-    @Override
     public final void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 
         if(v.getId()==R.id.listView){
@@ -94,4 +81,22 @@ public class MyScheduleFragment extends ScheduleFragment{
 
     }
 
+    @Override
+    protected final Boolean background(String[] params) {
+        if(DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) > 0) {
+            final String course = params[0];
+            final String semester = params[1];
+            final String termTime = params[2];
+            List<Object> scheduleList = DataManager.getInstance().getMySchedule(getActivity().getApplicationContext(), course, semester, termTime, Boolean.valueOf(params[3]));
+
+            if (scheduleList != null) {
+                super.updateListView(scheduleList);
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
 }

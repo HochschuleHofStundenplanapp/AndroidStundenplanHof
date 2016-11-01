@@ -57,13 +57,6 @@ public class MenuFragment extends AbstractListFragment {
     }
 
     @Override
-    protected final Void background(String[] params) {
-        List<Object> meals = DataManager.getInstance().getMeals(getActivity().getApplicationContext(), Boolean.valueOf(params[0]));
-        updateListView(meals);
-        return null;
-    }
-
-    @Override
     public final void onResume() {
         super.onResume();
         MainActivity mainActivity = (MainActivity) getActivity();
@@ -127,6 +120,18 @@ public class MenuFragment extends AbstractListFragment {
                 }
                 dataList.add(meal);
             }
+        }
+    }
+
+    @Override
+    protected final Boolean background(String[] params) {
+        List<Object> meals = DataManager.getInstance().getMeals(getActivity().getApplicationContext(), Boolean.valueOf(params[0]));
+
+        if (meals != null) {
+            updateListView(meals);
+            return true;
+        } else {
+            return false;
         }
     }
 }

@@ -80,13 +80,18 @@ public class ChangesFragment extends AbstractListFragment {
     }
 
     @Override
-    protected final Void background(String[] params) {
+    protected final Boolean background(String[] params) {
         final String course = params[0];
         final String semester = params[1];
         final String termTime = params[2];
         ArrayList<Object> changesList = DataManager.getInstance().getChanges(getActivity().getApplicationContext(), course, semester, termTime, Boolean.valueOf(params[3]));
 
-        dataList.addAll(changesList);
-        return null;
+        if (changesList != null) {
+            dataList.clear();
+            dataList.addAll(changesList);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
