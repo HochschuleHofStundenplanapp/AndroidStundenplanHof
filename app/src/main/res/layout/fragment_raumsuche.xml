@@ -14,101 +14,106 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context=".fragment.raum.RaumsucheFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/date"
-        android:id="@+id/textView3"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginRight="30dp" />
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".fragment.raum.RaumsucheFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/from"
-        android:id="@+id/textView4"
-        android:layout_marginTop="40dp"
-        android:layout_below="@+id/textView3"
-        android:layout_alignRight="@+id/textView3"
-        android:layout_alignEnd="@+id/textView3" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/date"
+            android:id="@+id/textView3"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginRight="30dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/to"
-        android:id="@+id/textView5"
-        android:layout_marginTop="40dp"
-        android:layout_below="@+id/textView4"
-        android:layout_alignRight="@+id/textView4"
-        android:layout_alignEnd="@+id/textView4" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/from"
+            android:id="@+id/textView4"
+            android:layout_marginTop="40dp"
+            android:layout_below="@+id/textView3"
+            android:layout_alignRight="@+id/textView3"
+            android:layout_alignEnd="@+id/textView3" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="date"
-        android:ems="10"
-        android:id="@+id/edt_date"
-        android:layout_alignTop="@+id/textView3"
-        android:layout_toRightOf="@+id/textView3"
-        android:layout_toEndOf="@+id/textView3"
-        android:focusable="false" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/to"
+            android:id="@+id/textView5"
+            android:layout_marginTop="40dp"
+            android:layout_below="@+id/textView4"
+            android:layout_alignRight="@+id/textView4"
+            android:layout_alignEnd="@+id/textView4" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="time"
-        android:ems="10"
-        android:id="@+id/edt_from"
-        android:layout_alignTop="@+id/textView4"
-        android:layout_alignLeft="@+id/edt_date"
-        android:layout_alignStart="@+id/edt_date"
-        android:focusable="false" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:ems="10"
+            android:id="@+id/edt_date"
+            android:layout_alignTop="@+id/textView3"
+            android:layout_toRightOf="@+id/textView3"
+            android:layout_toEndOf="@+id/textView3"
+            android:focusable="false" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="time"
-        android:ems="10"
-        android:id="@+id/edt_to"
-        android:layout_alignTop="@+id/textView5"
-        android:layout_alignLeft="@+id/edt_from"
-        android:layout_alignStart="@+id/edt_from"
-        android:focusable="false" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="time"
+            android:ems="10"
+            android:id="@+id/edt_from"
+            android:layout_alignTop="@+id/textView4"
+            android:layout_alignLeft="@+id/edt_date"
+            android:layout_alignStart="@+id/edt_date"
+            android:focusable="false" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/search"
-        android:id="@+id/btn_search"
-        android:layout_below="@+id/cb_edv"
-        android:layout_alignLeft="@+id/cb_edv"
-        android:layout_alignStart="@+id/cb_edv"
-        android:layout_marginTop="30dp" />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="time"
+            android:ems="10"
+            android:id="@+id/edt_to"
+            android:layout_alignTop="@+id/textView5"
+            android:layout_alignLeft="@+id/edt_from"
+            android:layout_alignStart="@+id/edt_from"
+            android:focusable="false" />
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/edvraum"
-        android:id="@+id/cb_edv"
-        android:layout_below="@+id/edt_to"
-        android:layout_alignLeft="@+id/edt_to"
-        android:layout_alignStart="@+id/edt_to"
-        android:layout_marginTop="30dp" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search"
+            android:id="@+id/btn_search"
+            android:layout_below="@+id/cb_edv"
+            android:layout_alignLeft="@+id/cb_edv"
+            android:layout_alignStart="@+id/cb_edv"
+            android:layout_marginTop="30dp" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/edvraum"
+            android:id="@+id/cb_edv"
+            android:layout_below="@+id/edt_to"
+            android:layout_alignLeft="@+id/edt_to"
+            android:layout_alignStart="@+id/edt_to"
+            android:layout_marginTop="30dp" />
 
 
-</RelativeLayout>
+    </RelativeLayout>
 </ScrollView>

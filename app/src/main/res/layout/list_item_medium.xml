@@ -20,7 +20,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -29,6 +28,8 @@
         android:id="@+id/list_item_medium_text"
         android:paddingTop="5dp"
         android:paddingBottom="5dp"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
         android:textColor="@android:color/black" />
 
 </LinearLayout>

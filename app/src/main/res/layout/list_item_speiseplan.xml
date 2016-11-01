@@ -18,7 +18,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical">
+    android:gravity="center_vertical"
+    android:paddingLeft="30dp"
+    android:paddingRight="@dimen/activity_horizontal_margin">
 
     <TextView
         android:id="@+id/list_item_level2_title"
@@ -41,7 +43,6 @@
         android:text="price"
         android:paddingBottom="4dp"
         android:textStyle="bold"
-        android:paddingLeft="5dp"
         android:minWidth="100dp"
         android:layout_weight="1">
     </TextView>
