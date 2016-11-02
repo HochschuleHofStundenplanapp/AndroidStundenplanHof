@@ -94,9 +94,6 @@ public class MainActivity extends AppCompatActivity
         final boolean showExperimentalFeatures = sharedPreferences.getBoolean("experimental_features", false);
         setExperimentalFeatures(showExperimentalFeatures);
 
-        // TODO Testweise auskommentiert
-        // DataManager.getInstance().cleanCache(getApplicationContext());
-
         if(savedInstanceState == null) {
             if (DataManager.getInstance().getMyScheduleSize(getApplicationContext()) > 0) {
                 onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_mySchedule));
