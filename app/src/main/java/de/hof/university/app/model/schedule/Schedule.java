@@ -31,9 +31,10 @@ public class Schedule {
     private final String end;
     private final String room;
     private final String lecturer;
+    private final String comment;
 
     public Schedule( final int id, final String weekday, final String label, final String type, final String group,
-                     final String begin, final String end, final String room, final String lecturer) {
+                     final String begin, final String end, final String room, final String lecturer, final String comment) {
         this.id=id;
         this.weekday = weekday;
         this.label = label;
@@ -43,6 +44,7 @@ public class Schedule {
         this.end = end;
         this.room = room;
         this.lecturer = lecturer;
+        this.comment = comment;
     }
 
     public final int getId() {
@@ -98,6 +100,12 @@ public class Schedule {
         if ( (group != null) && !group.isEmpty() ) {
             result += '\n' +  group ;
         }
+
+        // Hier steht unter anderem "Beginn ab KW XY"
+        if ( (comment != null) && !comment.isEmpty() ) {
+            result += '\n' +  comment ;
+        }
+
         return result;
     }
 
