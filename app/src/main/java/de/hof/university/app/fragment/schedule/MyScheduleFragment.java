@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import de.hof.university.app.BuildConfig;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.data.DataManager;
@@ -89,14 +90,13 @@ public class MyScheduleFragment extends ScheduleFragment{
             final String termTime = params[2];
             List<Object> scheduleList = DataManager.getInstance().getMySchedule(getActivity().getApplicationContext(), course, semester, termTime, Boolean.valueOf(params[3]));
 
+            if (BuildConfig.DEBUG) assert (scheduleList != null); // ob etwas zurück kommt
+
             if (scheduleList != null) {
                 super.updateListView(scheduleList);
                 return true;
-            } else {
-                return false;
             }
-        } else {
-            return false;
         }
+        return false;
     }
 }

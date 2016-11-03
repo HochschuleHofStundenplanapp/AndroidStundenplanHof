@@ -211,7 +211,8 @@ public class NotenbekanntgabeFragment extends Fragment {
                 //Notenbekanntgabe
                 Connection.Response res3 = Jsoup.connect("https://www3.primuss.de/cgi-bin/pg_Notenbekanntgabe/showajax.pl").data(
                         "Language", "de", "Session", session, "Poison", poison, "User", user, "FH", fh, "Accept", "X").method(Connection.Method.GET).timeout(10000).execute();
-//			System.out.println(res3.body());
+
+                // TODO falls keine Daten kommen Fehlermeldung anzeigen
 
                 SharedPreferences.Editor edit = sp.edit();
                 Document doc3 = res3.parse();

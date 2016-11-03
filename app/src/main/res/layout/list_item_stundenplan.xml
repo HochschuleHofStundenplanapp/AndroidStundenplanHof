@@ -39,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Medium Text"
+                android:text="Zeit"
                 android:id="@+id/stundenplan_time"
                 android:textColor="@android:color/black" />
 
@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Small Text"
+                android:text="Raum"
                 android:id="@+id/stundenplan_raum"
                 android:textStyle="bold"
                 android:textColor="@android:color/black" />
@@ -57,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Small Text"
+            android:text="Fach Dozent"
             android:id="@+id/stundenplan_details"
             android:textColor="@android:color/black" />
     </TableRow>

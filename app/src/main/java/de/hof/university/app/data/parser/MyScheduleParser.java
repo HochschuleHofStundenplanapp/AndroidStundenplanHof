@@ -72,8 +72,13 @@ public class MyScheduleParser implements Parser<Schedule>{
             final String end = jsonObject.getString("endtime");
             final String room = jsonObject.getString("room");
             final String lecturer = jsonObject.getString("docent").replace("§§",",");
+            // TODO comment kann leer sein abfangen
+            String comment = "";
+            /*if (jsonObject.getString("comment") != null) {
+                comment = jsonObject.getString("comment");
+            }*/
 
-            return new Schedule(id, weekday, label, type, group, begin, end, room, lecturer);
+            return new Schedule(id, weekday, label, type, group, begin, end, room, lecturer, comment);
         } catch (final JSONException e) {
             if ( BuildConfig.DEBUG) e.printStackTrace();
             return null;

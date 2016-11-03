@@ -120,7 +120,9 @@ public class DataManager {
         while(iterator.hasNext()){
             url+="&id[]="+iterator.next();
         }
+
         Parser parser = ParserFactory.create(EParser.MYSCHEDULE);
+        // TODO Anscheinend ohne comment
         String jsonString = this.getData(context,forceRefresh,url,DataManager.CONNECTION.SCHEDULE.getCache());
 
         if (jsonString == ""){
@@ -128,7 +130,6 @@ public class DataManager {
         }
 
         String[] params ={jsonString};
-	    assert parser != null;
 
 	    ArrayList<Object> mySchedule = parser.parse(params) ;
 

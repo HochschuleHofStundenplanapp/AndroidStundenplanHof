@@ -16,6 +16,9 @@
 
 package de.hof.university.app.model.schedule;
 
+//import de.hof.university.app.R;
+//import android.content.Context;
+
 /**
  * Created by larsg on 10.05.2016.
  */
@@ -96,33 +99,36 @@ public class Changes {
 
     public final String getOld() {
         String result = begin_old;
-        if (!room_old.equalsIgnoreCase(room_new)) {
+        // Raum soll immer angezeigt werden
+        //if (!room_old.equalsIgnoreCase(room_new)) {
             result += " - " + room_old;
-        }
+        //}
         return result;
     }
 
     public final String getNew() {
         String result = begin_new;
-        if (!room_old.equalsIgnoreCase(room_new)) {
+        // Raum soll immer angezeigt werden
+        //if (!room_old.equalsIgnoreCase(room_new)) {
             result += " - " + room_new;
-        }
+        //}
         return result;
     }
 
     public final String getDetails() {
 
-        String result = label + '\n';
+        String result = label + '\n'; // Fach
 
-        result+= lecturer + '\n';
+        result+= lecturer + '\n';     // Dozent
 
         if ( (null != group) && !group.isEmpty() ) {
-            result += group + '\n';
+            result += group + '\n';   // Übungsgruppe
         }
 
         if ( (null != reason) && !reason.isEmpty() ) {
-            result += reason;
+            result += reason;         // Grund
         }
+
         return result;
     }
 }
