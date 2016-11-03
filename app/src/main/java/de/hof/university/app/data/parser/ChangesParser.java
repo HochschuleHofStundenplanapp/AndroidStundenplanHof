@@ -41,7 +41,7 @@ public class ChangesParser implements Parser<Changes> {
                 return result;
             }
             try {
-                JSONArray jsonArray = new JSONObject(jsonString).getJSONArray("changes");
+                final JSONArray jsonArray = new JSONObject(jsonString).getJSONArray("changes");
                 for (int i = 0; i < jsonArray.length(); ++i) {
                     final Changes change = convertJsonObject(jsonArray.getJSONObject(i));
                     if ( null != change ) {

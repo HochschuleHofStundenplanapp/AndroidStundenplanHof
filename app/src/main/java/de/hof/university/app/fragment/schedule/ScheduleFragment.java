@@ -47,6 +47,7 @@ import de.hof.university.app.model.schedule.Schedule;
 public class ScheduleFragment extends AbstractListFragment {
     private int weekdayListPos;
 
+    //TODO onCreateView?
     @Override
     public final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,9 +118,9 @@ public class ScheduleFragment extends AbstractListFragment {
     protected final String[] setTaskParameter(boolean forceRefresh) {
         String[] params = new String[4];
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String course = sharedPref.getString("studiengang", "");
-        String semester = sharedPref.getString("semester", "");
-        String termTime = sharedPref.getString("term_time","");
+        final String course = sharedPref.getString("studiengang", "");
+        final String semester = sharedPref.getString("semester", "");
+        final String termTime = sharedPref.getString("term_time","");
 
         if(termTime.isEmpty()){
             Toast.makeText(getView().getContext(), getString(R.string.noTermTimeSelected), Toast.LENGTH_LONG).show();
@@ -135,6 +136,7 @@ public class ScheduleFragment extends AbstractListFragment {
             return null;
         }
 
+	    // TODO Warum geben wir eine Parametersammlung zurück?
         params[0] = course;
         params[1] = semester;
         params[2] = termTime;

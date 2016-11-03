@@ -118,11 +118,11 @@ public class SettingsFragment extends PreferenceFragment {
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
                     edtLogin.setEnabled(true);
-                    activity.setExperimentalFeatures(true);
+                    activity.displayExperimentalFeaturesMenuEntries(true);
 
                 }else{
                     edtLogin.setEnabled(false);
-                    activity.setExperimentalFeatures(false);
+                    activity.displayExperimentalFeaturesMenuEntries(false);
                 }
                 return true;
             }

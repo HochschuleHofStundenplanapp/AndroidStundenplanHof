@@ -165,7 +165,23 @@ public class NotenbekanntgabeFragment extends Fragment {
 
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 
+            /*
+            It enables TLS connections to virtual servers, in which multiple servers for different network names are
+            hosted at a single underlying network address
+            If you disable jsse.enableSNIExtension you won't be able to connect to pages under a virtual server
+
+            http://docs.oracle.com/javase/7/docs/technotes/guides/security/jsse/JSSERefGuide.html
+            Server Name Indication option
+
+            * jsse.enableSNIExtension system property. Server Name Indication (SNI) is a TLS extension,
+            * defined in RFC 4366. It enables TLS connections to virtual servers, in which multiple servers
+            * for different network names are hosted at a single underlying network address.
+
+            Some very old SSL/TLS vendors may not be able handle SSL/TLS extensions. In this case,
+            set this property to false to disable the SNI extension.
+             */
             System.setProperty("jsse.enableSNIExtension", "false");
+
             try {
                 //Login und Session holen
                 Connection.Response res = Jsoup.connect("https://www1.primuss.de/cgi/Sesam/sesam.pl").

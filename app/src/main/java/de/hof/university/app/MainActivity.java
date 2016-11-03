@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity
         //Experimentelle Features anzeigen?
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         final boolean showExperimentalFeatures = sharedPreferences.getBoolean("experimental_features", false);
-        setExperimentalFeatures(showExperimentalFeatures);
+        displayExperimentalFeaturesMenuEntries(showExperimentalFeatures);
 
         if(savedInstanceState == null) {
             if (DataManager.getInstance().getMyScheduleSize(getApplicationContext()) > 0) {
@@ -107,12 +107,13 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public final void setExperimentalFeatures(final boolean enabled) {
+    public final void displayExperimentalFeaturesMenuEntries(final boolean enabled) {
         if(enabled){
             navigationView.getMenu().findItem(R.id.nav_experimental).setVisible(true);
             navigationView.getMenu().findItem(R.id.nav_raumsuche).setVisible(true); //Raumsuche anzeigen
 
-            //Nur bei höheren Versionen funktioniert auch Primuss
+            //Nur bei höheren Versionen von Android unktioniert auch Primuss
+            //HTML Connectivity mit Verschlüsselung ist dann erst vorhanden
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 navigationView.getMenu().findItem(R.id.nav_notenbekanntgabe).setVisible(false);
                 navigationView.getMenu().findItem(R.id.nav_notenblatt).setVisible(false);

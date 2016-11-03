@@ -173,6 +173,8 @@ public class NotenblattFragment extends Fragment {
                 Connection.Response res = Jsoup.connect("https://www1.primuss.de/cgi/Sesam/sesam.pl").
                         data("User", params[0], "Javascript", "1", "Stage", "1", "Password", params[1], "Auth", "radius", "Portal", "1", "FH", "fhh", "Language", "de").
                         method(Connection.Method.POST).timeout(10000).execute();
+
+                // Wir erhalten vom Notenblatt momentan noch eine kompette HTML-Seite
                 Document doc = res.parse();
                 String session = doc.getElementsByAttributeValueMatching("name", "Session").val();
                 String user = doc.getElementsByAttributeValueMatching("name", "User").val();
