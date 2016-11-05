@@ -61,13 +61,14 @@ public class ScheduleAdapter extends ArrayAdapter<Object> {
                 tvRoom.setText(st.getRoom());
                 tvDetails.setText(st.getDetails());
 
-            }else if(obj instanceof BigListItem){
+            } else if(obj instanceof BigListItem){
                 BigListItem tag = (BigListItem) obj;
                 v = vi.inflate(R.layout.list_item_big, null);
                 final TextView sectionView = (TextView) v.findViewById(R.id.list_item_big_text);
                 sectionView.setText(tag.getTitle());
-
             }
+            // TODO möglich Lösung für einen Absturz mit java.lang.IllegalStateException
+            notifyDataSetChanged();
         }
         return v;
     }

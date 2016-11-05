@@ -207,6 +207,8 @@ public class RaumlisteFragment extends Fragment {
 
             while (tryes > 0) {
                 try {
+                    // Thread beenden wenn gecancelt
+                    if (isCancelled()) break;
                     loginForm = Jsoup
                             .connect("https://www.hof-university.de/anmelden.html")
                             .data("user", user, "pass", password)
@@ -242,6 +244,8 @@ public class RaumlisteFragment extends Fragment {
                 Elements tables = document.getElementsByTag("table");
                 String curCategory = "";
                 for (Element td : tables.first().getElementsByTag("td")) {
+                    // Thread beenden wenn gecancelt
+                    if (isCancelled()) break;
                     String room = td.text();
                     /* Füge Kategorie ein, wenn:
                             wenn Stringlänge > 2    >> da Kategorie 2 Zeichen
@@ -265,9 +269,6 @@ public class RaumlisteFragment extends Fragment {
             }
 
             // System.out.println(loginForm.cookie("fe_typo_user"));
-
-
-
 
             return null;
         }

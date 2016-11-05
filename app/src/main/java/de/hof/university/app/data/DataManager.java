@@ -20,6 +20,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -60,12 +66,13 @@ public class DataManager {
         }
     }
 
-	private static final int MAX_CACHE_TIME = 60*24*2;
+    private static final int MAX_CACHE_TIME = 60*24*2;
 
 
     private final ParserFactory parserFactory = new ParserFactory();
     private final DataConnector dataConnector = new DataConnector() ;
     private Set<String> mySchedule;
+    private static final String myScheduleFilename = "mySchedule";
 
     private static final DataManager dataManager = new DataManager();
 
@@ -88,11 +95,11 @@ public class DataManager {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String[] params ={xmlString, sharedPreferences.getString("speiseplan_tarif", "1")};
-	    assert parser != null;
+        assert parser != null;
 
         ArrayList<Object> meals = parser.parse(params);
 
-	    return meals;
+        return meals;
     }
 
     public final ArrayList<Object> getSchedule(Context context, String course, String semester,
@@ -105,11 +112,11 @@ public class DataManager {
         }
 
         String[] params ={jsonString};
-	    assert parser != null;
+        assert parser != null;
 
         ArrayList<Object> schedule = parser.parse(params) ;
 
-	    return schedule;
+        return schedule;
     }
 
 
@@ -131,9 +138,9 @@ public class DataManager {
 
         String[] params ={jsonString};
 
-	    ArrayList<Object> mySchedule = parser.parse(params) ;
+        ArrayList<Object> mySchedule = parser.parse(params) ;
 
-	    return mySchedule ;
+        return mySchedule ;
     }
 
     public final ArrayList<Object> getChanges(Context context, String course, String semester,
@@ -146,11 +153,11 @@ public class DataManager {
         }
 
         String[] params ={jsonString};
-	    assert parser != null;
+        assert parser != null;
 
-	    ArrayList<Object> myScheduleChanges = parser.parse(params) ;
+        ArrayList<Object> myScheduleChanges = parser.parse(params) ;
 
-	    return myScheduleChanges ;
+        return myScheduleChanges ;
     }
 
     public final ArrayList<Course> getCourses(Context context, String language, String termTime, boolean forceRefresh){
@@ -158,11 +165,11 @@ public class DataManager {
 
         String jsonString = this.getData(context,forceRefresh,String.format(DataManager.CONNECTION.COURSE.getUrl(), DataManager.replaceWhitespace(termTime)), DataManager.CONNECTION.COURSE.getCache());
         String[] params ={jsonString, language};
-	    assert parser != null;
+        assert parser != null;
 
-	    final ArrayList<Course> courses = parser.parse(params) ;
+        final ArrayList<Course> courses = parser.parse(params) ;
 
-	    return courses;
+        return courses;
     }
 
 
@@ -180,8 +187,8 @@ public class DataManager {
     }
 
     public final void addToMySchedule(Context context, Schedule s){
-	    this.getMySchedule(context).add(String.valueOf(s.getId()));
-	    this.saveMySchedule(context);
+        this.getMySchedule(context).add(String.valueOf(s.getId()));
+        this.saveMySchedule(context);
     }
 
     public final boolean myScheduleContains(Context context, Schedule s){
@@ -189,26 +196,51 @@ public class DataManager {
     }
 
     public final void deleteFromMySchedule(Context context, Schedule s){
-	    this.getMySchedule(context).remove(String.valueOf(s.getId()));
-	    this.saveMySchedule(context);
+        this.getMySchedule(context).remove(String.valueOf(s.getId()));
+        this.saveMySchedule(context);
     }
 
     private void saveMySchedule(Context context){
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        sharedPreferences.edit().putStringSet("myScheduleIds", this.getMySchedule(context)).apply();
+        // alte Variante
+        //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        //sharedPreferences.edit().putStringSet("myScheduleIds", this.getMySchedule(context)).apply();
+
+        try {
+            File file = new File(context.getFilesDir(), myScheduleFilename);
+            FileOutputStream fos = new FileOutputStream(file);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(this.getMySchedule(context));
+            os.close();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static Set<String> readMySchedule(Context context){
+        // alte Variante
+        //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        //final Set<String> result = sharedPreferences.getStringSet("myScheduleIds", new HashSet<String>());
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        final Set<String> result = sharedPreferences.getStringSet("myScheduleIds", new HashSet<String>());
-
+        Set<String> result = new HashSet<String>();
+        try {
+            File file = new File(context.getFilesDir(), myScheduleFilename);
+            if (file.exists()) {
+                FileInputStream fis = new FileInputStream(file);
+                ObjectInputStream is = new ObjectInputStream(fis);
+                result = (Set<String>) is.readObject();
+                is.close();
+                fis.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return result;
     }
 
     private Set<String> getMySchedule(Context context) {
-        if( this.mySchedule ==null){
-	        this.mySchedule = DataManager.readMySchedule(context);
+        if( this.mySchedule == null){
+            this.mySchedule = DataManager.readMySchedule(context);
         }
         return this.mySchedule;
     }
@@ -219,7 +251,7 @@ public class DataManager {
 
 
     public final void cleanCache(Context context){
-	    this.dataConnector.cleanCache(context, DataManager.MAX_CACHE_TIME);
+        this.dataConnector.cleanCache(context, DataManager.MAX_CACHE_TIME);
     }
 
 }
