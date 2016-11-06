@@ -145,8 +145,20 @@ public class DataManager {
 
     public final ArrayList<Object> getChanges(Context context, String course, String semester,
                                               String termTime, boolean forceRefresh){
+        // nur Änderungen von Mein Stundenplan holen
+        Iterator<String> iterator = this.getMySchedule(context).iterator();
+        // TODO Wenn Server angepasst ist wieder einkommentieren
+        //if (!iterator.hasNext()) {
+            String url = String.format(DataManager.CONNECTION.CHANGES.getUrl(), DataManager.replaceWhitespace(course), DataManager.replaceWhitespace(semester), DataManager.replaceWhitespace(termTime));
+        /*} else {
+            String url = String.format(DataManager.CONNECTION.CHANGES.getUrl());
+        }*/
+        while(iterator.hasNext()){
+            url+="&id[]="+iterator.next();
+        }
+
         Parser parser = ParserFactory.create(EParser.CHANGES);
-        String jsonString = this.getData(context,forceRefresh,String.format(DataManager.CONNECTION.CHANGES.getUrl(), DataManager.replaceWhitespace(course), DataManager.replaceWhitespace(semester), DataManager.replaceWhitespace(termTime)),DataManager.CONNECTION.CHANGES.getCache());
+        String jsonString = this.getData(context,forceRefresh,url,DataManager.CONNECTION.CHANGES.getCache());
 
         if (jsonString == ""){
             return null;
@@ -155,9 +167,9 @@ public class DataManager {
         String[] params ={jsonString};
         assert parser != null;
 
-        ArrayList<Object> myScheduleChanges = parser.parse(params) ;
+        ArrayList<Object> myScheduleChanges = parser.parse(params);
 
-        return myScheduleChanges ;
+        return myScheduleChanges;
     }
 
     public final ArrayList<Course> getCourses(Context context, String language, String termTime, boolean forceRefresh){

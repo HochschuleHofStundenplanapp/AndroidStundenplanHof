@@ -42,6 +42,8 @@ public class ScheduleAdapter extends ArrayAdapter<Object> {
         super(context, 0,items);
 
         this.items = items;
+        // TODO möglich Lösung für einen Absturz mit java.lang.IllegalStateException
+        this.notifyDataSetChanged();
         vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -67,8 +69,6 @@ public class ScheduleAdapter extends ArrayAdapter<Object> {
                 final TextView sectionView = (TextView) v.findViewById(R.id.list_item_big_text);
                 sectionView.setText(tag.getTitle());
             }
-            // TODO möglich Lösung für einen Absturz mit java.lang.IllegalStateException
-            notifyDataSetChanged();
         }
         return v;
     }
