@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -137,7 +138,7 @@ public class ScheduleFragment extends AbstractListFragment {
             return null;
         }
 
-	    // TODO Warum geben wir eine Parametersammlung zurück?
+        // TODO Warum geben wir eine Parametersammlung zurück?
         params[0] = course;
         params[1] = semester;
         params[2] = termTime;
@@ -151,13 +152,12 @@ public class ScheduleFragment extends AbstractListFragment {
 
         dataList.clear();
         // Temporäre Liste für die Vorlesungen die nur an einem Tag stattfinden damit sie am Ende angezeigt werden.
-        ArrayList<Object> tmpDataList = new ArrayList<>();
+        ArrayList<Schedule> tmpDataList = new ArrayList<>();
         for (Object object : list) {
             if(object instanceof Schedule) {
                 Schedule schedule = (Schedule)object;
                 // Wenn eine Vorlesung nur an einem Tag stattfindet sind Start- und Enddate gleich
                 if (schedule.getStartdate().equals(schedule.getEnddate())) {
-                    tmpDataList.add(new BigListItem(schedule.getStartdate()));
                     tmpDataList.add(schedule);
                 } else {
                     if (!weekday.equals(schedule.getWeekday())) {
@@ -171,7 +171,19 @@ public class ScheduleFragment extends AbstractListFragment {
                 }
             }
         }
-        dataList.addAll(tmpDataList);
+        // sortieren
+        Collections.sort(tmpDataList);
+        ArrayList<Object> sortDataList = new ArrayList<>();
+        String date = "";
+        for (Schedule schedule : tmpDataList) {
+            if (!date.equals(schedule.getStartdate())) {
+                sortDataList.add(new BigListItem(schedule.getStartdate()));
+                date = schedule.getStartdate();
+            }
+            sortDataList.add(schedule);
+        }
+
+        dataList.addAll(sortDataList);
     }
 
     @Override

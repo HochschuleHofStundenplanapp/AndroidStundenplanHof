@@ -19,7 +19,7 @@ package de.hof.university.app.model.schedule;
 /**
  * Created by larsg on 09.05.2016.
  */
-public class Schedule {
+public class Schedule implements Comparable<Schedule> {
     private static final String date_regex = "dd-MM-yyyy HH:mm:ss";
 
     private int id;
@@ -123,5 +123,30 @@ public class Schedule {
 
     public final String getShortDescription() {
         return label + " ("+ begin.split(" ")[1]+ " - "+ end.split(" ")[1]+ ')';
+    }
+
+    @Override
+    public int compareTo(Schedule schedule) {
+        // Jahr
+        if (Integer.parseInt(getStartdate().substring(6)) > Integer.parseInt(schedule.getStartdate().substring(6))) {
+            return +1;
+        } else if (Integer.parseInt(getStartdate().substring(6)) == Integer.parseInt(schedule.getStartdate().substring(6))){
+            // Monat
+            if (Integer.parseInt(getStartdate().substring(3, 5)) > Integer.parseInt(schedule.getStartdate().substring(3,5))) {
+                return +1;
+            } else if (Integer.parseInt(getStartdate().substring(3, 5)) == Integer.parseInt(schedule.getStartdate().substring(3,5))) {
+                // Tag
+                if (Integer.parseInt(getStartdate().substring(0, 2)) > Integer.parseInt(schedule.getStartdate().substring(0, 2))) {
+                    return +1;
+                } else if (Integer.parseInt(getStartdate().substring(0, 2)) == Integer.parseInt(schedule.getStartdate().substring(0, 2))) {
+                    if (Integer.parseInt(getBegin().substring(0, 2)) > Integer.parseInt(schedule.getBegin().substring(0, 2))) {
+                        return +1;
+                    } else if (Integer.parseInt(getBegin().substring(0, 2)) == Integer.parseInt(schedule.getBegin().substring(0, 2))) {
+                        return 0;
+                    }
+                }
+            }
+        }
+        return -1;
     }
 }
