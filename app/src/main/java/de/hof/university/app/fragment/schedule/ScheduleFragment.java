@@ -31,6 +31,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -149,19 +150,28 @@ public class ScheduleFragment extends AbstractListFragment {
         String weekday = "";
 
         dataList.clear();
+        // Temporäre Liste für die Vorlesungen die nur an einem Tag stattfinden damit sie am Ende angezeigt werden.
+        ArrayList<Object> tmpDataList = new ArrayList<>();
         for (Object object : list) {
             if(object instanceof Schedule) {
                 Schedule schedule = (Schedule)object;
-                if (!weekday.equals(schedule.getWeekday())) {
-                    dataList.add(new BigListItem(schedule.getWeekday()));
-                    weekday = schedule.getWeekday();
-                    if (weekday.equalsIgnoreCase(curWeekDay)) {
-                        weekdayListPos = dataList.size() - 1;
+                // Wenn eine Vorlesung nur an einem Tag stattfindet sind Start- und Enddate gleich
+                if (schedule.getStartdate().equals(schedule.getEnddate())) {
+                    tmpDataList.add(new BigListItem(schedule.getStartdate()));
+                    tmpDataList.add(schedule);
+                } else {
+                    if (!weekday.equals(schedule.getWeekday())) {
+                        dataList.add(new BigListItem(schedule.getWeekday()));
+                        weekday = schedule.getWeekday();
+                        if (weekday.equalsIgnoreCase(curWeekDay)) {
+                            weekdayListPos = dataList.size() - 1;
+                        }
                     }
+                    dataList.add(schedule);
                 }
-                dataList.add(schedule);
             }
         }
+        dataList.addAll(tmpDataList);
     }
 
     @Override

@@ -29,12 +29,14 @@ public class Schedule {
     private final String group;
     private final String begin;
     private final String end;
+    private final String startdate;
+    private final String enddate;
     private final String room;
     private final String lecturer;
     private final String comment;
 
     public Schedule( final int id, final String weekday, final String label, final String type, final String group,
-                     final String begin, final String end, final String room, final String lecturer, final String comment) {
+                     final String begin, final String end, final String startdate, final String enddate, final String room, final String lecturer, final String comment) {
         this.id=id;
         this.weekday = weekday;
         this.label = label;
@@ -42,6 +44,8 @@ public class Schedule {
         this.group = group;
         this.begin = begin;
         this.end = end;
+        this.startdate = startdate;
+        this.enddate = enddate;
         this.room = room;
         this.lecturer = lecturer;
         this.comment = comment;
@@ -78,6 +82,14 @@ public class Schedule {
 
     public final String getEnd() {
         return end;
+    }
+
+    public final String getStartdate() {
+        return startdate;
+    }
+
+    public final String getEnddate() {
+        return enddate;
     }
 
     public final String getRoom() {

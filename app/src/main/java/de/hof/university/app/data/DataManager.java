@@ -124,7 +124,7 @@ public class DataManager {
                                                  String termTime, boolean forceRefresh){
         Iterator<String> iterator = this.getMySchedule(context).iterator();
         String url = DataManager.CONNECTION.MYSCHEDULE.getUrl();
-        while(iterator.hasNext()){
+        while(iterator.hasNext()) {
             url+="&id[]="+iterator.next();
         }
 
@@ -132,15 +132,15 @@ public class DataManager {
         // TODO Anscheinend ohne comment
         String jsonString = this.getData(context,forceRefresh,url,DataManager.CONNECTION.SCHEDULE.getCache());
 
-        if (jsonString == ""){
+        if (jsonString == "") {
             return null;
         }
 
-        String[] params ={jsonString};
+        String[] params = {jsonString};
 
-        ArrayList<Object> mySchedule = parser.parse(params) ;
+        ArrayList<Object> mySchedule = parser.parse(params);
 
-        return mySchedule ;
+        return mySchedule;
     }
 
     public final ArrayList<Object> getChanges(Context context, String course, String semester,
@@ -225,6 +225,7 @@ public class DataManager {
             os.close();
             fos.close();
         } catch (IOException e) {
+            // TODO Fehlermeldung
             e.printStackTrace();
         }
     }

@@ -70,11 +70,13 @@ public class ScheduleParser implements Parser<Schedule> {
             final String group = jsonObject.getString(Define.SCHEDULE_PARSER_GROUP);
             final String begin = jsonObject.getString("starttime");
             final String end = jsonObject.getString("endtime");
+            final String startdate = jsonObject.getString("startdate");
+            final String enddate = jsonObject.getString("enddate");
             final String room = jsonObject.getString("room");
             final String lecturer = jsonObject.getString("docent").replace("§§",",");
             final String comment = jsonObject.getString("comment");
 
-            return new Schedule(id, weekday, label, type, group, begin, end, room, lecturer, comment);
+            return new Schedule(id, weekday, label, type, group, begin, end, startdate, enddate, room, lecturer, comment);
         } catch (final JSONException e) {
             if ( BuildConfig.DEBUG) e.printStackTrace();
             return null;
