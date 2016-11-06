@@ -41,7 +41,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Zeit"
                 android:id="@+id/stundenplan_time"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -50,7 +50,8 @@
                 android:text="Raum"
                 android:id="@+id/stundenplan_raum"
                 android:textStyle="bold"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/black"
+                android:maxWidth="80dp"/>
         </LinearLayout>
 
         <TextView
@@ -59,7 +60,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Fach Dozent"
             android:id="@+id/stundenplan_details"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"/>
     </TableRow>
 
 </RelativeLayout>
