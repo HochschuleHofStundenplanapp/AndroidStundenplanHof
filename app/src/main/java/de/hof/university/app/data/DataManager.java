@@ -212,6 +212,16 @@ public class DataManager {
         this.saveMySchedule(context);
     }
 
+    public final void addAllToMySchedule(Context context, ArrayList<String> schedulesIds) {
+        this.getMySchedule(context).addAll(schedulesIds);
+        this.saveMySchedule(context);
+    }
+
+    public final void deleteAllFromMySchedule(Context context) {
+        this.getMySchedule(context).clear();
+        this.saveMySchedule(context);
+    }
+
     private void saveMySchedule(Context context){
         // alte Variante
         //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);

@@ -19,6 +19,7 @@ package de.hof.university.app.fragment.schedule;
 import android.support.design.widget.NavigationView;
 import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -53,7 +54,7 @@ public class MyScheduleFragment extends ScheduleFragment{
         }
     }
 
-	
+
     @Override
     public final void onResume() {
         super.onResume();
@@ -81,6 +82,34 @@ public class MyScheduleFragment extends ScheduleFragment{
         return true;
 
     }
+
+
+    /**
+     * @param menu
+     * @param inflater
+     */
+    @Override
+    public final void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.myschedule_main, menu);
+    }
+
+    /**
+     * @param item
+     * @return
+     */
+    @Override
+    public final boolean onOptionsItemSelected(MenuItem item) {
+        //AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        // handle item selection
+        if (item.getItemId() == R.id.action_delete_all) {
+            DataManager.getInstance().deleteAllFromMySchedule(getActivity().getApplicationContext());
+            return super.onOptionsItemSelected(item);
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
 
     @Override
     protected final Boolean background(String[] params) {

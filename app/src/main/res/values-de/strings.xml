@@ -94,4 +94,6 @@
     <string name="doubleBackOnClose">Zum Beenden erneut Zurück tippen</string>
     <string name="noChanges">Es gibt keine Änderungen</string>
     <string name="refreshFailed">Aktualisierung fehlgeschlagen</string>
+    <string name="action_add_all">Alle hinzufügen</string>
+    <string name="action_delete_all">Alle löschen</string>
 </resources>

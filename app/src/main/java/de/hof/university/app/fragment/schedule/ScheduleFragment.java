@@ -23,6 +23,7 @@ import android.support.design.widget.NavigationView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,7 @@ public class ScheduleFragment extends AbstractListFragment {
     @Override
     public final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         weekdayListPos=0;
     }
 
@@ -190,6 +192,44 @@ public class ScheduleFragment extends AbstractListFragment {
     protected final void modifyListViewAfterDataSetChanged() {
         listView.setSelection(weekdayListPos);
     }
+
+
+    /**
+     * @param menu
+     * @param inflater
+     */
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        MainActivity mainActivity = (MainActivity) getActivity();
+        CharSequence title = mainActivity.getSupportActionBar().getTitle();
+        if (title.equals(getString(R.string.stundenplan))) {
+            inflater.inflate(R.menu.schedule_main, menu);
+        }
+    }
+
+    /**
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle item selection
+        if (item.getItemId() == R.id.action_add_all) {
+            ArrayList<String> schedulesIds = new ArrayList<>();
+            for (Object object : dataList) {
+                if (object instanceof Schedule) {
+                    Schedule schedule = (Schedule)object;
+                    schedulesIds.add(String.valueOf(schedule.getId()));
+                }
+            }
+            DataManager.getInstance().addAllToMySchedule(getActivity().getApplicationContext(), schedulesIds);
+            return super.onOptionsItemSelected(item);
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
 
     @Override
     protected Boolean background(String[] params) {

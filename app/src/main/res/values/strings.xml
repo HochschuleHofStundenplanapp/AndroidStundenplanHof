@@ -93,4 +93,6 @@
     <string name="doubleBackOnClose">To close press back again</string>
     <string name="noChanges">There are no changes</string>
     <string name="refreshFailed">Refrash failed</string>
+    <string name="action_add_all">add all</string>
+    <string name="action_delete_all">delete all</string>
 </resources>
