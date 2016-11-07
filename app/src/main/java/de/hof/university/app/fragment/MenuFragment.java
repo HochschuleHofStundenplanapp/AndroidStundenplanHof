@@ -22,6 +22,7 @@ import android.support.design.widget.NavigationView;
 import android.widget.ArrayAdapter;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -72,7 +73,7 @@ public class MenuFragment extends AbstractListFragment {
         listView.setSelection(weekdayListPos);
     }
 
-    private void updateListView(List<Object> list){
+    private ArrayList<Object> updateListView(List<Object> list){
         String day="";
         String category="";
         String curWeekDay = new SimpleDateFormat("EEEE", Locale.GERMANY).format(new Date());
@@ -85,6 +86,8 @@ public class MenuFragment extends AbstractListFragment {
         final boolean isSalad = sharedPref.getBoolean("speiseplan_salat", true);
 
 //        tarif = sharedPref.getString("speiseplan_tarif", "1");
+
+        ArrayList<Object> tmpDataList = new ArrayList<>();
 
         for(Object object : list){
             if(object instanceof Meal){
@@ -108,30 +111,30 @@ public class MenuFragment extends AbstractListFragment {
 
                 if(!day.equalsIgnoreCase(meal.getWeekDay())){
                     day=meal.getWeekDay();
-                    dataList.add(new BigListItem(day + " - "+sdf.format(meal.getDay())));
+                    tmpDataList.add(new BigListItem(day + " - "+sdf.format(meal.getDay())));
                     if(day.equalsIgnoreCase(curWeekDay)){
-                        weekdayListPos= dataList.size()-1;
+                        weekdayListPos= tmpDataList.size()-1;
                     }
                     category="";//Bei neuen Tagen immer auch die Kategorie anzeigen
                 }
                 if(!category.equalsIgnoreCase(meal.getCategory())){
                     category=meal.getCategory();
-                    dataList.add(new MediumListItem(meal.getCategory()));
+                    tmpDataList.add(new MediumListItem(meal.getCategory()));
                 }
-                dataList.add(meal);
+                tmpDataList.add(meal);
             }
         }
+        return tmpDataList;
     }
 
     @Override
-    protected final Boolean background(String[] params) {
+    protected final ArrayList<Object> background(String[] params) {
         List<Object> meals = DataManager.getInstance().getMeals(getActivity().getApplicationContext(), Boolean.valueOf(params[0]));
 
         if (meals != null) {
-            updateListView(meals);
-            return true;
+            return updateListView(meals);
         } else {
-            return false;
+            return null;
         }
     }
 }

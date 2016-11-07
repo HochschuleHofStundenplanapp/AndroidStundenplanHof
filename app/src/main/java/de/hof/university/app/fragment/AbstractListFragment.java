@@ -101,7 +101,7 @@ public abstract class AbstractListFragment extends Fragment {
         }
     }
 
-    private class Task extends AsyncTask<String, Void, Boolean> {
+    private class Task extends AsyncTask<String, Void, ArrayList<Object>> {
         @Override
         protected final void onPreExecute() {
             swipeContainer.post(new Runnable() {
@@ -117,19 +117,22 @@ public abstract class AbstractListFragment extends Fragment {
         }
 
         @Override
-        protected final Boolean doInBackground(String... params) {
+        protected final ArrayList<Object> doInBackground(String... params) {
             return background(params);
         }
 
         @Override
-        protected final void onPostExecute(Boolean result) {
+        protected final void onPostExecute(ArrayList<Object> result) {
             swipeContainer.post(new Runnable() {
                 @Override
                 public void run() {
                     swipeContainer.setRefreshing(false);
                 }
             });
-            if (result) {
+
+            if (result != null) {
+                dataList.clear();
+                dataList.addAll(result);
                 adapter.notifyDataSetChanged();
                 modifyListViewAfterDataSetChanged();
 
@@ -148,6 +151,6 @@ public abstract class AbstractListFragment extends Fragment {
 
     protected void modifyListViewAfterDataSetChanged(){}
 
-    protected abstract Boolean background(String[] params);
+    protected abstract ArrayList<Object> background(String[] params);
 
 }

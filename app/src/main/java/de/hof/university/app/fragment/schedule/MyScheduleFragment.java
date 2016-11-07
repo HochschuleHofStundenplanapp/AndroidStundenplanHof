@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hof.university.app.BuildConfig;
@@ -80,7 +81,6 @@ public class MyScheduleFragment extends ScheduleFragment{
             adapter.notifyDataSetChanged();
         }
         return true;
-
     }
 
 
@@ -104,6 +104,8 @@ public class MyScheduleFragment extends ScheduleFragment{
         // handle item selection
         if (item.getItemId() == R.id.action_delete_all) {
             DataManager.getInstance().deleteAllFromMySchedule(getActivity().getApplicationContext());
+            dataList.clear();
+            adapter.notifyDataSetChanged();
             return super.onOptionsItemSelected(item);
         } else {
             return super.onOptionsItemSelected(item);
@@ -112,7 +114,7 @@ public class MyScheduleFragment extends ScheduleFragment{
 
 
     @Override
-    protected final Boolean background(String[] params) {
+    protected final ArrayList<Object> background(String[] params) {
         if(DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) > 0) {
             final String course = params[0];
             final String semester = params[1];
@@ -122,10 +124,9 @@ public class MyScheduleFragment extends ScheduleFragment{
             if (BuildConfig.DEBUG) assert (scheduleList != null); // ob etwas zurück kommt
 
             if (scheduleList != null) {
-                super.updateListView(scheduleList);
-                return true;
+                return super.updateListView(scheduleList);
             }
         }
-        return false;
+        return null;
     }
 }
