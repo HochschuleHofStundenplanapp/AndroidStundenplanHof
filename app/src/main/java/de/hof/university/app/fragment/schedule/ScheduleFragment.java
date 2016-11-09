@@ -248,7 +248,7 @@ public class ScheduleFragment extends AbstractListFragment {
         List<Object> scheduleList = DataManager.getInstance().getSchedule(getActivity().getApplicationContext(), course, semester, termTime, Boolean.valueOf(params[3]));
 
         if (scheduleList != null) {
-            return updateListView(scheduleList);
+            return this.updateListView(scheduleList);
         } else {
             return null;
         }

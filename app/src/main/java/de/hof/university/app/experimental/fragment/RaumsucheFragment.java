@@ -74,7 +74,8 @@ public class RaumsucheFragment extends Fragment {
         cacheDate = Calendar.getInstance();
         cacheTimeFrom = Calendar.getInstance();
         cacheTimeTo = Calendar.getInstance();
-        cacheTimeTo.add(Calendar.HOUR_OF_DAY, 2); // für differenz der beiden DatePicker
+        cacheTimeTo.add(Calendar.HOUR_OF_DAY, 1); // für differenz der beiden DatePicker
+        cacheTimeTo.add(Calendar.MINUTE, 30);
     }
 
     @Override
