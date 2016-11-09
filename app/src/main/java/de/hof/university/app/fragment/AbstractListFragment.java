@@ -32,6 +32,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import de.hof.university.app.R;
+import de.hof.university.app.data.DataManager;
 import de.hof.university.app.fragment.schedule.ChangesFragment;
 
 /**
@@ -139,10 +140,12 @@ public abstract class AbstractListFragment extends Fragment {
                 // Damit man unter Änderungen ein Feedback bekommt.
                 ChangesFragment changesFragment = (ChangesFragment)getFragmentManager().findFragmentByTag("CHANGES_FRAGMENT");
                 if (changesFragment != null && changesFragment.isVisible() && dataList.size() == 0) {
-                    Toast.makeText(getContext(), getString(R.string.noChanges), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getView().getContext(), getString(R.string.noChanges), Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(getContext(), getString(R.string.refreshFailed), Toast.LENGTH_SHORT).show();
+                if(DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) > 0) {
+                    Toast.makeText(getView().getContext(), getString(R.string.refreshFailed), Toast.LENGTH_SHORT).show();
+                }
             }
 
             super.onPostExecute(result);
