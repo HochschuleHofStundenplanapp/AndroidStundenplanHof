@@ -23,6 +23,7 @@ import android.support.design.widget.NavigationView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,7 @@ public class ScheduleFragment extends AbstractListFragment {
     @Override
     public final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         weekdayListPos=0;
     }
 
@@ -146,36 +148,38 @@ public class ScheduleFragment extends AbstractListFragment {
         return params;
     }
 
-    protected final void updateListView(List<Object> list) {
+    protected final ArrayList<Object> updateListView(List<Object> list) {
         final String curWeekDay = new SimpleDateFormat("EEEE", Locale.GERMANY).format(new Date());
         String weekday = "";
 
-        dataList.clear();
-        // Temporäre Liste für die Vorlesungen die nur an einem Tag stattfinden damit sie am Ende angezeigt werden.
-        ArrayList<Schedule> tmpDataList = new ArrayList<>();
+        // Temporäre Liste für die neuen Vorlesungen damit sie erst später in ListView hinzugefügt werden können
+        ArrayList<Object> tmpDataList = new ArrayList<>();
+
+        // Temporäre Liste für die Vorlesungen die nur an einem Tag stattfinden (fix) damit sie am Ende angezeigt werden.
+        ArrayList<Schedule> fixDataList = new ArrayList<>();
         for (Object object : list) {
             if(object instanceof Schedule) {
                 Schedule schedule = (Schedule)object;
                 // Wenn eine Vorlesung nur an einem Tag stattfindet sind Start- und Enddate gleich
                 if (schedule.getStartdate().equals(schedule.getEnddate())) {
-                    tmpDataList.add(schedule);
+                    fixDataList.add(schedule);
                 } else {
                     if (!weekday.equals(schedule.getWeekday())) {
-                        dataList.add(new BigListItem(schedule.getWeekday()));
+                        tmpDataList.add(new BigListItem(schedule.getWeekday()));
                         weekday = schedule.getWeekday();
                         if (weekday.equalsIgnoreCase(curWeekDay)) {
-                            weekdayListPos = dataList.size() - 1;
+                            weekdayListPos = tmpDataList.size() - 1;
                         }
                     }
-                    dataList.add(schedule);
+                    tmpDataList.add(schedule);
                 }
             }
         }
         // sortieren
-        Collections.sort(tmpDataList);
+        Collections.sort(fixDataList);
         ArrayList<Object> sortDataList = new ArrayList<>();
         String date = "";
-        for (Schedule schedule : tmpDataList) {
+        for (Schedule schedule : fixDataList) {
             if (!date.equals(schedule.getStartdate())) {
                 sortDataList.add(new BigListItem(schedule.getStartdate()));
                 date = schedule.getStartdate();
@@ -183,7 +187,14 @@ public class ScheduleFragment extends AbstractListFragment {
             sortDataList.add(schedule);
         }
 
+        /*dataList.clear();
+        dataList.addAll(tmpDataList);
         dataList.addAll(sortDataList);
+        */
+
+        tmpDataList.addAll(sortDataList);
+
+        return tmpDataList;
     }
 
     @Override
@@ -191,18 +202,55 @@ public class ScheduleFragment extends AbstractListFragment {
         listView.setSelection(weekdayListPos);
     }
 
+
+    /**
+     * @param menu
+     * @param inflater
+     */
     @Override
-    protected Boolean background(String[] params) {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        MainActivity mainActivity = (MainActivity) getActivity();
+        CharSequence title = mainActivity.getSupportActionBar().getTitle();
+        if (title.equals(getString(R.string.stundenplan))) {
+            inflater.inflate(R.menu.schedule_main, menu);
+        }
+    }
+
+    /**
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle item selection
+        if (item.getItemId() == R.id.action_add_all) {
+            ArrayList<String> schedulesIds = new ArrayList<>();
+            for (Object object : dataList) {
+                if (object instanceof Schedule) {
+                    Schedule schedule = (Schedule)object;
+                    schedulesIds.add(String.valueOf(schedule.getId()));
+                }
+            }
+            DataManager.getInstance().addAllToMySchedule(getActivity().getApplicationContext(), schedulesIds);
+            return super.onOptionsItemSelected(item);
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    @Override
+    protected ArrayList<Object> background(String[] params) {
         final String course = params[0];
         final String semester = params[1];
         final String termTime = params[2];
         List<Object> scheduleList = DataManager.getInstance().getSchedule(getActivity().getApplicationContext(), course, semester, termTime, Boolean.valueOf(params[3]));
 
         if (scheduleList != null) {
-            updateListView(scheduleList);
-            return true;
+            return this.updateListView(scheduleList);
         } else {
-            return false;
+            return null;
         }
     }
 }

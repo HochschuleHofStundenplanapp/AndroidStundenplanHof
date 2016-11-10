@@ -42,8 +42,6 @@ public class ScheduleAdapter extends ArrayAdapter<Object> {
         super(context, 0,items);
 
         this.items = items;
-        // TODO möglich Lösung für einen Absturz mit java.lang.IllegalStateException
-        this.notifyDataSetChanged();
         vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 

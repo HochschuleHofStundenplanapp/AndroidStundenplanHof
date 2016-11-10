@@ -259,7 +259,6 @@ public class SettingsFragment extends PreferenceFragment {
     }
 
 
-
     /**
      * @param menu
      * @param inflater
@@ -283,8 +282,8 @@ public class SettingsFragment extends PreferenceFragment {
         } else {
             return super.onOptionsItemSelected(item);
         }
-
     }
+
 
     /**
      * Öffnet Prozessdialog und aktuallisiert die Semester zum dem zuvor ausgewählten Studiengang

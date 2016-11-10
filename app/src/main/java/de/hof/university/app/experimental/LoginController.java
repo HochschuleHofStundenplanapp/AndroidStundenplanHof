@@ -78,11 +78,11 @@ public class LoginController {
         checkBoxShowPasswordLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-	            if ( isChecked ) {
-		            editTextPasswordLogin.setTransformationMethod(null);
-	            } else {
-		            editTextPasswordLogin.setTransformationMethod(new PasswordTransformationMethod());
-	            }
+                if ( isChecked ) {
+                    editTextPasswordLogin.setTransformationMethod(null);
+                } else {
+                    editTextPasswordLogin.setTransformationMethod(new PasswordTransformationMethod());
+                }
             }
         });
         final CheckBox checkBoxSavePasswordLogin = (CheckBox) loginDialogView.findViewById(R.id.save_password);
@@ -124,11 +124,11 @@ public class LoginController {
         checkBoxShowPasswordPassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-	            if ( isChecked ) {
-		            editTextPasswordPassword.setTransformationMethod(null);
-	            } else {
-		            editTextPasswordPassword.setTransformationMethod(new PasswordTransformationMethod());
-	            }
+                if ( isChecked ) {
+                    editTextPasswordPassword.setTransformationMethod(null);
+                } else {
+                    editTextPasswordPassword.setTransformationMethod(new PasswordTransformationMethod());
+                }
             }
         });
 

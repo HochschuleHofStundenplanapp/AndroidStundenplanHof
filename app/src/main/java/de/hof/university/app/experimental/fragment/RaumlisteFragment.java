@@ -167,7 +167,7 @@ public class RaumlisteFragment extends Fragment {
         super.onDestroyView();
     }
 
-    private class GetRaumTask extends AsyncTask<String, Void, Void> {
+    private class GetRaumTask extends AsyncTask<String, Void, ArrayList<Level>> {
 
         String errorText = "";
 
@@ -179,12 +179,10 @@ public class RaumlisteFragment extends Fragment {
                     swipeContainer.setRefreshing(true);
                 }
             });
-            raumList.clear();
-            adapter.notifyDataSetChanged();
         }
 
         @Override
-        protected final Void doInBackground(String... params) {
+        protected final ArrayList<Level> doInBackground(String... params) {
 
             System.setProperty("jsse.enableSNIExtension", "false");
             String user = params[0];
@@ -197,7 +195,9 @@ public class RaumlisteFragment extends Fragment {
             String raumTyp = params[7];
             String prettyDate = params[8];
 
-            raumList.add(new Suchdetails(getString(R.string.date)+ ' ' +prettyDate,getString(R.string.timeFrom)+": "+ timeFrom,getString(R.string.timeTo)+": "+ timeTo));
+            ArrayList<Level> tmpRaumList = new ArrayList<Level>();
+
+            tmpRaumList.add(new Suchdetails(getString(R.string.date)+ ' ' +prettyDate,getString(R.string.timeFrom)+": "+ timeFrom,getString(R.string.timeTo)+": "+ timeTo));
 
             Connection.Response loginForm = null;
             Document document;
@@ -220,10 +220,12 @@ public class RaumlisteFragment extends Fragment {
                             .method(Connection.Method.POST).execute();
                     tryes = 0;
                 } catch (IOException e) {
-                    errorText = getString(R.string.loginFailed);
-                    return null;
+                    tryes--;
+                    if (tryes <= 0) {
+                        errorText = getString(R.string.loginFailed);
+                        return null;
+                    }
                 }
-                tryes--;
             }
 
             // Daten lesen
@@ -253,10 +255,10 @@ public class RaumlisteFragment extends Fragment {
                      */
                     if( (room.length() > 2) && !room.substring(0, 2).equals(curCategory) ){
                         room = room.substring(0,2); // Erzeuge Kategorie
-                        raumList.add(new Raumkategorie(room));
+                        tmpRaumList.add(new Raumkategorie(room));
                         curCategory = room; // Lege neue Kategorie fest
                     }
-                    raumList.add(new Raum(td.text()));
+                    tmpRaumList.add(new Raum(td.text()));
                 }
 
             } catch (IOException e) {
@@ -270,23 +272,28 @@ public class RaumlisteFragment extends Fragment {
 
             // System.out.println(loginForm.cookie("fe_typo_user"));
 
-            return null;
+            return tmpRaumList;
         }
 
         @Override
-        protected final void onPostExecute(Void aVoid) {
+        protected final void onPostExecute(ArrayList<Level> result) {
             swipeContainer.setRefreshing(false);
-            adapter.notifyDataSetChanged();
+
+            if (!result.isEmpty()) {
+                raumList.clear();
+                raumList.addAll(result);
+                adapter.notifyDataSetChanged();
+            }
 
             //Wenn es einen Fehler gab -> ausgeben
             if ( errorText.isEmpty() ) {
-                if ( raumList.isEmpty() ) {
+                if ( raumList.isEmpty() || result.isEmpty() ) {
                     Toast.makeText(getView().getContext(), getString(R.string.keineraeume), Toast.LENGTH_LONG).show();
                 }
             } else {
                 Toast.makeText(getView().getContext(), errorText, Toast.LENGTH_LONG).show();
             }
-            super.onPostExecute(aVoid);
+            super.onPostExecute(result);
         }
     }
 }

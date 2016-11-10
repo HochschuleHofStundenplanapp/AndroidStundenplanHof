@@ -19,11 +19,13 @@ package de.hof.university.app.fragment.schedule;
 import android.support.design.widget.NavigationView;
 import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hof.university.app.BuildConfig;
@@ -53,7 +55,7 @@ public class MyScheduleFragment extends ScheduleFragment{
         }
     }
 
-	
+
     @Override
     public final void onResume() {
         super.onResume();
@@ -79,11 +81,40 @@ public class MyScheduleFragment extends ScheduleFragment{
             adapter.notifyDataSetChanged();
         }
         return true;
-
     }
 
+
+    /**
+     * @param menu
+     * @param inflater
+     */
     @Override
-    protected final Boolean background(String[] params) {
+    public final void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.myschedule_main, menu);
+    }
+
+    /**
+     * @param item
+     * @return
+     */
+    @Override
+    public final boolean onOptionsItemSelected(MenuItem item) {
+        //AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        // handle item selection
+        if (item.getItemId() == R.id.action_delete_all) {
+            DataManager.getInstance().deleteAllFromMySchedule(getActivity().getApplicationContext());
+            dataList.clear();
+            adapter.notifyDataSetChanged();
+            return super.onOptionsItemSelected(item);
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    @Override
+    protected final ArrayList<Object> background(String[] params) {
         if(DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) > 0) {
             final String course = params[0];
             final String semester = params[1];
@@ -93,10 +124,9 @@ public class MyScheduleFragment extends ScheduleFragment{
             if (BuildConfig.DEBUG) assert (scheduleList != null); // ob etwas zurück kommt
 
             if (scheduleList != null) {
-                super.updateListView(scheduleList);
-                return true;
+                return super.updateListView(scheduleList);
             }
         }
-        return false;
+        return null;
     }
 }

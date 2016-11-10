@@ -32,6 +32,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import de.hof.university.app.R;
+import de.hof.university.app.data.DataManager;
 import de.hof.university.app.fragment.schedule.ChangesFragment;
 
 /**
@@ -101,7 +102,7 @@ public abstract class AbstractListFragment extends Fragment {
         }
     }
 
-    private class Task extends AsyncTask<String, Void, Boolean> {
+    private class Task extends AsyncTask<String, Void, ArrayList<Object>> {
         @Override
         protected final void onPreExecute() {
             swipeContainer.post(new Runnable() {
@@ -117,29 +118,34 @@ public abstract class AbstractListFragment extends Fragment {
         }
 
         @Override
-        protected final Boolean doInBackground(String... params) {
+        protected final ArrayList<Object> doInBackground(String... params) {
             return background(params);
         }
 
         @Override
-        protected final void onPostExecute(Boolean result) {
+        protected final void onPostExecute(ArrayList<Object> result) {
             swipeContainer.post(new Runnable() {
                 @Override
                 public void run() {
                     swipeContainer.setRefreshing(false);
                 }
             });
-            if (result) {
+
+            if (result != null) {
+                dataList.clear();
+                dataList.addAll(result);
                 adapter.notifyDataSetChanged();
                 modifyListViewAfterDataSetChanged();
 
                 // Damit man unter Änderungen ein Feedback bekommt.
                 ChangesFragment changesFragment = (ChangesFragment)getFragmentManager().findFragmentByTag("CHANGES_FRAGMENT");
                 if (changesFragment != null && changesFragment.isVisible() && dataList.size() == 0) {
-                    Toast.makeText(getContext(), getString(R.string.noChanges), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getView().getContext(), getString(R.string.noChanges), Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(getContext(), getString(R.string.refreshFailed), Toast.LENGTH_SHORT).show();
+                if(DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) > 0) {
+                    Toast.makeText(getView().getContext(), getString(R.string.refreshFailed), Toast.LENGTH_SHORT).show();
+                }
             }
 
             super.onPostExecute(result);
@@ -148,6 +154,6 @@ public abstract class AbstractListFragment extends Fragment {
 
     protected void modifyListViewAfterDataSetChanged(){}
 
-    protected abstract Boolean background(String[] params);
+    protected abstract ArrayList<Object> background(String[] params);
 
 }
