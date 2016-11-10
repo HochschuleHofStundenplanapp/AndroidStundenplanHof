@@ -279,10 +279,14 @@ public class RaumlisteFragment extends Fragment {
         protected final void onPostExecute(ArrayList<Level> result) {
             swipeContainer.setRefreshing(false);
 
-            if (!result.isEmpty()) {
-                raumList.clear();
-                raumList.addAll(result);
-                adapter.notifyDataSetChanged();
+            // Wenn ein schlimmer Fehler passiert ist, dann kann das Objekt null sein
+            if ( result != null ) {
+
+                if ( !result.isEmpty() ) {
+                    raumList.clear();
+                    raumList.addAll(result);
+                    adapter.notifyDataSetChanged();
+                }
             }
 
             //Wenn es einen Fehler gab -> ausgeben
