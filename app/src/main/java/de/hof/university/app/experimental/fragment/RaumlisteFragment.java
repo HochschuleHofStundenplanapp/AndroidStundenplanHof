@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.util.ArrayList;
 
+import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.experimental.adapter.RaumlistAdapter;
 import de.hof.university.app.experimental.model.Level;
@@ -140,6 +141,8 @@ public class RaumlisteFragment extends Fragment {
     @Override
     public final void onResume() {
         super.onResume();
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.findViewById(R.id.toolbar).setBackgroundColor(getResources().getColor(R.color.colorBlue));
     }
 
     private void updateData(){

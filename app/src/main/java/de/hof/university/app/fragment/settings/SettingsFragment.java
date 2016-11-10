@@ -140,6 +140,7 @@ public class SettingsFragment extends PreferenceFragment {
         super.onResume();
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.getSupportActionBar().setTitle(R.string.einstellungen);
+        mainActivity.findViewById(R.id.toolbar).setBackgroundColor(getResources().getColor(R.color.colorBlue));
 
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
         navigationView.getMenu().findItem(R.id.nav_einstellungen).setChecked(true);

@@ -93,14 +93,18 @@ public class ScheduleFragment extends AbstractListFragment {
 
         if(item.getTitle().equals(getString(R.string.addToMySchedule))) {
             DataManager.getInstance().addToMySchedule(info.targetView.getContext(), schedule);
+            Toast.makeText(getView().getContext(), "Hinzugefügt", Toast.LENGTH_SHORT).show();
+            if(DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) == 1) {
+                Toast.makeText(getView().getContext(), "Von nun an werden nur noch Änderungen zu den Vorlesungen die Sie zu Mein Stundenplan hinzugefügt haben angezeigt!", Toast.LENGTH_LONG).show();
+            }
         }
 
-        if(item.getTitle().equals(getString(R.string.deleteFromMySchedule))) {
+        // Hier unnötig wird in MyScheduleFragment behandelt
+        /*if(item.getTitle().equals(getString(R.string.deleteFromMySchedule))) {
             DataManager.getInstance().deleteFromMySchedule(info.targetView.getContext(), schedule);
-        }
+        }*/
 
         return true;
-
     }
 
     @Override
@@ -108,6 +112,7 @@ public class ScheduleFragment extends AbstractListFragment {
         super.onResume();
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.getSupportActionBar().setTitle(R.string.stundenplan);
+        mainActivity.findViewById(R.id.toolbar).setBackgroundColor(getResources().getColor(R.color.colorRed));
 
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
         navigationView.getMenu().findItem(R.id.nav_stundenplan).setChecked(true);
@@ -233,6 +238,7 @@ public class ScheduleFragment extends AbstractListFragment {
                 }
             }
             DataManager.getInstance().addAllToMySchedule(getView().getContext(), schedulesIds);
+            Toast.makeText(getView().getContext(), "Von nun an werden nur noch Änderungen zu den Vorlesungen die Sie zu Mein Stundenplan hinzugefügt haben angezeigt!", Toast.LENGTH_LONG).show();
             return super.onOptionsItemSelected(item);
         } else {
             return super.onOptionsItemSelected(item);

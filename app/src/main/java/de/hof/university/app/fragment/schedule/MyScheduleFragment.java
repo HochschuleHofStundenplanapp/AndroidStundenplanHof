@@ -61,11 +61,12 @@ public class MyScheduleFragment extends ScheduleFragment{
         super.onResume();
         final MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.getSupportActionBar().setTitle(R.string.myschedule);
+        mainActivity.findViewById(R.id.toolbar).setBackgroundColor(getResources().getColor(R.color.colorRed));
 
         final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
         navigationView.getMenu().findItem(R.id.nav_mySchedule).setChecked(true);
 
-        if(DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext())==0) {
+        if(DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) == 0) {
             Toast.makeText(getView().getContext(), getString(R.string.myScheduleInfo), Toast.LENGTH_LONG).show();
         }
     }
@@ -79,6 +80,10 @@ public class MyScheduleFragment extends ScheduleFragment{
             DataManager.getInstance().deleteFromMySchedule(info.targetView.getContext(), schedule);
             dataList.remove(schedule);
             adapter.notifyDataSetChanged();
+            Toast.makeText(getView().getContext(), "Gelöscht", Toast.LENGTH_SHORT).show();
+            if(DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) == 0) {
+                Toast.makeText(getView().getContext(), "Von nun an werden wieder alle Änderungen zu ihrem gewählten Studiengang angezeigt!", Toast.LENGTH_LONG).show();
+            }
         }
         return true;
     }
@@ -106,6 +111,7 @@ public class MyScheduleFragment extends ScheduleFragment{
             DataManager.getInstance().deleteAllFromMySchedule(getView().getContext());
             dataList.clear();
             adapter.notifyDataSetChanged();
+            Toast.makeText(getView().getContext(), "Von nun an werden wieder alle Änderungen zu ihrem gewählten Studiengang angezeigt!", Toast.LENGTH_LONG).show();
             return super.onOptionsItemSelected(item);
         } else {
             return super.onOptionsItemSelected(item);

@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.fragment.schedule.ChangesFragment;
@@ -80,6 +81,8 @@ public abstract class AbstractListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         updateData(false);
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.findViewById(R.id.toolbar).setBackgroundColor(getResources().getColor(R.color.colorBlue));
     }
 
 

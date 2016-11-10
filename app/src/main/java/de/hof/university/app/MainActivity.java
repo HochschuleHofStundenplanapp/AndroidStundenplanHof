@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity
     private MyScheduleFragment myScheduleFragment;
     private ImpressumFragment impressumFragment;
 
-    //Experimentelle Fragmente
+    // Experimentelle Fragmente
     private NotenblattFragment notenblattFragment;
     private NotenbekanntgabeFragment notenbekanntgabeFragment;
     private RaumsucheFragment raumsucheFragment;
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Notifications müssen nicht mehr angezeigt werden
+        // Notifications müssen nicht mehr angezeigt werden
         NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         nm.cancelAll();
 
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //Experimentelle Features anzeigen?
+        // Experimentelle Features anzeigen?
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         final boolean showExperimentalFeatures = sharedPreferences.getBoolean("experimental_features", false);
         displayExperimentalFeaturesMenuEntries(showExperimentalFeatures);
@@ -112,8 +112,8 @@ public class MainActivity extends AppCompatActivity
             navigationView.getMenu().findItem(R.id.nav_experimental).setVisible(true);
             navigationView.getMenu().findItem(R.id.nav_raumsuche).setVisible(true); //Raumsuche anzeigen
 
-            //Nur bei höheren Versionen von Android unktioniert auch Primuss
-            //HTML Connectivity mit Verschlüsselung ist dann erst vorhanden
+            // Nur bei höheren Versionen von Android funktioniert auch Primuss
+            // HTML Connectivity mit Verschlüsselung ist dann erst vorhanden
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 navigationView.getMenu().findItem(R.id.nav_notenbekanntgabe).setVisible(false);
                 navigationView.getMenu().findItem(R.id.nav_notenblatt).setVisible(false);
@@ -214,8 +214,8 @@ public class MainActivity extends AppCompatActivity
                 if (scheduleFragment == null) {
                     scheduleFragment = new ScheduleFragment();
                 }
-	            // starting ist ein leerer Bildschirm
-	            // deswegen wollen wir beim Zurückgehen diesen Bildschirm nicht auf den BackStack... legen
+                // starting ist ein leerer Bildschirm
+                // deswegen wollen wir beim Zurückgehen diesen Bildschirm nicht auf den BackStack... legen
                 FragmentTransaction trans = manager.beginTransaction();
                 if (firstStart) {
                     firstStart = false;
@@ -231,8 +231,8 @@ public class MainActivity extends AppCompatActivity
                 if (myScheduleFragment == null) {
                     myScheduleFragment = new MyScheduleFragment();
                 }
-	            // starting ist ein leerer Bildschirm
-	            // deswegen wollen wir beim Zurückgehen diesen Bildschirm nicht auf den BackStack... legen
+                // starting ist ein leerer Bildschirm
+                // deswegen wollen wir beim Zurückgehen diesen Bildschirm nicht auf den BackStack... legen
                 FragmentTransaction trans = manager.beginTransaction();
                 if (firstStart) {
                     firstStart = false;
@@ -260,8 +260,8 @@ public class MainActivity extends AppCompatActivity
             FragmentManager manager = getFragmentManager();
             if (!manager.popBackStackImmediate(SettingsFragment.class.getName(), 0)) {
 
-	            // starting ist ein leerer Bildschirm
-	            // deswegen wollen wir beim Zurückgehen diesen Bildschirm nicht auf den BackStack... legen
+                // starting ist ein leerer Bildschirm
+                // deswegen wollen wir beim Zurückgehen diesen Bildschirm nicht auf den BackStack... legen
                 FragmentTransaction trans = manager.beginTransaction();
                 if (firstStart) {
                     firstStart = false;

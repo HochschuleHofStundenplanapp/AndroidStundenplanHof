@@ -150,12 +150,15 @@ public class DataManager {
         // TODO Wenn Server angepasst ist wieder einkommentieren
         //if (!iterator.hasNext()) {
             String url = String.format(DataManager.CONNECTION.CHANGES.getUrl(), DataManager.replaceWhitespace(course), DataManager.replaceWhitespace(semester), DataManager.replaceWhitespace(termTime));
-        /*} else {
-            String url = String.format(DataManager.CONNECTION.CHANGES.getUrl());
-        }*/
-        while(iterator.hasNext()){
-            url+="&id[]="+iterator.next();
-        }
+        //} else {
+        //    String url = String.format(DataManager.CONNECTION.CHANGES.getUrl());
+
+            // Fügt die ID's der Vorlesungen hinzu die in Mein Stundenplan sind
+            // dadurch werden nur Änderungen davon geholt
+            while(iterator.hasNext()){
+                url+="&id[]="+iterator.next();
+            }
+        //}
 
         Parser parser = ParserFactory.create(EParser.CHANGES);
         String jsonString = this.getData(context,forceRefresh,url,DataManager.CONNECTION.CHANGES.getCache());

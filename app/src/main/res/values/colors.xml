@@ -17,5 +17,8 @@
 
 <resources>
     <color name="colorPrimary">#4b4b4a</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#005DA8</color>
+    <color name="colorBlue">#0066AF</color>
+    <color name="colorRed">#EB5C4A</color>
+    <color name="colorYellow">#FBBA00</color>
 </resources>

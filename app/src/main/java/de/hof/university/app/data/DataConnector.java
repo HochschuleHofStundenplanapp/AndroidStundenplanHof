@@ -103,21 +103,21 @@ public class DataConnector {
                 // user
                 String username = "p"; //soapuser
                 username = 'a' +username;
-	            username += "u";
+                username += "u";
                 username = 'o' +username;
-	            username += "s";
+                username += "s";
                 username = 's' +username;
-	            username += "er";
+                username += "er";
 
                 //password                  F%98z&12
                 String password = "8";
-	            password += "z";
+                password += "z";
                 password = '9' +password;
-	            password += "&";
+                password += "&";
                 password = '%' +password;
-	            password += "1";
+                password += "1";
                 password = 'F' +password;
-	            password += "2";
+                password += "2";
                 final String userPassword = username + ':' + password;
                 final String encoding = Base64.encodeToString(userPassword.getBytes(), Base64.DEFAULT);
                 urlConnection.setRequestProperty("Authorization", "Basic " + encoding);
