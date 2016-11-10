@@ -232,7 +232,7 @@ public class ScheduleFragment extends AbstractListFragment {
                     schedulesIds.add(String.valueOf(schedule.getId()));
                 }
             }
-            DataManager.getInstance().addAllToMySchedule(getActivity().getApplicationContext(), schedulesIds);
+            DataManager.getInstance().addAllToMySchedule(getView().getContext(), schedulesIds);
             return super.onOptionsItemSelected(item);
         } else {
             return super.onOptionsItemSelected(item);

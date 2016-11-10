@@ -103,7 +103,7 @@ public class MyScheduleFragment extends ScheduleFragment{
         //AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
         // handle item selection
         if (item.getItemId() == R.id.action_delete_all) {
-            DataManager.getInstance().deleteAllFromMySchedule(getActivity().getApplicationContext());
+            DataManager.getInstance().deleteAllFromMySchedule(getView().getContext());
             dataList.clear();
             adapter.notifyDataSetChanged();
             return super.onOptionsItemSelected(item);
