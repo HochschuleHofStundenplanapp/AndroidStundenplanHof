@@ -30,11 +30,12 @@ import de.hof.university.app.model.schedule.Schedule;
  * Created by larsg on 17.06.2016.
  */
 public class ScheduleParser implements Parser<Schedule> {
+    private String language;
 
     @Override
     public final ArrayList<Schedule> parse(String[] params) {
-        if(params.length != 1){
-               return null;
+        if(params.length != 2){
+            return null;
         }
         ArrayList<Schedule> result = new ArrayList<Schedule>();
 
@@ -42,6 +43,7 @@ public class ScheduleParser implements Parser<Schedule> {
         if(params[0].isEmpty()) {
             return result;
         }
+        language = params[1];
         try {
             JSONArray jsonArray = new JSONObject(params[0]).getJSONArray("schedule");
             for (int i = 0; i < jsonArray.length(); ++i) {
@@ -56,11 +58,29 @@ public class ScheduleParser implements Parser<Schedule> {
         return result;
     }
 
-    protected static Schedule convertJsonObject(JSONObject jsonObject) {
+    protected final Schedule convertJsonObject(JSONObject jsonObject) {
         try {
             String weekday;
             try {
                 weekday = jsonObject.getString("day");
+                // Wenn Sprache auf Englisch gestellt ist englische Wochentage nehmen
+                if (language.equals("en")) {
+                    if (weekday.equals("Montag")) {
+                        weekday = "Monday";
+                    } else if (weekday.equals("Dienstag")) {
+                        weekday = "Tuesday";
+                    } else if (weekday.equals("Mittwoch")) {
+                        weekday = "Wednesday";
+                    } else if (weekday.equals("Donnerstag")) {
+                        weekday = "Thursday";
+                    } else if (weekday.equals("Freitag")) {
+                        weekday = "Friday";
+                    } else if (weekday.equals("Samstag")) {
+                        weekday = "Saturday";
+                    } else if (weekday.equals("Sonntag")) {
+                        weekday = "Sunday";
+                    }
+                }
             } catch (JSONException e) {
                 return null;
             }

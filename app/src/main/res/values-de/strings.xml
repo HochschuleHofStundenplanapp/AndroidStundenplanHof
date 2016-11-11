@@ -96,4 +96,8 @@
     <string name="refreshFailed">Aktualisierung fehlgeschlagen</string>
     <string name="action_add_all">Alle hinzufügen</string>
     <string name="action_delete_all">Alle löschen</string>
+    <string name="added">Hinzugefügt</string>
+    <string name="changesMyScheduleText">Von nun an werden nur noch Änderungen zu den Vorlesungen die Sie zu Mein Stundenplan hinzugefügt haben angezeigt!</string>
+    <string name="deleted">Gelöscht</string>
+    <string name="changesScheduleText">Von nun an werden wieder alle Änderungen zu ihrem gewählten Studiengang angezeigt!</string>
 </resources>

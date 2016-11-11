@@ -93,6 +93,10 @@
     <string name="doubleBackOnClose">To close press back again</string>
     <string name="noChanges">There are no changes</string>
     <string name="refreshFailed">Refrash failed</string>
-    <string name="action_add_all">add all</string>
-    <string name="action_delete_all">delete all</string>
+    <string name="action_add_all">Add all</string>
+    <string name="action_delete_all">Delete all</string>
+    <string name="added">Added</string>
+    <string name="changesMyScheduleText">From now on only changes from schedules you added to My Schedule are shown!</string>
+    <string name="deleted">Deleted</string>
+    <string name="changesScheduleText">From now on all changes from your selected course are shown!</string>
 </resources>

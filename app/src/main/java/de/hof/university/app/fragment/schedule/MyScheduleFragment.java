@@ -80,9 +80,9 @@ public class MyScheduleFragment extends ScheduleFragment{
             DataManager.getInstance().deleteFromMySchedule(info.targetView.getContext(), schedule);
             dataList.remove(schedule);
             adapter.notifyDataSetChanged();
-            Toast.makeText(getView().getContext(), "Gelöscht", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getView().getContext(), getString(R.string.remove), Toast.LENGTH_SHORT).show();
             if(DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) == 0) {
-                Toast.makeText(getView().getContext(), "Von nun an werden wieder alle Änderungen zu ihrem gewählten Studiengang angezeigt!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getView().getContext(), getString(R.string.changesScheduleText), Toast.LENGTH_LONG).show();
             }
         }
         return true;
@@ -111,7 +111,7 @@ public class MyScheduleFragment extends ScheduleFragment{
             DataManager.getInstance().deleteAllFromMySchedule(getView().getContext());
             dataList.clear();
             adapter.notifyDataSetChanged();
-            Toast.makeText(getView().getContext(), "Von nun an werden wieder alle Änderungen zu ihrem gewählten Studiengang angezeigt!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getView().getContext(), getString(R.string.changesScheduleText), Toast.LENGTH_LONG).show();
             return super.onOptionsItemSelected(item);
         } else {
             return super.onOptionsItemSelected(item);
@@ -125,7 +125,7 @@ public class MyScheduleFragment extends ScheduleFragment{
             final String course = params[0];
             final String semester = params[1];
             final String termTime = params[2];
-            List<Object> scheduleList = DataManager.getInstance().getMySchedule(getActivity().getApplicationContext(), course, semester, termTime, Boolean.valueOf(params[3]));
+            List<Object> scheduleList = DataManager.getInstance().getMySchedule(getActivity().getApplicationContext(), getString(R.string.language), course, semester, termTime, Boolean.valueOf(params[3]));
 
             if (BuildConfig.DEBUG) assert (scheduleList != null); // ob etwas zurück kommt
 

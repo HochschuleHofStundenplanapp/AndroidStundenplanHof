@@ -93,9 +93,9 @@ public class ScheduleFragment extends AbstractListFragment {
 
         if(item.getTitle().equals(getString(R.string.addToMySchedule))) {
             DataManager.getInstance().addToMySchedule(info.targetView.getContext(), schedule);
-            Toast.makeText(getView().getContext(), "Hinzugefügt", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getView().getContext(), getString(R.string.added), Toast.LENGTH_SHORT).show();
             if(DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) == 1) {
-                Toast.makeText(getView().getContext(), "Von nun an werden nur noch Änderungen zu den Vorlesungen die Sie zu Mein Stundenplan hinzugefügt haben angezeigt!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getView().getContext(), getString(R.string.changesMyScheduleText), Toast.LENGTH_LONG).show();
             }
         }
 
@@ -154,7 +154,12 @@ public class ScheduleFragment extends AbstractListFragment {
     }
 
     protected final ArrayList<Object> updateListView(List<Object> list) {
-        final String curWeekDay = new SimpleDateFormat("EEEE", Locale.GERMANY).format(new Date());
+        String curWeekDay = "";
+        if (getString(R.string.language).equals("de")) {
+            curWeekDay = new SimpleDateFormat("EEEE", Locale.GERMANY).format(new Date());
+        } else {
+            curWeekDay = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(new Date());
+        }
         String weekday = "";
 
         // Temporäre Liste für die neuen Vorlesungen damit sie erst später in ListView hinzugefügt werden können
@@ -238,7 +243,7 @@ public class ScheduleFragment extends AbstractListFragment {
                 }
             }
             DataManager.getInstance().addAllToMySchedule(getView().getContext(), schedulesIds);
-            Toast.makeText(getView().getContext(), "Von nun an werden nur noch Änderungen zu den Vorlesungen die Sie zu Mein Stundenplan hinzugefügt haben angezeigt!", Toast.LENGTH_LONG).show();
+            Toast.makeText(getView().getContext(), getString(R.string.changesMyScheduleText), Toast.LENGTH_LONG).show();
             return super.onOptionsItemSelected(item);
         } else {
             return super.onOptionsItemSelected(item);
@@ -251,7 +256,7 @@ public class ScheduleFragment extends AbstractListFragment {
         final String course = params[0];
         final String semester = params[1];
         final String termTime = params[2];
-        List<Object> scheduleList = DataManager.getInstance().getSchedule(getActivity().getApplicationContext(), course, semester, termTime, Boolean.valueOf(params[3]));
+        List<Object> scheduleList = DataManager.getInstance().getSchedule(getActivity().getApplicationContext(), getString(R.string.language), course, semester, termTime, Boolean.valueOf(params[3]));
 
         if (scheduleList != null) {
             return this.updateListView(scheduleList);
