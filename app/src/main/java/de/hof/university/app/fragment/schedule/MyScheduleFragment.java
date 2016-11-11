@@ -80,7 +80,7 @@ public class MyScheduleFragment extends ScheduleFragment{
             DataManager.getInstance().deleteFromMySchedule(info.targetView.getContext(), schedule);
             dataList.remove(schedule);
             adapter.notifyDataSetChanged();
-            Toast.makeText(getView().getContext(), getString(R.string.remove), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getView().getContext(), getString(R.string.deleted), Toast.LENGTH_SHORT).show();
             if(DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) == 0) {
                 Toast.makeText(getView().getContext(), getString(R.string.changesScheduleText), Toast.LENGTH_LONG).show();
             }
