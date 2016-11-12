@@ -147,6 +147,9 @@ public class Schedule implements Comparable<Schedule> {
                 }
             }
         }
+        else
+            assert(false);
+
         return -1;
     }
 }

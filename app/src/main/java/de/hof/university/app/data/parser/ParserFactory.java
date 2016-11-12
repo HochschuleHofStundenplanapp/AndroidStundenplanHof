@@ -19,7 +19,7 @@ package de.hof.university.app.data.parser;
 /**
  * Created by larsg on 17.06.2016.
  */
-public class ParserFactory {
+public final class ParserFactory {
 
     public static Parser create(Enum<ParserFactory.EParser> parserEnum){
         if ( parserEnum == ParserFactory.EParser.SCHEDULE ) {
@@ -33,6 +33,8 @@ public class ParserFactory {
         } else if( parserEnum == ParserFactory.EParser.MYSCHEDULE ){
             return new MyScheduleParser();
         }
+        else
+            assert( false ) ;
         return null;
     }
 

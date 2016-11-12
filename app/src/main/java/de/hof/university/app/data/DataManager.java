@@ -77,7 +77,7 @@ public class DataManager {
 
     private static final DataManager dataManager = new DataManager();
 
-    public static final DataManager getInstance(){
+    public static DataManager getInstance(){
         return DataManager.dataManager;
     }
 

@@ -19,7 +19,7 @@ package de.hof.university.app.Util;
 /**
  * Created by stepping on 17.07.2016.
  */
-public class Define {
+public final class Define {
 
 
 	public static final String SCHEDULE_PARSER_LABEL = "label";     //NON-NLS
