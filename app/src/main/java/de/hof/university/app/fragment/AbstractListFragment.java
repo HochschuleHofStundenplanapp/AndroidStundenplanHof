@@ -81,8 +81,9 @@ public abstract class AbstractListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         updateData(false);
-        MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.findViewById(R.id.toolbar).setBackgroundColor(getResources().getColor(R.color.colorBlue));
+        // falls es eine andere Toolbar Farbe soll
+        //MainActivity mainActivity = (MainActivity) getActivity();
+        //mainActivity.findViewById(R.id.toolbar).setBackgroundColor(getResources().getColor(R.color.colorBlue));
     }
 
 

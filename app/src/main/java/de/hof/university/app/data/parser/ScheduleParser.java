@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 
 import de.hof.university.app.BuildConfig;
@@ -64,21 +65,21 @@ public class ScheduleParser implements Parser<Schedule> {
             try {
                 weekday = jsonObject.getString("day");
                 // Wenn Sprache auf Englisch gestellt ist englische Wochentage nehmen
-                if (language.equals("en")) {
+                if (!language.equals("de")) {
                     if (weekday.equals("Montag")) {
-                        weekday = "Monday";
+                        weekday = new DateFormatSymbols().getWeekdays()[2];
                     } else if (weekday.equals("Dienstag")) {
-                        weekday = "Tuesday";
+                        weekday = new DateFormatSymbols().getWeekdays()[3];
                     } else if (weekday.equals("Mittwoch")) {
-                        weekday = "Wednesday";
+                        weekday = new DateFormatSymbols().getWeekdays()[4];
                     } else if (weekday.equals("Donnerstag")) {
-                        weekday = "Thursday";
+                        weekday = new DateFormatSymbols().getWeekdays()[5];
                     } else if (weekday.equals("Freitag")) {
-                        weekday = "Friday";
+                        weekday = new DateFormatSymbols().getWeekdays()[6];
                     } else if (weekday.equals("Samstag")) {
-                        weekday = "Saturday";
+                        weekday = new DateFormatSymbols().getWeekdays()[7];
                     } else if (weekday.equals("Sonntag")) {
-                        weekday = "Sunday";
+                        weekday = new DateFormatSymbols().getWeekdays()[1];
                     }
                 }
             } catch (JSONException e) {
