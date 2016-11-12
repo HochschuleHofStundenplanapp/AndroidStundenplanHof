@@ -141,8 +141,6 @@ public class RaumlisteFragment extends Fragment {
     @Override
     public final void onResume() {
         super.onResume();
-        MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.findViewById(R.id.toolbar).setBackgroundColor(getResources().getColor(R.color.colorBlue));
     }
 
     private void updateData(){

@@ -112,7 +112,6 @@ public class ScheduleFragment extends AbstractListFragment {
         super.onResume();
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.getSupportActionBar().setTitle(R.string.stundenplan);
-        mainActivity.findViewById(R.id.toolbar).setBackgroundColor(getResources().getColor(R.color.colorRed));
 
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
         navigationView.getMenu().findItem(R.id.nav_stundenplan).setChecked(true);

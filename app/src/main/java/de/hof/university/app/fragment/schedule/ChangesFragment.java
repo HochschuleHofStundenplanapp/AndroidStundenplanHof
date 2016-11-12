@@ -45,7 +45,6 @@ public class ChangesFragment extends AbstractListFragment {
         super.onResume();
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.getSupportActionBar().setTitle(R.string.aenderung);
-        mainActivity.findViewById(R.id.toolbar).setBackgroundColor(getResources().getColor(R.color.colorYellow));
 
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
         navigationView.getMenu().findItem(R.id.nav_aenderung).setChecked(true);

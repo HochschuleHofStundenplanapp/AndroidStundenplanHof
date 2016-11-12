@@ -112,6 +112,10 @@ public class MainActivity extends AppCompatActivity
             navigationView.getMenu().findItem(R.id.nav_experimental).setVisible(true);
             navigationView.getMenu().findItem(R.id.nav_raumsuche).setVisible(true); //Raumsuche anzeigen
 
+            // TODO Weil ausblenden solange die neue Authentifizierungsmethode noch nicht funktioniert
+            navigationView.getMenu().findItem(R.id.nav_notenbekanntgabe).setVisible(false);
+            navigationView.getMenu().findItem(R.id.nav_notenblatt).setVisible(false);
+            /*
             // Nur bei höheren Versionen von Android funktioniert auch Primuss
             // HTML Connectivity mit Verschlüsselung ist dann erst vorhanden
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
@@ -120,7 +124,7 @@ public class MainActivity extends AppCompatActivity
             }else{
                 navigationView.getMenu().findItem(R.id.nav_notenbekanntgabe).setVisible(true);
                 navigationView.getMenu().findItem(R.id.nav_notenblatt).setVisible(true);
-            }
+            }*/
         }else{
             navigationView.getMenu().findItem(R.id.nav_experimental).setVisible(false);
         }

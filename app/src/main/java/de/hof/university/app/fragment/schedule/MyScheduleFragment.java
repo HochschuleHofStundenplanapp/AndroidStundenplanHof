@@ -61,7 +61,6 @@ public class MyScheduleFragment extends ScheduleFragment{
         super.onResume();
         final MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.getSupportActionBar().setTitle(R.string.myschedule);
-        mainActivity.findViewById(R.id.toolbar).setBackgroundColor(getResources().getColor(R.color.colorRed));
 
         final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
         navigationView.getMenu().findItem(R.id.nav_mySchedule).setChecked(true);
