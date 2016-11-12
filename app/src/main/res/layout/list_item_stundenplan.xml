@@ -20,20 +20,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingBottom="7dp"
-        android:layout_marginTop="7dp"
-        android:contextClickable="false">
-
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingRight="20dp">
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingBottom="7dp"
+            android:layout_marginTop="7dp"
+            >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -61,6 +56,5 @@
             android:text="Fach Dozent"
             android:id="@+id/stundenplan_details"
             android:textColor="@android:color/black"/>
-    </TableRow>
 
 </RelativeLayout>

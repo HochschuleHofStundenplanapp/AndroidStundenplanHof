@@ -100,4 +100,6 @@
     <string name="changesMyScheduleText">Von nun an werden nur noch Änderungen zu den Vorlesungen die Sie zu Mein Stundenplan hinzugefügt haben angezeigt!</string>
     <string name="deleted">Gelöscht</string>
     <string name="changesScheduleText">Von nun an werden wieder alle Änderungen zu ihrem gewählten Studiengang angezeigt!</string>
+    <string name="hof_university_app_by_lars_gaidzik_amp_lukas_mahr"><![CDATA[Hof University-APP by Lars Gaidzik & Lukas Mahr]]></string>
+    <string name="details">Details</string>
 </resources>

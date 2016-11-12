@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Details"
+            android:text="@string/details"
             android:id="@+id/aenderung_details"
             android:paddingTop="10dp"
             android:paddingBottom="5dp"

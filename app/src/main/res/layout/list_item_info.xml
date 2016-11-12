@@ -19,19 +19,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="true">
+    android:clickable="true"
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="7dp"
-        android:layout_marginTop="7dp"
-        android:contextClickable="false">
 
-        <LinearLayout
             android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:paddingBottom="7dp"
+            android:layout_marginTop="7dp"
             android:paddingRight="20dp">
 
             <TextView
@@ -54,8 +47,5 @@
                 android:id="@+id/info_text"
                 android:textStyle="bold"
                 android:textColor="@android:color/black" />
-        </LinearLayout>
-
-    </TableRow>
 
 </RelativeLayout>
