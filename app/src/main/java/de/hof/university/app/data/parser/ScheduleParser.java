@@ -21,7 +21,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import de.hof.university.app.BuildConfig;
 import de.hof.university.app.Util.Define;
@@ -34,7 +39,7 @@ public class ScheduleParser implements Parser<Schedule> {
     private String language;
 
     @Override
-    public final ArrayList<Schedule> parse(String[] params) {
+    public ArrayList<Schedule> parse(String[] params) {
         if(params.length != 2){
             return null;
         }
@@ -59,30 +64,28 @@ public class ScheduleParser implements Parser<Schedule> {
         return result;
     }
 
-    protected final Schedule convertJsonObject(JSONObject jsonObject) {
+    protected int parseDayOfWeek(String day, Locale locale)
+            throws ParseException {
+        SimpleDateFormat dayFormat = new SimpleDateFormat("E", locale);
+        Date date = dayFormat.parse(day);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        return dayOfWeek;
+    }
+
+    protected Schedule convertJsonObject(JSONObject jsonObject) {
         try {
             String weekday;
             try {
                 weekday = jsonObject.getString("day");
                 // Wenn Sprache auf Englisch gestellt ist englische Wochentage nehmen
                 if (!language.equals("de")) {
-                    if (weekday.equals("Montag")) {
-                        weekday = new DateFormatSymbols().getWeekdays()[2];
-                    } else if (weekday.equals("Dienstag")) {
-                        weekday = new DateFormatSymbols().getWeekdays()[3];
-                    } else if (weekday.equals("Mittwoch")) {
-                        weekday = new DateFormatSymbols().getWeekdays()[4];
-                    } else if (weekday.equals("Donnerstag")) {
-                        weekday = new DateFormatSymbols().getWeekdays()[5];
-                    } else if (weekday.equals("Freitag")) {
-                        weekday = new DateFormatSymbols().getWeekdays()[6];
-                    } else if (weekday.equals("Samstag")) {
-                        weekday = new DateFormatSymbols().getWeekdays()[7];
-                    } else if (weekday.equals("Sonntag")) {
-                        weekday = new DateFormatSymbols().getWeekdays()[1];
-                    }
+                    weekday = new DateFormatSymbols().getWeekdays()[parseDayOfWeek(weekday, Locale.GERMANY)];
                 }
             } catch (JSONException e) {
+                return null;
+            } catch (ParseException e) {
                 return null;
             }
             final int id = jsonObject.getInt("id");

@@ -21,7 +21,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DateFormatSymbols;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import de.hof.university.app.BuildConfig;
 import de.hof.university.app.Util.Define;
@@ -30,7 +32,7 @@ import de.hof.university.app.model.schedule.Schedule;
 /**
  * Created by Lukas on 07.07.2016.
  */
-public class MyScheduleParser implements Parser<Schedule>{
+public class MyScheduleParser extends ScheduleParser{
     private String language;
 
     @Override
@@ -59,6 +61,7 @@ public class MyScheduleParser implements Parser<Schedule>{
         return result;
     }
 
+    @Override
     protected final Schedule convertJsonObject(JSONObject jsonObject) {
         try {
             String weekday;
@@ -66,23 +69,11 @@ public class MyScheduleParser implements Parser<Schedule>{
                 weekday = jsonObject.getString("day");
                 // Wenn Sprache auf Englisch gestellt ist englische Wochentage nehmen
                 if (!language.equals("de")) {
-                    if (weekday.equals("Montag")) {
-                        weekday = new DateFormatSymbols().getWeekdays()[2];
-                    } else if (weekday.equals("Dienstag")) {
-                        weekday = new DateFormatSymbols().getWeekdays()[3];
-                    } else if (weekday.equals("Mittwoch")) {
-                        weekday = new DateFormatSymbols().getWeekdays()[4];
-                    } else if (weekday.equals("Donnerstag")) {
-                        weekday = new DateFormatSymbols().getWeekdays()[5];
-                    } else if (weekday.equals("Freitag")) {
-                        weekday = new DateFormatSymbols().getWeekdays()[6];
-                    } else if (weekday.equals("Samstag")) {
-                        weekday = new DateFormatSymbols().getWeekdays()[7];
-                    } else if (weekday.equals("Sonntag")) {
-                        weekday = new DateFormatSymbols().getWeekdays()[1];
-                    }
+                    weekday = new DateFormatSymbols().getWeekdays()[super.parseDayOfWeek(weekday, Locale.GERMANY)];
                 }
             } catch (JSONException e) {
+                return null;
+            } catch (ParseException e) {
                 return null;
             }
             final int id = jsonObject.getInt("id");
