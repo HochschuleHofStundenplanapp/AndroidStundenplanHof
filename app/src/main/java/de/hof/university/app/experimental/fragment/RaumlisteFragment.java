@@ -265,6 +265,7 @@ public class RaumlisteFragment extends Fragment {
             } catch (IOException e) {
                 if( e.getClass() == InterruptedIOException.class ) //Wurde einfach abgebrochen -> nichts tun
                 {
+                    errorText = getString(R.string.raumsuchefehler);
                     return null;
                 } else {
                     errorText = getString(R.string.raumsuchefehler);
@@ -281,23 +282,19 @@ public class RaumlisteFragment extends Fragment {
             swipeContainer.setRefreshing(false);
 
             // Wenn ein schlimmer Fehler passiert ist, dann kann das Objekt null sein
-            if ( result != null ) {
-
+            if ( result != null && errorText.isEmpty()) {
                 if ( !result.isEmpty() ) {
                     raumList.clear();
                     raumList.addAll(result);
                     adapter.notifyDataSetChanged();
-                }
-            }
-
-            //Wenn es einen Fehler gab -> ausgeben
-            if ( errorText.isEmpty() ) {
-                if ( raumList.isEmpty() || result.isEmpty() ) {
+                } else {
                     Toast.makeText(getView().getContext(), getString(R.string.keineraeume), Toast.LENGTH_LONG).show();
                 }
             } else {
+                //Wenn es einen Fehler gab -> ausgeben
                 Toast.makeText(getView().getContext(), errorText, Toast.LENGTH_LONG).show();
             }
+
             super.onPostExecute(result);
         }
     }
