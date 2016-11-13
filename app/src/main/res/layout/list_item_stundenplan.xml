@@ -20,41 +20,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingBottom="7dp"
-            android:layout_marginTop="7dp"
-            >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Zeit"
-                android:id="@+id/stundenplan_time"
-                android:textColor="@android:color/black"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="Raum"
-                android:id="@+id/stundenplan_raum"
-                android:textStyle="bold"
-                android:textColor="@android:color/black"
-                android:maxWidth="80dp"/>
-        </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="7dp"
+        android:layout_marginTop="7dp"
+        android:id="@+id/stundenplan_linealLayout">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Zeit"
+            android:id="@+id/stundenplan_time"
+            android:textColor="@android:color/black"/>
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Fach Dozent"
-            android:id="@+id/stundenplan_details"
-            android:textColor="@android:color/black"/>
+            android:text="Raum"
+            android:id="@+id/stundenplan_raum"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:maxWidth="80dp"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Fach Dozent"
+        android:id="@+id/stundenplan_details"
+        android:textColor="@android:color/black"
+        android:layout_alignTop="@+id/stundenplan_linealLayout"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="19dp"
+        android:layout_marginEnd="19dp"
+        android:layout_marginBottom="7dp"
+        android:layout_toRightOf="@+id/stundenplan_linealLayout"
+        android:layout_toEndOf="@+id/stundenplan_linealLayout" />
 
 </RelativeLayout>
