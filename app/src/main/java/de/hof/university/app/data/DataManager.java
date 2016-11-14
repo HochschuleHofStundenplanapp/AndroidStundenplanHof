@@ -46,9 +46,9 @@ public class DataManager {
     enum CONNECTION {
         // Testserver: http://sh-web02.hof-university.de
         COURSE("https://www.hof-university.de/soap/client.php?f=Courses&tt=%s", 60*24),
-        SCHEDULE("https://www.hof-university.de/soap/client.php?f=Schedule&stg=%s&sem=%s&tt=%s",60*24),
-        CHANGES("https://www.hof-university.de/soap/client.php?f=Changes",60*3),
-        MYSCHEDULE("https://www.hof-university.de/soap/client.php?f=MySchedule",60*24),
+        SCHEDULE("http://sh-web02.hof-university.de/soap/client.php?f=Schedule&stg=%s&sem=%s&tt=%s",60*24),
+        CHANGES("http://sh-web02.hof-university.de/soap/client.php?f=Changes",60*3),
+        MYSCHEDULE("http://sh-web02.hof-university.de/soap/client.php?f=MySchedule",60*24),
         MENU("https://www.studentenwerk-oberfranken.de/?eID=bwrkSpeiseplanRss&tx_bwrkspeiseplan_pi2%5Bbar%5D=340&tx_bwrkspeiseplan_pi2%5Bdate%5D=",60*24);
 
         private final String url;
@@ -148,22 +148,22 @@ public class DataManager {
                                               String termTime, boolean forceRefresh){
         // nur Änderungen von Mein Stundenplan holen
         Iterator<String> iterator = this.getMySchedule(context).iterator();
-    //  TODO Wenn Server angepasst ist wieder einkommentieren
+
         String url = "";
-    //    if (!iterator.hasNext()) {
+        if (!iterator.hasNext()) {
             url = DataManager.CONNECTION.CHANGES.getUrl();
             url+="&stg="+DataManager.replaceWhitespace(course);
             url+="&sem="+DataManager.replaceWhitespace(semester);
             url+="&tt="+DataManager.replaceWhitespace(termTime);
-    //    } else {
-    //        url = DataManager.CONNECTION.CHANGES.getUrl();
+        } else {
+            url = DataManager.CONNECTION.CHANGES.getUrl();
 
             // Fügt die ID's der Vorlesungen hinzu die in Mein Stundenplan sind
             // dadurch werden nur Änderungen davon geholt
             while(iterator.hasNext()){
                 url+="&id[]="+iterator.next();
             }
-    //    }
+        }
 
         Parser parser = ParserFactory.create(EParser.CHANGES);
         String jsonString = this.getData(context,forceRefresh,url,DataManager.CONNECTION.CHANGES.getCache());

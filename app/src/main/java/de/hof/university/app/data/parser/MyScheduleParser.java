@@ -86,9 +86,7 @@ public class MyScheduleParser extends ScheduleParser{
             final String enddate = jsonObject.getString("enddate");
             final String room = jsonObject.getString("room");
             final String lecturer = jsonObject.getString("docent").replace("§§",",");
-            // TODO comment ist noch leer, wenn Serveranpassung gemacht wurde auskommentieren teil nehmen
-            final String comment = "";
-            //final String comment = jsonObject.getString("comment");
+            final String comment = jsonObject.getString("comment");
 
             return new Schedule(id, weekday, label, type, group, begin, end, startdate, enddate, room, lecturer, comment);
         } catch (final JSONException e) {

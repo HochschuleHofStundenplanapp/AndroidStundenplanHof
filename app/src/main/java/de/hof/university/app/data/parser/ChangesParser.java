@@ -45,7 +45,16 @@ public class ChangesParser implements Parser<Changes> {
                 for (int i = 0; i < jsonArray.length(); ++i) {
                     final Changes change = convertJsonObject(jsonArray.getJSONObject(i));
                     if ( null != change ) {
-                        result.add(change);
+                        // TODO schauen ob diese change bereits enthalten ist.
+                        boolean contains = false;
+                        for (Changes c:result) {
+                            if (c.toString().equals(change.toString())) {
+                                contains = true;
+                            }
+                        }
+                        if (contains == false) {
+                            result.add(change);
+                        }
                     }
                 }
             } catch (final JSONException ignored ) {

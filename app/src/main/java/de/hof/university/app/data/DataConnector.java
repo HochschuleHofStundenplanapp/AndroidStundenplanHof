@@ -43,13 +43,17 @@ public class DataConnector {
 
     public final String getStringFromUrl(final Context context, final String strUrl, final int cacheTime){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        if(cacheStillValid(sharedPreferences, strUrl+TIME_APPEND, cacheTime)){
+        if (cacheStillValid(sharedPreferences, strUrl+TIME_APPEND, cacheTime)){
             return sharedPreferences.getString(strUrl, "");
-        }else{
+        } else {
             final String result = readStringFromUrl(strUrl);
             if (result == null) {
-                return sharedPreferences.getString(strUrl, "");
-            } else if(!result.isEmpty()) {
+                if (cacheTime != -1) {
+                    return sharedPreferences.getString(strUrl, "");
+                } else {
+                    return "";
+                }
+            } else if (!result.isEmpty()) {
                 sharedPreferences.edit()
                         .putLong(strUrl + TIME_APPEND, new Date().getTime())
                         .putString(strUrl, result)
@@ -120,6 +124,14 @@ public class DataConnector {
                 password += "1";
                 password = 'F' +password;
                 password += "2";
+                final String userPassword = username + ':' + password;
+                final String encoding = Base64.encodeToString(userPassword.getBytes(), Base64.DEFAULT);
+                urlConnection.setRequestProperty("Authorization", "Basic " + encoding);
+            } else if (strUrl.contains("http://sh-web02.hof-university.de/soap/client.php")) {
+                // Testserver
+                String username = "test";
+                String password = "test";
+
                 final String userPassword = username + ':' + password;
                 final String encoding = Base64.encodeToString(userPassword.getBytes(), Base64.DEFAULT);
                 urlConnection.setRequestProperty("Authorization", "Basic " + encoding);
