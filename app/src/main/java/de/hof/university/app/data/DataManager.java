@@ -131,7 +131,7 @@ public class DataManager {
 
         Parser parser = ParserFactory.create(EParser.MYSCHEDULE);
         // TODO Anscheinend ohne comment
-        String jsonString = this.getData(context,forceRefresh,url,DataManager.CONNECTION.SCHEDULE.getCache());
+        String jsonString = this.getData(context,forceRefresh,url,DataManager.CONNECTION.MYSCHEDULE.getCache());
 
         if (jsonString == "") {
             return null;

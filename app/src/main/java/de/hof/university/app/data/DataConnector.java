@@ -47,7 +47,9 @@ public class DataConnector {
             return sharedPreferences.getString(strUrl, "");
         }else{
             final String result = readStringFromUrl(strUrl);
-            if(!result.isEmpty()) {
+            if (result == null) {
+                return sharedPreferences.getString(strUrl, "");
+            } else if(!result.isEmpty()) {
                 sharedPreferences.edit()
                         .putLong(strUrl + TIME_APPEND, new Date().getTime())
                         .putString(strUrl, result)
@@ -140,6 +142,6 @@ public class DataConnector {
 
         }
 
-        return "";
+        return null;
     }
 }
