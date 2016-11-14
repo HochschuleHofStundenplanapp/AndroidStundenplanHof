@@ -52,7 +52,16 @@ public class MyScheduleParser extends ScheduleParser{
             for (int i = 0; i < jsonArray.length(); ++i) {
                 Schedule schedule = convertJsonObject(jsonArray.getJSONObject(i));
                 if (schedule != null) {
-                    result.add(schedule);
+                    // schauen ob diese Vorlesung bereits enthalten ist
+                    boolean contains = false;
+                    for (Schedule s:result) {
+                        if (s.toString().equals(schedule.toString())) {
+                            contains = true;
+                        }
+                    }
+                    if (contains == false) {
+                        result.add(schedule);
+                    }
                 }
             }
         } catch (final JSONException ignored ) {

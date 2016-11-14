@@ -51,6 +51,23 @@ public class Schedule implements Comparable<Schedule> {
         this.comment = comment;
     }
 
+    @Override
+    public String toString() {
+        return "Schedule{" +
+                ", weekday='" + weekday + '\'' +
+                ", label='" + label + '\'' +
+                ", type='" + type + '\'' +
+                ", group='" + group + '\'' +
+                ", begin='" + begin + '\'' +
+                ", end='" + end + '\'' +
+                ", startdate='" + startdate + '\'' +
+                ", enddate='" + enddate + '\'' +
+                ", room='" + room + '\'' +
+                ", lecturer='" + lecturer + '\'' +
+                ", comment='" + comment + '\'' +
+                '}';
+    }
+
     public final int getId() {
         return id;
     }
