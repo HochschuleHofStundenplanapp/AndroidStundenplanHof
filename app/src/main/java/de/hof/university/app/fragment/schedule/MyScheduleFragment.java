@@ -129,6 +129,17 @@ public class MyScheduleFragment extends ScheduleFragment{
             if (BuildConfig.DEBUG) assert (scheduleList != null); // ob etwas zurück kommt
 
             if (scheduleList != null) {
+                // Die ID's für den Mein Stundenplan nochmal speichern nachdem die Doppelten raus sortiert wurden
+                DataManager.getInstance().deleteAllFromMySchedule(getView().getContext());
+                ArrayList<String> schedulesIds = new ArrayList<>();
+                for (Object object : scheduleList) {
+                    if (object instanceof Schedule) {
+                        Schedule schedule = (Schedule) object;
+                        schedulesIds.add(String.valueOf(schedule.getId()));
+                    }
+                }
+                DataManager.getInstance().addAllToMySchedule(getView().getContext(), schedulesIds);
+
                 return super.updateListView(scheduleList);
             }
         }

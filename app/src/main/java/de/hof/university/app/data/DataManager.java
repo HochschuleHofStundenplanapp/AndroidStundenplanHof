@@ -43,7 +43,7 @@ import de.hof.university.app.model.schedule.Schedule;
  */
 public class DataManager {
 
-    enum CONNECTION {
+    private enum CONNECTION {
         // Testserver: http://sh-web02.hof-university.de
         COURSE("https://www.hof-university.de/soap/client.php?f=Courses&tt=%s", 60*24),
         SCHEDULE("http://sh-web02.hof-university.de/soap/client.php?f=Schedule&stg=%s&sem=%s&tt=%s",60*24),
@@ -81,7 +81,7 @@ public class DataManager {
         return DataManager.dataManager;
     }
 
-    public DataManager() {
+    private DataManager() {
     }
 
     public final ArrayList<Object> getMeals(Context context, boolean forceRefresh){
@@ -90,7 +90,7 @@ public class DataManager {
         String url = DataManager.CONNECTION.MENU.getUrl()+ calendar.get(Calendar.YEAR) + '-' + (calendar.get(Calendar.MONTH) + 1) + '-' + calendar.get(Calendar.DAY_OF_MONTH);
         String xmlString = this.getData(context,forceRefresh,url,DataManager.CONNECTION.MENU.getCache());
 
-        if (xmlString == ""){
+        if (xmlString.equals("")){
             return null;
         }
 
@@ -98,9 +98,7 @@ public class DataManager {
         String[] params ={xmlString, sharedPreferences.getString("speiseplan_tarif", "1")};
         assert parser != null;
 
-        ArrayList<Object> meals = parser.parse(params);
-
-        return meals;
+        return (ArrayList<Object>) parser.parse(params);
     }
 
     public final ArrayList<Object> getSchedule(Context context, String language, String course, String semester,
@@ -108,16 +106,14 @@ public class DataManager {
         final Parser parser = ParserFactory.create(EParser.SCHEDULE);
         final String jsonString = this.getData(context, forceRefresh, String.format(DataManager.CONNECTION.SCHEDULE.getUrl(), DataManager.replaceWhitespace(course), DataManager.replaceWhitespace(semester), DataManager.replaceWhitespace(termTime)) ,DataManager.CONNECTION.SCHEDULE.getCache());
 
-        if (jsonString == ""){
+        if (jsonString.equals("")){
             return null;
         }
 
         String[] params ={jsonString, language};
         assert parser != null;
 
-        ArrayList<Object> schedule = parser.parse(params) ;
-
-        return schedule;
+        return (ArrayList<Object>) parser.parse(params);
     }
 
 
@@ -130,18 +126,16 @@ public class DataManager {
         }
 
         Parser parser = ParserFactory.create(EParser.MYSCHEDULE);
-        // TODO Anscheinend ohne comment
+
         String jsonString = this.getData(context,forceRefresh,url,DataManager.CONNECTION.MYSCHEDULE.getCache());
 
-        if (jsonString == "") {
+        if (jsonString.equals("")) {
             return null;
         }
 
         String[] params ={jsonString, language};
 
-        ArrayList<Object> mySchedule = parser.parse(params);
-
-        return mySchedule;
+        return (ArrayList<Object>) parser.parse(params);
     }
 
     public final ArrayList<Object> getChanges(Context context, String course, String semester,
@@ -149,7 +143,7 @@ public class DataManager {
         // nur Änderungen von Mein Stundenplan holen
         Iterator<String> iterator = this.getMySchedule(context).iterator();
 
-        String url = "";
+        String url;
         if (!iterator.hasNext()) {
             url = DataManager.CONNECTION.CHANGES.getUrl();
             url+="&stg="+DataManager.replaceWhitespace(course);
@@ -168,16 +162,14 @@ public class DataManager {
         Parser parser = ParserFactory.create(EParser.CHANGES);
         String jsonString = this.getData(context,forceRefresh,url,DataManager.CONNECTION.CHANGES.getCache());
 
-        if (jsonString == ""){
+        if (jsonString.equals("")){
             return null;
         }
 
         String[] params ={jsonString};
         assert parser != null;
 
-        ArrayList<Object> myScheduleChanges = parser.parse(params);
-
-        return myScheduleChanges;
+        return (ArrayList<Object>) parser.parse(params);
     }
 
     public final ArrayList<Course> getCourses(Context context, String language, String termTime, boolean forceRefresh){
@@ -187,9 +179,7 @@ public class DataManager {
         String[] params ={jsonString, language};
         assert parser != null;
 
-        final ArrayList<Course> courses = parser.parse(params) ;
-
-        return courses;
+        return (ArrayList<Course>) parser.parse(params);
     }
 
 
@@ -253,7 +243,7 @@ public class DataManager {
         //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         //final Set<String> result = sharedPreferences.getStringSet("myScheduleIds", new HashSet<String>());
 
-        Set<String> result = new HashSet<String>();
+        Set<String> result = new HashSet<>();
         try {
             File file = new File(context.getFilesDir(), myScheduleFilename);
             if (file.exists()) {
@@ -264,6 +254,7 @@ public class DataManager {
                 fis.close();
             }
         } catch (Exception e) {
+            // TODO Fehlermeldung
             e.printStackTrace();
         }
         return result;
