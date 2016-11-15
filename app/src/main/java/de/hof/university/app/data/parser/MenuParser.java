@@ -110,15 +110,18 @@ public class MenuParser implements Parser<Meal> {
                             break;
 
                         case XmlPullParser.END_TAG:
-                         if (xmlTag.equalsIgnoreCase("preis")) {
+                            if (xmlTag.equalsIgnoreCase("preis")) {
                                 if( tariff == xmlTariff ) {
                                     assert meal != null;
                                     meal.setPrice(xmlText);
                                     meal.setTariff(xmlGroup);
                                     result.add(meal);
                                 }
+                            } else if (xmlTag.equalsIgnoreCase("gerichtAttribut")) {
+                                assert meal != null;
+                                meal.addAttribute(xmlText);
                             }
-                            break;
+                        break;
 
                         default:
                             break;

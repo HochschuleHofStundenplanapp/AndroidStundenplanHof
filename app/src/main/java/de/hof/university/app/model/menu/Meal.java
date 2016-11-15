@@ -17,6 +17,7 @@
 package de.hof.university.app.model.menu;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -29,6 +30,7 @@ public class Meal {
     private final String category;
     private String tariff;
     private final Date day;
+    private ArrayList<Integer> attributes;
 
 // --Commented out by Inspection START (17.07.2016 20:11):
 //    public Meal(final Meal meal) {
@@ -61,7 +63,8 @@ public class Meal {
         this.weekDay = weeekDay;
         this.day = tag;
         this.category =category;
-        this.name = name;
+        this.name = name.replace("\\","");
+        this.attributes = new ArrayList<>();
     }
 
 // --Commented out by Inspection START (17.07.2016 20:11):
@@ -125,7 +128,50 @@ public class Meal {
     }
 
     public final String getName() {
-        return name;
+        String result;
+        result = name;
+        String tmpAttributes = "";
+        for (int a:attributes
+             ) {
+            if (tmpAttributes != "") {
+                tmpAttributes += ", ";
+            }
+            if (a == 1) {
+                tmpAttributes += "hausgemacht";
+            } else if (a == 2) {
+                tmpAttributes += "Wild";
+            } else if (a == 3) {
+                tmpAttributes += "Geflügel";
+            } else if (a == 4) {
+                tmpAttributes += "regional";
+            } else if (a == 5) {
+                tmpAttributes += "Schwein";
+            } else if (a == 6) {
+                tmpAttributes += "Fisch";
+            } else if (a == 7) {
+                tmpAttributes += "vegetarisch";
+            } else if (a == 8) {
+                tmpAttributes += "Rind";
+            } else if (a == 9) {
+                tmpAttributes += "nachhaltiger Fang";
+            } else if (a == 10) {
+                tmpAttributes += "vegan";
+            } else if (a == 11) {
+                tmpAttributes += "Lamm";
+            } else if (a == 12) {
+                tmpAttributes += "Meeresfrüchte";
+            } else if (a == 13) {
+                tmpAttributes += "Mensa Vital";
+            } else if (a == 14) {
+                tmpAttributes += "nicht vegetarisch";
+            } else if (a == 15) {
+                tmpAttributes += "Kräuterküche";
+            }
+        }
+        if (tmpAttributes != "") {
+            result += " (" + tmpAttributes + ")";
+        }
+        return result;
     }
 
     public final String getPrice() {
@@ -136,5 +182,9 @@ public class Meal {
         }catch (final NumberFormatException nfe) {
             return price;
         }
+    }
+
+    public void addAttribute(String xmlText) {
+        attributes.add(Integer.parseInt(xmlText));
     }
 }
