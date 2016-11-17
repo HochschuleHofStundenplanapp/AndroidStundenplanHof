@@ -153,21 +153,20 @@ public class DataManager {
         // nur Änderungen von Mein Stundenplan holen
         Iterator<String> iterator = this.getMySchedule(context).iterator();
 
-        String url;
-        if (!iterator.hasNext()) {
-            url =  DataManager.CONNECTION.CHANGES.getUrl();
+        String url =  DataManager.CONNECTION.CHANGES.getUrl();
+
+    //    TODO wenn PHP Script geupdated die 3 Zeilen wieder einkommentieren
+    //    if (!iterator.hasNext()) {
             url += "&stg=" + DataManager.replaceWhitespace(course);
             url += "&sem=" + DataManager.replaceWhitespace(semester);
             url += "&tt="  + DataManager.replaceWhitespace(termTime);
-        } else {
-            url = DataManager.CONNECTION.CHANGES.getUrl();
-
+    //    } else {
             // Fügt die ID's der Vorlesungen hinzu die in Mein Stundenplan sind
             // dadurch werden nur Änderungen davon geholt
             while(iterator.hasNext()){
                 url += "&id[]=" + iterator.next();
             }
-        }
+    //    }
 
         final Parser parser = ParserFactory.create(EParser.CHANGES);
         final String jsonString = this.getData(context,forceRefresh,url,DataManager.CONNECTION.CHANGES.getCache());
