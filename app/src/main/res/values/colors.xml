@@ -20,6 +20,7 @@
     <color name="colorPrimaryOld">#4b4b4a</color>
     <color name="colorPrimaryNew">#4B4B4D</color>
     <color name="colorAccent">#2D4490</color>
+    <color name="colorBlack">#000000</color>
     <color name="colorBlueOld">#0066AF</color>
     <color name="colorBlue">#0134FF</color>
     <color name="colorRed">#FF0101</color>

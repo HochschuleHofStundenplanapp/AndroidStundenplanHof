@@ -65,25 +65,20 @@ public class ChangesParser implements Parser<Changes> {
     }
 
     protected static Changes convertJsonObject(JSONObject jsonObject) {
-        try {
-            final String label = jsonObject.getString(Define.SCHEDULE_PARSER_LABEL);
-            final String comment = jsonObject.getString(Define.SCHEDULE_PARSER_COMMENT);
-            final String group = jsonObject.getString(Define.SCHEDULE_PARSER_GROUP);
-            final String reason = jsonObject.getString(Define.SCHEDULE_PARSER_REASON);
-            final String begin_old = jsonObject.getJSONObject("original").getString("date")+ ' ' +jsonObject.getJSONObject("original").getString("time");
-            String begin_new="";
-            String room_new="";
-            if(!jsonObject.isNull("alternative")){
-                begin_new = jsonObject.getJSONObject("alternative").getString("date") + ' ' + jsonObject.getJSONObject("alternative").getString("time");
-                room_new = jsonObject.getJSONObject("alternative").getString("room");
-            }
-            final String room_old = jsonObject.getJSONObject("original").getString("room");
-            final String lecturer = jsonObject.getString("docent");
-
-            return new Changes(label, comment, group, reason, begin_old, begin_new, room_old, room_new, lecturer);
-        } catch (final JSONException e) {
-            if ( BuildConfig.DEBUG) e.printStackTrace();
-            return null;
+        final String label = jsonObject.optString(Define.SCHEDULE_PARSER_LABEL);
+        final String comment = jsonObject.optString(Define.SCHEDULE_PARSER_COMMENT);
+        final String group = jsonObject.optString(Define.SCHEDULE_PARSER_GROUP);
+        final String reason = jsonObject.optString(Define.SCHEDULE_PARSER_REASON);
+        final String begin_old = jsonObject.optJSONObject("original").optString("date")+ ' ' +jsonObject.optJSONObject("original").optString("time");
+        String begin_new="";
+        String room_new="";
+        if(!jsonObject.isNull("alternative")){
+            begin_new = jsonObject.optJSONObject("alternative").optString("date") + ' ' + jsonObject.optJSONObject("alternative").optString("time");
+            room_new = jsonObject.optJSONObject("alternative").optString("room");
         }
+        final String room_old = jsonObject.optJSONObject("original").optString("room");
+        final String lecturer = jsonObject.optString("docent");
+
+        return new Changes(label, comment, group, reason, begin_old, begin_new, room_old, room_new, lecturer);
     }
 }

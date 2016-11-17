@@ -39,13 +39,13 @@ public class ScheduleParser implements Parser<Schedule> {
 
     @Override
     public ArrayList<Schedule> parse(String[] params) {
-        if(params.length != 2){
+        if (params.length != 2) {
             return null;
         }
         ArrayList<Schedule> result = new ArrayList<Schedule>();
 
         //Escape, if String is empty
-        if(params[0].isEmpty()) {
+        if (params[0].isEmpty()) {
             return result;
         }
         language = params[1];
@@ -57,7 +57,7 @@ public class ScheduleParser implements Parser<Schedule> {
                     result.add(schedule);
                 }
             }
-        } catch (final JSONException ignored ) {
+        } catch (final JSONException ignored) {
 
         }
         return result;
@@ -79,12 +79,11 @@ public class ScheduleParser implements Parser<Schedule> {
         // Wenn Sprache der App auf Englisch gestellt ist englische Wochentage nehmen
         // Vom Webservice kommen nur deutsche Texte. Also suchen wir erst Mal den Wochentag
         // dann geben wir den fremdsprachlichen Text aus.
-        if (!language.equals("de"))
-        {
+        if (!language.equals("de")) {
             try {
-                weekday = new DateFormatSymbols().getWeekdays()[ parseDayOfWeek(weekday, Locale.GERMANY) ];
+                weekday = new DateFormatSymbols().getWeekdays()[parseDayOfWeek(weekday, Locale.GERMANY)];
             } catch (ParseException e) {
-				/* wir konnten den fremdsprachlichen Tag nicht finden, dann bleibt es beim deutschen Tag. */
+                /* wir konnten den fremdsprachlichen Tag nicht finden, dann bleibt es beim deutschen Tag. */
             }
         }
 
@@ -97,7 +96,7 @@ public class ScheduleParser implements Parser<Schedule> {
         final String startdate = jsonObject.optString("startdate");
         final String enddate = jsonObject.optString("enddate");
         final String room = jsonObject.optString("room");
-        final String lecturer = jsonObject.optString("docent").replace("§§",",");
+        final String lecturer = jsonObject.optString("docent").replace("§§", ",");
         final String comment = jsonObject.optString("comment");
 
         return new Schedule(id, weekday, label, type, group, begin, end, startdate, enddate, room, lecturer, comment);

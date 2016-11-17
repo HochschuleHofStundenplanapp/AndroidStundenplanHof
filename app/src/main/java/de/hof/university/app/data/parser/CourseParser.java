@@ -30,50 +30,43 @@ import de.hof.university.app.model.settings.Course;
  * Created by larsg on 17.06.2016.
  */
 public class CourseParser implements Parser<Course> {
-	private String language;
+    private String language;
 
-	@Override
-	public final ArrayList<Course> parse(String[] params) {
-		ArrayList<Course> result = new ArrayList<Course>();
-		if ( params.length == 2 ) {
-			final String jsonString = params[ 0 ];
-			language = params[ 1 ];
-			//Escape, if String is empty
-			if ( jsonString.isEmpty() ) {
-				return result;
-			}
-			JSONArray jsonArray = null;
-			try {
-				jsonArray = new JSONObject(jsonString).getJSONArray("courses");
-			} catch ( final JSONException e ) {
-				if ( BuildConfig.DEBUG ) e.printStackTrace();
-			}
-			for ( int i = 0; i < jsonArray.length(); ++i ) {
-				try {
-					Course course = convertJsonObject(jsonArray.getJSONObject(i));
-					if ( course != null ) {
-						result.add(course);
-					}
-				} catch ( final JSONException ignored ) {
-				}
-			}
-		}
-		return result;
-	}
+    @Override
+    public final ArrayList<Course> parse(String[] params) {
+        ArrayList<Course> result = new ArrayList<Course>();
+        if (params.length == 2) {
+            final String jsonString = params[0];
+            language = params[1];
+            //Escape, if String is empty
+            if (jsonString.isEmpty()) {
+                return result;
+            }
+            JSONArray jsonArray = null;
+            try {
+                // TODO gibt es da vielleicht eine andere Möglichkeit
+                jsonArray = new JSONObject(jsonString).optJSONArray("courses");
+            } catch (final JSONException e) {
+                if (BuildConfig.DEBUG) e.printStackTrace();
+            }
+            for (int i = 0; i < jsonArray.length(); ++i) {
+                Course course = convertJsonObject(jsonArray.optJSONObject(i));
+                if (course != null) {
+                    result.add(course);
+                }
+            }
+        }
+        return result;
+    }
 
-	protected final Course convertJsonObject(JSONObject jsonObject) {
-		try {
-			final String name = jsonObject.getJSONObject(Define.COURSE_PARSER_LABELS).getString(language);
-			final String tag = jsonObject.getString(Define.COURSE_PARSER_COURSE);
-			JSONArray jsonArray = jsonObject.getJSONArray(Define.COURSE_PARSER_SEMESTER);
-			ArrayList<String> terms = new ArrayList<>();
-			for ( int i = 0; i < jsonArray.length(); ++i ) {
-				terms.add(jsonArray.getString(i));
-			}
-			return new Course(name, tag, terms);
-		} catch ( final JSONException e ) {
-			if (BuildConfig.DEBUG) e.printStackTrace();
-			return null;
-		}
-	}
+    protected final Course convertJsonObject(JSONObject jsonObject) {
+        final String name = jsonObject.optJSONObject(Define.COURSE_PARSER_LABELS).optString(language);
+        final String tag = jsonObject.optString(Define.COURSE_PARSER_COURSE);
+        JSONArray jsonArray = jsonObject.optJSONArray(Define.COURSE_PARSER_SEMESTER);
+        ArrayList<String> terms = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); ++i) {
+            terms.add(jsonArray.optString(i));
+        }
+        return new Course(name, tag, terms);
+    }
 }
