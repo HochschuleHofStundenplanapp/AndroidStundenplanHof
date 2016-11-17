@@ -44,25 +44,36 @@ import de.hof.university.app.model.schedule.Schedule;
 public class DataManager {
 
     private enum CONNECTION {
+
+        // Essen
+        MENU("https://www.studentenwerk-oberfranken.de/?eID=bwrkSpeiseplanRss&tx_bwrkspeiseplan_pi2%5Bbar%5D=340&tx_bwrkspeiseplan_pi2%5Bdate%5D=", 60 * 24),
+
+        COURSE("https://www.hof-university.de/soap/client.php?f=Courses&tt=%s",60*24),
+
+        //TODO change for tests and release
         // Testserver: http://sh-web02.hof-university.de
-        COURSE("https://www.hof-university.de/soap/client.php?f=Courses&tt=%s", 60*24),
-        SCHEDULE("http://sh-web02.hof-university.de/soap/client.php?f=Schedule&stg=%s&sem=%s&tt=%s",60*24),
-        CHANGES("http://sh-web02.hof-university.de/soap/client.php?f=Changes",60*3),
-        MYSCHEDULE("http://sh-web02.hof-university.de/soap/client.php?f=MySchedule",60*24),
-        MENU("https://www.studentenwerk-oberfranken.de/?eID=bwrkSpeiseplanRss&tx_bwrkspeiseplan_pi2%5Bbar%5D=340&tx_bwrkspeiseplan_pi2%5Bdate%5D=",60*24);
+            //SCHEDULE("http://sh-web02.hof-university.de/soap/client.php?f=Schedule&stg=%s&sem=%s&tt=%s",60*24),
+            //CHANGES("http://sh-web02.hof-university.de/soap/client.php?f=Changes",60*3),
+            //MYSCHEDULE("http://sh-web02.hof-university.de/soap/client.php?f=MySchedule",60*24),
+
+        //Produktivserver
+            SCHEDULE("https://www.hof-university.de/soap/client.php?f=Schedule&stg=%s&sem=%s&tt=%s",60*24),
+            CHANGES("https://www.hof-university.de/soap/client.php?f=Changes",60*3),
+            MYSCHEDULE("https://www.hof-university.de/soap/client.php?f=MySchedule",60*24),
+        ;
 
         private final String url;
         private final int cache;
-        CONNECTION(String url, int cache){
+        CONNECTION(final String url, final int cache){
             this.url = url;
             this.cache=cache;
         }
 
-        public int getCache(){
+        public final int getCache(){
             return this.cache;
         }
 
-        public String getUrl(){
+        public final String getUrl(){
             return this.url;
         }
     }
@@ -70,11 +81,10 @@ public class DataManager {
     private static final int MAX_CACHE_TIME = 60*24*2;
 
 
-    private final ParserFactory parserFactory = new ParserFactory();
-    private final DataConnector dataConnector = new DataConnector() ;
+    private ParserFactory parserFactory = new ParserFactory();
+    private DataConnector dataConnector = new DataConnector();
     private Set<String> mySchedule;
     private static final String myScheduleFilename = "mySchedule";
-
     private static final DataManager dataManager = new DataManager();
 
     public static DataManager getInstance(){
@@ -85,17 +95,17 @@ public class DataManager {
     }
 
     public final ArrayList<Object> getMeals(Context context, boolean forceRefresh){
-        Parser parser = ParserFactory.create(EParser.MENU);
-        Calendar calendar = Calendar.getInstance();
-        String url = DataManager.CONNECTION.MENU.getUrl()+ calendar.get(Calendar.YEAR) + '-' + (calendar.get(Calendar.MONTH) + 1) + '-' + calendar.get(Calendar.DAY_OF_MONTH);
-        String xmlString = this.getData(context,forceRefresh,url,DataManager.CONNECTION.MENU.getCache());
+        final Parser parser = ParserFactory.create(EParser.MENU);
+        final Calendar calendar = Calendar.getInstance();
+        final String url = DataManager.CONNECTION.MENU.getUrl()+ calendar.get(Calendar.YEAR) + '-' + (calendar.get(Calendar.MONTH) + 1) + '-' + calendar.get(Calendar.DAY_OF_MONTH);
+        final String xmlString = this.getData(context,forceRefresh,url,DataManager.CONNECTION.MENU.getCache());
 
         if (xmlString.equals("")){
             return null;
         }
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String[] params ={xmlString, sharedPreferences.getString("speiseplan_tarif", "1")};
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        final String[] params ={xmlString, sharedPreferences.getString("speiseplan_tarif", "1")};
         assert parser != null;
 
         return (ArrayList<Object>) parser.parse(params);
@@ -110,7 +120,7 @@ public class DataManager {
             return null;
         }
 
-        String[] params ={jsonString, language};
+        final String[] params ={jsonString, language};
         assert parser != null;
 
         return (ArrayList<Object>) parser.parse(params);
@@ -119,21 +129,21 @@ public class DataManager {
 
     public final ArrayList<Object> getMySchedule(Context context, String language, String course, String semester,
                                                  String termTime, boolean forceRefresh){
-        Iterator<String> iterator = this.getMySchedule(context).iterator();
+        final Iterator<String> iterator = this.getMySchedule(context).iterator();
         String url = DataManager.CONNECTION.MYSCHEDULE.getUrl();
         while(iterator.hasNext()) {
-            url+="&id[]="+iterator.next();
+            url += "&id[]=" + iterator.next();
         }
 
-        Parser parser = ParserFactory.create(EParser.MYSCHEDULE);
+        final Parser parser = ParserFactory.create(EParser.MYSCHEDULE);
 
-        String jsonString = this.getData(context,forceRefresh,url,DataManager.CONNECTION.MYSCHEDULE.getCache());
+        final String jsonString = this.getData(context,forceRefresh,url,DataManager.CONNECTION.MYSCHEDULE.getCache());
 
         if (jsonString.equals("")) {
             return null;
         }
 
-        String[] params ={jsonString, language};
+        final String[] params ={jsonString, language};
 
         return (ArrayList<Object>) parser.parse(params);
     }
@@ -145,38 +155,38 @@ public class DataManager {
 
         String url;
         if (!iterator.hasNext()) {
-            url = DataManager.CONNECTION.CHANGES.getUrl();
-            url+="&stg="+DataManager.replaceWhitespace(course);
-            url+="&sem="+DataManager.replaceWhitespace(semester);
-            url+="&tt="+DataManager.replaceWhitespace(termTime);
+            url =  DataManager.CONNECTION.CHANGES.getUrl();
+            url += "&stg=" + DataManager.replaceWhitespace(course);
+            url += "&sem=" + DataManager.replaceWhitespace(semester);
+            url += "&tt="  + DataManager.replaceWhitespace(termTime);
         } else {
             url = DataManager.CONNECTION.CHANGES.getUrl();
 
             // Fügt die ID's der Vorlesungen hinzu die in Mein Stundenplan sind
             // dadurch werden nur Änderungen davon geholt
             while(iterator.hasNext()){
-                url+="&id[]="+iterator.next();
+                url += "&id[]=" + iterator.next();
             }
         }
 
-        Parser parser = ParserFactory.create(EParser.CHANGES);
-        String jsonString = this.getData(context,forceRefresh,url,DataManager.CONNECTION.CHANGES.getCache());
+        final Parser parser = ParserFactory.create(EParser.CHANGES);
+        final String jsonString = this.getData(context,forceRefresh,url,DataManager.CONNECTION.CHANGES.getCache());
 
         if (jsonString.equals("")){
             return null;
         }
 
-        String[] params ={jsonString};
+        final String[] params ={jsonString};
         assert parser != null;
 
         return (ArrayList<Object>) parser.parse(params);
     }
 
     public final ArrayList<Course> getCourses(Context context, String language, String termTime, boolean forceRefresh){
-        Parser parser = ParserFactory.create(EParser.COURSES);
+        final Parser parser = ParserFactory.create(EParser.COURSES);
 
-        String jsonString = this.getData(context,forceRefresh,String.format(DataManager.CONNECTION.COURSE.getUrl(), DataManager.replaceWhitespace(termTime)), DataManager.CONNECTION.COURSE.getCache());
-        String[] params ={jsonString, language};
+        final String jsonString = this.getData(context,forceRefresh,String.format(DataManager.CONNECTION.COURSE.getUrl(), DataManager.replaceWhitespace(termTime)), DataManager.CONNECTION.COURSE.getCache());
+        final String[] params ={jsonString, language};
         assert parser != null;
 
         return (ArrayList<Course>) parser.parse(params);
@@ -192,43 +202,43 @@ public class DataManager {
 
     }
 
-    private static String replaceWhitespace(String str) {
+    private static String replaceWhitespace(final String str) {
         return str.replace(" ", "%20");
     }
 
-    public final void addToMySchedule(Context context, Schedule s){
+    public final void addToMySchedule(final Context context, final Schedule s){
         this.getMySchedule(context).add(String.valueOf(s.getId()));
         this.saveMySchedule(context);
     }
 
-    public final boolean myScheduleContains(Context context, Schedule s){
+    public final boolean myScheduleContains(final Context context, final Schedule s){
         return this.getMySchedule(context).contains(String.valueOf(s.getId()));
     }
 
-    public final void deleteFromMySchedule(Context context, Schedule s){
+    public final void deleteFromMySchedule(final Context context, final Schedule s){
         this.getMySchedule(context).remove(String.valueOf(s.getId()));
         this.saveMySchedule(context);
     }
 
-    public final void addAllToMySchedule(Context context, ArrayList<String> schedulesIds) {
+    public final void addAllToMySchedule( final Context context, final ArrayList<String> schedulesIds) {
         this.getMySchedule(context).addAll(schedulesIds);
         this.saveMySchedule(context);
     }
 
-    public final void deleteAllFromMySchedule(Context context) {
+    public final void deleteAllFromMySchedule( final Context context) {
         this.getMySchedule(context).clear();
         this.saveMySchedule(context);
     }
 
-    private void saveMySchedule(Context context){
+    private void saveMySchedule(final Context context){
         // alte Variante
         //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         //sharedPreferences.edit().putStringSet("myScheduleIds", this.getMySchedule(context)).apply();
 
         try {
-            File file = new File(context.getFilesDir(), myScheduleFilename);
-            FileOutputStream fos = new FileOutputStream(file);
-            ObjectOutputStream os = new ObjectOutputStream(fos);
+            final File file = new File(context.getFilesDir(), myScheduleFilename);
+            final FileOutputStream fos = new FileOutputStream(file);
+            final ObjectOutputStream os = new ObjectOutputStream(fos);
             os.writeObject(this.getMySchedule(context));
             os.close();
             fos.close();
@@ -238,17 +248,17 @@ public class DataManager {
         }
     }
 
-    private static Set<String> readMySchedule(Context context){
+    private static Set<String> readMySchedule(final Context context){
         // alte Variante
         //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         //final Set<String> result = sharedPreferences.getStringSet("myScheduleIds", new HashSet<String>());
 
         Set<String> result = new HashSet<>();
         try {
-            File file = new File(context.getFilesDir(), myScheduleFilename);
+            final File file = new File(context.getFilesDir(), myScheduleFilename);
             if (file.exists()) {
-                FileInputStream fis = new FileInputStream(file);
-                ObjectInputStream is = new ObjectInputStream(fis);
+                final FileInputStream fis = new FileInputStream(file);
+                final ObjectInputStream is = new ObjectInputStream(fis);
                 result = (Set<String>) is.readObject();
                 is.close();
                 fis.close();
@@ -260,19 +270,19 @@ public class DataManager {
         return result;
     }
 
-    private Set<String> getMySchedule(Context context) {
+    private Set<String> getMySchedule(final Context context) {
         if( this.mySchedule == null){
             this.mySchedule = DataManager.readMySchedule(context);
         }
         return this.mySchedule;
     }
 
-    public final int getMyScheduleSize(Context context){
+    public final int getMyScheduleSize(final Context context){
         return this.getMySchedule(context).size();
     }
 
 
-    public final void cleanCache(Context context){
+    public final void cleanCache(final Context context){
         this.dataConnector.cleanCache(context, DataManager.MAX_CACHE_TIME);
     }
 
