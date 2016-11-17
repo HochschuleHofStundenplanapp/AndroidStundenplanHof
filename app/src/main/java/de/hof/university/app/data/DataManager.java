@@ -155,23 +155,40 @@ public class DataManager {
 
         String url =  DataManager.CONNECTION.CHANGES.getUrl();
 
-    //    TODO wenn PHP Script geupdated die 3 Zeilen wieder einkommentieren
-    //    if (!iterator.hasNext()) {
+        if (!iterator.hasNext()) {
             url += "&stg=" + DataManager.replaceWhitespace(course);
             url += "&sem=" + DataManager.replaceWhitespace(semester);
             url += "&tt="  + DataManager.replaceWhitespace(termTime);
-    //    } else {
+        } else {
             // Fügt die ID's der Vorlesungen hinzu die in Mein Stundenplan sind
             // dadurch werden nur Änderungen davon geholt
             while(iterator.hasNext()){
                 url += "&id[]=" + iterator.next();
             }
-    //    }
+        }
 
-        final Parser parser = ParserFactory.create(EParser.CHANGES);
-        final String jsonString = this.getData(context,forceRefresh,url,DataManager.CONNECTION.CHANGES.getCache());
+        Parser parser = ParserFactory.create(EParser.CHANGES);
+        String jsonString = this.getData(context,forceRefresh,url,DataManager.CONNECTION.CHANGES.getCache());
 
-        if (jsonString.equals("")){
+        // TODO Der if-Block kann weg wenn die neue php Version auf dem Server ist
+        if (jsonString.equals("{\n    \"version\": 3.2,\n    \"changes\": [\n\n    ]\n}\n    ") ||
+                jsonString.equals("{\n    \"version\": 3.2,\n    \"changes\": [\n\n    ]\n}\n")) {
+            // Falls keine Änderungen kamen noch einmal die alte Methode ausprobieren:
+            url =  DataManager.CONNECTION.CHANGES.getUrl();
+            url += "&stg=" + DataManager.replaceWhitespace(course);
+            url += "&sem=" + DataManager.replaceWhitespace(semester);
+            url += "&tt="  + DataManager.replaceWhitespace(termTime);
+
+            // Fügt die ID's der Vorlesungen hinzu die in Mein Stundenplan sind
+            // dadurch werden nur Änderungen davon geholt
+            while(iterator.hasNext()){
+                url += "&id[]=" + iterator.next();
+            }
+
+            jsonString = this.getData(context,forceRefresh,url,DataManager.CONNECTION.CHANGES.getCache());
+        }
+
+        if (jsonString.equals("")) {
             return null;
         }
 
