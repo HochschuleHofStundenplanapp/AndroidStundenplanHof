@@ -53,7 +53,7 @@
 
     <string name="addToMySchedule">Hinzufügen</string>
     <string name="deleteFromMySchedule">Löschen</string>
-    <string name="myScheduleInfo">Du kannst unter Stundenplan durch langes Drücken auf einen Eintrag diesen zu Mein Stundenplan hinzufügen.</string>
+    <string name="myScheduleInfo">Durch langes Drücken auf einen Eintrag wird dieser zu Mein Stundenplan hinzugefügt</string>
 
     <string name="experimental">Experimentell</string>
 
@@ -85,7 +85,8 @@
                                - Peter Rill\n
                                - Victor Dienstbier\n
                                - Michael Stepping\n
-                               - Theresa Vogel</string>
+                               - Theresa Vogel\n
+                               - Daniel Glaser</string>
     <string name="toImpressum">Zum Impressum</string>
     <!--URLs -->
     <string name="aboutusURL">http://www.hof-university.de/ueber-uns.html</string>
@@ -97,9 +98,9 @@
     <string name="action_add_all">Alle hinzufügen</string>
     <string name="action_delete_all">Alle löschen</string>
     <string name="added">Hinzugefügt</string>
-    <string name="changesMyScheduleText">Von nun an werden nur noch Änderungen zu den Vorlesungen die Sie zu Mein Stundenplan hinzugefügt haben angezeigt!</string>
+    <string name="changesMyScheduleText">Stundenplanänderungen basieren jetzt auf \"Mein Stundenplan\".</string>
     <string name="deleted">Gelöscht</string>
-    <string name="changesScheduleText">Von nun an werden wieder alle Änderungen zu ihrem gewählten Studiengang angezeigt!</string>
     <string name="hof_university_app_by_lars_gaidzik_amp_lukas_mahr"><![CDATA[Hof University-APP by Lars Gaidzik & Lukas Mahr]]></string>
     <string name="details">Details</string>
+    <string name="changesScheduleText">\"Mein Stundenplan\" ist leer. Alle Stundenplanänderungen werden angezeigt.</string>
 </resources>

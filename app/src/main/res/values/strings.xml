@@ -47,7 +47,7 @@
 
     <string name="addToMySchedule">Add</string>
     <string name="deleteFromMySchedule">Delete</string>
-    <string name="myScheduleInfo">If you press an entry long time, it is added to My Schedule.</string>
+    <string name="myScheduleInfo">Press an entry long time to add it to My Schedule.</string>
 
     <string name="experimental">Experimental</string>
 
@@ -82,8 +82,9 @@
                                - Peter Rill\n
                                - Victor Dienstbier\n
                                - Michael Stepping\n
-                               - Theresa Vogel</string>
-    <string name="toImpressum">Go to the Imprint</string>
+                               - Theresa Vogel\n
+                               - Daniel Glaser</string>
+    <string name="toImpressum">Go to the imprint</string>
     <!--URLs -->
     <string name="aboutusURL">http://www.hof-university.de/ueber-uns.html</string>
     <string name="impressumURL">http://www.hof-university.de/impressum.html</string>
@@ -92,13 +93,13 @@
     <string name="to">To:</string>
     <string name="doubleBackOnClose">To close press back again</string>
     <string name="noChanges">There are no changes</string>
-    <string name="refreshFailed">Refrash failed</string>
+    <string name="refreshFailed">Refresh failed</string>
     <string name="action_add_all">Add all</string>
     <string name="action_delete_all">Delete all</string>
     <string name="added">Added</string>
-    <string name="changesMyScheduleText">From now on only changes from schedules you added to My Schedule are shown!</string>
     <string name="deleted">Deleted</string>
-    <string name="changesScheduleText">From now on all changes from your selected course are shown!</string>
     <string name="hof_university_app_by_lars_gaidzik_amp_lukas_mahr"><![CDATA[Hof University-APP by Lars Gaidzik & Lukas Mahr]]></string>
     <string name="details">Details</string>
+    <string name="changesMyScheduleText">Schedule changes are based on \"My Schedule\"</string>
+    <string name="changesScheduleText">\"My Schedule\" is empty. All schedule changes are shown.</string>
 </resources>
