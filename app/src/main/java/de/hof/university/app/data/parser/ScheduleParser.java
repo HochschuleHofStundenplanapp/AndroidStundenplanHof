@@ -28,7 +28,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import de.hof.university.app.BuildConfig;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.model.schedule.Schedule;
 
@@ -36,7 +35,7 @@ import de.hof.university.app.model.schedule.Schedule;
  * Created by larsg on 17.06.2016.
  */
 public class ScheduleParser implements Parser<Schedule> {
-    private String language;
+    protected String language;
 
     @Override
     public ArrayList<Schedule> parse(String[] params) {
@@ -74,36 +73,33 @@ public class ScheduleParser implements Parser<Schedule> {
         return dayOfWeek;
     }
 
-    protected Schedule convertJsonObject(JSONObject jsonObject) {
-        try {
-            String weekday;
-            try {
-                weekday = jsonObject.getString("day");
-                // Wenn Sprache auf Englisch gestellt ist englische Wochentage nehmen
-                if (!language.equals("de")) {
-                    weekday = new DateFormatSymbols().getWeekdays()[parseDayOfWeek(weekday, Locale.GERMANY)];
-                }
-            } catch (JSONException e) {
-                return null;
-            } catch (ParseException e) {
-                return null;
-            }
-            final int id = jsonObject.getInt("id");
-            final String label = jsonObject.getString(Define.SCHEDULE_PARSER_LABEL);
-            final String type = jsonObject.getString("type");
-            final String group = jsonObject.getString(Define.SCHEDULE_PARSER_GROUP);
-            final String begin = jsonObject.getString("starttime");
-            final String end = jsonObject.getString("endtime");
-            final String startdate = jsonObject.getString("startdate");
-            final String enddate = jsonObject.getString("enddate");
-            final String room = jsonObject.getString("room");
-            final String lecturer = jsonObject.getString("docent").replace("§§",",");
-            final String comment = jsonObject.getString("comment");
+    protected final Schedule convertJsonObject(JSONObject jsonObject) {
 
-            return new Schedule(id, weekday, label, type, group, begin, end, startdate, enddate, room, lecturer, comment);
-        } catch (final JSONException e) {
-            if ( BuildConfig.DEBUG) e.printStackTrace();
-            return null;
+        String weekday = jsonObject.optString("day");
+        // Wenn Sprache der App auf Englisch gestellt ist englische Wochentage nehmen
+        // Vom Webservice kommen nur deutsche Texte. Also suchen wir erst Mal den Wochentag
+        // dann geben wir den fremdsprachlichen Text aus.
+        if (!language.equals("de"))
+        {
+            try {
+                weekday = new DateFormatSymbols().getWeekdays()[ parseDayOfWeek(weekday, Locale.GERMANY) ];
+            } catch (ParseException e) {
+				/* wir konnten den fremdsprachlichen Tag nicht finden, dann bleibt es beim deutschen Tag. */
+            }
         }
+
+        final int id = jsonObject.optInt("id", 0);
+        final String label = jsonObject.optString(Define.SCHEDULE_PARSER_LABEL);
+        final String type = jsonObject.optString("type");
+        final String group = jsonObject.optString(Define.SCHEDULE_PARSER_GROUP);
+        final String begin = jsonObject.optString("starttime");
+        final String end = jsonObject.optString("endtime");
+        final String startdate = jsonObject.optString("startdate");
+        final String enddate = jsonObject.optString("enddate");
+        final String room = jsonObject.optString("room");
+        final String lecturer = jsonObject.optString("docent").replace("§§",",");
+        final String comment = jsonObject.optString("comment");
+
+        return new Schedule(id, weekday, label, type, group, begin, end, startdate, enddate, room, lecturer, comment);
     }
 }
