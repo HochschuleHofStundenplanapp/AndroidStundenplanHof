@@ -130,7 +130,8 @@ public class MyScheduleFragment extends ScheduleFragment{
 
             if (scheduleList != null) {
                 // Die ID's für den Mein Stundenplan nochmal speichern nachdem die Doppelten raus sortiert wurden
-                DataManager.getInstance().deleteAllFromMySchedule(getView().getContext());
+                // auskommentiert da dadurch die id's geändert werden wodurch der Cache nicht mehr stimmt
+                /*DataManager.getInstance().deleteAllFromMySchedule(getView().getContext());
                 ArrayList<String> schedulesIds = new ArrayList<>();
                 for (Object object : scheduleList) {
                     if (object instanceof Schedule) {
@@ -139,7 +140,7 @@ public class MyScheduleFragment extends ScheduleFragment{
                     }
                 }
                 DataManager.getInstance().addAllToMySchedule(getView().getContext(), schedulesIds);
-
+                */
                 return super.updateListView(scheduleList);
             }
         }

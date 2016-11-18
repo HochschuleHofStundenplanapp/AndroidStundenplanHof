@@ -16,10 +16,12 @@
 
 package de.hof.university.app.model.schedule;
 
+import java.io.Serializable;
+
 /**
  * Created by larsg on 09.05.2016.
  */
-public class Schedule implements Comparable<Schedule> {
+public class Schedule implements Comparable<Schedule>, Serializable {
     private static final String date_regex = "dd-MM-yyyy HH:mm:ss";
 
     private int id;
@@ -143,6 +145,9 @@ public class Schedule implements Comparable<Schedule> {
     }
 
     @Override
+    /*
+    ** Sortiert nach Sartzeit
+     */
     public int compareTo(Schedule schedule) {
         // Jahr
         if (Integer.parseInt(getStartdate().substring(6)) > Integer.parseInt(schedule.getStartdate().substring(6))) {
