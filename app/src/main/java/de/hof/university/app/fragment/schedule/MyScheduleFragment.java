@@ -26,7 +26,9 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import de.hof.university.app.BuildConfig;
 import de.hof.university.app.MainActivity;
@@ -130,9 +132,8 @@ public class MyScheduleFragment extends ScheduleFragment{
 
             if (scheduleList != null) {
                 // Die ID's für den Mein Stundenplan nochmal speichern nachdem die Doppelten raus sortiert wurden
-                // auskommentiert da dadurch die id's geändert werden wodurch der Cache nicht mehr stimmt
-                /*DataManager.getInstance().deleteAllFromMySchedule(getView().getContext());
-                ArrayList<String> schedulesIds = new ArrayList<>();
+                DataManager.getInstance().deleteAllFromMySchedule(getView().getContext());
+                Set<String> schedulesIds = new HashSet<>();
                 for (Object object : scheduleList) {
                     if (object instanceof Schedule) {
                         Schedule schedule = (Schedule) object;
@@ -140,7 +141,7 @@ public class MyScheduleFragment extends ScheduleFragment{
                     }
                 }
                 DataManager.getInstance().addAllToMySchedule(getView().getContext(), schedulesIds);
-                */
+
                 return super.updateListView(scheduleList);
             }
         }

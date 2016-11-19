@@ -35,8 +35,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
@@ -234,7 +236,7 @@ public class ScheduleFragment extends AbstractListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle item selection
         if (item.getItemId() == R.id.action_add_all) {
-            ArrayList<String> schedulesIds = new ArrayList<>();
+            Set<String> schedulesIds = new HashSet<>();
             for (Object object : dataList) {
                 if (object instanceof Schedule) {
                     Schedule schedule = (Schedule)object;

@@ -129,6 +129,9 @@ public class DataManager {
 
     public final ArrayList<Object> getMySchedule(Context context, String language, String course, String semester,
                                                  String termTime, boolean forceRefresh){
+        // myScheudle leeren damit es noch mal frisch aus der Datei gelesen wird.
+        // Weil es dort in einer anderen Reihenfolge steht.
+        this.mySchedule = null;
         final Iterator<String> iterator = this.getMySchedule(context).iterator();
         String url = DataManager.CONNECTION.MYSCHEDULE.getUrl();
         while(iterator.hasNext()) {
@@ -150,8 +153,11 @@ public class DataManager {
 
     public final ArrayList<Object> getChanges(Context context, String course, String semester,
                                               String termTime, boolean forceRefresh){
-        // nur Änderungen von Mein Stundenplan holen
-        Iterator<String> iterator = this.getMySchedule(context).iterator();
+
+        // myScheudle leeren damit es noch mal frisch aus der Datei gelesen wird.
+        // Weil es dort in einer anderen Reihenfolge steht.
+        this.mySchedule = null;
+        final Iterator<String> iterator = this.getMySchedule(context).iterator();
 
         String url =  DataManager.CONNECTION.CHANGES.getUrl();
 
@@ -161,7 +167,7 @@ public class DataManager {
             url += "&tt="  + DataManager.replaceWhitespace(termTime);
         } else {
             // Fügt die ID's der Vorlesungen hinzu die in Mein Stundenplan sind
-            // dadurch werden nur Änderungen davon geholt
+            // dadurch werden nur Änderungen von Mein Stundenplan geholt
             while(iterator.hasNext()){
                 url += "&id[]=" + iterator.next();
             }
@@ -169,24 +175,6 @@ public class DataManager {
 
         Parser parser = ParserFactory.create(EParser.CHANGES);
         String jsonString = this.getData(context,forceRefresh,url,DataManager.CONNECTION.CHANGES.getCache());
-
-        // TODO Der if-Block kann weg wenn die neue php Version auf dem Server ist
-        if (jsonString.equals("{\n    \"version\": 3.2,\n    \"changes\": [\n\n    ]\n}\n    ") ||
-                jsonString.equals("{\n    \"version\": 3.2,\n    \"changes\": [\n\n    ]\n}\n")) {
-            // Falls keine Änderungen kamen noch einmal die alte Methode ausprobieren:
-            url =  DataManager.CONNECTION.CHANGES.getUrl();
-            url += "&stg=" + DataManager.replaceWhitespace(course);
-            url += "&sem=" + DataManager.replaceWhitespace(semester);
-            url += "&tt="  + DataManager.replaceWhitespace(termTime);
-
-            // Fügt die ID's der Vorlesungen hinzu die in Mein Stundenplan sind
-            // dadurch werden nur Änderungen davon geholt
-            while(iterator.hasNext()){
-                url += "&id[]=" + iterator.next();
-            }
-
-            jsonString = this.getData(context,forceRefresh,url,DataManager.CONNECTION.CHANGES.getCache());
-        }
 
         if (jsonString.equals("")) {
             return null;
@@ -236,7 +224,7 @@ public class DataManager {
         this.saveMySchedule(context);
     }
 
-    public final void addAllToMySchedule( final Context context, final ArrayList<String> schedulesIds) {
+    public final void addAllToMySchedule( final Context context, final Set<String> schedulesIds) {
         this.getMySchedule(context).addAll(schedulesIds);
         this.saveMySchedule(context);
     }

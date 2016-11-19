@@ -42,7 +42,7 @@ public class ScheduleParser implements Parser<Schedule> {
         if (params.length != 2) {
             return null;
         }
-        ArrayList<Schedule> result = new ArrayList<Schedule>();
+        ArrayList<Schedule> result = new ArrayList<>();
 
         //Escape, if String is empty
         if (params[0].isEmpty()) {
