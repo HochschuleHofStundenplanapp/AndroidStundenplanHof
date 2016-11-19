@@ -212,6 +212,7 @@ public class RaumlisteFragment extends Fragment {
                     if (isCancelled()) break;
                     loginForm = Jsoup
                             .connect("https://www.hof-university.de/anmelden.html")
+                            .timeout(5 * 1000) //4 Sekunden würden reichen aber 1 Sekunde zur Sicherheit
                             .data("user", user, "pass", password)
                             .data("logintype", "login")
                             .data("pid", "27")
@@ -235,7 +236,7 @@ public class RaumlisteFragment extends Fragment {
                         .connect(
                                 "https://www.hof-university.de/studierende/info-service/it-service/raumhardsoftwaresuche.html"
                                         + raumTyp)
-                        .timeout(10 * 1000)
+                        .timeout(6 * 1000) //5 Sekunden würden reichen aber 1 Sekunde zur Sicherheit
                         .data("tx_raumsuche_pi1[day]", day)
                         .data("tx_raumsuche_pi1[month]", month)
                         .data("tx_raumsuche_pi1[year]", year)
