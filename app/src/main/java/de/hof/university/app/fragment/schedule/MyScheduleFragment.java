@@ -142,6 +142,9 @@ public class MyScheduleFragment extends ScheduleFragment{
                 }
                 DataManager.getInstance().addAllToMySchedule(getView().getContext(), schedulesIds);
 
+                // erneut holen mit neu sortierten ID's
+                scheduleList = DataManager.getInstance().getMySchedule(getActivity().getApplicationContext(), getString(R.string.language), course, semester, termTime, Boolean.valueOf(params[3]));
+
                 return super.updateListView(scheduleList);
             }
         }

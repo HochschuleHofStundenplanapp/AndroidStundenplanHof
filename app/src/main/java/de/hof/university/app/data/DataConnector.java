@@ -72,8 +72,7 @@ public class DataConnector {
 
     private String loadFromSharedPreferences(String strUrl) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String result;
-        result = sharedPreferences.getString(strUrl, "");
+        String result = sharedPreferences.getString(strUrl, "");
         return result;
     }
 
