@@ -30,18 +30,25 @@ import de.hof.university.app.model.settings.Course;
  * Created by larsg on 17.06.2016.
  */
 public class CourseParser implements Parser<Course> {
+
+    // Die Sprache der Meldungen aus der Datenbank werden in diese Zielsprache überführt
     private String language;
 
     @Override
     public final ArrayList<Course> parse(String[] params) {
+
         ArrayList<Course> result = new ArrayList<Course>();
         if (params.length == 2) {
+
+	        language = params[1];
+
+			// Zerlegen des JSON Strings in die Kurse
             final String jsonString = params[0];
-            language = params[1];
             //Escape, if String is empty
             if (jsonString.isEmpty()) {
                 return result;
             }
+
             JSONArray jsonArray = null;
             try {
                 // TODO gibt es da vielleicht eine andere Möglichkeit
@@ -50,7 +57,7 @@ public class CourseParser implements Parser<Course> {
                 if (BuildConfig.DEBUG) e.printStackTrace();
             }
             for (int i = 0; i < jsonArray.length(); ++i) {
-                Course course = convertJsonObject(jsonArray.optJSONObject(i));
+                final Course course = convertJsonObject(jsonArray.optJSONObject(i));
                 if (course != null) {
                     result.add(course);
                 }
@@ -59,6 +66,7 @@ public class CourseParser implements Parser<Course> {
         return result;
     }
 
+	// Convert one JSonObject in a Course-Object
     protected final Course convertJsonObject(JSONObject jsonObject) {
         final String name = jsonObject.optJSONObject(Define.COURSE_PARSER_LABELS).optString(language);
         final String tag = jsonObject.optString(Define.COURSE_PARSER_COURSE);

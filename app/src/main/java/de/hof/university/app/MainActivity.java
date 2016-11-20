@@ -23,7 +23,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -35,17 +34,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.fragment.NotenbekanntgabeFragment;
 import de.hof.university.app.experimental.fragment.NotenblattFragment;
 import de.hof.university.app.experimental.fragment.RaumsucheFragment;
 import de.hof.university.app.fragment.ImpressumFragment;
 import de.hof.university.app.fragment.MenuFragment;
-import de.hof.university.app.fragment.schedule.MyScheduleFragment;
-import de.hof.university.app.fragment.settings.SettingsFragment;
 import de.hof.university.app.fragment.schedule.ChangesFragment;
+import de.hof.university.app.fragment.schedule.MyScheduleFragment;
 import de.hof.university.app.fragment.schedule.ScheduleFragment;
+import de.hof.university.app.fragment.settings.SettingsFragment;
 
 
 public class MainActivity extends AppCompatActivity
