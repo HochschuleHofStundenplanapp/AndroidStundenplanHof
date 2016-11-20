@@ -146,7 +146,7 @@ public class ScheduleFragment extends AbstractListFragment {
             return null;
         }
 
-        // TODO Warum geben wir eine Parametersammlung zurück?
+        // TODO Warum geben wir eine Parametersammlung zurück? Wir können hier ein Course Objekt erstellen
         params[0] = course;
         params[1] = semester;
         params[2] = termTime;
