@@ -27,18 +27,18 @@ import de.hof.university.app.model.schedule.Schedule;
 /**
  * Created by Lukas on 07.07.2016.
  */
-public class MyScheduleParser extends ScheduleParser{
+public class MyScheduleParser extends ScheduleParser {
 
 
     @Override
     public final ArrayList<Schedule> parse(String[] params) {
-        if(params.length != 2){
+        if (params.length != 2) {
             return null;
         }
         ArrayList<Schedule> result = new ArrayList<>();
 
         //Escape, if String is empty
-        if(params[0].isEmpty()) {
+        if (params[0].isEmpty()) {
             return result;
         }
         language = params[1];
@@ -49,7 +49,7 @@ public class MyScheduleParser extends ScheduleParser{
                 if (schedule != null) {
                     // schauen ob diese Vorlesung bereits enthalten ist
                     boolean contains = false;
-                    for (Schedule s:result) {
+                    for (Schedule s : result) {
                         if (s.toString().equals(schedule.toString())) {
                             contains = true;
                         }
@@ -59,7 +59,7 @@ public class MyScheduleParser extends ScheduleParser{
                     }
                 }
             }
-        } catch (final JSONException ignored ) {
+        } catch (final JSONException ignored) {
 
         }
         return result;

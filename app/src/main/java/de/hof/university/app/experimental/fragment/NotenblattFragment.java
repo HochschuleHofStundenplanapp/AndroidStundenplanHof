@@ -56,7 +56,7 @@ public class NotenblattFragment extends Fragment {
 
     @Override
     public final void onDestroyView() {
-        if(task!=null) {
+        if (task != null) {
             task.cancel(true);
         }
         swipeContainer.setRefreshing(false);
@@ -71,9 +71,9 @@ public class NotenblattFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         loginController = LoginController.getInstance(getActivity());
-        if( (savedInstanceState == null) || !savedInstanceState.containsKey("DATA") ){
+        if ((savedInstanceState == null) || !savedInstanceState.containsKey("DATA")) {
             html = "";
-        }else{
+        } else {
             html = savedInstanceState.getString("DATA");
         }
 
@@ -136,12 +136,11 @@ public class NotenblattFragment extends Fragment {
     }
 
 
-
-    private void updateData(View v){
+    private void updateData(View v) {
         String[] params = new String[2];
-        if(loginController.showDialog()) {
-            params[0]=loginController.getUsername();
-            params[1]= loginController.getPassword();
+        if (loginController.showDialog()) {
+            params[0] = loginController.getUsername();
+            params[1] = loginController.getPassword();
             task = new NotenblattFragment.GetNotenblattTask();
             task.execute(params);
         }
@@ -164,7 +163,7 @@ public class NotenblattFragment extends Fragment {
 
         @Override
         protected final String doInBackground(String... params) {
-            String result="";
+            String result = "";
             System.setProperty("jsse.enableSNIExtension", "false");
 
 
@@ -184,8 +183,8 @@ public class NotenblattFragment extends Fragment {
                 String javascript = doc.getElementsByAttributeValueMatching("name", "Javascript").val();
 
                 //Wenn session leer ist, dann ist der Login fehlgeschlagen
-                if(session.isEmpty()){
-                    errorText=getString(R.string.loginFailed);
+                if (session.isEmpty()) {
+                    errorText = getString(R.string.loginFailed);
                     return "";
                 }
                 //Notenblatt
@@ -195,11 +194,11 @@ public class NotenblattFragment extends Fragment {
                 doc2.getElementsByTag("a").remove();
                 result = doc2.html();
             } catch (IOException e) {
-                if ( BuildConfig.DEBUG) e.printStackTrace();
+                if (BuildConfig.DEBUG) e.printStackTrace();
 
-                if( e.getClass() == InterruptedIOException.class ) { //Wurde einfach abgebrochen -> nichts tun
+                if (e.getClass() == InterruptedIOException.class) { //Wurde einfach abgebrochen -> nichts tun
                     return "";
-                }else {
+                } else {
                     errorText = getString(R.string.lesenotenblattfehler);
                 }
             }
@@ -208,7 +207,7 @@ public class NotenblattFragment extends Fragment {
 
         @Override
         protected final void onCancelled() {
-            html="";
+            html = "";
             super.onCancelled();
         }
 
@@ -217,10 +216,10 @@ public class NotenblattFragment extends Fragment {
             swipeContainer.setRefreshing(false);
 
             //Wenn es einen Fehler gab -> ausgeben
-            if(!errorText.isEmpty()){
+            if (!errorText.isEmpty()) {
                 Toast.makeText(getView().getContext(), errorText, Toast.LENGTH_LONG).show();
             }
-            html=aString; //Ergebnis merken, damit beim erneuten Anzeigen nicht neu gelesen werden muss
+            html = aString; //Ergebnis merken, damit beim erneuten Anzeigen nicht neu gelesen werden muss
             webView.loadData(aString, "text/html", null);
 
 

@@ -18,7 +18,7 @@ package de.hof.university.app.experimental.model;
 
 /**
  * Created by Lukas on 05.07.2016.
-*/
+ */
 public class Suchdetails implements Level {
 
     final String datum;

@@ -45,16 +45,16 @@ public class MenuParser implements Parser<Meal> {
     @Override
     public final ArrayList<Meal> parse(String[] params) {
         ArrayList<Meal> result = new ArrayList<>();
-        if(params.length==2) {
+        if (params.length == 2) {
             String xmlString = params[0];
-            try{
-                tariff =Integer.valueOf(params[1]);
-            }catch (NumberFormatException nfe){
-                tariff=1;
+            try {
+                tariff = Integer.valueOf(params[1]);
+            } catch (NumberFormatException nfe) {
+                tariff = 1;
             }
 
             //Escape, if String is empty
-            if(xmlString.isEmpty()) {
+            if (xmlString.isEmpty()) {
                 return result;
             }
 
@@ -67,7 +67,7 @@ public class MenuParser implements Parser<Meal> {
                 Date xmlDay = new Date();
                 String xmlWeekday = "";
                 Integer xmlTariff = 0;
-                String xmlGroup="";
+                String xmlGroup = "";
 
                 int eventType = xmlParser.getEventType();
                 while (eventType != XmlPullParser.END_DOCUMENT) {
@@ -81,8 +81,8 @@ public class MenuParser implements Parser<Meal> {
                             }
                             if (xmlTag.equalsIgnoreCase("kategorie")) {
                                 xmlCategory = xmlParser.getAttributeValue(null, "name");
-                                if(xmlCategory.equalsIgnoreCase("Salat_suppe")){
-                                    xmlCategory="Salat";
+                                if (xmlCategory.equalsIgnoreCase("Salat_suppe")) {
+                                    xmlCategory = "Salat";
                                 }
 //                                System.out.println(xmlParser.getAttributeValue(null, "name"));
                             }
@@ -90,18 +90,18 @@ public class MenuParser implements Parser<Meal> {
                                 try {
                                     xmlDay = MenuParser.sdf.parse(xmlParser.getAttributeValue(null, "datum"));
                                 } catch (ParseException e) {
-                                    if ( BuildConfig.DEBUG) e.printStackTrace();
+                                    if (BuildConfig.DEBUG) e.printStackTrace();
                                 }
                                 xmlWeekday = xmlParser.getAttributeValue(null, "wochentag");
 //                                System.out.println(xmlParser.getAttributeValue(null, "wochentag"));
                             }
-                            if(xmlTag.equalsIgnoreCase("preis")){
+                            if (xmlTag.equalsIgnoreCase("preis")) {
                                 try {
                                     xmlTariff = Integer.valueOf(xmlParser.getAttributeValue(null, "gruppenId"));
-                                }catch (NumberFormatException nfe){
-                                    xmlTariff=0;
+                                } catch (NumberFormatException nfe) {
+                                    xmlTariff = 0;
                                 }
-                                 xmlGroup = xmlParser.getAttributeValue(null, "gruppe");
+                                xmlGroup = xmlParser.getAttributeValue(null, "gruppe");
                             }
                             break;
 
@@ -111,7 +111,7 @@ public class MenuParser implements Parser<Meal> {
 
                         case XmlPullParser.END_TAG:
                             if (xmlTag.equalsIgnoreCase("preis")) {
-                                if( tariff == xmlTariff ) {
+                                if (tariff == xmlTariff) {
                                     assert meal != null;
                                     meal.setPrice(xmlText);
                                     meal.setTariff(xmlGroup);
@@ -121,7 +121,7 @@ public class MenuParser implements Parser<Meal> {
                                 assert meal != null;
                                 meal.addAttribute(xmlText);
                             }
-                        break;
+                            break;
 
                         default:
                             break;
@@ -129,10 +129,10 @@ public class MenuParser implements Parser<Meal> {
                     eventType = xmlParser.next();
                 }
             } catch (final XmlPullParserException e) {
-                if ( BuildConfig.DEBUG) e.printStackTrace();
+                if (BuildConfig.DEBUG) e.printStackTrace();
                 result.clear();
             } catch (final IOException e) {
-                if ( BuildConfig.DEBUG) e.printStackTrace();
+                if (BuildConfig.DEBUG) e.printStackTrace();
                 result.clear();
             }
         }

@@ -37,9 +37,9 @@ public class Schedule implements Comparable<Schedule>, Serializable {
     private final String lecturer;
     private final String comment;
 
-    public Schedule( final int id, final String weekday, final String label, final String type, final String group,
-                     final String begin, final String end, final String startdate, final String enddate, final String room, final String lecturer, final String comment) {
-        this.id=id;
+    public Schedule(final int id, final String weekday, final String label, final String type, final String group,
+                    final String begin, final String end, final String startdate, final String enddate, final String room, final String lecturer, final String comment) {
+        this.id = id;
         this.weekday = weekday;
         this.label = label;
         this.type = type;
@@ -120,28 +120,28 @@ public class Schedule implements Comparable<Schedule>, Serializable {
     }
 
     public final String getTime() {
-        return begin +" - " + end;
+        return begin + " - " + end;
     }
 
     public final String getDetails() {
         String result = label;
 
-        result += '\n' +lecturer;
+        result += '\n' + lecturer;
 
-        if ( (group != null) && !group.isEmpty() ) {
-            result += '\n' +  group ;
+        if ((group != null) && !group.isEmpty()) {
+            result += '\n' + group;
         }
 
         // Hier steht unter anderem "Beginn ab KW XY"
-        if ( (comment != null) && !comment.isEmpty() ) {
-            result += '\n' +  comment ;
+        if ((comment != null) && !comment.isEmpty()) {
+            result += '\n' + comment;
         }
 
         return result;
     }
 
     public final String getShortDescription() {
-        return label + " ("+ begin.split(" ")[1]+ " - "+ end.split(" ")[1]+ ')';
+        return label + " (" + begin.split(" ")[1] + " - " + end.split(" ")[1] + ')';
     }
 
     @Override
@@ -152,11 +152,11 @@ public class Schedule implements Comparable<Schedule>, Serializable {
         // Jahr
         if (Integer.parseInt(getStartdate().substring(6)) > Integer.parseInt(schedule.getStartdate().substring(6))) {
             return +1;
-        } else if (Integer.parseInt(getStartdate().substring(6)) == Integer.parseInt(schedule.getStartdate().substring(6))){
+        } else if (Integer.parseInt(getStartdate().substring(6)) == Integer.parseInt(schedule.getStartdate().substring(6))) {
             // Monat
-            if (Integer.parseInt(getStartdate().substring(3, 5)) > Integer.parseInt(schedule.getStartdate().substring(3,5))) {
+            if (Integer.parseInt(getStartdate().substring(3, 5)) > Integer.parseInt(schedule.getStartdate().substring(3, 5))) {
                 return +1;
-            } else if (Integer.parseInt(getStartdate().substring(3, 5)) == Integer.parseInt(schedule.getStartdate().substring(3,5))) {
+            } else if (Integer.parseInt(getStartdate().substring(3, 5)) == Integer.parseInt(schedule.getStartdate().substring(3, 5))) {
                 // Tag
                 if (Integer.parseInt(getStartdate().substring(0, 2)) > Integer.parseInt(schedule.getStartdate().substring(0, 2))) {
                     return +1;
@@ -168,9 +168,8 @@ public class Schedule implements Comparable<Schedule>, Serializable {
                     }
                 }
             }
-        }
-        else
-            assert(false);
+        } else
+            assert (false);
 
         return -1;
     }

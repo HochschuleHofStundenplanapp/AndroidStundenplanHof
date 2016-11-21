@@ -39,10 +39,10 @@ public class ScheduleAdapter extends ArrayAdapter<Object> {
     private final LayoutInflater vi;
 
     public ScheduleAdapter(final Context context, final ArrayList<Object> items) {
-        super(context, 0,items);
+        super(context, 0, items);
 
         this.items = items;
-        vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class ScheduleAdapter extends ArrayAdapter<Object> {
 
         final Object obj = items.get(position);
         if (obj != null) {
-            if(obj instanceof Schedule){
+            if (obj instanceof Schedule) {
                 Schedule st = (Schedule) obj;
                 v = vi.inflate(R.layout.list_item_stundenplan, null);
                 final TextView tvTime = (TextView) v.findViewById(R.id.stundenplan_time);
@@ -61,7 +61,7 @@ public class ScheduleAdapter extends ArrayAdapter<Object> {
                 tvRoom.setText(st.getRoom());
                 tvDetails.setText(st.getDetails());
 
-            } else if(obj instanceof BigListItem){
+            } else if (obj instanceof BigListItem) {
                 BigListItem tag = (BigListItem) obj;
                 v = vi.inflate(R.layout.list_item_big, null);
                 final TextView sectionView = (TextView) v.findViewById(R.id.list_item_big_text);

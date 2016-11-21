@@ -56,25 +56,25 @@ public class ChangesFragment extends AbstractListFragment {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String course = sharedPref.getString("studiengang", "");
         String semester = sharedPref.getString("semester", "");
-        String termTime = sharedPref.getString("term_time","");
+        String termTime = sharedPref.getString("term_time", "");
 
-        if(termTime.isEmpty()){
+        if (termTime.isEmpty()) {
             Toast.makeText(getView().getContext(), getString(R.string.noTermTimeSelected), Toast.LENGTH_LONG).show();
             return null;
         }
 
-        if(course.isEmpty()){
+        if (course.isEmpty()) {
             Toast.makeText(getView().getContext(), getString(R.string.noCourseSelected), Toast.LENGTH_LONG).show();
             return null;
         }
-        if(semester.isEmpty()){
+        if (semester.isEmpty()) {
             Toast.makeText(getView().getContext(), getString(R.string.noSemesterSelected), Toast.LENGTH_LONG).show();
             return null;
         }
 
         params[0] = course;
         params[1] = semester;
-        params[2]=termTime;
+        params[2] = termTime;
         params[3] = String.valueOf(forceRefresh);
         return params;
     }

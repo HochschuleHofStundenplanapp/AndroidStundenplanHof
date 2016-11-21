@@ -57,7 +57,7 @@ public class ScheduleFragment extends AbstractListFragment {
     public final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        weekdayListPos=0;
+        weekdayListPos = 0;
     }
 
     @Override
@@ -74,14 +74,14 @@ public class ScheduleFragment extends AbstractListFragment {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 
-        if(v.getId()==R.id.listView){
-            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+        if (v.getId() == R.id.listView) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
             Schedule schedule = (Schedule) listView.getItemAtPosition(info.position);
 
             final DataManager dm = DataManager.getInstance();
 
             //Wenn noch nicht im Mein Stundenplan -> hinzufügen anzeigen
-            if(!dm.myScheduleContains(v.getContext(), schedule)) {
+            if (!dm.myScheduleContains(v.getContext(), schedule)) {
                 menu.setHeaderTitle(R.string.myschedule);
                 menu.add(Menu.NONE, 0, 0, R.string.addToMySchedule);
             }
@@ -90,13 +90,13 @@ public class ScheduleFragment extends AbstractListFragment {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         Schedule schedule = (Schedule) listView.getItemAtPosition(info.position);
 
-        if(item.getTitle().equals(getString(R.string.addToMySchedule))) {
+        if (item.getTitle().equals(getString(R.string.addToMySchedule))) {
             DataManager.getInstance().addToMySchedule(info.targetView.getContext(), schedule);
             Toast.makeText(getView().getContext(), getString(R.string.added), Toast.LENGTH_SHORT).show();
-            if(DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) == 1) {
+            if (DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) == 1) {
                 Toast.makeText(getView().getContext(), getString(R.string.changesMyScheduleText), Toast.LENGTH_LONG).show();
             }
         }
@@ -130,18 +130,18 @@ public class ScheduleFragment extends AbstractListFragment {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         final String course = sharedPref.getString("studiengang", "");
         final String semester = sharedPref.getString("semester", "");
-        final String termTime = sharedPref.getString("term_time","");
+        final String termTime = sharedPref.getString("term_time", "");
 
-        if(termTime.isEmpty()){
+        if (termTime.isEmpty()) {
             Toast.makeText(getView().getContext(), getString(R.string.noTermTimeSelected), Toast.LENGTH_LONG).show();
             return null;
         }
 
-        if(course.isEmpty()){
+        if (course.isEmpty()) {
             Toast.makeText(getView().getContext(), getString(R.string.noCourseSelected), Toast.LENGTH_LONG).show();
             return null;
         }
-        if(semester.isEmpty()){
+        if (semester.isEmpty()) {
             Toast.makeText(getView().getContext(), getString(R.string.noSemesterSelected), Toast.LENGTH_LONG).show();
             return null;
         }
@@ -169,8 +169,8 @@ public class ScheduleFragment extends AbstractListFragment {
         // Temporäre Liste für die Vorlesungen die nur an einem Tag stattfinden (fix) damit sie am Ende angezeigt werden.
         ArrayList<Schedule> fixDataList = new ArrayList<>();
         for (Object object : list) {
-            if(object instanceof Schedule) {
-                Schedule schedule = (Schedule)object;
+            if (object instanceof Schedule) {
+                Schedule schedule = (Schedule) object;
                 // Wenn eine Vorlesung nur an einem Tag stattfindet sind Start- und Enddate gleich
                 if (schedule.getStartdate().equals(schedule.getEnddate())) {
                     fixDataList.add(schedule);
@@ -197,11 +197,6 @@ public class ScheduleFragment extends AbstractListFragment {
             }
             sortDataList.add(schedule);
         }
-
-        /*dataList.clear();
-        dataList.addAll(tmpDataList);
-        dataList.addAll(sortDataList);
-        */
 
         tmpDataList.addAll(sortDataList);
 
@@ -239,7 +234,7 @@ public class ScheduleFragment extends AbstractListFragment {
             Set<String> schedulesIds = new HashSet<>();
             for (Object object : dataList) {
                 if (object instanceof Schedule) {
-                    Schedule schedule = (Schedule)object;
+                    Schedule schedule = (Schedule) object;
                     schedulesIds.add(String.valueOf(schedule.getId()));
                 }
             }

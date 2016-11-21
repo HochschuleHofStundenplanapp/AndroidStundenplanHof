@@ -242,7 +242,7 @@ public class RaumsucheFragment extends Fragment {
                         RaumlisteFragment raumFragment = new RaumlisteFragment();
                         raumFragment.setArguments(b);
                         getFragmentManager().beginTransaction().replace(R.id.content_main, raumFragment).addToBackStack(null).commit();
-                    } catch ( final ParseException e) {
+                    } catch (final ParseException e) {
                         Toast.makeText(getView().getContext(), getString(R.string.raumsuchefehler), Toast.LENGTH_LONG).show();
                     }
                 }

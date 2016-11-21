@@ -39,10 +39,10 @@ public class MenuAdapter extends ArrayAdapter<Object> {
     private final LayoutInflater vi;
 
     public MenuAdapter(final Context context, final ArrayList<Object> items) {
-        super(context,0, items);
+        super(context, 0, items);
 
         this.items = items;
-        vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class MenuAdapter extends ArrayAdapter<Object> {
         View v = convertView;
         final Object obj = items.get(position);
         if (obj != null) {
-            if(obj instanceof BigListItem){
+            if (obj instanceof BigListItem) {
                 BigListItem st = (BigListItem) obj;
                 v = vi.inflate(R.layout.list_item_big, null);
 
@@ -61,7 +61,7 @@ public class MenuAdapter extends ArrayAdapter<Object> {
                 final TextView sectionView = (TextView) v.findViewById(R.id.list_item_big_text);
                 sectionView.setText(st.getTitle());
 
-            }else if(obj instanceof MediumListItem){
+            } else if (obj instanceof MediumListItem) {
                 MediumListItem sk = (MediumListItem) obj;
                 v = vi.inflate(R.layout.list_item_medium, null);
 
@@ -71,17 +71,17 @@ public class MenuAdapter extends ArrayAdapter<Object> {
 
                 final TextView sectionView = (TextView) v.findViewById(R.id.list_item_medium_text);
                 sectionView.setText(sk.getTitle());
-            }else{
-                Meal sp = (Meal)obj;
+            } else {
+                Meal sp = (Meal) obj;
                 v = vi.inflate(R.layout.list_item_speiseplan, null);
-                final TextView title = (TextView)v.findViewById(R.id.list_item_level2_title);
-                final TextView subtitle = (TextView)v.findViewById(R.id.list_item_level2_price);
+                final TextView title = (TextView) v.findViewById(R.id.list_item_level2_title);
+                final TextView subtitle = (TextView) v.findViewById(R.id.list_item_level2_price);
 
 
                 if (title != null) {
                     title.setText(sp.getName());
                 }
-                if(subtitle != null) {
+                if (subtitle != null) {
                     subtitle.setText(sp.getPrice());
                 }
             }

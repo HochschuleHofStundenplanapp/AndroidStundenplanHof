@@ -24,69 +24,69 @@ import de.hof.university.app.BuildConfig;
  */
 public final class Log {
 
-	private Log() {
-		super();
-	}
+    private Log() {
+        super();
+    }
 
-	/**
-	 * Look into android.util.Log.d
-	 *
-	 * @param Tag
-	 * @param msg
-	 */
-	public static void d(final String Tag, final String msg) {
-		if ( BuildConfig.DEBUG) {
-			android.util.Log.d(Tag, msg);
-		}
-	}
+    /**
+     * Look into android.util.Log.d
+     *
+     * @param Tag
+     * @param msg
+     */
+    public static void d(final String Tag, final String msg) {
+        if (BuildConfig.DEBUG) {
+            android.util.Log.d(Tag, msg);
+        }
+    }
 
-	/**
-	 * Look into android.util.Log.i
-	 *
-	 * @param Tag
-	 * @param msg
-	 */
-	public static void i(final String Tag, final String msg) {
-		if (BuildConfig.DEBUG) {
-			android.util.Log.i(Tag, msg);
-		}
-	}
+    /**
+     * Look into android.util.Log.i
+     *
+     * @param Tag
+     * @param msg
+     */
+    public static void i(final String Tag, final String msg) {
+        if (BuildConfig.DEBUG) {
+            android.util.Log.i(Tag, msg);
+        }
+    }
 
-	/**
-	 * Look into android.util.Log.e
-	 *
-	 * @param Tag
-	 * @param msg
-	 */
-	public static void e(final String Tag, final String msg) {
-		if (BuildConfig.DEBUG) {
-			android.util.Log.e(Tag, msg);
-		}
-	}
+    /**
+     * Look into android.util.Log.e
+     *
+     * @param Tag
+     * @param msg
+     */
+    public static void e(final String Tag, final String msg) {
+        if (BuildConfig.DEBUG) {
+            android.util.Log.e(Tag, msg);
+        }
+    }
 
-	/**
-	 * Look into android.util.Log.e
-	 *
-	 * @param Tag
-	 * @param msg
-	 * @param e
-	 */
-	public static void e(final String Tag, final String msg, final Exception e) {
-		if (BuildConfig.DEBUG) {
-			android.util.Log.e(Tag, msg, e);
-		}
-	}
+    /**
+     * Look into android.util.Log.e
+     *
+     * @param Tag
+     * @param msg
+     * @param e
+     */
+    public static void e(final String Tag, final String msg, final Exception e) {
+        if (BuildConfig.DEBUG) {
+            android.util.Log.e(Tag, msg, e);
+        }
+    }
 
-	/**
-	 * Look into android.util.Log.v
-	 *
-	 * @param Tag
-	 * @param msg
-	 */
-	public static void v(final String Tag, final String msg) {
-		if (BuildConfig.DEBUG) {
-			android.util.Log.v(Tag, msg);
-		}
-	}
+    /**
+     * Look into android.util.Log.v
+     *
+     * @param Tag
+     * @param msg
+     */
+    public static void v(final String Tag, final String msg) {
+        if (BuildConfig.DEBUG) {
+            android.util.Log.v(Tag, msg);
+        }
+    }
 
 }

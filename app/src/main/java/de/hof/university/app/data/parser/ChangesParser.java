@@ -34,20 +34,20 @@ public class ChangesParser implements Parser<Changes> {
     @Override
     public final ArrayList<Changes> parse(String[] params) {
         ArrayList<Changes> result = new ArrayList<>();
-        if( 1 == params.length ) {
+        if (1 == params.length) {
             String jsonString = params[0];
             //Escape, if String is empty
-            if(jsonString.isEmpty()) {
+            if (jsonString.isEmpty()) {
                 return result;
             }
             try {
                 final JSONArray jsonArray = new JSONObject(jsonString).getJSONArray("changes");
                 for (int i = 0; i < jsonArray.length(); ++i) {
                     final Changes change = convertJsonObject(jsonArray.getJSONObject(i));
-                    if ( null != change ) {
+                    if (null != change) {
                         // schauen ob diese Änderung bereits enthalten ist.
                         boolean contains = false;
-                        for (Changes c:result) {
+                        for (Changes c : result) {
                             if (c.toString().equals(change.toString())) {
                                 contains = true;
                             }
@@ -57,7 +57,7 @@ public class ChangesParser implements Parser<Changes> {
                         }
                     }
                 }
-            } catch (final JSONException ignored ) {
+            } catch (final JSONException ignored) {
 
             }
         }
@@ -69,10 +69,10 @@ public class ChangesParser implements Parser<Changes> {
         final String comment = jsonObject.optString(Define.SCHEDULE_PARSER_COMMENT);
         final String group = jsonObject.optString(Define.SCHEDULE_PARSER_GROUP);
         final String reason = jsonObject.optString(Define.SCHEDULE_PARSER_REASON);
-        final String begin_old = jsonObject.optJSONObject("original").optString("date")+ ' ' +jsonObject.optJSONObject("original").optString("time");
-        String begin_new="";
-        String room_new="";
-        if(!jsonObject.isNull("alternative")){
+        final String begin_old = jsonObject.optJSONObject("original").optString("date") + ' ' + jsonObject.optJSONObject("original").optString("time");
+        String begin_new = "";
+        String room_new = "";
+        if (!jsonObject.isNull("alternative")) {
             begin_new = jsonObject.optJSONObject("alternative").optString("date") + ' ' + jsonObject.optJSONObject("alternative").optString("time");
             room_new = jsonObject.optJSONObject("alternative").optString("room");
         }

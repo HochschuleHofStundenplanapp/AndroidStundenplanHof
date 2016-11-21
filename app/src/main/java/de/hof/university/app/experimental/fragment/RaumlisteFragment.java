@@ -19,6 +19,7 @@ package de.hof.university.app.experimental.fragment;
 /**
  * Created by Lukas on 05.07.2016.
  */
+
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -131,7 +132,7 @@ public class RaumlisteFragment extends Fragment {
 
         //Aktualisieren, wenn noch keine Daten darin stehen. 1. Element ist immer da
         //wegen Kopfzeile mit Infos zur Suchanfrage, daher >2 prüfen
-        if(raumList.size()<2) {
+        if (raumList.size() < 2) {
             updateData();
         }
 
@@ -143,17 +144,17 @@ public class RaumlisteFragment extends Fragment {
         super.onResume();
     }
 
-    private void updateData(){
-        String[] params = new String[ 9 ];
-        params[0]=user;
-        params[1]=password;
-        params[2]=year;
-        params[3]=month;
-        params[4]=day;
-        params[5]=timeStart;
-        params[6]=timeEnd;
-        params[7]=raumTyp;
-        params[8]=prettyDate;
+    private void updateData() {
+        String[] params = new String[9];
+        params[0] = user;
+        params[1] = password;
+        params[2] = year;
+        params[3] = month;
+        params[4] = day;
+        params[5] = timeStart;
+        params[6] = timeEnd;
+        params[7] = raumTyp;
+        params[8] = prettyDate;
 
         task = new RaumlisteFragment.GetRaumTask();
         task.execute(params);
@@ -161,7 +162,7 @@ public class RaumlisteFragment extends Fragment {
 
     @Override
     public final void onDestroyView() {
-        if(task!=null) {
+        if (task != null) {
             task.cancel(true);
         }
         swipeContainer.setRefreshing(false);
@@ -198,7 +199,7 @@ public class RaumlisteFragment extends Fragment {
 
             ArrayList<Level> tmpRaumList = new ArrayList<Level>();
 
-            tmpRaumList.add(new Suchdetails(getString(R.string.date)+ ' ' +prettyDate,getString(R.string.timeFrom)+": "+ timeFrom,getString(R.string.timeTo)+": "+ timeTo));
+            tmpRaumList.add(new Suchdetails(getString(R.string.date) + ' ' + prettyDate, getString(R.string.timeFrom) + ": " + timeFrom, getString(R.string.timeTo) + ": " + timeTo));
 
             Connection.Response loginForm = null;
             Document document;
@@ -255,8 +256,8 @@ public class RaumlisteFragment extends Fragment {
                             wenn Stringlänge > 2    >> da Kategorie 2 Zeichen
                             neue Kategorie != curCategory
                      */
-                    if( (room.length() > 2) && !room.substring(0, 2).equals(curCategory) ){
-                        room = room.substring(0,2); // Erzeuge Kategorie
+                    if ((room.length() > 2) && !room.substring(0, 2).equals(curCategory)) {
+                        room = room.substring(0, 2); // Erzeuge Kategorie
                         tmpRaumList.add(new Raumkategorie(room));
                         curCategory = room; // Lege neue Kategorie fest
                     }
@@ -264,7 +265,7 @@ public class RaumlisteFragment extends Fragment {
                 }
 
             } catch (IOException e) {
-                if( e.getClass() == InterruptedIOException.class ) //Wurde einfach abgebrochen -> nichts tun
+                if (e.getClass() == InterruptedIOException.class) //Wurde einfach abgebrochen -> nichts tun
                 {
                     errorText = getString(R.string.raumsuchefehler);
                     return null;
@@ -283,8 +284,8 @@ public class RaumlisteFragment extends Fragment {
             swipeContainer.setRefreshing(false);
 
             // Wenn ein schlimmer Fehler passiert ist, dann kann das Objekt null sein
-            if ( result != null && errorText.isEmpty()) {
-                if ( !result.isEmpty() ) {
+            if (result != null && errorText.isEmpty()) {
+                if (!result.isEmpty()) {
                     raumList.clear();
                     raumList.addAll(result);
                     adapter.notifyDataSetChanged();

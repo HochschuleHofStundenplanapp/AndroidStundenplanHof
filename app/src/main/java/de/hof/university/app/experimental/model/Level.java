@@ -19,7 +19,7 @@ package de.hof.university.app.experimental.model;
 /**
  * Created by Lukas on 05.07.2016.
  */
-public interface Level{
+public interface Level {
     public int getLevel();
 
 }

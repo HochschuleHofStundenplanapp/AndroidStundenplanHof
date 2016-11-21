@@ -21,6 +21,6 @@ import java.util.ArrayList;
 /**
  * Created by larsg on 17.06.2016.
  */
-public interface Parser<E>  {
+public interface Parser<E> {
     ArrayList<E> parse(String[] params);
 }

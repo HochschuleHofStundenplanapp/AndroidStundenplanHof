@@ -33,8 +33,8 @@ public class Changes {
     private final String room_new;
     private final String lecturer;
 
-    public Changes( final String label, final String comment, final String group, final String reason,
-                    final String begin_old, final String begin_new, final String room_old, final String room_new, final String lecturer) {
+    public Changes(final String label, final String comment, final String group, final String reason,
+                   final String begin_old, final String begin_new, final String room_old, final String room_new, final String lecturer) {
         this.label = label;
         this.comment = comment;
         this.group = group;
@@ -101,7 +101,7 @@ public class Changes {
         String result = begin_old;
         // Raum soll immer angezeigt werden
         //if (!room_old.equalsIgnoreCase(room_new)) {
-            result += " - " + room_old;
+        result += " - " + room_old;
         //}
         return result;
     }
@@ -110,7 +110,7 @@ public class Changes {
         String result = begin_new;
         // Raum soll immer angezeigt werden
         //if (!room_old.equalsIgnoreCase(room_new)) {
-            result += " - " + room_new;
+        result += " - " + room_new;
         //}
         return result;
     }
@@ -119,13 +119,13 @@ public class Changes {
 
         String result = label + '\n'; // Fach
 
-        result+= lecturer + '\n';     // Dozent
+        result += lecturer + '\n';     // Dozent
 
-        if ( (null != group) && !group.isEmpty() ) {
+        if ((null != group) && !group.isEmpty()) {
             result += group + '\n';   // Übungsgruppe
         }
 
-        if ( (null != reason) && !reason.isEmpty() ) {
+        if ((null != reason) && !reason.isEmpty()) {
             result += reason;         // Grund
         }
 

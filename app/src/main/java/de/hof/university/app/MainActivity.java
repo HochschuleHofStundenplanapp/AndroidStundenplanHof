@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity
         final boolean showExperimentalFeatures = sharedPreferences.getBoolean("experimental_features", false);
         displayExperimentalFeaturesMenuEntries(showExperimentalFeatures);
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             if (DataManager.getInstance().getMyScheduleSize(getApplicationContext()) > 0) {
                 onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_mySchedule));
             } else {
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public final void displayExperimentalFeaturesMenuEntries(final boolean enabled) {
-        if(enabled){
+        if (enabled) {
             navigationView.getMenu().findItem(R.id.nav_experimental).setVisible(true);
             navigationView.getMenu().findItem(R.id.nav_raumsuche).setVisible(true); //Raumsuche anzeigen
 
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity
                 navigationView.getMenu().findItem(R.id.nav_notenbekanntgabe).setVisible(true);
                 navigationView.getMenu().findItem(R.id.nav_notenblatt).setVisible(true);
             }*/
-        }else{
+        } else {
             navigationView.getMenu().findItem(R.id.nav_experimental).setVisible(false);
         }
     }
@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity
     public final boolean onNavigationItemSelected(final MenuItem item) {
         final int id = item.getItemId();
 
-        if ( R.id.nav_speiseplan == id ) {
+        if (R.id.nav_speiseplan == id) {
             FragmentManager manager = getFragmentManager();
             if (!manager.popBackStackImmediate(MenuFragment.class.getName(), 0)) {
                 if (menuFragment == null) {
@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity
                 trans.replace(R.id.content_main, menuFragment);
                 trans.commit();
             }
-        } else if ( R.id.nav_notenbekanntgabe == id ) {
+        } else if (R.id.nav_notenbekanntgabe == id) {
             FragmentManager manager = getFragmentManager();
             if (!manager.popBackStackImmediate(NotenbekanntgabeFragment.class.getName(), 0)) {
 
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity
                 trans.replace(R.id.content_main, notenbekanntgabeFragment);
                 trans.commit();
             }
-        } else if ( R.id.nav_notenblatt == id ) {
+        } else if (R.id.nav_notenblatt == id) {
             FragmentManager manager = getFragmentManager();
             if (!manager.popBackStackImmediate(NotenblattFragment.class.getName(), 0)) {
 
@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity
                 trans.replace(R.id.content_main, notenblattFragment);
                 trans.commit();
             }
-        } else if ( R.id.nav_raumsuche == id ) {
+        } else if (R.id.nav_raumsuche == id) {
             FragmentManager manager = getFragmentManager();
             if (!manager.popBackStackImmediate(RaumsucheFragment.class.getName(), 0)) {
                 if (raumsucheFragment == null) {
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity
                 trans.replace(R.id.content_main, raumsucheFragment);
                 trans.commit();
             }
-        } else if ( R.id.nav_stundenplan == id ) {
+        } else if (R.id.nav_stundenplan == id) {
             FragmentManager manager = getFragmentManager();
             if (!manager.popBackStackImmediate(ScheduleFragment.class.getName(), 0)) {
                 if (scheduleFragment == null) {
@@ -227,7 +227,7 @@ public class MainActivity extends AppCompatActivity
                 trans.replace(R.id.content_main, scheduleFragment);
                 trans.commit();
             }
-        } else if( R.id.nav_mySchedule == id ){
+        } else if (R.id.nav_mySchedule == id) {
             FragmentManager manager = getFragmentManager();
             if (!manager.popBackStackImmediate(MyScheduleFragment.class.getName(), 0)) {
                 if (myScheduleFragment == null) {
@@ -245,7 +245,7 @@ public class MainActivity extends AppCompatActivity
                 trans.commit();
             }
 
-        } else if ( R.id.nav_aenderung == id ) {
+        } else if (R.id.nav_aenderung == id) {
             FragmentManager manager = getFragmentManager();
             if (!manager.popBackStackImmediate(ChangesFragment.class.getName(), 0)) {
 
@@ -258,7 +258,7 @@ public class MainActivity extends AppCompatActivity
                 trans.commit();
             }
 
-        } else if ( R.id.nav_einstellungen == id ) {
+        } else if (R.id.nav_einstellungen == id) {
             FragmentManager manager = getFragmentManager();
             if (!manager.popBackStackImmediate(SettingsFragment.class.getName(), 0)) {
 
@@ -273,7 +273,7 @@ public class MainActivity extends AppCompatActivity
                 trans.replace(R.id.content_main, new SettingsFragment());
                 trans.commit();
             }
-        } else if ( R.id.nav_impressum == id ) {
+        } else if (R.id.nav_impressum == id) {
             FragmentManager manager = getFragmentManager();
             if (!manager.popBackStackImmediate(ImpressumFragment.class.getName(), 0)) {
 
@@ -285,10 +285,10 @@ public class MainActivity extends AppCompatActivity
                 trans.replace(R.id.content_main, impressumFragment);
                 trans.commit();
             }
-        } else if ( R.id.nav_aboutus == id ) {
+        } else if (R.id.nav_aboutus == id) {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.aboutusURL)));
             startActivity(browserIntent);
-        } else if( R.id.nav_datenschutz == id ){
+        } else if (R.id.nav_datenschutz == id) {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.datenschutzURL)));
             startActivity(browserIntent);
         }

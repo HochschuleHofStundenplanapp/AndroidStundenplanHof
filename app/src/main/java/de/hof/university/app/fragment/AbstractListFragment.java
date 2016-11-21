@@ -89,7 +89,7 @@ public abstract class AbstractListFragment extends Fragment {
 
     @Override
     public final void onDestroyView() {
-        if ( null != task ) {
+        if (null != task) {
             task.cancel(true);
         }
         swipeContainer.setRefreshing(false);
@@ -100,7 +100,7 @@ public abstract class AbstractListFragment extends Fragment {
 
     private void updateData(boolean forceRefresh) {
         String[] params = setTaskParameter(forceRefresh);
-        if(params != null) {
+        if (params != null) {
             task = new AbstractListFragment.Task();
             task.execute(params);
         }
@@ -115,10 +115,6 @@ public abstract class AbstractListFragment extends Fragment {
                     swipeContainer.setRefreshing(true);
                 }
             });
-            // TODO auskommentiert damit nicht immer die Daten gelöscht werden,
-            // sondern nur wenn es wirklich neue Daten gibt.
-            //dataList.clear();
-            //adapter.notifyDataSetChanged();
         }
 
         @Override
@@ -142,12 +138,12 @@ public abstract class AbstractListFragment extends Fragment {
                 modifyListViewAfterDataSetChanged();
 
                 // Damit man unter Änderungen ein Feedback bekommt.
-                ChangesFragment changesFragment = (ChangesFragment)getFragmentManager().findFragmentByTag("CHANGES_FRAGMENT");
+                ChangesFragment changesFragment = (ChangesFragment) getFragmentManager().findFragmentByTag("CHANGES_FRAGMENT");
                 if (changesFragment != null && changesFragment.isVisible() && dataList.size() == 0) {
                     Toast.makeText(getView().getContext(), getString(R.string.noChanges), Toast.LENGTH_SHORT).show();
                 }
             } else {
-                if(DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) > 0) {
+                if (DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) > 0) {
                     Toast.makeText(getView().getContext(), getString(R.string.refreshFailed), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -156,7 +152,8 @@ public abstract class AbstractListFragment extends Fragment {
         }
     }
 
-    protected void modifyListViewAfterDataSetChanged(){}
+    protected void modifyListViewAfterDataSetChanged() {
+    }
 
     protected abstract ArrayList<Object> background(String[] params);
 

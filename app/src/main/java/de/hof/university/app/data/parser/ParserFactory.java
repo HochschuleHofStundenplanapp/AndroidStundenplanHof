@@ -21,20 +21,19 @@ package de.hof.university.app.data.parser;
  */
 public final class ParserFactory {
 
-    public static Parser create(Enum<ParserFactory.EParser> parserEnum){
-        if ( parserEnum == ParserFactory.EParser.SCHEDULE ) {
+    public static Parser create(Enum<ParserFactory.EParser> parserEnum) {
+        if (parserEnum == ParserFactory.EParser.SCHEDULE) {
             return new ScheduleParser();
-        } else if ( parserEnum == ParserFactory.EParser.CHANGES ) {
+        } else if (parserEnum == ParserFactory.EParser.CHANGES) {
             return new ChangesParser();
-        } else if ( parserEnum == ParserFactory.EParser.COURSES ) {
-            return  new CourseParser();
-        } else if ( parserEnum == ParserFactory.EParser.MENU ) {
+        } else if (parserEnum == ParserFactory.EParser.COURSES) {
+            return new CourseParser();
+        } else if (parserEnum == ParserFactory.EParser.MENU) {
             return new MenuParser();
-        } else if( parserEnum == ParserFactory.EParser.MYSCHEDULE ){
+        } else if (parserEnum == ParserFactory.EParser.MYSCHEDULE) {
             return new MyScheduleParser();
-        }
-        else
-            assert( false ) ;
+        } else
+            assert (false);
         return null;
     }
 
