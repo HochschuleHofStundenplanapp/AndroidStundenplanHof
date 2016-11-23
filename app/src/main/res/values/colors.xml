@@ -16,13 +16,13 @@
   -->
 
 <resources>
-    <color name="colorPrimary">#2D4490</color>
-    <color name="colorPrimaryOld">#4b4b4a</color>
-    <color name="colorPrimaryNew">#4B4B4D</color>
-    <color name="colorAccent">#2D4490</color>
+    <color name="colorPrimary">#eab81a</color>
+    <color name="colorAccent">#4b4b4a</color>
     <color name="colorBlack">#000000</color>
-    <color name="colorBlueOld">#0066AF</color>
-    <color name="colorBlue">#0134FF</color>
-    <color name="colorRed">#FF0101</color>
-    <color name="colorYellow">#FFB301</color>
+    <color name="colorWhite">#FFFF</color>
+    <color name="colorINF">#eab81a</color>
+    <color name="colorING">#2d4490</color>
+    <color name="colorWR">#c2161c</color>
+    <color name="colorgrey">#4b4b4a</color>
+    <color name="colorgreen">#5c8f52</color>
 </resources>
