@@ -238,7 +238,7 @@ public class ScheduleFragment extends AbstractListFragment {
                     schedulesIds.add(String.valueOf(schedule.getId()));
                 }
             }
-            DataManager.getInstance().addAllToMySchedule(getView().getContext(), schedulesIds);
+            DataManager.getInstance().addAllToMySchedule(getActivity().getApplicationContext(), schedulesIds);
             Toast.makeText(getView().getContext(), getString(R.string.changesMyScheduleText), Toast.LENGTH_LONG).show();
             return super.onOptionsItemSelected(item);
         } else {
@@ -252,12 +252,17 @@ public class ScheduleFragment extends AbstractListFragment {
         final String course = params[0];
         final String semester = params[1];
         final String termTime = params[2];
-        List<Object> scheduleList = DataManager.getInstance().getSchedule(getActivity().getApplicationContext(), getString(R.string.language), course, semester, termTime, Boolean.valueOf(params[3]));
+        if (isVisible()) {
+            List<Object> scheduleList = DataManager.getInstance().getSchedule(getActivity().getApplicationContext(), getString(R.string.language), course, semester, termTime, Boolean.valueOf(params[3]));
 
-        if (scheduleList != null) {
-            return this.updateListView(scheduleList);
-        } else {
-            return null;
+            System.out.println("isVisible: "+ isVisible());
+            if (isVisible()) {
+                if (scheduleList != null) {
+                    return this.updateListView(scheduleList);
+                }
+            }
         }
+        System.out.println("result is null");
+        return null;
     }
 }

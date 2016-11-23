@@ -40,7 +40,6 @@ import de.hof.university.app.fragment.schedule.ChangesFragment;
  * Created by larsg on 20.06.2016.
  */
 public abstract class AbstractListFragment extends Fragment {
-
     private SwipeRefreshLayout swipeContainer;
     protected ListView listView;
     protected ArrayAdapter adapter;
@@ -89,9 +88,11 @@ public abstract class AbstractListFragment extends Fragment {
 
     @Override
     public final void onDestroyView() {
-        if (null != task) {
+        if (task != null) {
             task.cancel(true);
         }
+        dataList.clear();
+        adapter.notifyDataSetChanged();
         swipeContainer.setRefreshing(false);
         super.onDestroyView();
     }
@@ -107,48 +108,62 @@ public abstract class AbstractListFragment extends Fragment {
     }
 
     private class Task extends AsyncTask<String, Void, ArrayList<Object>> {
+
         @Override
         protected final void onPreExecute() {
-            swipeContainer.post(new Runnable() {
-                @Override
-                public void run() {
-                    swipeContainer.setRefreshing(true);
-                }
-            });
+            if (!isCancelled()) {
+                swipeContainer.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeContainer.setRefreshing(true);
+                    }
+                });
+            }
         }
 
         @Override
         protected final ArrayList<Object> doInBackground(String... params) {
-            return background(params);
+            if (!isCancelled()) {
+                return background(params);
+            }
+            return null;
         }
 
         @Override
         protected final void onPostExecute(ArrayList<Object> result) {
-            swipeContainer.post(new Runnable() {
-                @Override
-                public void run() {
-                    swipeContainer.setRefreshing(false);
-                }
-            });
+            System.out.println("isCancelled: " + this.isCancelled());
+            if (!this.isCancelled()) {
+                swipeContainer.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeContainer.setRefreshing(false);
+                    }
+                });
 
-            if (result != null) {
-                dataList.clear();
-                dataList.addAll(result);
-                adapter.notifyDataSetChanged();
-                modifyListViewAfterDataSetChanged();
+                if (result != null) {
+                    dataList.clear();
+                    dataList.addAll(result);
+                    adapter.notifyDataSetChanged();
+                    modifyListViewAfterDataSetChanged();
 
-                // Damit man unter Änderungen ein Feedback bekommt.
-                ChangesFragment changesFragment = (ChangesFragment) getFragmentManager().findFragmentByTag("CHANGES_FRAGMENT");
-                if (changesFragment != null && changesFragment.isVisible() && dataList.size() == 0) {
-                    Toast.makeText(getView().getContext(), getString(R.string.noChanges), Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                if (DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) > 0) {
-                    Toast.makeText(getView().getContext(), getString(R.string.refreshFailed), Toast.LENGTH_SHORT).show();
+                    // Damit man unter Änderungen ein Feedback bekommt.
+                    ChangesFragment changesFragment = (ChangesFragment) getFragmentManager().findFragmentByTag("CHANGES_FRAGMENT");
+                    if (changesFragment != null && changesFragment.isVisible() && dataList.size() == 0) {
+                        Toast.makeText(getView().getContext(), getString(R.string.noChanges), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    if (DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) > 0) {
+                        Toast.makeText(getView().getContext(), getString(R.string.refreshFailed), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
-
             super.onPostExecute(result);
+        }
+
+        @Override
+        protected final void onCancelled(ArrayList<Object> result) {
+            System.out.println("onCancelled");
+            super.onCancelled(result);
         }
     }
 
