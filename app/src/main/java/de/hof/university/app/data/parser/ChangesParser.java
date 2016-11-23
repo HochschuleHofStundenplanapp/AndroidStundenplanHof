@@ -34,10 +34,10 @@ public class ChangesParser implements Parser<Changes> {
     public final ArrayList<Changes> parse(String[] params) {
 
         ArrayList<Changes> result = new ArrayList<>();
-        if( 1 == params.length ) {
+        if (1 == params.length) {
             String jsonString = params[0];
             //Escape, if String is empty
-            if(jsonString.isEmpty()) {
+            if (jsonString.isEmpty()) {
                 return result;
             }
 
@@ -47,10 +47,10 @@ public class ChangesParser implements Parser<Changes> {
 
                     // Gibt es Änderungen überhaupt
                     final Changes change = convertJsonObject(jsonArray.getJSONObject(i));
-                    if ( null != change ) {
+                    if (null != change) {
                         // schauen ob diese Änderung bereits enthalten ist.
                         boolean contains = false;
-                        for (Changes c:result) {
+                        for (Changes c : result) {
                             if (c.toString().equals(change.toString())) {
                                 contains = true;
                             }
@@ -60,7 +60,7 @@ public class ChangesParser implements Parser<Changes> {
                         }
                     }
                 }
-            } catch (final JSONException ignored ) {
+            } catch (final JSONException ignored) {
 
             }
         }

@@ -19,7 +19,7 @@ package de.hof.university.app.model;
 /**
  * Created by Lukas on 25.11.2015.
  */
-public class MediumListItem{
+public class MediumListItem {
     private final String title;
 
     public MediumListItem(final String title) {

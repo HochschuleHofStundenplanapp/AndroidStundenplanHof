@@ -50,7 +50,6 @@ public class SettingsFragment extends PreferenceFragment {
     private List<Course> courseList;
     private LoginController loginController = null;
 
-
     /**
      * @param savedInstanceState
      */
@@ -65,20 +64,19 @@ public class SettingsFragment extends PreferenceFragment {
 
         final ListPreference lpSemester = (ListPreference) findPreference("semester");
 
-        if(lpSemester!=null) {
+        if (lpSemester != null) {
             lpSemester.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    return ((ListPreference)preference).getEntries().length>0;
+                    return ((ListPreference) preference).getEntries().length > 0;
                 }
             });
             lpSemester.setEnabled(false);
         }
 
 
-
         final ListPreference lpCourse = (ListPreference) findPreference("studiengang");
-        if(lpCourse!=null){
+        if (lpCourse != null) {
             lpCourse.setEnabled(false);
         }
 
@@ -94,9 +92,9 @@ public class SettingsFragment extends PreferenceFragment {
 
         final CheckBoxPreference experimentalFeatures = (CheckBoxPreference) findPreference("experimental_features");
 
-        if(experimentalFeatures.isChecked()){
+        if (experimentalFeatures.isChecked()) {
             edtLogin.setEnabled(true);
-        }else{
+        } else {
             edtLogin.setEnabled(false);
         }
 
@@ -105,7 +103,7 @@ public class SettingsFragment extends PreferenceFragment {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 final Preference edtLogin = findPreference("login");
                 final MainActivity activity = (MainActivity) getActivity();
-                if( (Boolean) newValue ){
+                if ((Boolean) newValue) {
                     new AlertDialog.Builder(getView().getContext())
                             .setTitle(getString(R.string.enableExperimental))
                             .setMessage(getString(R.string.enableExperimentalSure))
@@ -120,7 +118,7 @@ public class SettingsFragment extends PreferenceFragment {
                     edtLogin.setEnabled(true);
                     activity.displayExperimentalFeaturesMenuEntries(true);
 
-                }else{
+                } else {
                     edtLogin.setEnabled(false);
                     activity.displayExperimentalFeaturesMenuEntries(false);
                 }
@@ -144,8 +142,8 @@ public class SettingsFragment extends PreferenceFragment {
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
         navigationView.getMenu().findItem(R.id.nav_einstellungen).setChecked(true);
 
-        if(courseList==null){
-            updateCourseListPreference("",false);
+        if (courseList == null) {
+            updateCourseListPreference("", false);
         }
 
         updateSemesterData(PreferenceManager.getDefaultSharedPreferences(getView().getContext()).getString("studiengang", ""));
@@ -205,7 +203,7 @@ public class SettingsFragment extends PreferenceFragment {
                 if (preference instanceof ListPreference) {
                     ListPreference listPreference = (ListPreference) preference;
                     int index = listPreference.findIndexOfValue(newValue.toString());
-                    if(index>=0) {
+                    if (index >= 0) {
                         listPreference.setSummary(listPreference.getEntries()[index]);
                         return true;
                     }
@@ -221,7 +219,7 @@ public class SettingsFragment extends PreferenceFragment {
                 if (preference instanceof ListPreference) {
                     ListPreference listPreference = (ListPreference) preference;
                     int index = listPreference.findIndexOfValue(newValue.toString());
-                    if(index>=0) {
+                    if (index >= 0) {
                         listPreference.setSummary(listPreference.getEntries()[index]);
                         updateCourseListPreference(newValue.toString(), false);
                         return true;
@@ -238,20 +236,20 @@ public class SettingsFragment extends PreferenceFragment {
     private void updateCourseListPreference(String term, boolean forceRefresh) {
 
 
-        if(term.isEmpty()) {
+        if (term.isEmpty()) {
             ListPreference lpTermTime = (ListPreference) findPreference("term_time");
-             term = lpTermTime.getValue();
+            term = lpTermTime.getValue();
         }
 
         //Cancel, if no termTime is set!
-        if(term==null){
-            Toast.makeText(getActivity(),getString(R.string.noTermTimeSelected), Toast.LENGTH_LONG).show();
+        if (term == null) {
+            Toast.makeText(getActivity(), getString(R.string.noTermTimeSelected), Toast.LENGTH_LONG).show();
             return;
         }
 
         String[] params = new String[2];
-        params[0]=term;
-        params[1]=String.valueOf(forceRefresh);
+        params[0] = term;
+        params[1] = String.valueOf(forceRefresh);
 
         SettingsFragment.GetSemesterTask getSemesterTask = new SettingsFragment.GetSemesterTask();
         getSemesterTask.execute(params);
@@ -277,7 +275,7 @@ public class SettingsFragment extends PreferenceFragment {
     public final boolean onOptionsItemSelected(MenuItem item) {
         // handle item selection
         if (item.getItemId() == R.id.action_refresh) {
-            updateCourseListPreference("",true);
+            updateCourseListPreference("", true);
             return super.onOptionsItemSelected(item);
         } else {
             return super.onOptionsItemSelected(item);
@@ -292,27 +290,27 @@ public class SettingsFragment extends PreferenceFragment {
      */
     private void updateSemesterData(final String courseStr) {
         ListPreference lpSemester = (ListPreference) findPreference("semester");
-        if( (courseList == null) || courseStr.isEmpty() ){
+        if ((courseList == null) || courseStr.isEmpty()) {
             lpSemester.setEntries(new CharSequence[]{});
             lpSemester.setEntryValues(new CharSequence[]{});
             return;
         }
 
-        for(Course course: courseList){
-            if(course.getTag().equals(courseStr)){
+        for (Course course : courseList) {
+            if (course.getTag().equals(courseStr)) {
                 CharSequence[] entries = new CharSequence[course.getTerms().size()];
                 CharSequence[] entryValues = new CharSequence[course.getTerms().size()];
-                for(int j=0; j<course.getTerms().size(); ++j){
-                    entries[j]=course.getTerms().get(j);
-                    entryValues[j]=course.getTerms().get(j);
+                for (int j = 0; j < course.getTerms().size(); ++j) {
+                    entries[j] = course.getTerms().get(j);
+                    entryValues[j] = course.getTerms().get(j);
                 }
 
-                if(lpSemester!=null) {
-                    if(entries.length>0) {
+                if (lpSemester != null) {
+                    if (entries.length > 0) {
                         lpSemester.setEntries(entries);
                         lpSemester.setEntryValues(entryValues);
                         lpSemester.setEnabled(true);
-                    }else{
+                    } else {
                         lpSemester.setEnabled(false);
                     }
                 }
@@ -340,7 +338,7 @@ public class SettingsFragment extends PreferenceFragment {
 
         @Override
         protected final Void doInBackground(String... params) {
-            String termTime=params[0];
+            String termTime = params[0];
             boolean pForceRefresh = Boolean.valueOf(params[1]);
 
             courseList = DataManager.getInstance().getCourses(getActivity().getBaseContext(), getString(R.string.language), termTime, pForceRefresh);
@@ -364,7 +362,7 @@ public class SettingsFragment extends PreferenceFragment {
         protected final void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
             ListPreference lpCourse = (ListPreference) findPreference("studiengang");
-            if(entries.length>0) {
+            if (entries.length > 0) {
                 lpCourse.setEntries(entries);
                 lpCourse.setEntryValues(entryValues);
                 lpCourse.setEnabled(true);
@@ -373,7 +371,6 @@ public class SettingsFragment extends PreferenceFragment {
 
             progressDialog.dismiss();
         }
-
 
 
     }

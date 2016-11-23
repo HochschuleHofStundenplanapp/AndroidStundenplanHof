@@ -113,7 +113,7 @@ public class NotenbekanntgabeFragment extends Fragment {
         listView.setAdapter(adapter);
 
         //Wenn noch keine Daten gelesen wurden
-        if( items.isEmpty() ) {
+        if (items.isEmpty()) {
             updateData(v);
         }
 
@@ -122,18 +122,18 @@ public class NotenbekanntgabeFragment extends Fragment {
 
     @Override
     public final void onDestroyView() {
-        if(task!=null) {
+        if (task != null) {
             task.cancel(true);
         }
         swipeContainer.setRefreshing(false);
         super.onDestroyView();
     }
 
-    private void updateData(View v){
+    private void updateData(View v) {
         String[] params = new String[2];
-        if(loginController.showDialog()) {
-            params[0]=loginController.getUsername();
-            params[1]= loginController.getPassword();
+        if (loginController.showDialog()) {
+            params[0] = loginController.getUsername();
+            params[1] = loginController.getPassword();
             task = new NotenbekanntgabeFragment.GetNotenTask(getActivity());
             task.execute(params);
         }
@@ -197,8 +197,8 @@ public class NotenbekanntgabeFragment extends Fragment {
                 String javascript = doc.getElementsByAttributeValueMatching("name", "Javascript").val();
 
                 //Wenn session leer ist, dann ist der Login fehlgeschlagen
-                if(session.isEmpty()){
-                    errorText=getString(R.string.loginFailed);
+                if (session.isEmpty()) {
+                    errorText = getString(R.string.loginFailed);
                     return null;
                 }
 
@@ -217,14 +217,14 @@ public class NotenbekanntgabeFragment extends Fragment {
                 SharedPreferences.Editor edit = sp.edit();
                 Document doc3 = res3.parse();
                 // Prüfe ob Notenbekanntgabe bereits beendet wurde.
-                if(doc3.getElementsByTag("h2").hasClass("error")){
+                if (doc3.getElementsByTag("h2").hasClass("error")) {
                     Elements tr = doc3.getElementsByClass("table1").get(0).getElementsByTag("tr");
-                    for(org.jsoup.nodes.Element line : tr){
+                    for (org.jsoup.nodes.Element line : tr) {
                         items.add(new Noten(line.child(0).text(), line.child(1).text()));
                     }
-                }else{
+                } else {
                     Elements elements = doc3.getElementsByClass("table2").get(0).child(1).children();
-                    for(int i=0; i<elements.size(); ++i){
+                    for (int i = 0; i < elements.size(); ++i) {
                         items.add(new Noten(elements.get(i).child(2).text(), elements.get(i).child(5).child(0).text()));
                         edit.putString(String.valueOf(elements.get(i).child(2).text().hashCode()), elements.get(i).child(5).child(0).text());
                     }
@@ -238,7 +238,7 @@ public class NotenbekanntgabeFragment extends Fragment {
 //			System.out.println(res4.body());
             } catch (IOException e) {
 
-                if( e.getClass() == InterruptedIOException.class ) //Wurde einfach abgebrochen -> nichts tun
+                if (e.getClass() == InterruptedIOException.class) //Wurde einfach abgebrochen -> nichts tun
                 {
                     return null;
                 } else {
@@ -254,7 +254,7 @@ public class NotenbekanntgabeFragment extends Fragment {
             adapter.notifyDataSetChanged();
 
             //Wenn es einen Fehler gab -> ausgeben
-            if(!errorText.isEmpty()){
+            if (!errorText.isEmpty()) {
                 Toast.makeText(getActivity(), errorText, Toast.LENGTH_LONG).show();
             }
             super.onPostExecute(aVoid);

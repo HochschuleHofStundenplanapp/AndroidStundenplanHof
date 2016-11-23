@@ -41,7 +41,7 @@ public class MenuFragment extends AbstractListFragment {
 
     @Override
     public final void onCreate(Bundle savedInstanceState) {
-        weekdayListPos=0;
+        weekdayListPos = 0;
         super.onCreate(savedInstanceState);
     }
 
@@ -52,7 +52,7 @@ public class MenuFragment extends AbstractListFragment {
 
     @Override
     protected final String[] setTaskParameter(boolean forceRefresh) {
-        String[] params =   new String[1];
+        String[] params = new String[1];
         params[0] = String.valueOf(forceRefresh);
         return params;
     }
@@ -73,9 +73,9 @@ public class MenuFragment extends AbstractListFragment {
         listView.setSelection(weekdayListPos);
     }
 
-    private ArrayList<Object> updateListView(List<Object> list){
-        String day="";
-        String category="";
+    private ArrayList<Object> updateListView(List<Object> list) {
+        String day = "";
+        String category = "";
         String curWeekDay = new SimpleDateFormat("EEEE", Locale.GERMANY).format(new Date());
         final SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN);
 
@@ -89,36 +89,36 @@ public class MenuFragment extends AbstractListFragment {
 
         ArrayList<Object> tmpDataList = new ArrayList<>();
 
-        for(Object object : list){
-            if(object instanceof Meal){
+        for (Object object : list) {
+            if (object instanceof Meal) {
                 Meal meal = (Meal) object;
 
-                if(meal.getCategory().equalsIgnoreCase("Hauptgericht") && !isDish) {
+                if (meal.getCategory().equalsIgnoreCase("Hauptgericht") && !isDish) {
                     continue;
                 }
-                if(meal.getCategory().equalsIgnoreCase("Beilage") && !isSupplement) {
+                if (meal.getCategory().equalsIgnoreCase("Beilage") && !isSupplement) {
                     continue;
                 }
-                if(meal.getCategory().equalsIgnoreCase("Nachspeise") && !isDessert) {
+                if (meal.getCategory().equalsIgnoreCase("Nachspeise") && !isDessert) {
                     continue;
                 }
-                if(meal.getCategory().equalsIgnoreCase("Pastatheke") && !isPasta) {
+                if (meal.getCategory().equalsIgnoreCase("Pastatheke") && !isPasta) {
                     continue;
                 }
-                if(meal.getCategory().equalsIgnoreCase("Salat") && !isSalad) {
+                if (meal.getCategory().equalsIgnoreCase("Salat") && !isSalad) {
                     continue;
                 }
 
-                if(!day.equalsIgnoreCase(meal.getWeekDay())){
-                    day=meal.getWeekDay();
-                    tmpDataList.add(new BigListItem(day + " - "+sdf.format(meal.getDay())));
-                    if(day.equalsIgnoreCase(curWeekDay)){
-                        weekdayListPos= tmpDataList.size()-1;
+                if (!day.equalsIgnoreCase(meal.getWeekDay())) {
+                    day = meal.getWeekDay();
+                    tmpDataList.add(new BigListItem(day + " - " + sdf.format(meal.getDay())));
+                    if (day.equalsIgnoreCase(curWeekDay)) {
+                        weekdayListPos = tmpDataList.size() - 1;
                     }
-                    category="";//Bei neuen Tagen immer auch die Kategorie anzeigen
+                    category = "";//Bei neuen Tagen immer auch die Kategorie anzeigen
                 }
-                if(!category.equalsIgnoreCase(meal.getCategory())){
-                    category=meal.getCategory();
+                if (!category.equalsIgnoreCase(meal.getCategory())) {
+                    category = meal.getCategory();
                     tmpDataList.add(new MediumListItem(meal.getCategory()));
                 }
                 tmpDataList.add(meal);

@@ -28,7 +28,7 @@ public class Raum implements Level {
 
     @Override
     public final String toString() {
-        return "Raum: "+name;
+        return "Raum: " + name;
     }
 
     public final String getName() {
@@ -39,7 +39,6 @@ public class Raum implements Level {
     public final int getLevel() {
         return 0;
     }
-
 
 
 }

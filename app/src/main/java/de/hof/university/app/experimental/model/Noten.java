@@ -30,7 +30,7 @@ public class Noten {
 
     @Override
     public final String toString() {
-        return fach+":  "+note;
+        return fach + ":  " + note;
     }
 
     public final String getFach() {

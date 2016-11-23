@@ -19,6 +19,7 @@ package de.hof.university.app.experimental;
 /**
  * Created by Lukas on 05.07.2016.
  */
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -50,7 +51,7 @@ public class LoginController {
     private String password;
 
     public static final LoginController getInstance(Context context) {
-        if ( null == controller ) {
+        if (null == controller) {
             controller = new LoginController(context);
         }
         return controller;
@@ -78,7 +79,7 @@ public class LoginController {
         checkBoxShowPasswordLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if ( isChecked ) {
+                if (isChecked) {
                     editTextPasswordLogin.setTransformationMethod(null);
                 } else {
                     editTextPasswordLogin.setTransformationMethod(new PasswordTransformationMethod());
@@ -86,7 +87,7 @@ public class LoginController {
             }
         });
         final CheckBox checkBoxSavePasswordLogin = (CheckBox) loginDialogView.findViewById(R.id.save_password);
-        checkBoxSavePasswordLogin.setChecked(sharedPref.getBoolean("save_password",true));
+        checkBoxSavePasswordLogin.setChecked(sharedPref.getBoolean("save_password", true));
 
         AlertDialog.Builder builderLogin = new AlertDialog.Builder(context);
         loginAlertDialog = builderLogin.setTitle(context.getString(R.string.LOGIN_DIALOG)).setView(loginDialogView)
@@ -124,7 +125,7 @@ public class LoginController {
         checkBoxShowPasswordPassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if ( isChecked ) {
+                if (isChecked) {
                     editTextPasswordPassword.setTransformationMethod(null);
                 } else {
                     editTextPasswordPassword.setTransformationMethod(new PasswordTransformationMethod());
@@ -159,13 +160,13 @@ public class LoginController {
             loginAlertDialog.show();
             try {
                 Looper.loop();
-            } catch (RuntimeException ignored ) {
+            } catch (RuntimeException ignored) {
             }
         } else if (getPassword().isEmpty()) {
             passwordAlertDialog.show();
             try {
                 Looper.loop();
-            } catch (RuntimeException ignored ) {
+            } catch (RuntimeException ignored) {
             }
         }
         return (!passwordIsEmpty() && !getUsername().isEmpty());
@@ -185,7 +186,7 @@ public class LoginController {
         loginAlertDialog.show();
         try {
             Looper.loop();
-        } catch (RuntimeException ignored ) {
+        } catch (RuntimeException ignored) {
         }
     }
 

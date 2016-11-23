@@ -42,11 +42,11 @@ public class NotenAdapter extends ArrayAdapter<Noten> {
     private final LayoutInflater vi;
 
     public NotenAdapter(final Context context, final ArrayList<Noten> items) {
-        super(context,0, items);
+        super(context, 0, items);
 
         this.items = items;
 
-        vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class NotenAdapter extends ArrayAdapter<Noten> {
         View v = convertView;
         Noten note = items.get(position);
 
-        if(note!=null){
+        if (note != null) {
             v = vi.inflate(R.layout.notenbekanntgabe_item, null);
 
             v.setOnClickListener(null);
@@ -67,15 +67,15 @@ public class NotenAdapter extends ArrayAdapter<Noten> {
             final TextView notenView = (TextView) v.findViewById(R.id.notenbekanntgabe_item_note);
             notenView.setText("");
             String strNote = note.getNote();
-            switch (strNote){
+            switch (strNote) {
                 case "erfolgreich":
-                    notenView.setCompoundDrawablesWithIntrinsicBounds(0, 0,R.drawable.ic_checked, 0);
+                    notenView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_checked, 0);
                     break;
                 case "nicht erfolgreich":
-                    notenView.setCompoundDrawablesWithIntrinsicBounds(0, 0,R.drawable.ic_unchecked, 0);
+                    notenView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_unchecked, 0);
                     break;
-                case "Korrektur noch nicht abgeschlossen" :
-                    notenView.setCompoundDrawablesWithIntrinsicBounds(0, 0,R.drawable.ic_pen, 0);
+                case "Korrektur noch nicht abgeschlossen":
+                    notenView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_pen, 0);
                     break;
                 default:
                     notenView.setText(strNote);

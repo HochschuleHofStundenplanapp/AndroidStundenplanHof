@@ -37,12 +37,12 @@ public class CourseParser implements Parser<Course> {
     @Override
     public final ArrayList<Course> parse(String[] params) {
 
-        ArrayList<Course> result = new ArrayList<Course>();
+        ArrayList<Course> result = new ArrayList<>();
         if (params.length == 2) {
 
-	        language = params[1];
+            language = params[1];
 
-			// Zerlegen des JSON Strings in die Kurse
+            // Zerlegen des JSON Strings in die Kurse
             final String jsonString = params[0];
             //Escape, if String is empty
             if (jsonString.isEmpty()) {
@@ -66,7 +66,7 @@ public class CourseParser implements Parser<Course> {
         return result;
     }
 
-	// Convert one JSonObject in a Course-Object
+    // Convert one JSonObject in a Course-Object
     protected final Course convertJsonObject(JSONObject jsonObject) {
         final String name = jsonObject.optJSONObject(Define.COURSE_PARSER_LABELS).optString(language);
         final String tag = jsonObject.optString(Define.COURSE_PARSER_COURSE);

@@ -29,14 +29,14 @@ public class Course {
     private List<String> terms = null;
 
     public Course(final long id, final String name, final String tag) {
-        this.id=id;
-        this.name=name;
-        this.tag =tag;
+        this.id = id;
+        this.name = name;
+        this.tag = tag;
     }
 
     public Course(final String course, final String courseTag, final List<String> termsParams) {
-        name=course;
-        tag=courseTag;
+        name = course;
+        tag = courseTag;
         this.terms = termsParams;
     }
 

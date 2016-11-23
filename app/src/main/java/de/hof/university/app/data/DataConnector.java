@@ -43,9 +43,9 @@ public class DataConnector {
 
     private Context context;
 
-    public final String getStringFromUrl(Context context, final String strUrl, final int cacheTime){
+    public final String getStringFromUrl(Context context, final String strUrl, final int cacheTime) {
         this.context = context;
-        if (cacheStillValid(strUrl+TIME_APPEND, cacheTime)){
+        if (cacheStillValid(strUrl + TIME_APPEND, cacheTime)) {
             return loadFromSharedPreferences(strUrl);
         } else {
             final String result = readStringFromUrl(strUrl);
@@ -76,22 +76,22 @@ public class DataConnector {
         return result;
     }
 
-    public final void cleanCache(final Context context, final int maxAge){
+    public final void cleanCache(final Context context, final int maxAge) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         Map<String, ?> allEntries = sharedPreferences.getAll();
 
-        for(Map.Entry<String, ?> entry : allEntries.entrySet()){
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
             final String key = entry.getKey();
-            if(key.endsWith(TIME_APPEND)){
-                if(!cacheStillValid(key, maxAge)){
+            if (key.endsWith(TIME_APPEND)) {
+                if (!cacheStillValid(key, maxAge)) {
                     //Delete the old Keys
-                    sharedPreferences.edit().remove(key).remove(key.substring(0, key.length()-TIME_APPEND.length())).apply();
+                    sharedPreferences.edit().remove(key).remove(key.substring(0, key.length() - TIME_APPEND.length())).apply();
                 }
             }
         }
     }
 
-    private boolean cacheStillValid(final String urlKey, final int cacheTime){
+    private boolean cacheStillValid(final String urlKey, final int cacheTime) {
         final Date today = new Date();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context);
@@ -109,7 +109,7 @@ public class DataConnector {
 
     static final int timeoutInSeconds = 1000;
 
-    private static String readStringFromUrl(final String strUrl){
+    private static String readStringFromUrl(final String strUrl) {
         InputStream inputStream;
 
         HttpURLConnection urlConnection;
@@ -120,24 +120,24 @@ public class DataConnector {
             urlConnection = (HttpURLConnection) url.openConnection();
 
             //Für die Schnittstelle der Hochschule wird Authentifizerung benötigt
-            if(strUrl.contains("www.hof-university.de/soap/client.php")) {
+            if (strUrl.contains("www.hof-university.de/soap/client.php")) {
                 // user
                 String username = "p"; //soapuser
-                username = 'a' +username;
+                username = 'a' + username;
                 username += "u";
-                username = 'o' +username;
+                username = 'o' + username;
                 username += "s";
-                username = 's' +username;
+                username = 's' + username;
                 username += "er";
 
                 //password                  F%98z&12
                 String password = "8";
                 password += "z";
-                password = '9' +password;
+                password = '9' + password;
                 password += "&";
-                password = '%' +password;
+                password = '%' + password;
                 password += "1";
-                password = 'F' +password;
+                password = 'F' + password;
                 password += "2";
                 final String userPassword = username + ':' + password;
                 final String encoding = Base64.encodeToString(userPassword.getBytes(), Base64.DEFAULT);
@@ -163,9 +163,9 @@ public class DataConnector {
                 sb.append(line).append('\n');
             }
             return sb.toString();
-        } catch (final MalformedURLException | UnsupportedEncodingException ignored ) {
+        } catch (final MalformedURLException | UnsupportedEncodingException ignored) {
 
-        } catch (final IOException ignored ) {
+        } catch (final IOException ignored) {
             //System.out.println(ignored);
         }
 

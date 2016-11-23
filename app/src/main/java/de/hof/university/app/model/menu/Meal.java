@@ -59,11 +59,11 @@ public class Meal {
 //    }
 // --Commented out by Inspection STOP (17.07.2016 20:11)
 
-    public Meal(final Date tag, final String weeekDay, final String category, final String name){
+    public Meal(final Date tag, final String weeekDay, final String category, final String name) {
         this.weekDay = weeekDay;
         this.day = tag;
-        this.category =category;
-        this.name = name.replace("\\","");
+        this.category = category;
+        this.name = name.replace("\\", "");
         this.attributes = new ArrayList<>();
     }
 
@@ -131,8 +131,8 @@ public class Meal {
         String result;
         result = name;
         String tmpAttributes = "";
-        for (int a:attributes
-             ) {
+        for (int a : attributes
+                ) {
             if (tmpAttributes != "") {
                 tmpAttributes += ", ";
             }
@@ -175,11 +175,11 @@ public class Meal {
     }
 
     public final String getPrice() {
-        try{
+        try {
             final Double number = Double.valueOf(price);
             DecimalFormat decimalFormat = new DecimalFormat("#0.00");
             return decimalFormat.format(number);
-        }catch (final NumberFormatException nfe) {
+        } catch (final NumberFormatException nfe) {
             return price;
         }
     }

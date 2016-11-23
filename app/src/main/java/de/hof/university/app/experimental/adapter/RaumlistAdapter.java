@@ -19,6 +19,7 @@ package de.hof.university.app.experimental.adapter;
 /**
  * Created by Lukas on 05.07.2016.
  */
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,20 +45,20 @@ public class RaumlistAdapter extends ArrayAdapter<Level> {
     private final LayoutInflater vi;
 
 
-    public RaumlistAdapter( final Context context, final ArrayList<Level> items) {
+    public RaumlistAdapter(final Context context, final ArrayList<Level> items) {
         super(context, 0, items);
 
         this.items = items;
-        vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public final View getView(int position, View convertView, ViewGroup parent) {
         View v = convertView;
-        switch (items.get(position).getLevel()){
+        switch (items.get(position).getLevel()) {
             case 0:
                 Raum raum = (Raum) items.get(position);
-                if(raum!=null){
+                if (raum != null) {
                     v = vi.inflate(R.layout.list_item_raum, null);
 
                     v.setOnClickListener(null);
@@ -70,7 +71,7 @@ public class RaumlistAdapter extends ArrayAdapter<Level> {
                 break;
             case 1:
                 Raumkategorie category = (Raumkategorie) items.get(position);
-                if(category != null){
+                if (category != null) {
                     v = vi.inflate(R.layout.list_item_big, null);
 
                     v.setOnClickListener(null);
@@ -83,7 +84,7 @@ public class RaumlistAdapter extends ArrayAdapter<Level> {
                 break;
             case 2:
                 Suchdetails details = (Suchdetails) items.get(position);
-                if(details != null){
+                if (details != null) {
                     v = vi.inflate(R.layout.list_item_medium, null);
 
                     v.setOnClickListener(null);
@@ -92,7 +93,7 @@ public class RaumlistAdapter extends ArrayAdapter<Level> {
 
                     final TextView raumView = (TextView) v.findViewById(R.id.list_item_medium_text);
                     //TODO AUSGABE formatieren
-                    final String outputText = details.getDate()+ '\n' +details.getTimeFrom()+ '\n' +details.getTimeTo();
+                    final String outputText = details.getDate() + '\n' + details.getTimeFrom() + '\n' + details.getTimeTo();
                     raumView.setText(outputText);
                 }
                 break;
@@ -102,7 +103,6 @@ public class RaumlistAdapter extends ArrayAdapter<Level> {
         }
 
         //Raum raum = items.get(position);
-
 
 
         return v;
