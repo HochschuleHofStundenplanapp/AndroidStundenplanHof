@@ -34,7 +34,7 @@ import de.hof.university.app.model.menu.Meal;
  * Created by Lukas on 25.11.2015.
  */
 public class MenuAdapter extends ArrayAdapter<Object> {
-    // --Commented out by Inspection (17.07.2016 20:12):private final Context context;
+
     private final ArrayList<Object> items;
     private final LayoutInflater vi;
 
