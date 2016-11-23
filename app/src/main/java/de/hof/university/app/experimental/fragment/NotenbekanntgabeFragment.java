@@ -80,7 +80,7 @@ public class NotenbekanntgabeFragment extends Fragment {
     public final void onResume() {
         super.onResume();
         MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().setTitle(R.string.notenbekanntgabe);
+        mainActivity.getActionBar().setTitle(R.string.notenbekanntgabe);
 
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
         MenuItem item = navigationView.getMenu().findItem(R.id.nav_experimental);

@@ -23,32 +23,32 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:text="@string/details"
-            android:id="@+id/aenderung_details"
-            android:paddingTop="10dp"
-            android:paddingBottom="5dp"
-            android:textColor="@color/colorBlack" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:text="@string/details"
+        android:id="@+id/aenderung_details"
+        android:paddingTop="10dp"
+        android:paddingBottom="5dp"
+        android:textColor="@color/colorBlack" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:text="OldDate"
-            android:id="@+id/aenderung_oldDate"
-            android:textColor="@color/colorBlack"
-            android:paddingTop="3dp"
-            android:paddingBottom="3dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:text="OldDate"
+        android:id="@+id/aenderung_oldDate"
+        android:textColor="@color/colorBlack"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:text="NewDate"
-            android:id="@+id/aenderung_newDate"
-            android:textColor="@android:color/holo_red_dark"
-            android:paddingBottom="7dp" />
-    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:text="NewDate"
+        android:id="@+id/aenderung_newDate"
+        android:textColor="@android:color/holo_red_dark"
+        android:paddingBottom="7dp" />
+</LinearLayout>

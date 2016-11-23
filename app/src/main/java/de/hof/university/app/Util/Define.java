@@ -21,7 +21,8 @@ package de.hof.university.app.Util;
  */
 public final class Define {
 
-
+	// Strings returned from the Webserverinterface from IT-Service of Hochschule Hof,
+	// language-INDEPENDENT
 	public static final String SCHEDULE_PARSER_LABEL = "label";     //NON-NLS
 	public static final String SCHEDULE_PARSER_COMMENT = "comment";     //NON-NLS
 	public static final String SCHEDULE_PARSER_GROUP = "group";     //NON-NLS
@@ -29,6 +30,33 @@ public final class Define {
 	public static final String COURSE_PARSER_LABELS = "labels";     //NON-NLS
 	public static final String COURSE_PARSER_COURSE = "course";     //NON-NLS
 	public static final String COURSE_PARSER_SEMESTER = "semester";     //NON-NLS
+
+	public static final String PARSER_SCHEDULE = "schedule"; // NON-NLS
+	public static final String PARSER_DAY = "day" ; //NON-NLS
+	public static final String PARSER_TYPE = "type" ; //NON-NLS
+	public static final String PARSER_STARTTIME = "starttime" ; //NON-NLS
+	public static final String PARSER_ENDTIME = "endtime" ; //NON-NLS
+	public static final String PARSER_STARTDATE = "startdate" ; //NON-NLS
+	public static final String PARSER_ENDDATE = "enddate" ; //NON-NLS
+	public static final String PARSER_ROOM = "room" ; //NON-NLS
+	public static final String PARSER_DOCENT = "docent" ; //NON-NLS
+
+	public static final String PARSER_CHANGES = "changes" ; //NON-NLS
+	public static final String PARSER_TIME = "time" ; //NON-NLS
+	public static final String PARSER_DATE = "date" ; //NON-NLS
+	public static final String PARSER_ORIGNAL = "original" ; //NON-NLS
+	public static final String PARSER_ALTERNATIVE = "alternative" ; //NON-NLS
+
+	// Semester term: Winterterm, summerterm (Wintersemester, Sommersemester)
+
+
+/*	public static final String PARSER_ = "" ; //NON-NLS
+	public static final String PARSER_ = "" ; //NON-NLS
+	public static final String PARSER_ = "" ; //NON-NLS
+	public static final String PARSER_ = "" ; //NON-NLS
+	public static final String PARSER_ = "" ; //NON-NLS
+	public static final String PARSER_ = "" ; //NON-NLS
+*/
 
 	public static final int Student = 1 ;
 }

@@ -22,7 +22,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import de.hof.university.app.BuildConfig;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.model.schedule.Changes;
 
@@ -33,6 +32,7 @@ public class ChangesParser implements Parser<Changes> {
 
     @Override
     public final ArrayList<Changes> parse(String[] params) {
+
         ArrayList<Changes> result = new ArrayList<>();
         if( 1 == params.length ) {
             String jsonString = params[0];
@@ -40,9 +40,12 @@ public class ChangesParser implements Parser<Changes> {
             if(jsonString.isEmpty()) {
                 return result;
             }
+
             try {
-                final JSONArray jsonArray = new JSONObject(jsonString).getJSONArray("changes");
+                final JSONArray jsonArray = new JSONObject(jsonString).getJSONArray(Define.PARSER_CHANGES);
                 for (int i = 0; i < jsonArray.length(); ++i) {
+
+                    // Gibt es Änderungen überhaupt
                     final Changes change = convertJsonObject(jsonArray.getJSONObject(i));
                     if ( null != change ) {
                         // schauen ob diese Änderung bereits enthalten ist.
@@ -69,15 +72,15 @@ public class ChangesParser implements Parser<Changes> {
         final String comment = jsonObject.optString(Define.SCHEDULE_PARSER_COMMENT);
         final String group = jsonObject.optString(Define.SCHEDULE_PARSER_GROUP);
         final String reason = jsonObject.optString(Define.SCHEDULE_PARSER_REASON);
-        final String begin_old = jsonObject.optJSONObject("original").optString("date")+ ' ' +jsonObject.optJSONObject("original").optString("time");
-        String begin_new="";
-        String room_new="";
-        if(!jsonObject.isNull("alternative")){
-            begin_new = jsonObject.optJSONObject("alternative").optString("date") + ' ' + jsonObject.optJSONObject("alternative").optString("time");
-            room_new = jsonObject.optJSONObject("alternative").optString("room");
+        final String begin_old = jsonObject.optJSONObject(Define.PARSER_ORIGNAL).optString(Define.PARSER_DATE)+ ' ' +jsonObject.optJSONObject(Define.PARSER_ORIGNAL).optString(Define.PARSER_TIME);
+        String begin_new = "";
+        String room_new = "";
+        if(!jsonObject.isNull( Define.PARSER_ALTERNATIVE )){
+            begin_new = jsonObject.optJSONObject(Define.PARSER_ALTERNATIVE).optString(Define.PARSER_DATE) + ' ' + jsonObject.optJSONObject(Define.PARSER_ALTERNATIVE).optString(Define.PARSER_TIME);
+            room_new = jsonObject.optJSONObject(Define.PARSER_ALTERNATIVE).optString(Define.PARSER_ROOM);
         }
-        final String room_old = jsonObject.optJSONObject("original").optString("room");
-        final String lecturer = jsonObject.optString("docent");
+        final String room_old = jsonObject.optJSONObject(Define.PARSER_ORIGNAL).optString(Define.PARSER_ROOM);
+        final String lecturer = jsonObject.optString(Define.PARSER_DOCENT);
 
         return new Changes(label, comment, group, reason, begin_old, begin_new, room_old, room_new, lecturer);
     }

@@ -50,7 +50,7 @@ public class ScheduleParser implements Parser<Schedule> {
         }
         language = params[1];
         try {
-            JSONArray jsonArray = new JSONObject(params[0]).getJSONArray("schedule");
+            JSONArray jsonArray = new JSONObject(params[0]).getJSONArray(Define.PARSER_SCHEDULE);
             for (int i = 0; i < jsonArray.length(); ++i) {
                 Schedule schedule = convertJsonObject(jsonArray.getJSONObject(i));
                 if (schedule != null) {
@@ -75,7 +75,7 @@ public class ScheduleParser implements Parser<Schedule> {
 
     protected final Schedule convertJsonObject(JSONObject jsonObject) {
 
-        String weekday = jsonObject.optString("day");
+        String weekday = jsonObject.optString(Define.PARSER_DAY);
         // Wenn Sprache der App auf Englisch gestellt ist englische Wochentage nehmen
         // Vom Webservice kommen nur deutsche Texte. Also suchen wir erst Mal den Wochentag
         // dann geben wir den fremdsprachlichen Text aus.
@@ -89,15 +89,16 @@ public class ScheduleParser implements Parser<Schedule> {
 
         final int id = jsonObject.optInt("id", 0);
         final String label = jsonObject.optString(Define.SCHEDULE_PARSER_LABEL);
-        final String type = jsonObject.optString("type");
+        final String type = jsonObject.optString(Define.PARSER_TYPE);
         final String group = jsonObject.optString(Define.SCHEDULE_PARSER_GROUP);
-        final String begin = jsonObject.optString("starttime");
-        final String end = jsonObject.optString("endtime");
-        final String startdate = jsonObject.optString("startdate");
-        final String enddate = jsonObject.optString("enddate");
-        final String room = jsonObject.optString("room");
-        final String lecturer = jsonObject.optString("docent").replace("§§", ",");
-        final String comment = jsonObject.optString("comment");
+        final String begin = jsonObject.optString(Define.PARSER_STARTTIME);
+        final String end = jsonObject.optString(Define.PARSER_ENDTIME);
+        final String startdate = jsonObject.optString(Define.PARSER_STARTDATE);
+        final String enddate = jsonObject.optString(Define.PARSER_ENDDATE);
+        final String room = jsonObject.optString(Define.PARSER_ROOM);
+            //Entferne alle Sonderzeichen bei den Dozenten, eingetragen durch SPLUS
+        final String lecturer = jsonObject.optString(Define.PARSER_DOCENT).replace("§§", ",");
+        final String comment = jsonObject.optString(Define.SCHEDULE_PARSER_COMMENT);
 
         return new Schedule(id, weekday, label, type, group, begin, end, startdate, enddate, room, lecturer, comment);
     }

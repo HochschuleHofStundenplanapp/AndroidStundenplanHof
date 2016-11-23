@@ -44,7 +44,7 @@ public class ChangesFragment extends AbstractListFragment {
     public final void onResume() {
         super.onResume();
         MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().setTitle(R.string.aenderung);
+        mainActivity.getActionBar().setTitle(R.string.aenderung);
 
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
         navigationView.getMenu().findItem(R.id.nav_aenderung).setChecked(true);
