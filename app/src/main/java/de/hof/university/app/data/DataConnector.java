@@ -50,6 +50,7 @@ public class DataConnector {
         } else {
             final String result = readStringFromUrl(strUrl);
             if (result == null) {
+                System.out.println("result is null");
                 if (cacheTime != -1) {
                     return loadFromSharedPreferences(strUrl);
                 } else {
@@ -57,7 +58,12 @@ public class DataConnector {
                 }
             } else if (!result.isEmpty()) {
                 saveToSharedPreferences(strUrl, result);
+            } else {
+                // TODO TEST
+                // falls das result empty ist nimm auch den Cache
+                return loadFromSharedPreferences(strUrl);
             }
+            System.out.println("result: " + result.substring(0, 300));
             return result;
         }
     }
@@ -105,7 +111,6 @@ public class DataConnector {
 
         return lastCached.after(today);
     }
-
 
     static final int timeoutInSeconds = 1000;
 

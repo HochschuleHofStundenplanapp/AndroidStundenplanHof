@@ -109,7 +109,7 @@ public class MyScheduleFragment extends ScheduleFragment {
         //AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
         // handle item selection
         if (item.getItemId() == R.id.action_delete_all) {
-            DataManager.getInstance().deleteAllFromMySchedule(getView().getContext());
+            DataManager.getInstance().deleteAllFromMySchedule(getActivity().getApplicationContext());
             dataList.clear();
             adapter.notifyDataSetChanged();
             Toast.makeText(getView().getContext(), getString(R.string.changesScheduleText), Toast.LENGTH_LONG).show();
@@ -132,7 +132,7 @@ public class MyScheduleFragment extends ScheduleFragment {
 
             if (scheduleList != null) {
                 // Die ID's für den Mein Stundenplan nochmal speichern nachdem die Doppelten raus sortiert wurden
-                DataManager.getInstance().deleteAllFromMySchedule(getView().getContext());
+                DataManager.getInstance().deleteAllFromMySchedule(getActivity().getApplicationContext());
                 Set<String> schedulesIds = new HashSet<>();
                 for (Object object : scheduleList) {
                     if (object instanceof Schedule) {
@@ -140,10 +140,11 @@ public class MyScheduleFragment extends ScheduleFragment {
                         schedulesIds.add(String.valueOf(schedule.getId()));
                     }
                 }
-                DataManager.getInstance().addAllToMySchedule(getView().getContext(), schedulesIds);
+                DataManager.getInstance().addAllToMySchedule(getActivity().getApplicationContext(), schedulesIds);
 
                 // erneut holen mit neu sortierten ID's
-                scheduleList = DataManager.getInstance().getMySchedule(getActivity().getApplicationContext(), getString(R.string.language), course, semester, termTime, Boolean.valueOf(params[3]));
+                // forceRefresh auf false damit er falls sich nichts ändert sie aus dem Cache holen kann
+                scheduleList = DataManager.getInstance().getMySchedule(getActivity().getApplicationContext(), getString(R.string.language), course, semester, termTime, false);
 
                 if (scheduleList != null) {
                     return super.updateListView(scheduleList);
