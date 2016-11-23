@@ -67,7 +67,11 @@ public class ChangesParser implements Parser<Changes> {
         return result;
     }
 
+    // Wozu brauchen wir diese Methode
     protected static Changes convertJsonObject(JSONObject jsonObject) {
+
+        // Die Antwort vom Server enthält die folgenden Objekte und werden weparat in Teil.Strings zerleigt
+        // optSting: wirft keine Exception, wenn das JSON Element NICHT vorhanden ist.
         final String label = jsonObject.optString(Define.SCHEDULE_PARSER_LABEL);
         final String comment = jsonObject.optString(Define.SCHEDULE_PARSER_COMMENT);
         final String group = jsonObject.optString(Define.SCHEDULE_PARSER_GROUP);
