@@ -163,7 +163,6 @@ public abstract class AbstractListFragment extends Fragment {
         @Override
         protected final void onCancelled(ArrayList<Object> result) {
             System.out.println("onCancelled");
-            super.onCancelled(result);
         }
     }
 
