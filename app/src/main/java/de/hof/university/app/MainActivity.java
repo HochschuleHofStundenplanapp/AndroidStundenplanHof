@@ -30,8 +30,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import de.hof.university.app.data.DataManager;
@@ -62,6 +62,9 @@ public class MainActivity extends AppCompatActivity
 
     private NavigationView navigationView;
 
+	DrawerLayout mDrawerLayout;
+	ActionBarDrawerToggle mDrawerToggle;
+
     // für Navigation
     private boolean backButtonPressedOnce = false;
     private boolean firstStart = true;
@@ -72,7 +75,7 @@ public class MainActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_main);
 
-	    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+	    //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 	    //setSupportActionBar(toolbar);
 
 
@@ -80,11 +83,36 @@ public class MainActivity extends AppCompatActivity
         NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         nm.cancelAll();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+
+	    mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+	    mDrawerToggle = new ActionBarDrawerToggle(
+             this,                  /* host Activity */
+             mDrawerLayout,         /* DrawerLayout object */
+             //R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
+             R.string.navigation_drawer_open,  /* "open drawer" description */
+             R.string.navigation_drawer_close  /* "close drawer" description */
+	    ) {
+
+		    /** Called when a drawer has settled in a completely closed state. */
+		    public void onDrawerClosed(View view) {
+			    super.onDrawerClosed(view);
+			    //getActionBar().setTitle(mTitle);
+		    }
+
+		    /** Called when a drawer has settled in a completely open state. */
+		    public void onDrawerOpened(View drawerView) {
+			    super.onDrawerOpened(drawerView);
+			    //getActionBar().setTitle(mDrawerTitle);
+		    }
+	    };
+
+	    // Set the drawer toggle as the DrawerListener
+	    mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+	    // getActionBar geht nicht wahrscheinlich weil doch noch irgendwo dafür die Support Libary eingebunden wird
+	    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+	    getSupportActionBar().setHomeButtonEnabled(true);
+
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -108,6 +136,12 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
+
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		mDrawerToggle.syncState();
+	}
 
     public final void displayExperimentalFeaturesMenuEntries(final boolean enabled) {
         if (enabled) {
