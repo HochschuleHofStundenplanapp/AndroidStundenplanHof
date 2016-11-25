@@ -20,9 +20,9 @@ package de.hof.university.app.experimental.fragment;
  * Created by Lukas on 05.07.2016.
  */
 
-import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +40,6 @@ import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.util.ArrayList;
 
-import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.experimental.adapter.RaumlistAdapter;
 import de.hof.university.app.experimental.model.Level;

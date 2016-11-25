@@ -62,7 +62,7 @@ public class MyScheduleFragment extends ScheduleFragment {
     public final void onResume() {
         super.onResume();
         final MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getActionBar().setTitle(R.string.myschedule);
+        mainActivity.getSupportActionBar().setTitle(R.string.myschedule);
 
         final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
         navigationView.getMenu().findItem(R.id.nav_mySchedule).setChecked(true);

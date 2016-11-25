@@ -137,7 +137,7 @@ public class SettingsFragment extends PreferenceFragment {
     public final void onResume() {
         super.onResume();
         MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getActionBar().setTitle(R.string.einstellungen);
+        mainActivity.getSupportActionBar().setTitle(R.string.einstellungen);
 
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
         navigationView.getMenu().findItem(R.id.nav_einstellungen).setChecked(true);

@@ -113,7 +113,7 @@ public class ScheduleFragment extends AbstractListFragment {
     public void onResume() {
         super.onResume();
         final MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getActionBar().setTitle(R.string.stundenplan);
+        mainActivity.getSupportActionBar().setTitle(R.string.stundenplan);
 
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
         navigationView.getMenu().findItem(R.id.nav_stundenplan).setChecked(true);
@@ -217,7 +217,7 @@ public class ScheduleFragment extends AbstractListFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         MainActivity mainActivity = (MainActivity) getActivity();
-        CharSequence title = mainActivity.getActionBar().getTitle();
+        CharSequence title = mainActivity.getSupportActionBar().getTitle();
         if (title.equals(getString(R.string.stundenplan))) {
             inflater.inflate(R.menu.schedule_main, menu);
         }

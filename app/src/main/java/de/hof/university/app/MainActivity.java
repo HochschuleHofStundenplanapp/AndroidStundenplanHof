@@ -16,7 +16,6 @@
 
 package de.hof.university.app;
 
-import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.NotificationManager;
@@ -30,6 +29,8 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -45,7 +46,7 @@ import de.hof.university.app.fragment.schedule.ScheduleFragment;
 import de.hof.university.app.fragment.settings.SettingsFragment;
 
 
-public class MainActivity extends Activity
+public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private MenuFragment menuFragment;
@@ -71,13 +72,17 @@ public class MainActivity extends Activity
 
         setContentView(R.layout.activity_main);
 
-        // Notifications müssen nicht mehr angezeigt werden
+	    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+	    //setSupportActionBar(toolbar);
+
+
+	    // Notifications müssen nicht mehr angezeigt werden
         NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         nm.cancelAll();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -89,15 +94,17 @@ public class MainActivity extends Activity
         final boolean showExperimentalFeatures = sharedPreferences.getBoolean("experimental_features", false);
         displayExperimentalFeaturesMenuEntries(showExperimentalFeatures);
 
-        if (savedInstanceState == null) {
-            if (DataManager.getInstance().getMyScheduleSize(getApplicationContext()) > 0) {
-                onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_mySchedule));
+        // Habe ich schon einen eigenen Stundenplan "Mein Stundeplan" erstellt, dann damit beeginnen
+        if (DataManager.getInstance().getMyScheduleSize(getApplicationContext()) > 0) {
+            onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_mySchedule));
+        } else {
+            // Ich habe keinen Stundenplan erstellt,
+            // habe ich denn wenigstens schon Einstellungen vorgenommen?
+            if (sharedPreferences.getString("term_time", "").isEmpty()) {
+                // Noch nicht mal Einstellungen sind vorhanden, also gehen wir direkt in diesen Dialog
+                onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_einstellungen));
             } else {
-                if (sharedPreferences.getString("term_time", "").isEmpty()) {
-                    onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_einstellungen));
-                } else {
-                    onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_stundenplan));
-                }
+                onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_stundenplan));
             }
         }
     }
@@ -290,7 +297,7 @@ public class MainActivity extends Activity
             startActivity(browserIntent);
         }
 
-        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+	    final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

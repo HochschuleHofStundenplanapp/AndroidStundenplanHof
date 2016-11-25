@@ -168,7 +168,8 @@ public class Schedule implements Comparable<Schedule>, Serializable {
                     }
                 }
             }
-        } else
+        }
+        else
             assert (false);
 
         return -1;

@@ -61,7 +61,7 @@ public class MenuFragment extends AbstractListFragment {
     public final void onResume() {
         super.onResume();
         MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getActionBar().setTitle(R.string.speiseplan);
+        mainActivity.getSupportActionBar().setTitle(R.string.speiseplan);
 
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
         navigationView.getMenu().findItem(R.id.nav_speiseplan).setChecked(true);
