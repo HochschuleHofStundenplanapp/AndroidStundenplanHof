@@ -63,7 +63,7 @@ public class DataConnector {
                 // falls das result empty ist nimm auch den Cache
                 return loadFromSharedPreferences(strUrl);
             }
-            System.out.println("result: " + result.substring(0, 300));
+            //System.out.println("result: " + result.substring(0, 300));
             return result;
         }
     }
