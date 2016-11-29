@@ -84,6 +84,10 @@ public class MainActivity extends AppCompatActivity
         nm.cancelAll();
 
 
+        // getActionBar geht nicht wahrscheinlich weil doch noch irgendwo dafür die Support Libary eingebunden wird
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // getSupportActionBar().setHomeButtonEnabled(true);
+
 	    mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 	    mDrawerToggle = new ActionBarDrawerToggle(
              this,                  /* host Activity */
@@ -97,21 +101,19 @@ public class MainActivity extends AppCompatActivity
 		    public void onDrawerClosed(View view) {
 			    super.onDrawerClosed(view);
 			    //getActionBar().setTitle(mTitle);
+                invalidateOptionsMenu();
 		    }
 
 		    /** Called when a drawer has settled in a completely open state. */
 		    public void onDrawerOpened(View drawerView) {
 			    super.onDrawerOpened(drawerView);
 			    //getActionBar().setTitle(mDrawerTitle);
+                invalidateOptionsMenu();
 		    }
 	    };
 
 	    // Set the drawer toggle as the DrawerListener
-	    mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-	    // getActionBar geht nicht wahrscheinlich weil doch noch irgendwo dafür die Support Libary eingebunden wird
-	    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-	    getSupportActionBar().setHomeButtonEnabled(true);
+	    mDrawerLayout.addDrawerListener(mDrawerToggle);
 
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -142,6 +144,20 @@ public class MainActivity extends AppCompatActivity
 		super.onPostCreate(savedInstanceState);
 		mDrawerToggle.syncState();
 	}
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Pass the event to ActionBarDrawerToggle
+        // If it returns true, then it has handled
+        // the nav drawer indicator touch event
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        // Handle your other action bar items...
+
+        return super.onOptionsItemSelected(item);
+    }
 
     public final void displayExperimentalFeaturesMenuEntries(final boolean enabled) {
         if (enabled) {
