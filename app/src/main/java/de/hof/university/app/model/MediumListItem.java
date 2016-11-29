@@ -16,10 +16,12 @@
 
 package de.hof.university.app.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Lukas on 25.11.2015.
  */
-public class MediumListItem {
+public class MediumListItem implements Serializable{
     private final String title;
 
     public MediumListItem(final String title) {

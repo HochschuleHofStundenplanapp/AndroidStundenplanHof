@@ -19,10 +19,12 @@ package de.hof.university.app.model.schedule;
 //import de.hof.university.app.R;
 //import android.content.Context;
 
+import java.io.Serializable;
+
 /**
  * Created by larsg on 10.05.2016.
  */
-public class Changes {
+public class Changes implements Serializable {
     private final String label;
     private final String comment;
     private final String group;

@@ -85,6 +85,7 @@ public class DataManager {
     private DataConnector dataConnector = new DataConnector();
     private Set<String> mySchedule;
     private static final String myScheduleFilename = "mySchedule";
+    private static final String scheduleFilename = "schedule";
     private static final DataManager dataManager = new DataManager();
 
     public static DataManager getInstance() {
@@ -111,7 +112,7 @@ public class DataManager {
         return (ArrayList<Object>) parser.parse(params);
     }
 
-    public final ArrayList<Object> getSchedule(Context context, String language, String course, String semester,
+    public final ArrayList<Schedule> getSchedule(Context context, String language, String course, String semester,
                                                String termTime, boolean forceRefresh) {
         final Parser parser = ParserFactory.create(EParser.SCHEDULE);
         final String jsonString = this.getData(context, forceRefresh, String.format(DataManager.CONNECTION.SCHEDULE.getUrl(), DataManager.replaceWhitespace(course), DataManager.replaceWhitespace(semester), DataManager.replaceWhitespace(termTime)), DataManager.CONNECTION.SCHEDULE.getCache());
@@ -123,11 +124,22 @@ public class DataManager {
         final String[] params = {jsonString, language};
         assert parser != null;
 
-        return (ArrayList<Object>) parser.parse(params);
+        ArrayList<Object> objects = (ArrayList<Object>) parser.parse(params);
+
+        ArrayList<Schedule> schedules = new ArrayList<>();
+
+        for (Object object : objects) {
+            if ( object instanceof Schedule ) {
+                schedules.add((Schedule) object);
+            }
+        }
+
+        saveSchedule(context, schedules);
+        
+        return schedules;
     }
 
-
-    public final ArrayList<Object> getMySchedule(Context context, String language, String course, String semester,
+    public final ArrayList<Schedule> getMySchedule(Context context, String language, String course, String semester,
                                                  String termTime, boolean forceRefresh) {
         // myScheudle leeren damit es noch mal frisch aus der Datei gelesen wird.
         // Weil es dort in einer anderen Reihenfolge steht.
@@ -148,7 +160,17 @@ public class DataManager {
 
         final String[] params = {jsonString, language};
 
-        return (ArrayList<Object>) parser.parse(params);
+        ArrayList<Object> objects = (ArrayList<Object>) parser.parse(params);
+
+        ArrayList<Schedule> myschedules = new ArrayList<>();
+
+        for (Object object : objects) {
+            if ( object instanceof Schedule ) {
+                myschedules.add((Schedule) object);
+            }
+        }
+
+        return myschedules;
     }
 
     public final ArrayList<Object> getChanges(Context context, String course, String semester,
@@ -233,10 +255,6 @@ public class DataManager {
     }
 
     private void saveMySchedule(final Context context) {
-        // alte Variante
-        //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        //sharedPreferences.edit().putStringSet("myScheduleIds", this.getMySchedule(context)).apply();
-
         try {
             final File file = new File(context.getFilesDir(), myScheduleFilename);
             final FileOutputStream fos = new FileOutputStream(file);
@@ -251,10 +269,6 @@ public class DataManager {
     }
 
     private static Set<String> readMySchedule(final Context context) {
-        // alte Variante
-        //SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        //final Set<String> result = sharedPreferences.getStringSet("myScheduleIds", new HashSet<String>());
-
         Set<String> result = new HashSet<>();
         try {
             final File file = new File(context.getFilesDir(), myScheduleFilename);
@@ -288,4 +302,35 @@ public class DataManager {
         this.dataConnector.cleanCache(context, DataManager.MAX_CACHE_TIME);
     }
 
+    private void saveSchedule(final Context context, ArrayList<Schedule> schedule) {
+        try {
+            final File file = new File(context.getFilesDir(), scheduleFilename);
+            final FileOutputStream fos = new FileOutputStream(file);
+            final ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(schedule);
+            os.close();
+            fos.close();
+        } catch (IOException e) {
+            // TODO Fehlermeldung
+            e.printStackTrace();
+        }
+    }
+
+    private static ArrayList<Schedule> readSchedule(final Context context) {
+        ArrayList<Schedule> result = null;
+        try {
+            final File file = new File(context.getFilesDir(), scheduleFilename);
+            if (file.exists()) {
+                final FileInputStream fis = new FileInputStream(file);
+                final ObjectInputStream is = new ObjectInputStream(fis);
+                result = (ArrayList<Schedule>) is.readObject();
+                is.close();
+                fis.close();
+            }
+        } catch (Exception e) {
+            // TODO Fehlermeldung
+            e.printStackTrace();
+        }
+        return result;
+    }
 }

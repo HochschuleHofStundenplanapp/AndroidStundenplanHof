@@ -16,10 +16,12 @@
 
 package de.hof.university.app.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Lars on 29.11.2015.
  */
-public class BigListItem {
+public class BigListItem implements Serializable{
     final String title;
 
     public BigListItem(final String title) {

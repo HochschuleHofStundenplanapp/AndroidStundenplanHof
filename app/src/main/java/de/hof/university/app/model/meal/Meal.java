@@ -16,6 +16,7 @@
 
 package de.hof.university.app.model.meal;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,7 +24,7 @@ import java.util.Date;
 /**
  * Created by Lukas on 25.11.2015.
  */
-public class Meal {
+public class Meal implements Serializable{
     private String name;
     private String price;
     private final String weekDay;
