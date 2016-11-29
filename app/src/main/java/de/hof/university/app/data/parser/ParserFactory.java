@@ -29,7 +29,7 @@ public final class ParserFactory {
         } else if (parserEnum == ParserFactory.EParser.COURSES) {
             return new CourseParser();
         } else if (parserEnum == ParserFactory.EParser.MENU) {
-            return new MenuParser();
+            return new MealParser();
         } else if (parserEnum == ParserFactory.EParser.MYSCHEDULE) {
             return new MyScheduleParser();
         } else

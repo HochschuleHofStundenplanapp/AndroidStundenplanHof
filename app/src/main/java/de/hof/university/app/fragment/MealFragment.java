@@ -29,13 +29,13 @@ import java.util.Locale;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
-import de.hof.university.app.adapter.MenuAdapter;
+import de.hof.university.app.adapter.MealAdapter;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.model.BigListItem;
 import de.hof.university.app.model.MediumListItem;
-import de.hof.university.app.model.menu.Meal;
+import de.hof.university.app.model.meal.Meal;
 
-public class MenuFragment extends AbstractListFragment {
+public class MealFragment extends AbstractListFragment {
     // --Commented out by Inspection (17.07.2016 20:12):private String tarif;
     private int weekdayListPos;
 
@@ -47,7 +47,7 @@ public class MenuFragment extends AbstractListFragment {
 
     @Override
     protected final ArrayAdapter setArrayAdapter() {
-        return new MenuAdapter(getActivity(), dataList);
+        return new MealAdapter(getActivity(), dataList);
     }
 
     @Override

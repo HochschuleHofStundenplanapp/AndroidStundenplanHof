@@ -28,17 +28,17 @@ import java.util.ArrayList;
 import de.hof.university.app.R;
 import de.hof.university.app.model.BigListItem;
 import de.hof.university.app.model.MediumListItem;
-import de.hof.university.app.model.menu.Meal;
+import de.hof.university.app.model.meal.Meal;
 
 /**
  * Created by Lukas on 25.11.2015.
  */
-public class MenuAdapter extends ArrayAdapter<Object> {
+public class MealAdapter extends ArrayAdapter<Object> {
 
     private final ArrayList<Object> items;
     private final LayoutInflater vi;
 
-    public MenuAdapter(final Context context, final ArrayList<Object> items) {
+    public MealAdapter(final Context context, final ArrayList<Object> items) {
         super(context, 0, items);
 
         this.items = items;

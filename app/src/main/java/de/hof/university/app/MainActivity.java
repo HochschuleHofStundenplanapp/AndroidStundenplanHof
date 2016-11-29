@@ -39,7 +39,7 @@ import de.hof.university.app.experimental.fragment.NotenbekanntgabeFragment;
 import de.hof.university.app.experimental.fragment.NotenblattFragment;
 import de.hof.university.app.experimental.fragment.RaumsucheFragment;
 import de.hof.university.app.fragment.ImpressumFragment;
-import de.hof.university.app.fragment.MenuFragment;
+import de.hof.university.app.fragment.MealFragment;
 import de.hof.university.app.fragment.schedule.ChangesFragment;
 import de.hof.university.app.fragment.schedule.MyScheduleFragment;
 import de.hof.university.app.fragment.schedule.ScheduleFragment;
@@ -49,7 +49,7 @@ import de.hof.university.app.fragment.settings.SettingsFragment;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private MenuFragment menuFragment;
+    private MealFragment mealFragment;
     private ScheduleFragment scheduleFragment;
     private ChangesFragment changesFragment;
     private MyScheduleFragment myScheduleFragment;
@@ -204,13 +204,13 @@ public class MainActivity extends AppCompatActivity
 
         if (R.id.nav_speiseplan == id) {
             FragmentManager manager = getFragmentManager();
-            if (!manager.popBackStackImmediate(MenuFragment.class.getName(), 0)) {
-                if (menuFragment == null) {
-                    menuFragment = new MenuFragment();
+            if (!manager.popBackStackImmediate(MealFragment.class.getName(), 0)) {
+                if ( mealFragment == null) {
+                    mealFragment = new MealFragment();
                 }
                 FragmentTransaction trans = manager.beginTransaction();
-                trans.addToBackStack(MenuFragment.class.getName());
-                trans.replace(R.id.content_main, menuFragment);
+                trans.addToBackStack(MealFragment.class.getName());
+                trans.replace(R.id.content_main, mealFragment);
                 trans.commit();
             }
         } else if (R.id.nav_notenbekanntgabe == id) {

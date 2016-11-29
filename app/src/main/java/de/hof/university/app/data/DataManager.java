@@ -46,7 +46,7 @@ public class DataManager {
     private enum CONNECTION {
 
         // Essen
-        MENU("https://www.studentenwerk-oberfranken.de/?eID=bwrkSpeiseplanRss&tx_bwrkspeiseplan_pi2%5Bbar%5D=340&tx_bwrkspeiseplan_pi2%5Bdate%5D=", 60 * 24),
+        MEAL("https://www.studentenwerk-oberfranken.de/?eID=bwrkSpeiseplanRss&tx_bwrkspeiseplan_pi2%5Bbar%5D=340&tx_bwrkspeiseplan_pi2%5Bdate%5D=", 60 * 24),
 
         COURSE("https://www.hof-university.de/soap/client.php?f=Courses&tt=%s", 60 * 24),
 
@@ -97,8 +97,8 @@ public class DataManager {
     public final ArrayList<Object> getMeals(Context context, boolean forceRefresh) {
         final Parser parser = ParserFactory.create(EParser.MENU);
         final Calendar calendar = Calendar.getInstance();
-        final String url = DataManager.CONNECTION.MENU.getUrl() + calendar.get(Calendar.YEAR) + '-' + (calendar.get(Calendar.MONTH) + 1) + '-' + calendar.get(Calendar.DAY_OF_MONTH);
-        final String xmlString = this.getData(context, forceRefresh, url, DataManager.CONNECTION.MENU.getCache());
+        final String url = DataManager.CONNECTION.MEAL.getUrl() + calendar.get(Calendar.YEAR) + '-' + (calendar.get(Calendar.MONTH) + 1) + '-' + calendar.get(Calendar.DAY_OF_MONTH);
+        final String xmlString = this.getData(context, forceRefresh, url, DataManager.CONNECTION.MEAL.getCache());
 
         if (xmlString.equals("")) {
             return null;

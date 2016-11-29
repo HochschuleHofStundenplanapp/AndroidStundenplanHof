@@ -30,16 +30,16 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.hof.university.app.BuildConfig;
-import de.hof.university.app.model.menu.Meal;
+import de.hof.university.app.model.meal.Meal;
 
 /**
  * Created by larsg on 17.06.2016.
  */
-public class MenuParser implements Parser<Meal> {
+public class MealParser implements Parser<Meal> {
     private static final SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY);
     private Integer tariff;
 
-    public MenuParser() {
+    public MealParser() {
     }
 
     @Override
@@ -88,7 +88,7 @@ public class MenuParser implements Parser<Meal> {
                             }
                             if (xmlTag.equalsIgnoreCase("tag")) {
                                 try {
-                                    xmlDay = MenuParser.sdf.parse(xmlParser.getAttributeValue(null, "datum"));
+                                    xmlDay = MealParser.sdf.parse(xmlParser.getAttributeValue(null, "datum"));
                                 } catch (ParseException e) {
                                     if (BuildConfig.DEBUG) e.printStackTrace();
                                 }
@@ -150,7 +150,7 @@ public class MenuParser implements Parser<Meal> {
             if(jsonString.isEmpty())
                 return result;
             try {
-                JSONArray jsonArray = new JSONObject(jsonString).getJSONArray("menu");
+                JSONArray jsonArray = new JSONObject(jsonString).getJSONArray("meal");
                 for (int i = 0; i < jsonArray.length(); ++i) {
                     JSONObject tmpObject = jsonArray.getJSONObject(i);
                     result.addAll(convertJsonObject(tmpObject));
