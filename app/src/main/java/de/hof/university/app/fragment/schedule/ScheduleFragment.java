@@ -42,6 +42,7 @@ import java.util.Set;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
+import de.hof.university.app.Util.Log;
 import de.hof.university.app.adapter.ScheduleAdapter;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.fragment.AbstractListFragment;
@@ -50,6 +51,8 @@ import de.hof.university.app.model.schedule.Schedule;
 
 
 public class ScheduleFragment extends AbstractListFragment {
+    public static final String TAG = "ScheduleFragment";
+
     private int weekdayListPos;
 
     //TODO onCreateView?
@@ -253,14 +256,14 @@ public class ScheduleFragment extends AbstractListFragment {
         if (isVisible()) {
             List<Schedule> scheduleList = DataManager.getInstance().getSchedule(getActivity().getApplicationContext(), getString(R.string.language), course, semester, termTime, Boolean.valueOf(params[3]));
 
-            System.out.println("isVisible: "+ isVisible());
+            Log.d(TAG, "isVisible: "+ isVisible());
             if (isVisible()) {
                 if (scheduleList != null) {
                     return this.updateListView(scheduleList);
                 }
             }
         }
-        System.out.println("result is null");
+        Log.d(TAG, "result is null");
         return null;
     }
 }

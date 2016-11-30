@@ -34,10 +34,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
+import de.hof.university.app.Util.Log;
+
 /**
  * Created by Lukas on 14.06.2016.
  */
 public class DataConnector {
+
+    public final String TAG = "DataConnector";
 
     public static final String TIME_APPEND = "_url_cache_time";
 
@@ -50,7 +54,7 @@ public class DataConnector {
         } else {
             final String result = readStringFromUrl(strUrl);
             if (result == null) {
-                System.out.println("result is null");
+                Log.d(TAG, "result is null");
                 if (cacheTime != -1) {
                     return loadFromSharedPreferences(strUrl);
                 } else {
