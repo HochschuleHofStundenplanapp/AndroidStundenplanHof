@@ -35,8 +35,8 @@ import java.util.Set;
 import de.hof.university.app.data.parser.Parser;
 import de.hof.university.app.data.parser.ParserFactory;
 import de.hof.university.app.data.parser.ParserFactory.EParser;
-import de.hof.university.app.model.settings.Course;
-import de.hof.university.app.model.schedule.Schedule;
+import de.hof.university.app.model.schedule.LectureItem;
+import de.hof.university.app.model.settings.StudyCourse;
 
 /**
  * Created by Lukas on 14.06.2016.
@@ -59,8 +59,8 @@ public class DataManager {
         //MYSCHEDULE("http://sh-web02.hof-university.de/soap/client.php?f=MySchedule",60*24),
 
         //Produktivserver
-        SCHEDULE("https://www.hof-university.de/soap/client.php?f=Schedule&stg=%s&sem=%s&tt=%s", 60 * 24),
-        CHANGES("https://www.hof-university.de/soap/client.php?f=Changes", 60 * 3),
+        SCHEDULE("https://www.hof-university.de/soap/client.php?f=LectureItem&stg=%s&sem=%s&tt=%s", 60 * 24),
+        CHANGES("https://www.hof-university.de/soap/client.php?f=LectureChange", 60 * 3),
         MYSCHEDULE("https://www.hof-university.de/soap/client.php?f=MySchedule", 60 * 24),;
 
         private final String url;
@@ -186,14 +186,14 @@ public class DataManager {
         return (ArrayList<Object>) parser.parse(params);
     }
 
-    public final ArrayList<Course> getCourses(Context context, String language, String termTime, boolean forceRefresh) {
+    public final ArrayList<StudyCourse> getCourses(Context context, String language, String termTime, boolean forceRefresh) {
         final Parser parser = ParserFactory.create(EParser.COURSES);
 
         final String jsonString = this.getData(context, forceRefresh, String.format(DataManager.CONNECTION.COURSE.getUrl(), DataManager.replaceWhitespace(termTime)), DataManager.CONNECTION.COURSE.getCache());
         final String[] params = {jsonString, language};
         assert parser != null;
 
-        return (ArrayList<Course>) parser.parse(params);
+        return (ArrayList<StudyCourse>) parser.parse(params);
     }
 
 
@@ -209,16 +209,16 @@ public class DataManager {
         return str.replace(" ", "%20");
     }
 
-    public final void addToMySchedule(final Context context, final Schedule s) {
+    public final void addToMySchedule(final Context context, final LectureItem s) {
         this.getMySchedule(context).add(String.valueOf(s.getId()));
         this.saveMySchedule(context);
     }
 
-    public final boolean myScheduleContains(final Context context, final Schedule s) {
+    public final boolean myScheduleContains(final Context context, final LectureItem s) {
         return this.getMySchedule(context).contains(String.valueOf(s.getId()));
     }
 
-    public final void deleteFromMySchedule(final Context context, final Schedule s) {
+    public final void deleteFromMySchedule(final Context context, final LectureItem s) {
         this.getMySchedule(context).remove(String.valueOf(s.getId()));
         this.saveMySchedule(context);
     }

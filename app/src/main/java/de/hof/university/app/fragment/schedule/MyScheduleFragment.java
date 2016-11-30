@@ -34,7 +34,7 @@ import de.hof.university.app.BuildConfig;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.data.DataManager;
-import de.hof.university.app.model.schedule.Schedule;
+import de.hof.university.app.model.schedule.LectureItem;
 
 /**
  * Created by Lukas on 22.06.2016.
@@ -45,12 +45,12 @@ public class MyScheduleFragment extends ScheduleFragment {
 
         if (v.getId() == R.id.listView) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-            Schedule schedule = (Schedule) listView.getItemAtPosition(info.position);
+            LectureItem lectureItem = (LectureItem) listView.getItemAtPosition(info.position);
 
             DataManager dm = DataManager.getInstance();
 
             //Wenn in Mein Stundenplan enthalten -> löschen anzeigen
-            if (dm.myScheduleContains(v.getContext(), schedule)) {
+            if (dm.myScheduleContains(v.getContext(), lectureItem)) {
                 menu.setHeaderTitle(R.string.myschedule);
                 menu.add(Menu.NONE, 0, 0, R.string.deleteFromMySchedule);
             }
@@ -75,11 +75,11 @@ public class MyScheduleFragment extends ScheduleFragment {
     @Override
     public final boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        final Schedule schedule = (Schedule) listView.getItemAtPosition(info.position);
+        final LectureItem lectureItem = (LectureItem) listView.getItemAtPosition(info.position);
 
         if (item.getTitle().equals(getString(R.string.deleteFromMySchedule))) {
-            DataManager.getInstance().deleteFromMySchedule(info.targetView.getContext(), schedule);
-            dataList.remove(schedule);
+            DataManager.getInstance().deleteFromMySchedule(info.targetView.getContext(), lectureItem);
+            dataList.remove(lectureItem);
             adapter.notifyDataSetChanged();
             Toast.makeText(getView().getContext(), getString(R.string.deleted), Toast.LENGTH_SHORT).show();
             if (DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) == 0) {
@@ -135,9 +135,9 @@ public class MyScheduleFragment extends ScheduleFragment {
                 DataManager.getInstance().deleteAllFromMySchedule(getActivity().getApplicationContext());
                 Set<String> schedulesIds = new HashSet<>();
                 for (Object object : scheduleList) {
-                    if (object instanceof Schedule) {
-                        Schedule schedule = (Schedule) object;
-                        schedulesIds.add(String.valueOf(schedule.getId()));
+                    if (object instanceof LectureItem ) {
+                        LectureItem lectureItem = (LectureItem) object;
+                        schedulesIds.add(String.valueOf(lectureItem.getId()));
                     }
                 }
                 DataManager.getInstance().addAllToMySchedule(getActivity().getApplicationContext(), schedulesIds);

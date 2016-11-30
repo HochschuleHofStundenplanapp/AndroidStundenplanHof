@@ -21,7 +21,7 @@ import java.io.Serializable;
 /**
  * Created by larsg on 09.05.2016.
  */
-public class Schedule implements Comparable<Schedule>, Serializable {
+public class LectureItem implements Comparable<LectureItem>, Serializable {
     private static final String date_regex = "dd-MM-yyyy HH:mm:ss";
 
     private int id;
@@ -37,8 +37,8 @@ public class Schedule implements Comparable<Schedule>, Serializable {
     private final String lecturer;
     private final String comment;
 
-    public Schedule(final int id, final String weekday, final String label, final String type, final String group,
-                    final String begin, final String end, final String startdate, final String enddate, final String room, final String lecturer, final String comment) {
+    public LectureItem(final int id, final String weekday, final String label, final String type, final String group,
+                       final String begin, final String end, final String startdate, final String enddate, final String room, final String lecturer, final String comment) {
         this.id = id;
         this.weekday = weekday;
         this.label = label;
@@ -55,7 +55,7 @@ public class Schedule implements Comparable<Schedule>, Serializable {
 
     @Override
     public String toString() {
-        return "Schedule{" +
+        return "LectureItem{" +
                 ", weekday='" + weekday + '\'' +
                 ", label='" + label + '\'' +
                 ", type='" + type + '\'' +
@@ -148,22 +148,22 @@ public class Schedule implements Comparable<Schedule>, Serializable {
     /*
     ** Sortiert nach Sartzeit
      */
-    public int compareTo(Schedule schedule) {
+    public int compareTo(LectureItem lectureItem) {
         // Jahr
-        if (Integer.parseInt(getStartdate().substring(6)) > Integer.parseInt(schedule.getStartdate().substring(6))) {
+        if (Integer.parseInt(getStartdate().substring(6)) > Integer.parseInt(lectureItem.getStartdate().substring(6))) {
             return +1;
-        } else if (Integer.parseInt(getStartdate().substring(6)) == Integer.parseInt(schedule.getStartdate().substring(6))) {
+        } else if (Integer.parseInt(getStartdate().substring(6)) == Integer.parseInt(lectureItem.getStartdate().substring(6))) {
             // Monat
-            if (Integer.parseInt(getStartdate().substring(3, 5)) > Integer.parseInt(schedule.getStartdate().substring(3, 5))) {
+            if (Integer.parseInt(getStartdate().substring(3, 5)) > Integer.parseInt(lectureItem.getStartdate().substring(3, 5))) {
                 return +1;
-            } else if (Integer.parseInt(getStartdate().substring(3, 5)) == Integer.parseInt(schedule.getStartdate().substring(3, 5))) {
+            } else if (Integer.parseInt(getStartdate().substring(3, 5)) == Integer.parseInt(lectureItem.getStartdate().substring(3, 5))) {
                 // Tag
-                if (Integer.parseInt(getStartdate().substring(0, 2)) > Integer.parseInt(schedule.getStartdate().substring(0, 2))) {
+                if (Integer.parseInt(getStartdate().substring(0, 2)) > Integer.parseInt(lectureItem.getStartdate().substring(0, 2))) {
                     return +1;
-                } else if (Integer.parseInt(getStartdate().substring(0, 2)) == Integer.parseInt(schedule.getStartdate().substring(0, 2))) {
-                    if (Integer.parseInt(getBegin().substring(0, 2)) > Integer.parseInt(schedule.getBegin().substring(0, 2))) {
+                } else if (Integer.parseInt(getStartdate().substring(0, 2)) == Integer.parseInt(lectureItem.getStartdate().substring(0, 2))) {
+                    if (Integer.parseInt(getBegin().substring(0, 2)) > Integer.parseInt(lectureItem.getBegin().substring(0, 2))) {
                         return +1;
-                    } else if (Integer.parseInt(getBegin().substring(0, 2)) == Integer.parseInt(schedule.getBegin().substring(0, 2))) {
+                    } else if (Integer.parseInt(getBegin().substring(0, 2)) == Integer.parseInt(lectureItem.getBegin().substring(0, 2))) {
                         return 0;
                     }
                 }

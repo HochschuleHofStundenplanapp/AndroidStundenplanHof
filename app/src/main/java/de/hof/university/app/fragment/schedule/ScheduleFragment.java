@@ -47,7 +47,7 @@ import de.hof.university.app.adapter.ScheduleAdapter;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.fragment.AbstractListFragment;
 import de.hof.university.app.model.BigListItem;
-import de.hof.university.app.model.schedule.Schedule;
+import de.hof.university.app.model.schedule.LectureItem;
 
 
 public class ScheduleFragment extends AbstractListFragment {
@@ -79,12 +79,12 @@ public class ScheduleFragment extends AbstractListFragment {
 
         if (v.getId() == R.id.listView) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-            Schedule schedule = (Schedule) listView.getItemAtPosition(info.position);
+            LectureItem lectureItem = (LectureItem) listView.getItemAtPosition(info.position);
 
             final DataManager dm = DataManager.getInstance();
 
             //Wenn noch nicht im Mein Stundenplan -> hinzufügen anzeigen
-            if (!dm.myScheduleContains(v.getContext(), schedule)) {
+            if (!dm.myScheduleContains(v.getContext(), lectureItem)) {
                 menu.setHeaderTitle(R.string.myschedule);
                 menu.add(Menu.NONE, 0, 0, R.string.addToMySchedule);
             }
@@ -94,10 +94,10 @@ public class ScheduleFragment extends AbstractListFragment {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        Schedule schedule = (Schedule) listView.getItemAtPosition(info.position);
+        LectureItem lectureItem = (LectureItem) listView.getItemAtPosition(info.position);
 
         if (item.getTitle().equals(getString(R.string.addToMySchedule))) {
-            DataManager.getInstance().addToMySchedule(info.targetView.getContext(), schedule);
+            DataManager.getInstance().addToMySchedule(info.targetView.getContext(), lectureItem);
             Toast.makeText(getView().getContext(), getString(R.string.added), Toast.LENGTH_SHORT).show();
             if (DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) == 1) {
                 Toast.makeText(getView().getContext(), getString(R.string.changesMyScheduleText), Toast.LENGTH_LONG).show();
@@ -106,7 +106,7 @@ public class ScheduleFragment extends AbstractListFragment {
 
         // Hier unnötig wird in MyScheduleFragment behandelt
         /*if(item.getTitle().equals(getString(R.string.deleteFromMySchedule))) {
-            DataManager.getInstance().deleteFromMySchedule(info.targetView.getContext(), schedule);
+            DataManager.getInstance().deleteFromMySchedule(info.targetView.getContext(), lectureItem);
         }*/
 
         return true;
@@ -149,7 +149,7 @@ public class ScheduleFragment extends AbstractListFragment {
             return null;
         }
 
-        // TODO Warum geben wir eine Parametersammlung zurück? Wir können hier ein Course Objekt erstellen
+        // TODO Warum geben wir eine Parametersammlung zurück? Wir können hier ein StudyCourse Objekt erstellen
         params[0] = course;
         params[1] = semester;
         params[2] = termTime;
@@ -170,22 +170,22 @@ public class ScheduleFragment extends AbstractListFragment {
         ArrayList<Object> tmpDataList = new ArrayList<>();
 
         // Temporäre Liste für die Vorlesungen die nur an einem Tag stattfinden (fix) damit sie am Ende angezeigt werden.
-        ArrayList<Schedule> fixDataList = new ArrayList<>();
+        ArrayList<LectureItem> fixDataList = new ArrayList<>();
         for (Object object : list) {
-            if (object instanceof Schedule) {
-                Schedule schedule = (Schedule) object;
+            if (object instanceof LectureItem ) {
+                LectureItem lectureItem = (LectureItem) object;
                 // Wenn eine Vorlesung nur an einem Tag stattfindet sind Start- und Enddate gleich
-                if (schedule.getStartdate().equals(schedule.getEnddate())) {
-                    fixDataList.add(schedule);
+                if ( lectureItem.getStartdate().equals(lectureItem.getEnddate())) {
+                    fixDataList.add(lectureItem);
                 } else {
-                    if (!weekday.equals(schedule.getWeekday())) {
-                        tmpDataList.add(new BigListItem(schedule.getWeekday()));
-                        weekday = schedule.getWeekday();
+                    if (!weekday.equals(lectureItem.getWeekday())) {
+                        tmpDataList.add(new BigListItem(lectureItem.getWeekday()));
+                        weekday = lectureItem.getWeekday();
                         if (weekday.equalsIgnoreCase(curWeekDay)) {
                             weekdayListPos = tmpDataList.size() - 1;
                         }
                     }
-                    tmpDataList.add(schedule);
+                    tmpDataList.add(lectureItem);
                 }
             }
         }
@@ -193,12 +193,12 @@ public class ScheduleFragment extends AbstractListFragment {
         Collections.sort(fixDataList);
         ArrayList<Object> sortDataList = new ArrayList<>();
         String date = "";
-        for (Schedule schedule : fixDataList) {
-            if (!date.equals(schedule.getStartdate())) {
-                sortDataList.add(new BigListItem(schedule.getStartdate()));
-                date = schedule.getStartdate();
+        for (LectureItem lectureItem : fixDataList) {
+            if (!date.equals(lectureItem.getStartdate())) {
+                sortDataList.add(new BigListItem(lectureItem.getStartdate()));
+                date = lectureItem.getStartdate();
             }
-            sortDataList.add(schedule);
+            sortDataList.add(lectureItem);
         }
 
         tmpDataList.addAll(sortDataList);
@@ -236,9 +236,9 @@ public class ScheduleFragment extends AbstractListFragment {
         if (item.getItemId() == R.id.action_add_all) {
             Set<String> schedulesIds = new HashSet<>();
             for (Object object : dataList) {
-                if (object instanceof Schedule) {
-                    Schedule schedule = (Schedule) object;
-                    schedulesIds.add(String.valueOf(schedule.getId()));
+                if (object instanceof LectureItem ) {
+                    LectureItem lectureItem = (LectureItem) object;
+                    schedulesIds.add(String.valueOf(lectureItem.getId()));
                 }
             }
             DataManager.getInstance().addAllToMySchedule(getActivity().getApplicationContext(), schedulesIds);

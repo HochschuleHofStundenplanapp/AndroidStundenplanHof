@@ -27,7 +27,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import de.hof.university.app.R;
-import de.hof.university.app.model.schedule.Changes;
+import de.hof.university.app.model.schedule.LectureChange;
 
 /**
  * Created by larsg_000 on 30.11.2015.
@@ -46,9 +46,9 @@ public class ChangesAdapter extends ArrayAdapter<Object> {
     @Override
     public final View getView(final int position, final View convertView, final ViewGroup parent) {
         View v = convertView;
-        if (items.get(position) instanceof Changes) {
+        if (items.get(position) instanceof LectureChange ) {
 
-            final Changes changes = (Changes) items.get(position);
+            final LectureChange lectureChange = (LectureChange) items.get(position);
             v = vi.inflate(R.layout.list_item_aenderung, null);
 
             v.setOnClickListener(null);
@@ -59,10 +59,10 @@ public class ChangesAdapter extends ArrayAdapter<Object> {
             final TextView tvNewDate = (TextView) v.findViewById(R.id.aenderung_newDate);
             final TextView tvDetails = (TextView) v.findViewById(R.id.aenderung_details);
 
-            tvOldDate.setText(changes.getOld());
+            tvOldDate.setText(lectureChange.getOld());
             tvOldDate.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-            tvNewDate.setText(changes.getNew());
-            tvDetails.setText(changes.getDetails());
+            tvNewDate.setText(lectureChange.getNew());
+            tvDetails.setText(lectureChange.getDetails());
         }
         return v;
     }

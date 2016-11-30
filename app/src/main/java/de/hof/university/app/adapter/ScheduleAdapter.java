@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 import de.hof.university.app.R;
 import de.hof.university.app.model.BigListItem;
-import de.hof.university.app.model.schedule.Schedule;
+import de.hof.university.app.model.schedule.LectureItem;
 
 /**
  * Created by Lars on 29.11.2015.
@@ -51,8 +51,8 @@ public class ScheduleAdapter extends ArrayAdapter<Object> {
 
         final Object obj = items.get(position);
         if (obj != null) {
-            if (obj instanceof Schedule) {
-                final Schedule st = (Schedule) obj;
+            if (obj instanceof LectureItem ) {
+                final LectureItem st = (LectureItem) obj;
                 v = vi.inflate(R.layout.list_item_stundenplan, null);
                 final TextView tvTime = (TextView) v.findViewById(R.id.stundenplan_time);
                 final TextView tvRoom = (TextView) v.findViewById(R.id.stundenplan_raum);

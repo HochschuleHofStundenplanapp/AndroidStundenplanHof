@@ -29,20 +29,20 @@ import java.util.Date;
 import java.util.Locale;
 
 import de.hof.university.app.Util.Define;
-import de.hof.university.app.model.schedule.Schedule;
+import de.hof.university.app.model.schedule.LectureItem;
 
 /**
  * Created by larsg on 17.06.2016.
  */
-public class ScheduleParser implements Parser<Schedule> {
+public class ScheduleParser implements Parser<LectureItem> {
     protected String language;
 
     @Override
-    public ArrayList<Schedule> parse(String[] params) {
+    public ArrayList<LectureItem> parse(String[] params) {
         if (params.length != 2) {
             return null;
         }
-        ArrayList<Schedule> result = new ArrayList<>();
+        ArrayList<LectureItem> result = new ArrayList<>();
 
         //Escape, if String is empty
         if (params[0].isEmpty()) {
@@ -52,9 +52,9 @@ public class ScheduleParser implements Parser<Schedule> {
         try {
             JSONArray jsonArray = new JSONObject(params[0]).getJSONArray(Define.PARSER_SCHEDULE);
             for (int i = 0; i < jsonArray.length(); ++i) {
-                Schedule schedule = convertJsonObject(jsonArray.getJSONObject(i));
-                if (schedule != null) {
-                    result.add(schedule);
+                LectureItem lectureItem = convertJsonObject(jsonArray.getJSONObject(i));
+                if ( lectureItem != null) {
+                    result.add(lectureItem);
                 }
             }
         } catch (final JSONException ignored) {
@@ -73,7 +73,7 @@ public class ScheduleParser implements Parser<Schedule> {
         return dayOfWeek;
     }
 
-    protected final Schedule convertJsonObject(JSONObject jsonObject) {
+    protected final LectureItem convertJsonObject(JSONObject jsonObject) {
 
         String weekday = jsonObject.optString(Define.PARSER_DAY);
         // Wenn Sprache der App auf Englisch gestellt ist englische Wochentage nehmen
@@ -100,6 +100,6 @@ public class ScheduleParser implements Parser<Schedule> {
         final String lecturer = jsonObject.optString(Define.PARSER_DOCENT).replace("§§", ",");
         final String comment = jsonObject.optString(Define.SCHEDULE_PARSER_COMMENT);
 
-        return new Schedule(id, weekday, label, type, group, begin, end, startdate, enddate, room, lecturer, comment);
+        return new LectureItem(id, weekday, label, type, group, begin, end, startdate, enddate, room, lecturer, comment);
     }
 }

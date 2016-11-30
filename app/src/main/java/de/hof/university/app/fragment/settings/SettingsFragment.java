@@ -40,14 +40,14 @@ import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.LoginController;
-import de.hof.university.app.model.settings.Course;
+import de.hof.university.app.model.settings.StudyCourse;
 
 /**
  * Created by Lukas on 24.11.2015.
  */
 public class SettingsFragment extends PreferenceFragment {
     private ProgressDialog progressDialog;
-    private List<Course> courseList;
+    private List<StudyCourse> studyCourseList;
     private LoginController loginController = null;
 
     /**
@@ -142,7 +142,7 @@ public class SettingsFragment extends PreferenceFragment {
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
         navigationView.getMenu().findItem(R.id.nav_einstellungen).setChecked(true);
 
-        if (courseList == null) {
+        if ( studyCourseList == null) {
             updateCourseListPreference("", false);
         }
 
@@ -290,19 +290,19 @@ public class SettingsFragment extends PreferenceFragment {
      */
     private void updateSemesterData(final String courseStr) {
         ListPreference lpSemester = (ListPreference) findPreference("semester");
-        if ((courseList == null) || courseStr.isEmpty()) {
+        if ((studyCourseList == null) || courseStr.isEmpty()) {
             lpSemester.setEntries(new CharSequence[]{});
             lpSemester.setEntryValues(new CharSequence[]{});
             return;
         }
 
-        for (Course course : courseList) {
-            if (course.getTag().equals(courseStr)) {
-                CharSequence[] entries = new CharSequence[course.getTerms().size()];
-                CharSequence[] entryValues = new CharSequence[course.getTerms().size()];
-                for (int j = 0; j < course.getTerms().size(); ++j) {
-                    entries[j] = course.getTerms().get(j);
-                    entryValues[j] = course.getTerms().get(j);
+        for (StudyCourse studyCourse : studyCourseList ) {
+            if ( studyCourse.getTag().equals(courseStr)) {
+                CharSequence[] entries = new CharSequence[ studyCourse.getTerms().size()];
+                CharSequence[] entryValues = new CharSequence[ studyCourse.getTerms().size()];
+                for ( int j = 0; j < studyCourse.getTerms().size(); ++j) {
+                    entries[j] = studyCourse.getTerms().get(j);
+                    entryValues[j] = studyCourse.getTerms().get(j);
                 }
 
                 if (lpSemester != null) {
@@ -341,18 +341,18 @@ public class SettingsFragment extends PreferenceFragment {
             String termTime = params[0];
             boolean pForceRefresh = Boolean.valueOf(params[1]);
 
-            courseList = DataManager.getInstance().getCourses(getActivity().getBaseContext(), getString(R.string.language), termTime, pForceRefresh);
+            studyCourseList = DataManager.getInstance().getCourses(getActivity().getBaseContext(), getString(R.string.language), termTime, pForceRefresh);
 
-            entries = new CharSequence[courseList.size()];
-            entryValues = new CharSequence[courseList.size()];
+            entries = new CharSequence[ studyCourseList.size()];
+            entryValues = new CharSequence[ studyCourseList.size()];
 
-            Course course;
-            for (int i = 0; i < courseList.size(); ++i) {
-                if (courseList.get(i) instanceof Course) {
-                    course = courseList.get(i);
-                    entries[i] = course.getName();
-                    entryValues[i] = course.getTag();
-                    //entryValues[i]= String.valueOf(courseList.get(i).getId());
+            StudyCourse studyCourse;
+            for ( int i = 0; i < studyCourseList.size(); ++i) {
+                if ( studyCourseList.get(i) instanceof StudyCourse ) {
+                    studyCourse = studyCourseList.get(i);
+                    entries[i] = studyCourse.getName();
+                    entryValues[i] = studyCourse.getTag();
+                    //entryValues[i]= String.valueOf(studyCourseList.get(i).getId());
                 }
             }
             return null;

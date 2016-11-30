@@ -22,7 +22,7 @@ package de.hof.university.app.model.schedule;
 /**
  * Created by larsg on 10.05.2016.
  */
-public class Changes {
+public class LectureChange {
     private final String label;
     private final String comment;
     private final String group;
@@ -33,8 +33,8 @@ public class Changes {
     private final String room_new;
     private final String lecturer;
 
-    public Changes(final String label, final String comment, final String group, final String reason,
-                   final String begin_old, final String begin_new, final String room_old, final String room_new, final String lecturer) {
+    public LectureChange(final String label, final String comment, final String group, final String reason,
+                         final String begin_old, final String begin_new, final String room_old, final String room_new, final String lecturer) {
         this.label = label;
         this.comment = comment;
         this.group = group;
@@ -84,7 +84,7 @@ public class Changes {
 
     @Override
     public final String toString() {
-        return "Changes{" +
+        return "LectureChange{" +
                 "label='" + label + '\'' +
                 ", comment='" + comment + '\'' +
                 ", group='" + group + '\'' +
