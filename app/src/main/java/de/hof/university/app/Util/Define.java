@@ -59,4 +59,8 @@ public final class Define {
 */
 
 	public static final int Student = 1;
+
+
+	// show the fragments dealing with the location of the user
+	public static final int SHOW_LOCATION_FRAGMENT = 0 ;
 }
