@@ -31,7 +31,7 @@ public class Meal implements Serializable{
     private final String category;
     private String tariff;
     private final Date day;
-    private ArrayList<Integer> attributes;
+    final private ArrayList<Integer> attributes;
 
 // --Commented out by Inspection START (17.07.2016 20:11):
 //    public Meal(final Meal meal) {

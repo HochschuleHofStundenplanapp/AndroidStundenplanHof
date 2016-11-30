@@ -52,7 +52,7 @@ public class ScheduleAdapter extends ArrayAdapter<Object> {
         final Object obj = items.get(position);
         if (obj != null) {
             if (obj instanceof Schedule) {
-                Schedule st = (Schedule) obj;
+                final Schedule st = (Schedule) obj;
                 v = vi.inflate(R.layout.list_item_stundenplan, null);
                 final TextView tvTime = (TextView) v.findViewById(R.id.stundenplan_time);
                 final TextView tvRoom = (TextView) v.findViewById(R.id.stundenplan_raum);
@@ -62,7 +62,7 @@ public class ScheduleAdapter extends ArrayAdapter<Object> {
                 tvDetails.setText(st.getDetails());
 
             } else if (obj instanceof BigListItem) {
-                BigListItem tag = (BigListItem) obj;
+                final BigListItem tag = (BigListItem) obj;
                 v = vi.inflate(R.layout.list_item_big, null);
                 final TextView sectionView = (TextView) v.findViewById(R.id.list_item_big_text);
                 sectionView.setText(tag.getTitle());

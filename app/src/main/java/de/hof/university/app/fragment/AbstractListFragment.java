@@ -146,7 +146,7 @@ public abstract class AbstractListFragment extends Fragment {
                     modifyListViewAfterDataSetChanged();
 
                     // Damit man unter Änderungen ein Feedback bekommt.
-                    ChangesFragment changesFragment = (ChangesFragment) getFragmentManager().findFragmentByTag("CHANGES_FRAGMENT");
+                    final ChangesFragment changesFragment = (ChangesFragment) getFragmentManager().findFragmentByTag("CHANGES_FRAGMENT");
                     if (changesFragment != null && changesFragment.isVisible() && dataList.size() == 0) {
                         Toast.makeText(getView().getContext(), getString(R.string.noChanges), Toast.LENGTH_SHORT).show();
                     }

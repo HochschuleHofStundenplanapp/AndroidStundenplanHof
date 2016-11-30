@@ -65,11 +65,11 @@ public class ScheduleParser implements Parser<Schedule> {
 
     protected int parseDayOfWeek(String day, Locale locale)
             throws ParseException {
-        SimpleDateFormat dayFormat = new SimpleDateFormat("E", locale);
-        Date date = dayFormat.parse(day);
-        Calendar calendar = Calendar.getInstance();
+        final SimpleDateFormat dayFormat = new SimpleDateFormat("E", locale);
+        final Date date = dayFormat.parse(day);
+        final Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+        final int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
         return dayOfWeek;
     }
 

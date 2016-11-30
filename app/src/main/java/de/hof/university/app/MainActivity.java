@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -34,6 +35,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import de.hof.university.app.Util.Define;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.fragment.NotenbekanntgabeFragment;
 import de.hof.university.app.experimental.fragment.NotenblattFragment;
@@ -164,19 +166,22 @@ public class MainActivity extends AppCompatActivity
             navigationView.getMenu().findItem(R.id.nav_experimental).setVisible(true);
             navigationView.getMenu().findItem(R.id.nav_raumsuche).setVisible(true); //Raumsuche anzeigen
 
-            // TODO Weil ausblenden solange die neue Authentifizierungsmethode noch nicht funktioniert
-            navigationView.getMenu().findItem(R.id.nav_notenbekanntgabe).setVisible(false);
-            navigationView.getMenu().findItem(R.id.nav_notenblatt).setVisible(false);
-            /*
-            // Nur bei höheren Versionen von Android funktioniert auch Primuss
-            // HTML Connectivity mit Verschlüsselung ist dann erst vorhanden
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+	        // TODO Weil ausblenden solange die neue Authentifizierungsmethode noch nicht funktioniert
+            if ( Define.SHOW_NOTEN == 0 ) {
                 navigationView.getMenu().findItem(R.id.nav_notenbekanntgabe).setVisible(false);
                 navigationView.getMenu().findItem(R.id.nav_notenblatt).setVisible(false);
-            }else{
-                navigationView.getMenu().findItem(R.id.nav_notenbekanntgabe).setVisible(true);
-                navigationView.getMenu().findItem(R.id.nav_notenblatt).setVisible(true);
-            }*/
+            }
+            else {
+                // Nur bei höheren Versionen von Android funktioniert auch Primuss
+                // HTML Connectivity mit Verschlüsselung ist dann erst vorhanden
+                if ( Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ) {
+                    navigationView.getMenu().findItem(R.id.nav_notenbekanntgabe).setVisible(false);
+                    navigationView.getMenu().findItem(R.id.nav_notenblatt).setVisible(false);
+                } else {
+                    navigationView.getMenu().findItem(R.id.nav_notenbekanntgabe).setVisible(true);
+                    navigationView.getMenu().findItem(R.id.nav_notenblatt).setVisible(true);
+                }
+            }
         } else {
             navigationView.getMenu().findItem(R.id.nav_experimental).setVisible(false);
         }
