@@ -28,6 +28,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -36,6 +37,8 @@ import de.hof.university.app.data.parser.Parser;
 import de.hof.university.app.data.parser.ParserFactory;
 import de.hof.university.app.data.parser.ParserFactory.EParser;
 import de.hof.university.app.model.schedule.LectureItem;
+import de.hof.university.app.model.schedule.MySchedule;
+import de.hof.university.app.model.schedule.Schedule;
 import de.hof.university.app.model.settings.StudyCourse;
 
 /**
@@ -86,9 +89,11 @@ public class DataManager {
     // single instance of the Factories
     static final private DataConnector dataConnector = new DataConnector();
 
-    private Set<String> mySchedule;
+    private MySchedule mySchedule;
+
     private static final String myScheduleFilename = "mySchedule";
     private static final String scheduleFilename = "schedule";
+
     private static final DataManager dataManager = new DataManager();
 
     public static DataManager getInstance() {
@@ -115,65 +120,80 @@ public class DataManager {
         return (ArrayList<Object>) parser.parse(params);
     }
 
-    public final ArrayList<LectureItem> getSchedule(Context context, String language, String course, String semester,
+    public final ArrayList<Object> getSchedule(Context context, String language, String course, String semester,
                                                String termTime, boolean forceRefresh) {
-        final Parser parser = ParserFactory.create(EParser.SCHEDULE);
-        final String jsonString = this.getData(context, forceRefresh, String.format(DataManager.CONNECTION.SCHEDULE.getUrl(), DataManager.replaceWhitespace(course), DataManager.replaceWhitespace(semester), DataManager.replaceWhitespace(termTime)), DataManager.CONNECTION.SCHEDULE.getCache());
+        ArrayList<Object> result = null;
 
-        if (jsonString.equals("")) {
-            return null;
-        }
+        Schedule schedule = readSchedule(context);
 
-        final String[] params = {jsonString, language};
-        assert parser != null;
+        Date lastCached = schedule.getLastSaved();
 
-        ArrayList<Object> objects = (ArrayList<Object>) parser.parse(params);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(lastCached);
+        cal.add(Calendar.MINUTE, DataManager.CONNECTION.SCHEDULE.getCache());
+        lastCached = cal.getTime();
 
-        ArrayList<LectureItem> schedule = new ArrayList<>();
+        if (schedule.getLectures().size() == 0 || !lastCached.after(new Date())) {
+            final Parser parser = ParserFactory.create(EParser.SCHEDULE);
+            final String jsonString = this.getData(context, forceRefresh, String.format(DataManager.CONNECTION.SCHEDULE.getUrl(), DataManager.replaceWhitespace(course), DataManager.replaceWhitespace(semester), DataManager.replaceWhitespace(termTime)), DataManager.CONNECTION.SCHEDULE.getCache());
 
-        for (Object object : objects) {
-            if ( object instanceof LectureItem ) {
-                schedule.add((LectureItem) object);
+            if ( jsonString.equals("") ) {
+                return null;
             }
-        }
 
-        saveSchedule(context, schedule);
+            final String[] params = { jsonString, language };
+            assert parser != null;
+
+            result = (ArrayList<Object>) parser.parse(params);
+
+            schedule.setLectures(result);
+
+            saveSchedule(context, schedule);
+        }
         
-        return schedule;
+        return result;
     }
 
-    public final ArrayList<LectureItem> getMySchedule(Context context, String language, String course, String semester,
+    public final ArrayList<Object> getMySchedule(Context context, String language, String course, String semester,
                                                  String termTime, boolean forceRefresh) {
         // myScheudle leeren damit es noch mal frisch aus der Datei gelesen wird.
         // Weil es dort in einer anderen Reihenfolge steht.
-        this.mySchedule = null;
-        final Iterator<String> iterator = this.getMySchedule(context).iterator();
-        String url = DataManager.CONNECTION.MYSCHEDULE.getUrl();
-        while (iterator.hasNext()) {
-            url += "&id[]=" + iterator.next();
-        }
+        //this.mySchedule = null;
 
-        final Parser parser = ParserFactory.create(EParser.MYSCHEDULE);
+        MySchedule mySchedule = this.getMySchedule(context);
 
-        final String jsonString = this.getData(context, forceRefresh, url, DataManager.CONNECTION.MYSCHEDULE.getCache());
+        Date lastCached = mySchedule.getLastSaved();
 
-        if (jsonString.equals("")) {
-            return null;
-        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(lastCached);
+        cal.add(Calendar.MINUTE, DataManager.CONNECTION.MYSCHEDULE.getCache());
+        lastCached = cal.getTime();
 
-        final String[] params = {jsonString, language};
+        if (mySchedule.getLectures().size() == 0 || !lastCached.after(new Date())) {
 
-        ArrayList<Object> objects = (ArrayList<Object>) parser.parse(params);
-
-        ArrayList<LectureItem> myschedule = new ArrayList<>();
-
-        for (Object object : objects) {
-            if ( object instanceof LectureItem ) {
-                myschedule.add((LectureItem) object);
+            final Iterator<String> iterator = this.getMySchedule(context).getIds().iterator();
+            String url = DataManager.CONNECTION.MYSCHEDULE.getUrl();
+            while ( iterator.hasNext() ) {
+                url += "&id[]=" + iterator.next();
             }
+
+            final Parser parser = ParserFactory.create(EParser.MYSCHEDULE);
+
+            final String jsonString = this.getData(context, forceRefresh, url, DataManager.CONNECTION.MYSCHEDULE.getCache());
+
+            if ( jsonString.equals("") ) {
+                return null;
+            }
+
+            final String[] params = { jsonString, language };
+
+            ArrayList<Object> myschedule = (ArrayList<Object>) parser.parse(params);
+
+            getMySchedule(context).setLectures(myschedule);
+            saveMySchedule(context);
         }
 
-        return myschedule;
+        return this.getMySchedule(context).getLectures();
     }
 
     public final ArrayList<Object> getChanges(Context context, String course, String semester,
@@ -181,7 +201,7 @@ public class DataManager {
         // myScheudle leeren damit es noch mal frisch aus der Datei gelesen wird.
         // Weil es dort in einer anderen Reihenfolge steht.
         this.mySchedule = null;
-        final Iterator<String> iterator = this.getMySchedule(context).iterator();
+        final Iterator<String> iterator = this.getMySchedule(context).getIds().iterator();
 
         String url = DataManager.CONNECTION.CHANGES.getUrl();
 
@@ -234,26 +254,26 @@ public class DataManager {
     }
 
     public final void addToMySchedule(final Context context, final LectureItem s) {
-        this.getMySchedule(context).add(String.valueOf(s.getId()));
+        this.getMySchedule(context).getIds().add(String.valueOf(s.getId()));
         this.saveMySchedule(context);
     }
 
     public final boolean myScheduleContains(final Context context, final LectureItem s) {
-        return this.getMySchedule(context).contains(String.valueOf(s.getId()));
+        return this.getMySchedule(context).getIds().contains(String.valueOf(s.getId()));
     }
 
     public final void deleteFromMySchedule(final Context context, final LectureItem s) {
-        this.getMySchedule(context).remove(String.valueOf(s.getId()));
+        this.getMySchedule(context).getIds().remove(String.valueOf(s.getId()));
         this.saveMySchedule(context);
     }
 
     public final void addAllToMySchedule(final Context context, final Set<String> schedulesIds) {
-        this.getMySchedule(context).addAll(schedulesIds);
+        this.getMySchedule(context).getIds().addAll(schedulesIds);
         this.saveMySchedule(context);
     }
 
     public final void deleteAllFromMySchedule(final Context context) {
-        this.getMySchedule(context).clear();
+        this.getMySchedule(context).getIds().clear();
         this.saveMySchedule(context);
     }
 
@@ -271,14 +291,14 @@ public class DataManager {
         }
     }
 
-    private static Set<String> readMySchedule(final Context context) {
-        Set<String> result = new HashSet<>();
+    private static MySchedule readMySchedule(final Context context) {
+        MySchedule result = new MySchedule();
         try {
             final File file = new File(context.getFilesDir(), myScheduleFilename);
             if (file.exists()) {
                 final FileInputStream fis = new FileInputStream(file);
                 final ObjectInputStream is = new ObjectInputStream(fis);
-                result = (Set<String>) is.readObject();
+                result = (MySchedule) is.readObject();
                 is.close();
                 fis.close();
             }
@@ -289,7 +309,7 @@ public class DataManager {
         return result;
     }
 
-    private Set<String> getMySchedule(final Context context) {
+    private MySchedule getMySchedule(final Context context) {
         if (this.mySchedule == null) {
             this.mySchedule = DataManager.readMySchedule(context);
         }
@@ -297,10 +317,10 @@ public class DataManager {
     }
 
     public final int getMyScheduleSize(final Context context) {
-        return this.getMySchedule(context).size();
+        return this.getMySchedule(context).getLectures().size();
     }
 
-    private void saveSchedule(final Context context, ArrayList<LectureItem> schedule) {
+    private void saveSchedule(final Context context, Schedule schedule) {
         try {
             final File file = new File(context.getFilesDir(), scheduleFilename);
             final FileOutputStream fos = new FileOutputStream(file);
@@ -314,14 +334,14 @@ public class DataManager {
         }
     }
 
-    private static ArrayList<LectureItem> readSchedule(final Context context) {
-        ArrayList<LectureItem> result = null;
+    private static Schedule readSchedule(final Context context) {
+        Schedule result = new Schedule();
         try {
             final File file = new File(context.getFilesDir(), scheduleFilename);
             if (file.exists()) {
                 final FileInputStream fis = new FileInputStream(file);
                 final ObjectInputStream is = new ObjectInputStream(fis);
-                result = (ArrayList<LectureItem>) is.readObject();
+                result = (Schedule) is.readObject();
                 is.close();
                 fis.close();
             }

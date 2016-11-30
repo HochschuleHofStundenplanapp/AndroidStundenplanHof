@@ -129,7 +129,7 @@ public class MyScheduleFragment extends ScheduleFragment {
             final String course = params[0];
             final String semester = params[1];
             final String termTime = params[2];
-            List<Schedule> scheduleList = DataManager.getInstance().getMySchedule(getActivity().getApplicationContext(), getString(R.string.language), course, semester, termTime, Boolean.valueOf(params[3]));
+            List<Object> scheduleList = DataManager.getInstance().getMySchedule(getActivity().getApplicationContext(), getString(R.string.language), course, semester, termTime, Boolean.valueOf(params[3]));
 
             if (BuildConfig.DEBUG) assert (scheduleList != null); // ob etwas zurück kommt
 
