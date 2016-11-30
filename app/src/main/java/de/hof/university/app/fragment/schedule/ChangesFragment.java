@@ -35,61 +35,64 @@ import de.hof.university.app.fragment.AbstractListFragment;
  * Created by larsg_000 on 30.11.2015.
  */
 public class ChangesFragment extends AbstractListFragment {
-    @Override
-    protected final ArrayAdapter setArrayAdapter() {
-        return new ChangesAdapter(getActivity(), dataList);
-    }
 
-    @Override
-    public final void onResume() {
-        super.onResume();
-        MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().setTitle(R.string.aenderung);
+	public final String TAG = "ChangesFragment";
 
-        NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
-        navigationView.getMenu().findItem(R.id.nav_aenderung).setChecked(true);
-    }
+	@Override
+	protected final ArrayAdapter setArrayAdapter() {
+		return new ChangesAdapter(getActivity(), dataList);
+	}
 
-    @Override
-    protected final String[] setTaskParameter(boolean forceRefresh) {
-        String[] params = new String[4];
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String course = sharedPref.getString("studiengang", "");
-        String semester = sharedPref.getString("semester", "");
-        String termTime = sharedPref.getString("term_time", "");
+	@Override
+	public final void onResume() {
+		super.onResume();
+		MainActivity mainActivity = (MainActivity) getActivity();
+		mainActivity.getSupportActionBar().setTitle(R.string.aenderung);
 
-        if (termTime.isEmpty()) {
-            Toast.makeText(getView().getContext(), getString(R.string.noTermTimeSelected), Toast.LENGTH_LONG).show();
-            return null;
-        }
+		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+		navigationView.getMenu().findItem(R.id.nav_aenderung).setChecked(true);
+	}
 
-        if (course.isEmpty()) {
-            Toast.makeText(getView().getContext(), getString(R.string.noCourseSelected), Toast.LENGTH_LONG).show();
-            return null;
-        }
-        if (semester.isEmpty()) {
-            Toast.makeText(getView().getContext(), getString(R.string.noSemesterSelected), Toast.LENGTH_LONG).show();
-            return null;
-        }
+	@Override
+	protected final String[] setTaskParameter(boolean forceRefresh) {
+		String[] params = new String[ 4 ];
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+		String course = sharedPref.getString("studiengang", "");
+		String semester = sharedPref.getString("semester", "");
+		String termTime = sharedPref.getString("term_time", "");
 
-        params[0] = course;
-        params[1] = semester;
-        params[2] = termTime;
-        params[3] = String.valueOf(forceRefresh);
-        return params;
-    }
+		if ( termTime.isEmpty() ) {
+			Toast.makeText(getView().getContext(), getString(R.string.noTermTimeSelected), Toast.LENGTH_LONG).show();
+			return null;
+		}
 
-    @Override
-    protected final ArrayList<Object> background(String[] params) {
-        final String course = params[0];
-        final String semester = params[1];
-        final String termTime = params[2];
-        ArrayList<Object> changesList = DataManager.getInstance().getChanges(getActivity().getApplicationContext(), course, semester, termTime, Boolean.valueOf(params[3]));
+		if ( course.isEmpty() ) {
+			Toast.makeText(getView().getContext(), getString(R.string.noCourseSelected), Toast.LENGTH_LONG).show();
+			return null;
+		}
+		if ( semester.isEmpty() ) {
+			Toast.makeText(getView().getContext(), getString(R.string.noSemesterSelected), Toast.LENGTH_LONG).show();
+			return null;
+		}
 
-        if (changesList != null) {
-            return changesList;
-        } else {
-            return null;
-        }
-    }
+		params[ 0 ] = course;
+		params[ 1 ] = semester;
+		params[ 2 ] = termTime;
+		params[ 3 ] = String.valueOf(forceRefresh);
+		return params;
+	}
+
+	@Override
+	protected final ArrayList<Object> background(String[] params) {
+		final String course = params[ 0 ];
+		final String semester = params[ 1 ];
+		final String termTime = params[ 2 ];
+		ArrayList<Object> changesList = DataManager.getInstance().getChanges(getActivity().getApplicationContext(), course, semester, termTime, Boolean.valueOf(params[ 3 ]));
+
+		if ( changesList != null ) {
+			return changesList;
+		} else {
+			return null;
+		}
+	}
 }

@@ -51,6 +51,7 @@ import de.hof.university.app.model.schedule.LectureItem;
 
 
 public class ScheduleFragment extends AbstractListFragment {
+
     public static final String TAG = "ScheduleFragment";
 
     private int weekdayListPos;

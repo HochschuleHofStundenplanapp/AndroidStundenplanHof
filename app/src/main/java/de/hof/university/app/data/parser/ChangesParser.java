@@ -30,6 +30,8 @@ import de.hof.university.app.model.schedule.LectureChange;
  */
 public class ChangesParser implements Parser<LectureChange> {
 
+    public final String TAG = "ChangesParser";
+
     @Override
     public final ArrayList<LectureChange> parse(String[] params) {
 
