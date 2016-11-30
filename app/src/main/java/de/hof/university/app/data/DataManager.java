@@ -64,8 +64,8 @@ public class DataManager {
         //MYSCHEDULE("http://sh-web02.hof-university.de/soap/client.php?f=MySchedule",60*24),
 
         //Produktivserver
-        SCHEDULE("https://www.hof-university.de/soap/client.php?f=LectureItem&stg=%s&sem=%s&tt=%s", 60 * 24),
-        CHANGES("https://www.hof-university.de/soap/client.php?f=LectureChange", 60 * 3),
+        SCHEDULE("https://www.hof-university.de/soap/client.php?f=Schedule&stg=%s&sem=%s&tt=%s", 60 * 24),
+        CHANGES("https://www.hof-university.de/soap/client.php?f=Changes", 60 * 3),
         MYSCHEDULE("https://www.hof-university.de/soap/client.php?f=MySchedule", 60 * 24),;
 
         private final String url;
