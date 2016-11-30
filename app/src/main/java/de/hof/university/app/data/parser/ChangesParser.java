@@ -23,17 +23,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import de.hof.university.app.Util.Define;
-import de.hof.university.app.model.schedule.Changes;
+import de.hof.university.app.model.schedule.LectureChange;
 
 /**
  * Created by larsg on 17.06.2016.
  */
-public class ChangesParser implements Parser<Changes> {
+public class ChangesParser implements Parser<LectureChange> {
 
     @Override
-    public final ArrayList<Changes> parse(String[] params) {
+    public final ArrayList<LectureChange> parse(String[] params) {
 
-        ArrayList<Changes> result = new ArrayList<>();
+        ArrayList<LectureChange> result = new ArrayList<>();
         if (1 == params.length) {
             String jsonString = params[0];
             //Escape, if String is empty
@@ -46,11 +46,11 @@ public class ChangesParser implements Parser<Changes> {
                 for (int i = 0; i < jsonArray.length(); ++i) {
 
                     // Gibt es Änderungen überhaupt
-                    final Changes change = convertJsonObject(jsonArray.getJSONObject(i));
+                    final LectureChange change = convertJsonObject(jsonArray.getJSONObject(i));
                     if (null != change) {
                         // schauen ob diese Änderung bereits enthalten ist.
                         boolean contains = false;
-                        for (Changes c : result) {
+                        for (LectureChange c : result) {
                             if (c.toString().equals(change.toString())) {
                                 contains = true;
                             }
@@ -68,7 +68,7 @@ public class ChangesParser implements Parser<Changes> {
     }
 
     // Wozu brauchen wir diese Methode
-    protected static Changes convertJsonObject(JSONObject jsonObject) {
+    protected static LectureChange convertJsonObject(JSONObject jsonObject) {
 
         // Die Antwort vom Server enthält die folgenden Objekte und werden weparat in Teil.Strings zerleigt
         // optSting: wirft keine Exception, wenn das JSON Element NICHT vorhanden ist.
@@ -86,6 +86,6 @@ public class ChangesParser implements Parser<Changes> {
         final String room_old = jsonObject.optJSONObject(Define.PARSER_ORIGNAL).optString(Define.PARSER_ROOM);
         final String lecturer = jsonObject.optString(Define.PARSER_DOCENT);
 
-        return new Changes(label, comment, group, reason, begin_old, begin_new, room_old, room_new, lecturer);
+        return new LectureChange(label, comment, group, reason, begin_old, begin_new, room_old, room_new, lecturer);
     }
 }

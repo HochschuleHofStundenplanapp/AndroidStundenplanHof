@@ -20,22 +20,21 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by larsg on 13.04.2016.
+ * Studiengang
  */
-public class Course implements Serializable{
-
+public class StudyCourse implements Serializable{
     private long id = 0L;
     private String name;
     private String tag;
     private List<String> terms = null;
 
-    public Course(final long id, final String name, final String tag) {
+    public StudyCourse(final long id, final String name, final String tag) {
         this.id = id;
         this.name = name;
         this.tag = tag;
     }
 
-    public Course(final String course, final String courseTag, final List<String> termsParams) {
+    public StudyCourse(final String course, final String courseTag, final List<String> termsParams) {
         name = course;
         tag = courseTag;
         this.terms = termsParams;
@@ -76,7 +75,7 @@ public class Course implements Serializable{
 
     @Override
     public final String toString() {
-        return "Course{" +
+        return "StudyCourse{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';

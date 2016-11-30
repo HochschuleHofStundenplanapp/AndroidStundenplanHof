@@ -22,7 +22,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import de.hof.university.app.model.schedule.Schedule;
+import de.hof.university.app.model.schedule.LectureItem;
 
 /**
  * Created by Lukas on 07.07.2016.
@@ -31,11 +31,11 @@ public class MyScheduleParser extends ScheduleParser {
 
 
     @Override
-    public final ArrayList<Schedule> parse(String[] params) {
+    public final ArrayList<LectureItem> parse(String[] params) {
         if (params.length != 2) {
             return null;
         }
-        ArrayList<Schedule> result = new ArrayList<>();
+        ArrayList<LectureItem> result = new ArrayList<>();
 
         //Escape, if String is empty
         if (params[0].isEmpty()) {
@@ -45,17 +45,17 @@ public class MyScheduleParser extends ScheduleParser {
         try {
             JSONArray jsonArray = new JSONObject(params[0]).getJSONArray("myschedule");
             for (int i = 0; i < jsonArray.length(); ++i) {
-                Schedule schedule = convertJsonObject(jsonArray.getJSONObject(i));
-                if (schedule != null) {
+                LectureItem lectureItem = convertJsonObject(jsonArray.getJSONObject(i));
+                if ( lectureItem != null) {
                     // schauen ob diese Vorlesung bereits enthalten ist
                     boolean contains = false;
-                    for (Schedule s : result) {
-                        if (s.toString().equals(schedule.toString())) {
+                    for (LectureItem s : result) {
+                        if (s.toString().equals(lectureItem.toString())) {
                             contains = true;
                         }
                     }
                     if (contains == false) {
-                        result.add(schedule);
+                        result.add(lectureItem);
                     }
                 }
             }
