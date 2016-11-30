@@ -45,34 +45,26 @@ public class DataConnector {
 
     public static final String TIME_APPEND = "_url_cache_time";
 
-    private Context context;
-
     public final String getStringFromUrl(Context context, final String strUrl, final int cacheTime) {
-        this.context = context;
-        if (cacheStillValid(strUrl + TIME_APPEND, cacheTime)) {
-            return loadFromSharedPreferences(strUrl);
-        } else {
+        //if (cacheStillValid(strUrl + TIME_APPEND, cacheTime)) {
+        //    return loadFromSharedPreferences(strUrl);
+        //} else {
             final String result = readStringFromUrl(strUrl);
             if (result == null) {
                 Log.d(TAG, "result is null");
-                if (cacheTime != -1) {
-                    return loadFromSharedPreferences(strUrl);
-                } else {
+                //if (cacheTime != -1) {
+                //    return loadFromSharedPreferences(context, strUrl);
+                //} else {
                     return "";
-                }
+                //}
             } else if (!result.isEmpty()) {
-                saveToSharedPreferences(strUrl, result);
-            } else {
-                // TODO TEST
-                // falls das result empty ist nimm auch den Cache
-                return loadFromSharedPreferences(strUrl);
+                //saveToSharedPreferences(context, strUrl, result);
             }
-            //System.out.println("result: " + result.substring(0, 300));
             return result;
-        }
+        //}
     }
 
-    private void saveToSharedPreferences(String strUrl, String result) {
+    private void saveToSharedPreferences(Context context, String strUrl, String result) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         sharedPreferences.edit()
                 .putLong(strUrl + TIME_APPEND, new Date().getTime())
@@ -80,7 +72,7 @@ public class DataConnector {
                 .apply();
     }
 
-    private String loadFromSharedPreferences(String strUrl) {
+    private String loadFromSharedPreferences(Context context, String strUrl) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         final String result = sharedPreferences.getString(strUrl, "");
         return result;
@@ -94,7 +86,7 @@ public class DataConnector {
         for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
             final String key = entry.getKey();
             if (key.endsWith(TIME_APPEND)) {
-                if (!cacheStillValid(key, maxAge)) {
+                if (!cacheStillValid(context, key, maxAge)) {
                     //Delete the old Keys
                     sharedPreferences.edit().remove(key).remove(key.substring(0, key.length() - TIME_APPEND.length())).apply();
                 }
@@ -102,10 +94,10 @@ public class DataConnector {
         }
     }
 
-    private boolean cacheStillValid(final String urlKey, final int cacheTime) {
+    private boolean cacheStillValid(Context context, final String urlKey, final int cacheTime) {
         final Date today = new Date();
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 
         Date lastCached = new Date(sharedPreferences.getLong(urlKey, 0L));
 

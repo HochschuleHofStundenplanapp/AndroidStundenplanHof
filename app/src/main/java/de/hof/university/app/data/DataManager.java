@@ -150,6 +150,8 @@ public class DataManager {
 
             saveSchedule(context, schedule);
         }
+
+        result = schedule.getLectures();
         
         return result;
     }
@@ -350,5 +352,9 @@ public class DataManager {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public final void cleanCache(final Context context) {
+        this.dataConnector.cleanCache(context, DataManager.MAX_CACHE_TIME);
     }
 }

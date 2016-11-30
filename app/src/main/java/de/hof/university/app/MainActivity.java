@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity
 		//Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		//setSupportActionBar(toolbar);
 
+		DataManager.getInstance().cleanCache(getApplicationContext());
 
 		// Notifications müssen nicht mehr angezeigt werden
 		NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
