@@ -189,9 +189,9 @@ public class RaumlisteFragment extends Fragment {
             Document document;
 
             // TODO Temporäre Lösung durch gleich mehrere Versuche.
-            int tryes = 5;
+            int networkRetry = 5;
 
-            while (tryes > 0) {
+            while (networkRetry > 0) {
                 try {
                     // Thread beenden wenn gecancelt
                     if (isCancelled()) break;
@@ -205,10 +205,10 @@ public class RaumlisteFragment extends Fragment {
                                     "http://www.hof-university.de/anmeldung-erfolgreich.html")
                             .data("tx_felogin_pi1[noredirect]", "0")
                             .method(Connection.Method.POST).execute();
-                    tryes = 0;
+                    networkRetry = 0;
                 } catch (IOException e) {
-                    tryes--;
-                    if (tryes <= 0) {
+                    networkRetry--;
+                    if (networkRetry <= 0) {
                         errorText = getString(R.string.loginFailed);
                         return null;
                     }
