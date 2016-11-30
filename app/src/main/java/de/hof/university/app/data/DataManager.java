@@ -115,7 +115,7 @@ public class DataManager {
         return (ArrayList<Object>) parser.parse(params);
     }
 
-    public final ArrayList<Schedule> getSchedule(Context context, String language, String course, String semester,
+    public final ArrayList<LectureItem> getSchedule(Context context, String language, String course, String semester,
                                                String termTime, boolean forceRefresh) {
         final Parser parser = ParserFactory.create(EParser.SCHEDULE);
         final String jsonString = this.getData(context, forceRefresh, String.format(DataManager.CONNECTION.SCHEDULE.getUrl(), DataManager.replaceWhitespace(course), DataManager.replaceWhitespace(semester), DataManager.replaceWhitespace(termTime)), DataManager.CONNECTION.SCHEDULE.getCache());
@@ -129,20 +129,20 @@ public class DataManager {
 
         ArrayList<Object> objects = (ArrayList<Object>) parser.parse(params);
 
-        ArrayList<Schedule> schedules = new ArrayList<>();
+        ArrayList<LectureItem> schedule = new ArrayList<>();
 
         for (Object object : objects) {
-            if ( object instanceof Schedule ) {
-                schedules.add((Schedule) object);
+            if ( object instanceof LectureItem ) {
+                schedule.add((LectureItem) object);
             }
         }
 
-        saveSchedule(context, schedules);
+        saveSchedule(context, schedule);
         
-        return schedules;
+        return schedule;
     }
 
-    public final ArrayList<Schedule> getMySchedule(Context context, String language, String course, String semester,
+    public final ArrayList<LectureItem> getMySchedule(Context context, String language, String course, String semester,
                                                  String termTime, boolean forceRefresh) {
         // myScheudle leeren damit es noch mal frisch aus der Datei gelesen wird.
         // Weil es dort in einer anderen Reihenfolge steht.
@@ -165,15 +165,15 @@ public class DataManager {
 
         ArrayList<Object> objects = (ArrayList<Object>) parser.parse(params);
 
-        ArrayList<Schedule> myschedules = new ArrayList<>();
+        ArrayList<LectureItem> myschedule = new ArrayList<>();
 
         for (Object object : objects) {
-            if ( object instanceof Schedule ) {
-                myschedules.add((Schedule) object);
+            if ( object instanceof LectureItem ) {
+                myschedule.add((LectureItem) object);
             }
         }
 
-        return myschedules;
+        return myschedule;
     }
 
     public final ArrayList<Object> getChanges(Context context, String course, String semester,
@@ -300,7 +300,7 @@ public class DataManager {
         return this.getMySchedule(context).size();
     }
 
-    private void saveSchedule(final Context context, ArrayList<Schedule> schedule) {
+    private void saveSchedule(final Context context, ArrayList<LectureItem> schedule) {
         try {
             final File file = new File(context.getFilesDir(), scheduleFilename);
             final FileOutputStream fos = new FileOutputStream(file);
@@ -314,14 +314,14 @@ public class DataManager {
         }
     }
 
-    private static ArrayList<Schedule> readSchedule(final Context context) {
-        ArrayList<Schedule> result = null;
+    private static ArrayList<LectureItem> readSchedule(final Context context) {
+        ArrayList<LectureItem> result = null;
         try {
             final File file = new File(context.getFilesDir(), scheduleFilename);
             if (file.exists()) {
                 final FileInputStream fis = new FileInputStream(file);
                 final ObjectInputStream is = new ObjectInputStream(fis);
-                result = (ArrayList<Schedule>) is.readObject();
+                result = (ArrayList<LectureItem>) is.readObject();
                 is.close();
                 fis.close();
             }
