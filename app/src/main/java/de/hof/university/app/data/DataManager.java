@@ -43,12 +43,14 @@ import de.hof.university.app.model.schedule.Schedule;
  */
 public class DataManager {
 
+    private static final int MAX_CACHE_TIME = 60 * 24 * 2;
+
     private enum CONNECTION {
 
         // Essen
         MEAL("https://www.studentenwerk-oberfranken.de/?eID=bwrkSpeiseplanRss&tx_bwrkspeiseplan_pi2%5Bbar%5D=340&tx_bwrkspeiseplan_pi2%5Bdate%5D=", 60 * 24),
 
-        COURSE("https://www.hof-university.de/soap/client.php?f=Courses&tt=%s", 60 * 24),
+        COURSE("https://www.hof-university.de/soap/client.php?f=Courses&tt=%s", MAX_CACHE_TIME),
 
         //TODO change for tests and release
         // Testserver: http://sh-web02.hof-university.de
@@ -78,10 +80,8 @@ public class DataManager {
         }
     }
 
-    private static final int MAX_CACHE_TIME = 60 * 24 * 2;
 
     // single instance of the Factories
-    static final private ParserFactory parserFactory = new ParserFactory();
     static final private DataConnector dataConnector = new DataConnector();
 
     private Set<String> mySchedule;
