@@ -82,6 +82,7 @@ public class DataConnector {
         return result;
     }
 
+    //TODO Shared Preferences leeren
     public final void cleanCache(final Context context, final int maxAge) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         Map<String, ?> allEntries = sharedPreferences.getAll();
