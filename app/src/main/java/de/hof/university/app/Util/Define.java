@@ -58,9 +58,9 @@ public final class Define {
 	public static final String PARSER_ = "" ; //NON-NLS
 */
 
-	public static final int Student = 1;
-
-
 	// show the fragments dealing with the location of the user
 	public static final int SHOW_LOCATION_FRAGMENT = 0 ;
+	// show Notenblatt and Notenfreigabe
+	// TODO Weil ausblenden solange die neue Authentifizierungsmethode noch nicht funktioniert
+	public static final int SHOW_NOTEN = 0 ;
 }
