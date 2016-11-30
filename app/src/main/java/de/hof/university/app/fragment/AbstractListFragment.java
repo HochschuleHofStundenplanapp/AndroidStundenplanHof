@@ -34,11 +34,16 @@ import java.util.ArrayList;
 import de.hof.university.app.R;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.fragment.schedule.ChangesFragment;
+import de.hof.university.app.Util.Log;
+
 
 /**
  * Created by larsg on 20.06.2016.
  */
 public abstract class AbstractListFragment extends Fragment {
+
+    public final String TAG = "AbstractListFragment";
+
     private SwipeRefreshLayout swipeContainer;
     protected ListView listView;
     protected ArrayAdapter adapter;
@@ -130,7 +135,7 @@ public abstract class AbstractListFragment extends Fragment {
 
         @Override
         protected final void onPostExecute(ArrayList<Object> result) {
-            System.out.println("isCancelled: " + this.isCancelled());
+            Log.d(TAG, "isCancelled: " + this.isCancelled());
             if (!this.isCancelled()) {
                 swipeContainer.post(new Runnable() {
                     @Override
@@ -161,7 +166,7 @@ public abstract class AbstractListFragment extends Fragment {
 
         @Override
         protected final void onCancelled(ArrayList<Object> result) {
-            System.out.println("onCancelled");
+            Log.d(TAG, "onCancelled");
         }
     }
 
