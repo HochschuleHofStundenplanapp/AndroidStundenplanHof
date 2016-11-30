@@ -31,8 +31,8 @@ public final class Log {
     /**
      * Look into android.util.Log.d
      *
-     * @param Tag
-     * @param msg
+     * @param Tag class name to find it in the debugger and source
+     * @param msg message for the developer what is going on at that stage
      */
     public static void d(final String Tag, final String msg) {
         if (BuildConfig.DEBUG) {
@@ -43,8 +43,8 @@ public final class Log {
     /**
      * Look into android.util.Log.i
      *
-     * @param Tag
-     * @param msg
+     * @param Tag class name to find it in the debugger and source
+     * @param msg message for the developer what is going on at that stage
      */
     public static void i(final String Tag, final String msg) {
         if (BuildConfig.DEBUG) {
@@ -55,8 +55,8 @@ public final class Log {
     /**
      * Look into android.util.Log.e
      *
-     * @param Tag
-     * @param msg
+     * @param Tag class name to find it in the debugger and source
+     * @param msg message for the developer what is going on at that stage
      */
     public static void e(final String Tag, final String msg) {
         if (BuildConfig.DEBUG) {
@@ -67,9 +67,9 @@ public final class Log {
     /**
      * Look into android.util.Log.e
      *
-     * @param Tag
-     * @param msg
-     * @param e
+     * @param Tag class name to find it in the debugger and source
+     * @param msg message for the developer what is going on at that stage
+     * @param e the thrown Exception
      */
     public static void e(final String Tag, final String msg, final Exception e) {
         if (BuildConfig.DEBUG) {
@@ -80,8 +80,8 @@ public final class Log {
     /**
      * Look into android.util.Log.v
      *
-     * @param Tag
-     * @param msg
+     * @param Tag class name to find it in the debugger and source
+     * @param msg message for the developer what is going on at that stage
      */
     public static void v(final String Tag, final String msg) {
         if (BuildConfig.DEBUG) {
