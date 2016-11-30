@@ -33,6 +33,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import de.hof.university.app.Util.Log;
 import de.hof.university.app.data.parser.Parser;
 import de.hof.university.app.data.parser.ParserFactory;
 import de.hof.university.app.data.parser.ParserFactory.EParser;
@@ -46,7 +47,7 @@ import de.hof.university.app.model.settings.StudyCourse;
  */
 public class DataManager {
 
-    public final String TAG = "DataManager";
+    public static final String TAG = "DataManager";
 
     private static final int MAX_CACHE_TIME = 60 * 24 * 2;
 
@@ -192,7 +193,7 @@ public class DataManager {
             ArrayList<Object> myschedule = (ArrayList<Object>) parser.parse(params);
 
             getMySchedule(context).setLectures(myschedule);
-            saveMySchedule(context);
+            this.saveMySchedule(context);
         }
 
         return this.getMySchedule(context).getLectures();
@@ -307,6 +308,7 @@ public class DataManager {
         } catch (Exception e) {
             // TODO Fehlermeldung
             e.printStackTrace();
+            Log.d(TAG, "Fehler beim Laden der MySchedule Datei");
         }
         return result;
     }
@@ -319,7 +321,7 @@ public class DataManager {
     }
 
     public final int getMyScheduleSize(final Context context) {
-        return this.getMySchedule(context).getLectures().size();
+        return this.getMySchedule(context).getIds().size();
     }
 
     private void saveSchedule(final Context context, Schedule schedule) {

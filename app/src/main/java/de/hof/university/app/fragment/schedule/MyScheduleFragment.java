@@ -134,6 +134,7 @@ public class MyScheduleFragment extends ScheduleFragment {
             if (BuildConfig.DEBUG) assert (scheduleList != null); // ob etwas zurück kommt
 
             if (scheduleList != null) {
+                /*
                 // Die ID's für den Mein Stundenplan nochmal speichern nachdem die Doppelten raus sortiert wurden
                 DataManager.getInstance().deleteAllFromMySchedule(getActivity().getApplicationContext());
                 Set<String> schedulesIds = new HashSet<>();
@@ -148,10 +149,11 @@ public class MyScheduleFragment extends ScheduleFragment {
                 // erneut holen mit neu sortierten ID's
                 // forceRefresh auf false damit er falls sich nichts ändert sie aus dem Cache holen kann
                 scheduleList = DataManager.getInstance().getMySchedule(getActivity().getApplicationContext(), getString(R.string.language), course, semester, termTime, false);
+                */
 
-                if (scheduleList != null) {
+                //if (scheduleList != null) {
                     return super.updateListView(scheduleList);
-                }
+                //}
             }
         }
         return null;
