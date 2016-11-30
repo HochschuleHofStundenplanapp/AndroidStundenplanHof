@@ -134,7 +134,7 @@ public class DataManager {
         cal.add(Calendar.MINUTE, DataManager.CONNECTION.SCHEDULE.getCache());
         lastCached = cal.getTime();
 
-        if (schedule.getLectures().size() == 0 || !lastCached.after(new Date())) {
+        if (schedule.getLectures().size() == 0 || !lastCached.after(new Date()) || !schedule.getCourse().equals(course) || !schedule.getSemester().equals(semester) || !schedule.getTermtime().equals(termTime)) {
             final Parser parser = ParserFactory.create(EParser.SCHEDULE);
             final String jsonString = this.getData(context, forceRefresh, String.format(DataManager.CONNECTION.SCHEDULE.getUrl(), DataManager.replaceWhitespace(course), DataManager.replaceWhitespace(semester), DataManager.replaceWhitespace(termTime)), DataManager.CONNECTION.SCHEDULE.getCache());
 
@@ -148,6 +148,10 @@ public class DataManager {
             result = (ArrayList<Object>) parser.parse(params);
 
             schedule.setLectures(result);
+
+            schedule.setCourse(course);
+            schedule.setSemester(semester);
+            schedule.setTermtime(termTime);
 
             saveSchedule(context, schedule);
         }
@@ -172,7 +176,7 @@ public class DataManager {
         cal.add(Calendar.MINUTE, DataManager.CONNECTION.MYSCHEDULE.getCache());
         lastCached = cal.getTime();
 
-        if (mySchedule.getLectures().size() == 0 || !lastCached.after(new Date())) {
+        if (mySchedule.getLectures().size() == 0 || !lastCached.after(new Date()) || mySchedule.getIds().size() != mySchedule.getLectures().size()) {
 
             final Iterator<String> iterator = this.getMySchedule(context).getIds().iterator();
             String url = DataManager.CONNECTION.MYSCHEDULE.getUrl();
@@ -267,6 +271,8 @@ public class DataManager {
 
     public final void deleteFromMySchedule(final Context context, final LectureItem s) {
         this.getMySchedule(context).getIds().remove(String.valueOf(s.getId()));
+        // TODO Objekt mit der ID finden und löschen
+        //this.getMySchedule(context).getLectures().remove();
         this.saveMySchedule(context);
     }
 
@@ -277,6 +283,7 @@ public class DataManager {
 
     public final void deleteAllFromMySchedule(final Context context) {
         this.getMySchedule(context).getIds().clear();
+        this.getMySchedule(context).getLectures().clear();
         this.saveMySchedule(context);
     }
 

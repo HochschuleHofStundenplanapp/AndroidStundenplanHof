@@ -13,6 +13,9 @@ import java.util.Set;
 public class Schedule implements Serializable {
 	ArrayList<Object> lectures;
 	Date lastSaved;
+	String course;
+	String semester;
+	String termtime;
 
 	public Schedule() {
 		this.lectures = new ArrayList<>();
@@ -33,5 +36,29 @@ public class Schedule implements Serializable {
 
 	public void setLastSaved(Date lastSaved) {
 		this.lastSaved = lastSaved;
+	}
+
+	public String getCourse() {
+		return course;
+	}
+
+	public void setCourse(String course) {
+		this.course = course;
+	}
+
+	public String getSemester() {
+		return semester;
+	}
+
+	public void setSemester(String semester) {
+		this.semester = semester;
+	}
+
+	public String getTermtime() {
+		return termtime;
+	}
+
+	public void setTermtime(String termtime) {
+		this.termtime = termtime;
 	}
 }
