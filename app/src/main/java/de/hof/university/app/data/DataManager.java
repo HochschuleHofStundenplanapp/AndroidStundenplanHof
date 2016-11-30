@@ -43,6 +43,8 @@ import de.hof.university.app.model.settings.StudyCourse;
  */
 public class DataManager {
 
+    public final String TAG = "DataManager";
+
     private static final int MAX_CACHE_TIME = 60 * 24 * 2;
 
     private enum CONNECTION {

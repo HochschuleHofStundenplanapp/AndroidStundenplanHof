@@ -20,6 +20,9 @@ package de.hof.university.app.experimental.model;
  * Created by Lukas on 05.07.2016.
  */
 public class Noten {
+
+    public final String TAG = "Noten";
+
     private final String fach;
     private final String note;
 

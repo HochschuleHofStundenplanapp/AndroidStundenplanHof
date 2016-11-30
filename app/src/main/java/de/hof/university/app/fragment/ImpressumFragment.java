@@ -34,31 +34,33 @@ import de.hof.university.app.R;
  */
 public class ImpressumFragment extends Fragment {
 
-    @Override
-    public final void onResume() {
-        super.onResume();
-        MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().setTitle(R.string.impressum);
+	public final String TAG = "ImpressumFragment";
 
-        NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
-        navigationView.getMenu().findItem(R.id.nav_impressum).setChecked(true);
-    }
+	@Override
+	public final void onResume() {
+		super.onResume();
+		MainActivity mainActivity = (MainActivity) getActivity();
+		mainActivity.getSupportActionBar().setTitle(R.string.impressum);
 
-    @Override
-    public final View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                   Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_impressum, container, false);
+		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+		navigationView.getMenu().findItem(R.id.nav_impressum).setChecked(true);
+	}
 
-        Button btnImpressum = (Button) v.findViewById(R.id.btnImpressum);
-        btnImpressum.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.impressumURL)));
-                startActivity(browserIntent);
-            }
-        });
+	@Override
+	public final View onCreateView(LayoutInflater inflater, ViewGroup container,
+	                               Bundle savedInstanceState) {
+		// Inflate the layout for this fragment
+		View v = inflater.inflate(R.layout.fragment_impressum, container, false);
 
-        return v;
-    }
+		Button btnImpressum = (Button) v.findViewById(R.id.btnImpressum);
+		btnImpressum.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.impressumURL)));
+				startActivity(browserIntent);
+			}
+		});
+
+		return v;
+	}
 }

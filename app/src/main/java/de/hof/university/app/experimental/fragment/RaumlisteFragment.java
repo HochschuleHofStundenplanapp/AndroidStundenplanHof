@@ -53,6 +53,8 @@ import de.hof.university.app.experimental.model.Suchdetails;
  */
 public class RaumlisteFragment extends Fragment {
 
+    public final String TAG = "RaumlisteFragment";
+
     private static final String ARG_PARAM1 = "user";
     private static final String ARG_PARAM2 = "password";
     private static final String ARG_PARAM3 = "year";

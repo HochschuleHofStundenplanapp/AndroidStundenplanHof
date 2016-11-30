@@ -40,6 +40,9 @@ import de.hof.university.app.model.schedule.LectureItem;
  * Created by Lukas on 22.06.2016.
  */
 public class MyScheduleFragment extends ScheduleFragment {
+
+    public final String TAG = "MyScheduleFragment";
+
     @Override
     public final void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
 

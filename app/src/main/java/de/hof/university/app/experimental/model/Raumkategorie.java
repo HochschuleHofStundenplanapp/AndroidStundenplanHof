@@ -20,6 +20,9 @@ package de.hof.university.app.experimental.model;
  * Created by Lukas on 05.07.2016.
  */
 public class Raumkategorie implements Level {
+
+    public final String TAG = "Raumkategorie";
+
     private final String title;
 
     public Raumkategorie(String title) {

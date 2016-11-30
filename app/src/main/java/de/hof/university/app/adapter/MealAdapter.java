@@ -35,6 +35,8 @@ import de.hof.university.app.model.meal.Meal;
  */
 public class MealAdapter extends ArrayAdapter<Object> {
 
+    public final String TAG = "MealAdapter";
+
     private final ArrayList<Object> items;
     private final LayoutInflater vi;
 

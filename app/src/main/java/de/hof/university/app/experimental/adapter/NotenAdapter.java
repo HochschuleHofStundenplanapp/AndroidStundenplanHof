@@ -37,7 +37,9 @@ import de.hof.university.app.experimental.model.Noten;
  * Created by Lukas on 26.11.2015.
  */
 public class NotenAdapter extends ArrayAdapter<Noten> {
-    // --Commented out by Inspection (17.07.2016 20:12):private final Context context;
+
+    public final String TAG = "NotenAdapter";
+
     private final ArrayList<Noten> items;
     private final LayoutInflater vi;
 

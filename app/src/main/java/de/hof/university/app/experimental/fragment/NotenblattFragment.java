@@ -47,6 +47,8 @@ import de.hof.university.app.experimental.LoginController;
 
 public class NotenblattFragment extends Fragment {
 
+    public final String TAG = "NotenblattFragment";
+
     private SwipeRefreshLayout swipeContainer;
     private WebView webView;
     private NotenblattFragment.GetNotenblattTask task;

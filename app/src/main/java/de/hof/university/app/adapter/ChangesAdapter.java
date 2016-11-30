@@ -30,9 +30,11 @@ import de.hof.university.app.R;
 import de.hof.university.app.model.schedule.LectureChange;
 
 /**
- * Created by larsg_000 on 30.11.2015.
+ *
  */
 public class ChangesAdapter extends ArrayAdapter<Object> {
+
+    public final String TAG = "ChangesAdapter";
 
     private final ArrayList<Object> items;
     private final LayoutInflater vi;

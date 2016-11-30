@@ -21,33 +21,35 @@ package de.hof.university.app.experimental.model;
  */
 public class Suchdetails implements Level {
 
-    final String datum;
-    final String timeFrom;
-    final String timeTo;
+	public final String TAG = "Suchdetails";
 
-    public Suchdetails(String datum, String timeFrom, String timeTo) {
-        this.datum = datum;
-        this.timeFrom = timeFrom;
-        this.timeTo = timeTo;
-    }
+	final String datum;
+	final String timeFrom;
+	final String timeTo;
 
-    public final String getDate() {
-        return datum;
-    }
+	public Suchdetails(String datum, String timeFrom, String timeTo) {
+		this.datum = datum;
+		this.timeFrom = timeFrom;
+		this.timeTo = timeTo;
+	}
 
-    public final String getTimeFrom() {
-        return timeFrom;
-    }
+	public final String getDate() {
+		return datum;
+	}
 
-    public final String getTimeTo() {
-        return timeTo;
-    }
+	public final String getTimeFrom() {
+		return timeFrom;
+	}
 
-    @Override
-    public final int getLevel() {
-        return 2;
+	public final String getTimeTo() {
+		return timeTo;
+	}
 
-    }
+	@Override
+	public final int getLevel() {
+		return 2;
+
+	}
 
 
 }

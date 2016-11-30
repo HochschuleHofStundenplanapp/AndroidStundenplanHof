@@ -39,169 +39,171 @@ import de.hof.university.app.R;
 
 public class LoginController {
 
-    //singleton
-    private static LoginController controller = null;
+	public final String TAG = "LoginController";
 
-    // --Commented out by Inspection (17.07.2016 20:11):private final Context context;
-    private final SharedPreferences sharedPref;
+	//singleton
+	private static LoginController controller = null;
 
-    private final AlertDialog loginAlertDialog;
-    private final AlertDialog passwordAlertDialog;
+	// --Commented out by Inspection (17.07.2016 20:11):private final Context context;
+	private final SharedPreferences sharedPref;
 
-    private String password;
+	private final AlertDialog loginAlertDialog;
+	private final AlertDialog passwordAlertDialog;
 
-    public static final LoginController getInstance(Context context) {
-        if (null == controller) {
-            controller = new LoginController(context);
-        }
-        return controller;
-    }
+	private String password;
 
-    private LoginController(final Context context) {
+	public static final LoginController getInstance(Context context) {
+		if ( null == controller ) {
+			controller = new LoginController(context);
+		}
+		return controller;
+	}
 
-        password = "";
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+	private LoginController(final Context context) {
 
-        final Handler handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                throw new RuntimeException();
-            }
-        };
-        // LOGIN DIALOG
-        View loginDialogView = View.inflate(context, R.layout.dialog_login, null);
-        final EditText editTextUsernameLogin = (EditText) loginDialogView.findViewById(R.id.username);
-        final EditText editTextPasswordLogin = (EditText) loginDialogView.findViewById(R.id.password);
-        editTextUsernameLogin.setText(getUsername());
+		password = "";
+		sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+
+		final Handler handler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				throw new RuntimeException();
+			}
+		};
+		// LOGIN DIALOG
+		View loginDialogView = View.inflate(context, R.layout.dialog_login, null);
+		final EditText editTextUsernameLogin = (EditText) loginDialogView.findViewById(R.id.username);
+		final EditText editTextPasswordLogin = (EditText) loginDialogView.findViewById(R.id.password);
+		editTextUsernameLogin.setText(getUsername());
 
 
-        final CheckBox checkBoxShowPasswordLogin = (CheckBox) loginDialogView.findViewById(R.id.show_password);
-        checkBoxShowPasswordLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    editTextPasswordLogin.setTransformationMethod(null);
-                } else {
-                    editTextPasswordLogin.setTransformationMethod(new PasswordTransformationMethod());
-                }
-            }
-        });
-        final CheckBox checkBoxSavePasswordLogin = (CheckBox) loginDialogView.findViewById(R.id.save_password);
-        checkBoxSavePasswordLogin.setChecked(sharedPref.getBoolean("save_password", true));
+		final CheckBox checkBoxShowPasswordLogin = (CheckBox) loginDialogView.findViewById(R.id.show_password);
+		checkBoxShowPasswordLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if ( isChecked ) {
+					editTextPasswordLogin.setTransformationMethod(null);
+				} else {
+					editTextPasswordLogin.setTransformationMethod(new PasswordTransformationMethod());
+				}
+			}
+		});
+		final CheckBox checkBoxSavePasswordLogin = (CheckBox) loginDialogView.findViewById(R.id.save_password);
+		checkBoxSavePasswordLogin.setChecked(sharedPref.getBoolean("save_password", true));
 
-        AlertDialog.Builder builderLogin = new AlertDialog.Builder(context);
-        loginAlertDialog = builderLogin.setTitle(context.getString(R.string.LOGIN_DIALOG)).setView(loginDialogView)
-                .setPositiveButton(context.getString(android.R.string.ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        sharedPref.edit().putBoolean("save_password", checkBoxSavePasswordLogin.isChecked()).apply();
-                        sharedPref.edit().putString("username", editTextUsernameLogin.getText().toString()).apply();
+		AlertDialog.Builder builderLogin = new AlertDialog.Builder(context);
+		loginAlertDialog = builderLogin.setTitle(context.getString(R.string.LOGIN_DIALOG)).setView(loginDialogView)
+				                   .setPositiveButton(context.getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+					                   @Override
+					                   public void onClick(DialogInterface dialog, int which) {
+						                   sharedPref.edit().putBoolean("save_password", checkBoxSavePasswordLogin.isChecked()).apply();
+						                   sharedPref.edit().putString("username", editTextUsernameLogin.getText().toString()).apply();
 
-                        if (checkBoxSavePasswordLogin.isChecked()) {
-                            sharedPref.edit().putString("password", editTextPasswordLogin.getText().toString()).apply();
-                        } else {
-                            password = editTextPasswordLogin.getText().toString();
-                        }
-                        editTextPasswordLogin.setText("");
-                        checkBoxShowPasswordLogin.setChecked(false);
-                        handler.sendMessage(handler.obtainMessage());
-                    }
-                })
-                .setNegativeButton(context.getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        editTextPasswordLogin.setText("");
-                        checkBoxShowPasswordLogin.setChecked(false);
-                        handler.sendMessage(handler.obtainMessage());
-                        dialog.dismiss();
-                    }
-                }).setCancelable(false)
-                .create();
+						                   if ( checkBoxSavePasswordLogin.isChecked() ) {
+							                   sharedPref.edit().putString("password", editTextPasswordLogin.getText().toString()).apply();
+						                   } else {
+							                   password = editTextPasswordLogin.getText().toString();
+						                   }
+						                   editTextPasswordLogin.setText("");
+						                   checkBoxShowPasswordLogin.setChecked(false);
+						                   handler.sendMessage(handler.obtainMessage());
+					                   }
+				                   })
+				                   .setNegativeButton(context.getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+					                   @Override
+					                   public void onClick(DialogInterface dialog, int which) {
+						                   editTextPasswordLogin.setText("");
+						                   checkBoxShowPasswordLogin.setChecked(false);
+						                   handler.sendMessage(handler.obtainMessage());
+						                   dialog.dismiss();
+					                   }
+				                   }).setCancelable(false)
+				                   .create();
 
-        // PASSWORD DIALOG
-        View passwordDialogView = View.inflate(context, R.layout.dialog_password, null);
-        final EditText editTextPasswordPassword = (EditText) passwordDialogView.findViewById(R.id.password);
-        final CheckBox checkBoxShowPasswordPassword = (CheckBox) passwordDialogView.findViewById(R.id.show_password);
-        checkBoxShowPasswordPassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    editTextPasswordPassword.setTransformationMethod(null);
-                } else {
-                    editTextPasswordPassword.setTransformationMethod(new PasswordTransformationMethod());
-                }
-            }
-        });
+		// PASSWORD DIALOG
+		View passwordDialogView = View.inflate(context, R.layout.dialog_password, null);
+		final EditText editTextPasswordPassword = (EditText) passwordDialogView.findViewById(R.id.password);
+		final CheckBox checkBoxShowPasswordPassword = (CheckBox) passwordDialogView.findViewById(R.id.show_password);
+		checkBoxShowPasswordPassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if ( isChecked ) {
+					editTextPasswordPassword.setTransformationMethod(null);
+				} else {
+					editTextPasswordPassword.setTransformationMethod(new PasswordTransformationMethod());
+				}
+			}
+		});
 
-        AlertDialog.Builder builderPassword = new AlertDialog.Builder(context);
-        passwordAlertDialog = builderPassword.setTitle(context.getString(R.string.LOGIN_DIALOG)).setView(passwordDialogView)
-                .setPositiveButton(context.getString(android.R.string.ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        password = editTextPasswordPassword.getText().toString();
-                        editTextPasswordPassword.setText("");
-                        checkBoxShowPasswordPassword.setChecked(false);
-                        handler.sendMessage(handler.obtainMessage());
-                    }
-                })
-                .setNegativeButton(context.getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        editTextPasswordPassword.setText("");
-                        checkBoxShowPasswordPassword.setChecked(false);
-                        handler.sendMessage(handler.obtainMessage());
-                        dialog.dismiss();
-                    }
-                }).setCancelable(false).create();
-    }
+		AlertDialog.Builder builderPassword = new AlertDialog.Builder(context);
+		passwordAlertDialog = builderPassword.setTitle(context.getString(R.string.LOGIN_DIALOG)).setView(passwordDialogView)
+				                      .setPositiveButton(context.getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+					                      @Override
+					                      public void onClick(DialogInterface dialog, int which) {
+						                      password = editTextPasswordPassword.getText().toString();
+						                      editTextPasswordPassword.setText("");
+						                      checkBoxShowPasswordPassword.setChecked(false);
+						                      handler.sendMessage(handler.obtainMessage());
+					                      }
+				                      })
+				                      .setNegativeButton(context.getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+					                      @Override
+					                      public void onClick(DialogInterface dialog, int which) {
+						                      editTextPasswordPassword.setText("");
+						                      checkBoxShowPasswordPassword.setChecked(false);
+						                      handler.sendMessage(handler.obtainMessage());
+						                      dialog.dismiss();
+					                      }
+				                      }).setCancelable(false).create();
+	}
 
-    public final boolean showDialog() {
-        if (getUsername().isEmpty()) {
-            loginAlertDialog.show();
-            try {
-                Looper.loop();
-            } catch (RuntimeException ignored) {
-            }
-        } else if (getPassword().isEmpty()) {
-            passwordAlertDialog.show();
-            try {
-                Looper.loop();
-            } catch (RuntimeException ignored) {
-            }
-        }
-        return (!passwordIsEmpty() && !getUsername().isEmpty());
-    }
+	public final boolean showDialog() {
+		if ( getUsername().isEmpty() ) {
+			loginAlertDialog.show();
+			try {
+				Looper.loop();
+			} catch ( RuntimeException ignored ) {
+			}
+		} else if ( getPassword().isEmpty() ) {
+			passwordAlertDialog.show();
+			try {
+				Looper.loop();
+			} catch ( RuntimeException ignored ) {
+			}
+		}
+		return (!passwordIsEmpty() && !getUsername().isEmpty());
+	}
 
-    private boolean passwordIsEmpty() {
-        boolean result;
-        if (sharedPref.getBoolean("save_password", false)) {
-            result = sharedPref.getString("password", "").isEmpty();
-        } else {
-            result = password.isEmpty();
-        }
-        return result;
-    }
+	private boolean passwordIsEmpty() {
+		boolean result;
+		if ( sharedPref.getBoolean("save_password", false) ) {
+			result = sharedPref.getString("password", "").isEmpty();
+		} else {
+			result = password.isEmpty();
+		}
+		return result;
+	}
 
-    public final void showLoginDialog() {
-        loginAlertDialog.show();
-        try {
-            Looper.loop();
-        } catch (RuntimeException ignored) {
-        }
-    }
+	public final void showLoginDialog() {
+		loginAlertDialog.show();
+		try {
+			Looper.loop();
+		} catch ( RuntimeException ignored ) {
+		}
+	}
 
-    public final String getUsername() {
-        return sharedPref.getString("username", "");
-    }
+	public final String getUsername() {
+		return sharedPref.getString("username", "");
+	}
 
-    public final String getPassword() {
-        String result;
-        if (sharedPref.getBoolean("save_password", false)) {
-            result = sharedPref.getString("password", "");
-        } else {
-            result = password;
-            password = "";
-        }
-        return result;
-    }
+	public final String getPassword() {
+		String result;
+		if ( sharedPref.getBoolean("save_password", false) ) {
+			result = sharedPref.getString("password", "");
+		} else {
+			result = password;
+			password = "";
+		}
+		return result;
+	}
 }

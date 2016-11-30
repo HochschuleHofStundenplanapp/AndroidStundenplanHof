@@ -40,7 +40,9 @@ import de.hof.university.app.experimental.model.Suchdetails;
  * Created by Lukas on 26.11.2015.
  */
 public class RaumlistAdapter extends ArrayAdapter<Level> {
-    // --Commented out by Inspection (17.07.2016 20:12):private final Context context;
+
+    public final String TAG = "RaumlistAdapter";
+
     private final ArrayList<Level> items;
     private final LayoutInflater vi;
 
