@@ -16,16 +16,23 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="@dimen/nav_header_height"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark" android:orientation="vertical"
-    android:gravity="bottom"
-    android:background="@color/background_material_light" >
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:gravity="bottom"
+              android:orientation="vertical"
+              android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/fh_hof_logo"
+        android:adjustViewBounds="true"
         android:contentDescription="Logo"
+        android:paddingBottom="0sp"
+        android:paddingLeft="60sp"
+        android:paddingRight="60sp"
+        android:paddingTop="30sp"
+        android:scaleType="fitXY"
+        android:src="@drawable/test_hochschule_hof_logo_transparent"
         />
 
 </LinearLayout>
