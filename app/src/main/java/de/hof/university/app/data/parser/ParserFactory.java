@@ -27,7 +27,7 @@ public final class ParserFactory {
         } else if (parserEnum == ParserFactory.EParser.CHANGES) {
             return new ChangesParser();
         } else if (parserEnum == ParserFactory.EParser.COURSES) {
-            return new CourseParser();
+            return new StudyCourseParser();
         } else if (parserEnum == ParserFactory.EParser.MENU) {
             return new MealParser();
         } else if (parserEnum == ParserFactory.EParser.MYSCHEDULE) {
