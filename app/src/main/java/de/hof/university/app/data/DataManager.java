@@ -80,9 +80,10 @@ public class DataManager {
 
     private static final int MAX_CACHE_TIME = 60 * 24 * 2;
 
+    // single instance of the Factories
+    static final private ParserFactory parserFactory = new ParserFactory();
+    static final private DataConnector dataConnector = new DataConnector();
 
-    private ParserFactory parserFactory = new ParserFactory();
-    private DataConnector dataConnector = new DataConnector();
     private Set<String> mySchedule;
     private static final String myScheduleFilename = "mySchedule";
     private static final DataManager dataManager = new DataManager();
@@ -283,9 +284,5 @@ public class DataManager {
         return this.getMySchedule(context).size();
     }
 
-
-    public final void cleanCache(final Context context) {
-        this.dataConnector.cleanCache(context, DataManager.MAX_CACHE_TIME);
-    }
 
 }
