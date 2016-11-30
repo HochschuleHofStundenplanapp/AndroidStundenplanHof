@@ -86,16 +86,6 @@ public class RaumlisteFragment extends Fragment {
 
 
     @Override
-    public final void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public final void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public final View onCreateView(LayoutInflater inflater, ViewGroup container,
                                    Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -136,11 +126,6 @@ public class RaumlisteFragment extends Fragment {
         }
 
         return v;
-    }
-
-    @Override
-    public final void onResume() {
-        super.onResume();
     }
 
     private void updateData() {

@@ -78,7 +78,7 @@ public class DataConnector {
 
     private String loadFromSharedPreferences(String strUrl) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String result = sharedPreferences.getString(strUrl, "");
+        final String result = sharedPreferences.getString(strUrl, "");
         return result;
     }
 
@@ -112,7 +112,7 @@ public class DataConnector {
         return lastCached.after(today);
     }
 
-    static final int timeoutInSeconds = 1000;
+	static final int timeoutInSeconds = 1000;
 
     private static String readStringFromUrl(final String strUrl) {
         InputStream inputStream;
@@ -127,30 +127,16 @@ public class DataConnector {
             //Für die Schnittstelle der Hochschule wird Authentifizerung benötigt
             if (strUrl.contains("www.hof-university.de/soap/client.php")) {
                 // user
-                String username = "p"; //soapuser
-                username = 'a' + username;
-                username += "u";
-                username = 'o' + username;
-                username += "s";
-                username = 's' + username;
-                username += "er";
-
                 //password                  F%98z&12
-                String password = "8";
-                password += "z";
-                password = '9' + password;
-                password += "&";
-                password = '%' + password;
-                password += "1";
-                password = 'F' + password;
-                password += "2";
-                final String userPassword = username + ':' + password;
-                final String encoding = Base64.encodeToString(userPassword.getBytes(), Base64.DEFAULT);
+	            final String username = "soapuser";
+	            final String password = "F%98z&12";
+	            final String userPassword = username + ':' + password;
+				final String encoding = Base64.encodeToString(userPassword.getBytes(), Base64.DEFAULT);
                 urlConnection.setRequestProperty("Authorization", "Basic " + encoding);
             } else if (strUrl.contains("http://sh-web02.hof-university.de/soap/client.php")) {
                 // Testserver
-                String username = "test";
-                String password = "test";
+                final String username = "test";
+                final String password = "test";
 
                 final String userPassword = username + ':' + password;
                 final String encoding = Base64.encodeToString(userPassword.getBytes(), Base64.DEFAULT);
@@ -168,6 +154,7 @@ public class DataConnector {
                 sb.append(line).append('\n');
             }
             return sb.toString();
+
         } catch (final MalformedURLException | UnsupportedEncodingException ignored) {
 
         } catch (final IOException ignored) {

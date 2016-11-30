@@ -51,7 +51,7 @@ public class MealAdapter extends ArrayAdapter<Object> {
         final Object obj = items.get(position);
         if (obj != null) {
             if (obj instanceof BigListItem) {
-                BigListItem st = (BigListItem) obj;
+                final BigListItem st = (BigListItem) obj;
                 v = vi.inflate(R.layout.list_item_big, null);
 
                 v.setOnClickListener(null);
@@ -62,7 +62,7 @@ public class MealAdapter extends ArrayAdapter<Object> {
                 sectionView.setText(st.getTitle());
 
             } else if (obj instanceof MediumListItem) {
-                MediumListItem sk = (MediumListItem) obj;
+                final MediumListItem sk = (MediumListItem) obj;
                 v = vi.inflate(R.layout.list_item_medium, null);
 
                 v.setOnClickListener(null);
@@ -72,7 +72,7 @@ public class MealAdapter extends ArrayAdapter<Object> {
                 final TextView sectionView = (TextView) v.findViewById(R.id.list_item_medium_text);
                 sectionView.setText(sk.getTitle());
             } else {
-                Meal sp = (Meal) obj;
+                final Meal sp = (Meal) obj;
                 v = vi.inflate(R.layout.list_item_speiseplan, null);
                 final TextView title = (TextView) v.findViewById(R.id.list_item_level2_title);
                 final TextView subtitle = (TextView) v.findViewById(R.id.list_item_level2_price);

@@ -70,11 +70,6 @@ public class NotenbekanntgabeFragment extends Fragment {
         items = new ArrayList<Noten>();
     }
 
-    @Override
-    public final void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-    }
 
     @Override
     public final void onResume() {
