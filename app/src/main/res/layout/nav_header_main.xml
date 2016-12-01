@@ -27,12 +27,10 @@
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         android:contentDescription="Logo"
-        android:paddingBottom="0sp"
-        android:paddingLeft="60sp"
-        android:paddingRight="60sp"
-        android:paddingTop="30sp"
-        android:scaleType="fitXY"
-        android:src="@drawable/test_hochschule_hof_logo_transparent"
-        />
+        android:src="@drawable/ic_hs_hof_logode"
+        android:scaleType="fitCenter"
+        android:paddingLeft="60dp"
+        android:paddingRight="60dp"
+        android:paddingTop="15dp"/>
 
 </LinearLayout>
