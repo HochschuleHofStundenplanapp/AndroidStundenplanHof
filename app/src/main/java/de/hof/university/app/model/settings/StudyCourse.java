@@ -16,12 +16,13 @@
 
 package de.hof.university.app.model.settings;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Studiengang
  */
-public class StudyCourse {
+public class StudyCourse implements Serializable {
 
     private long id = 0L;
     private String name;
