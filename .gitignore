@@ -37,6 +37,7 @@ captures/
 .idea/workspace.xml
 .idea/libraries/
 .idea/modules.xml
+.idea/misc.xml
 
 # Keystore files
 *.jks

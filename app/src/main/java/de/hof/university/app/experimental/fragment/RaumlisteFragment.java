@@ -23,8 +23,10 @@ package de.hof.university.app.experimental.fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.NavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -40,6 +42,7 @@ import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.util.ArrayList;
 
+import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.experimental.adapter.RaumlistAdapter;
 import de.hof.university.app.experimental.model.Level;
@@ -128,6 +131,18 @@ public class RaumlisteFragment extends Fragment {
         }
 
         return v;
+    }
+
+    @Override
+    public final void onResume() {
+        super.onResume();
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.getSupportActionBar().setTitle(R.string.raumsuche);
+
+        NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+        MenuItem item = navigationView.getMenu().findItem(R.id.nav_experimental);
+        item.setChecked(true);
+        item.getSubMenu().findItem(R.id.nav_raumsuche).setChecked(true);
     }
 
     private void updateData() {
