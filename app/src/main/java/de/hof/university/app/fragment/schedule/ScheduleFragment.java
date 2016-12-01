@@ -158,7 +158,7 @@ public class ScheduleFragment extends AbstractListFragment {
         return params;
     }
 
-    protected final ArrayList<Object> updateListView(List<Object> list) {
+    protected final ArrayList<Object> updateListView(List<LectureItem> list) {
         String curWeekDay = "";
         if ( getString(R.string.language).equals("de") ) {
             curWeekDay = new SimpleDateFormat("EEEE", Locale.GERMANY).format(new Date());
@@ -172,22 +172,19 @@ public class ScheduleFragment extends AbstractListFragment {
 
         // Temporäre Liste für die Vorlesungen die nur an einem Tag stattfinden (fix) damit sie am Ende angezeigt werden.
         ArrayList<LectureItem> fixDataList = new ArrayList<>();
-        for ( Object object : list ) {
-            if ( object instanceof LectureItem ) {
-                LectureItem lectureItem = (LectureItem) object;
-                // Wenn eine Vorlesung nur an einem Tag stattfindet sind Start- und Enddate gleich
-                if ( lectureItem.getStartdate().equals(lectureItem.getEnddate()) ) {
-                    fixDataList.add(lectureItem);
-                } else {
-                    if ( !weekday.equals(lectureItem.getWeekday()) ) {
-                        tmpDataList.add(new BigListItem(lectureItem.getWeekday()));
-                        weekday = lectureItem.getWeekday();
-                        if ( weekday.equalsIgnoreCase(curWeekDay) ) {
-                            weekdayListPos = tmpDataList.size() - 1;
-                        }
+        for ( LectureItem lectureItem : list ) {
+            // Wenn eine Vorlesung nur an einem Tag stattfindet sind Start- und Enddate gleich
+            if ( lectureItem.getStartdate().equals(lectureItem.getEnddate()) ) {
+                fixDataList.add(lectureItem);
+            } else {
+                if ( !weekday.equals(lectureItem.getWeekday()) ) {
+                    tmpDataList.add(new BigListItem(lectureItem.getWeekday()));
+                    weekday = lectureItem.getWeekday();
+                    if ( weekday.equalsIgnoreCase(curWeekDay) ) {
+                        weekdayListPos = tmpDataList.size() - 1;
                     }
-                    tmpDataList.add(lectureItem);
                 }
+                tmpDataList.add(lectureItem);
             }
         }
         // sortieren
@@ -257,7 +254,7 @@ public class ScheduleFragment extends AbstractListFragment {
         final String semester = params[1];
         final String termTime = params[2];
         if (isVisible()) {
-            List<Object> scheduleList = DataManager.getInstance().getSchedule(getActivity().getApplicationContext(), getString(R.string.language), course, semester, termTime, Boolean.valueOf(params[3]));
+            List<LectureItem> scheduleList = DataManager.getInstance().getSchedule(getActivity().getApplicationContext(), getString(R.string.language), course, semester, termTime, Boolean.valueOf(params[3]));
 
             Log.d(TAG, "isVisible: "+ isVisible());
             if (isVisible()) {

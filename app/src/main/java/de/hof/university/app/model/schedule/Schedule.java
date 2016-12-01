@@ -6,36 +6,29 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import de.hof.university.app.model.SaveObject;
+
 /**
  * Created by danie on 30.11.2016.
  */
 
-public class Schedule implements Serializable {
-	ArrayList<Object> lectures;
-	Date lastSaved;
+public class Schedule extends SaveObject {
+	ArrayList<LectureItem> lectures;
 	String course;
 	String semester;
 	String termtime;
 
 	public Schedule() {
+		super();
 		this.lectures = new ArrayList<>();
-		lastSaved = new Date();
 	}
 
-	public ArrayList<Object> getLectures() {
+	public ArrayList<LectureItem> getLectures() {
 		return lectures;
 	}
 
-	public void setLectures(ArrayList<Object> lectures) {
+	public void setLectures(ArrayList<LectureItem> lectures) {
 		this.lectures = lectures;
-	}
-
-	public Date getLastSaved() {
-		return lastSaved;
-	}
-
-	public void setLastSaved(Date lastSaved) {
-		this.lastSaved = lastSaved;
 	}
 
 	public String getCourse() {

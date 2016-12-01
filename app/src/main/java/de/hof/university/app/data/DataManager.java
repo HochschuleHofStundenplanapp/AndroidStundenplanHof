@@ -29,7 +29,6 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -37,9 +36,15 @@ import de.hof.university.app.Util.Log;
 import de.hof.university.app.data.parser.Parser;
 import de.hof.university.app.data.parser.ParserFactory;
 import de.hof.university.app.data.parser.ParserFactory.EParser;
+import de.hof.university.app.model.SaveObject;
+import de.hof.university.app.model.meal.Meal;
+import de.hof.university.app.model.meal.Meals;
+import de.hof.university.app.model.schedule.Changes;
+import de.hof.university.app.model.schedule.LectureChange;
 import de.hof.university.app.model.schedule.LectureItem;
 import de.hof.university.app.model.schedule.MySchedule;
 import de.hof.university.app.model.schedule.Schedule;
+import de.hof.university.app.model.settings.Courses;
 import de.hof.university.app.model.settings.StudyCourse;
 
 /**
@@ -94,6 +99,9 @@ public class DataManager {
 
     private static final String myScheduleFilename = "mySchedule";
     private static final String scheduleFilename = "schedule";
+    private static final String changesFilename = "changes";
+    private static final String coursesFilename = "courses";
+    private static final String mealsFilename = "meals";
 
     private static final DataManager dataManager = new DataManager();
 
@@ -104,37 +112,67 @@ public class DataManager {
     private DataManager() {
     }
 
-    public final ArrayList<Object> getMeals(Context context, boolean forceRefresh) {
-        final Parser parser = ParserFactory.create(EParser.MENU);
-        final Calendar calendar = Calendar.getInstance();
-        final String url = DataManager.CONNECTION.MEAL.getUrl() + calendar.get(Calendar.YEAR) + '-' + (calendar.get(Calendar.MONTH) + 1) + '-' + calendar.get(Calendar.DAY_OF_MONTH);
-        final String xmlString = this.getData(context, forceRefresh, url, DataManager.CONNECTION.MEAL.getCache());
+    public final ArrayList<Meal> getMeals(Context context, boolean forceRefresh) {
+        Object object = this.readObject(context, mealsFilename);
+        Meals meals = new Meals();
+        Date lastCached = new Date();
 
-        if (xmlString.equals("")) {
-            return null;
+        if (object != null) {
+            meals = (Meals) object;
+
+            if ( meals.getLastSaved() != null ) {
+                lastCached = meals.getLastSaved();
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(lastCached);
+                cal.add(Calendar.MINUTE, DataManager.CONNECTION.MEAL.getCache());
+                lastCached = cal.getTime();
+            }
         }
 
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        final String[] params = {xmlString, sharedPreferences.getString("speiseplan_tarif", "1")};
-        assert parser != null;
+        if (forceRefresh == true || object == null || meals.getMeals().size() == 0 || meals.getLastSaved() == null || !lastCached.after(new Date())) {
+            final Parser parser = ParserFactory.create(EParser.MENU);
+            final Calendar calendar = Calendar.getInstance();
+            final String url = DataManager.CONNECTION.MEAL.getUrl() + calendar.get(Calendar.YEAR) + '-' + (calendar.get(Calendar.MONTH) + 1) + '-' + calendar.get(Calendar.DAY_OF_MONTH);
+            final String xmlString = this.getData(context, forceRefresh, url, DataManager.CONNECTION.MEAL.getCache());
 
-        return (ArrayList<Object>) parser.parse(params);
+            if ( xmlString.equals("") ) {
+                return null;
+            }
+
+            final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            final String[] params = { xmlString, sharedPreferences.getString("speiseplan_tarif", "1") };
+            assert parser != null;
+
+            meals.setMeals((ArrayList<Meal>) parser.parse(params));
+
+            meals.setLastSaved(new Date());
+            saveObject(context, meals, mealsFilename);
+        }
+
+        return meals.getMeals();
     }
 
-    public final ArrayList<Object> getSchedule(Context context, String language, String course, String semester,
+    public final ArrayList<LectureItem> getSchedule(Context context, String language, String course, String semester,
                                                String termTime, boolean forceRefresh) {
-        ArrayList<Object> result = null;
+        Object object = readObject(context, scheduleFilename);
+        Schedule schedule = new Schedule();
+        Date lastCached = new Date();
 
-        Schedule schedule = readSchedule(context);
+        if (object != null) {
+            schedule = (Schedule) object;
 
-        Date lastCached = schedule.getLastSaved();
+            if ( schedule.getLastSaved() != null ) {
+                lastCached = schedule.getLastSaved();
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(lastCached);
-        cal.add(Calendar.MINUTE, DataManager.CONNECTION.SCHEDULE.getCache());
-        lastCached = cal.getTime();
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(lastCached);
+                cal.add(Calendar.MINUTE, DataManager.CONNECTION.SCHEDULE.getCache());
+                lastCached = cal.getTime();
+            }
+        }
 
-        if (schedule.getLectures().size() == 0 || !lastCached.after(new Date()) || !schedule.getCourse().equals(course) || !schedule.getSemester().equals(semester) || !schedule.getTermtime().equals(termTime)) {
+        if (forceRefresh == true || object == null || schedule.getLectures().size() == 0 || schedule.getLastSaved() == null || !lastCached.after(new Date()) || !schedule.getCourse().equals(course) || !schedule.getSemester().equals(semester) || !schedule.getTermtime().equals(termTime)) {
             final Parser parser = ParserFactory.create(EParser.SCHEDULE);
             final String jsonString = this.getData(context, forceRefresh, String.format(DataManager.CONNECTION.SCHEDULE.getUrl(), DataManager.replaceWhitespace(course), DataManager.replaceWhitespace(semester), DataManager.replaceWhitespace(termTime)), DataManager.CONNECTION.SCHEDULE.getCache());
 
@@ -145,23 +183,20 @@ public class DataManager {
             final String[] params = { jsonString, language };
             assert parser != null;
 
-            result = (ArrayList<Object>) parser.parse(params);
-
-            schedule.setLectures(result);
+            schedule.setLectures((ArrayList<LectureItem>) parser.parse(params));
 
             schedule.setCourse(course);
             schedule.setSemester(semester);
             schedule.setTermtime(termTime);
 
-            saveSchedule(context, schedule);
+            schedule.setLastSaved(new Date());
+            saveObject(context, schedule, scheduleFilename);
         }
-
-        result = schedule.getLectures();
         
-        return result;
+        return schedule.getLectures();
     }
 
-    public final ArrayList<Object> getMySchedule(Context context, String language, String course, String semester,
+    public final ArrayList<LectureItem> getMySchedule(Context context, String language, String course, String semester,
                                                  String termTime, boolean forceRefresh) {
         // myScheudle leeren damit es noch mal frisch aus der Datei gelesen wird.
         // Weil es dort in einer anderen Reihenfolge steht.
@@ -169,14 +204,25 @@ public class DataManager {
 
         MySchedule mySchedule = this.getMySchedule(context);
 
-        Date lastCached = mySchedule.getLastSaved();
+        Date lastCached = new Date();
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(lastCached);
-        cal.add(Calendar.MINUTE, DataManager.CONNECTION.MYSCHEDULE.getCache());
-        lastCached = cal.getTime();
+        if (mySchedule.getLastSaved() != null) {
+            lastCached = mySchedule.getLastSaved();
 
-        if (mySchedule.getLectures().size() == 0 || !lastCached.after(new Date()) || mySchedule.getIds().size() != mySchedule.getLectures().size()) {
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(lastCached);
+            cal.add(Calendar.MINUTE, DataManager.CONNECTION.MYSCHEDULE.getCache());
+            lastCached = cal.getTime();
+        }
+
+        if (forceRefresh == true || mySchedule.getLectures().size() == 0 || mySchedule.getLastSaved() == null || !lastCached.after(new Date()) || mySchedule.getIds().size() != mySchedule.getLectures().size()) {
+            Object object = this.readObject(context, changesFilename);
+
+            Changes changes = (Changes) object;
+            if ( changes != null ) {
+                changes.setLastSaved(null);
+                saveObject(context, changes, changesFilename);
+            }
 
             final Iterator<String> iterator = this.getMySchedule(context).getIds().iterator();
             String url = DataManager.CONNECTION.MYSCHEDULE.getUrl();
@@ -194,57 +240,104 @@ public class DataManager {
 
             final String[] params = { jsonString, language };
 
-            ArrayList<Object> myschedule = (ArrayList<Object>) parser.parse(params);
+            ArrayList<LectureItem> myschedule = (ArrayList<LectureItem>) parser.parse(params);
 
             getMySchedule(context).setLectures(myschedule);
-            this.saveMySchedule(context);
+
+            getMySchedule(context).setLastSaved(new Date());
+            this.saveObject(context, getMySchedule(context), myScheduleFilename);
         }
 
         return this.getMySchedule(context).getLectures();
     }
 
     public final ArrayList<Object> getChanges(Context context, String course, String semester,
-                                              String termTime, boolean forceRefresh) {
-        // myScheudle leeren damit es noch mal frisch aus der Datei gelesen wird.
-        // Weil es dort in einer anderen Reihenfolge steht.
-        this.mySchedule = null;
-        final Iterator<String> iterator = this.getMySchedule(context).getIds().iterator();
+                                                     String termTime, boolean forceRefresh) {
+        Object object = this.readObject(context, changesFilename);
+        Changes changes = new Changes();
+        Date lastCached = new Date();
 
-        String url = DataManager.CONNECTION.CHANGES.getUrl();
+        if (object != null) {
+            changes = (Changes) object;
 
-        if (!iterator.hasNext()) {
-            url += "&stg=" + DataManager.replaceWhitespace(course);
-            url += "&sem=" + DataManager.replaceWhitespace(semester);
-            url += "&tt=" + DataManager.replaceWhitespace(termTime);
-        } else {
-            // Fügt die ID's der Vorlesungen hinzu die in Mein Stundenplan sind
-            // dadurch werden nur Änderungen von Mein Stundenplan geholt
-            while (iterator.hasNext()) {
-                url += "&id[]=" + iterator.next();
+            if ( changes.getLastSaved() != null ) {
+                lastCached = changes.getLastSaved();
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(lastCached);
+                cal.add(Calendar.MINUTE, DataManager.CONNECTION.CHANGES.getCache());
+                lastCached = cal.getTime();
             }
         }
 
-        Parser parser = ParserFactory.create(EParser.CHANGES);
-        String jsonString = this.getData(context, forceRefresh, url, DataManager.CONNECTION.CHANGES.getCache());
+        if (forceRefresh == true || object == null || changes.getChanges().size() == 0 || changes.getLastSaved() == null || !lastCached.after(new Date())) {
+            final Iterator<String> iterator = this.getMySchedule(context).getIds().iterator();
 
-        if (jsonString.equals("")) {
-            return null;
+            String url = DataManager.CONNECTION.CHANGES.getUrl();
+
+            if ( !iterator.hasNext() ) {
+                url += "&stg=" + DataManager.replaceWhitespace(course);
+                url += "&sem=" + DataManager.replaceWhitespace(semester);
+                url += "&tt=" + DataManager.replaceWhitespace(termTime);
+            } else {
+                // Fügt die ID's der Vorlesungen hinzu die in Mein Stundenplan sind
+                // dadurch werden nur Änderungen von Mein Stundenplan geholt
+                while ( iterator.hasNext() ) {
+                    url += "&id[]=" + iterator.next();
+                }
+            }
+
+            Parser parser = ParserFactory.create(EParser.CHANGES);
+            String jsonString = this.getData(context, forceRefresh, url, DataManager.CONNECTION.CHANGES.getCache());
+
+            if ( jsonString.equals("") ) {
+                return null;
+            }
+
+            final String[] params = { jsonString };
+            assert parser != null;
+
+            changes.setChanges((ArrayList<Object>) parser.parse(params));
+
+            changes.setLastSaved(new Date());
+            saveObject(context, changes, changesFilename);
         }
 
-        final String[] params = {jsonString};
-        assert parser != null;
-
-        return (ArrayList<Object>) parser.parse(params);
+        return changes.getChanges();
     }
 
     public final ArrayList<StudyCourse> getCourses(Context context, String language, String termTime, boolean forceRefresh) {
-        final Parser parser = ParserFactory.create(EParser.COURSES);
+        Object object = this.readObject(context, coursesFilename);
+        Courses courses = new Courses();
+        Date lastCached = new Date();
 
-        final String jsonString = this.getData(context, forceRefresh, String.format(DataManager.CONNECTION.COURSE.getUrl(), DataManager.replaceWhitespace(termTime)), DataManager.CONNECTION.COURSE.getCache());
-        final String[] params = {jsonString, language};
-        assert parser != null;
+        if (object != null) {
+            courses = (Courses) object;
 
-        return (ArrayList<StudyCourse>) parser.parse(params);
+            if ( courses.getLastSaved() != null ) {
+                lastCached = courses.getLastSaved();
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(lastCached);
+                cal.add(Calendar.MINUTE, DataManager.CONNECTION.COURSE.getCache());
+                lastCached = cal.getTime();
+            }
+        }
+
+        if (forceRefresh == true || object == null || courses.getCourses().size() == 0 || courses.getLastSaved() == null || !lastCached.after(new Date())) {
+            final Parser parser = ParserFactory.create(EParser.COURSES);
+
+            final String jsonString = this.getData(context, forceRefresh, String.format(DataManager.CONNECTION.COURSE.getUrl(), DataManager.replaceWhitespace(termTime)), DataManager.CONNECTION.COURSE.getCache());
+            final String[] params = { jsonString, language };
+            assert parser != null;
+
+            courses.setCourses((ArrayList<StudyCourse>) parser.parse(params));
+
+            courses.setLastSaved(new Date());
+            saveObject(context, courses, coursesFilename);
+        }
+
+        return courses.getCourses();
     }
 
 
@@ -262,7 +355,7 @@ public class DataManager {
 
     public final void addToMySchedule(final Context context, final LectureItem s) {
         this.getMySchedule(context).getIds().add(String.valueOf(s.getId()));
-        this.saveMySchedule(context);
+        this.saveObject(context, this.getMySchedule(context), myScheduleFilename);
     }
 
     public final boolean myScheduleContains(final Context context, final LectureItem s) {
@@ -273,56 +366,28 @@ public class DataManager {
         this.getMySchedule(context).getIds().remove(String.valueOf(s.getId()));
         // TODO Objekt mit der ID finden und löschen
         //this.getMySchedule(context).getLectures().remove();
-        this.saveMySchedule(context);
+        this.saveObject(context, this.getMySchedule(context), myScheduleFilename);
     }
 
     public final void addAllToMySchedule(final Context context, final Set<String> schedulesIds) {
         this.getMySchedule(context).getIds().addAll(schedulesIds);
-        this.saveMySchedule(context);
+        this.saveObject(context, this.getMySchedule(context), myScheduleFilename);
     }
 
     public final void deleteAllFromMySchedule(final Context context) {
         this.getMySchedule(context).getIds().clear();
         this.getMySchedule(context).getLectures().clear();
-        this.saveMySchedule(context);
-    }
-
-    private void saveMySchedule(final Context context) {
-        try {
-            final File file = new File(context.getFilesDir(), myScheduleFilename);
-            final FileOutputStream fos = new FileOutputStream(file);
-            final ObjectOutputStream os = new ObjectOutputStream(fos);
-            os.writeObject(this.getMySchedule(context));
-            os.close();
-            fos.close();
-        } catch (IOException e) {
-            // TODO Fehlermeldung
-            e.printStackTrace();
-        }
-    }
-
-    private static MySchedule readMySchedule(final Context context) {
-        MySchedule result = new MySchedule();
-        try {
-            final File file = new File(context.getFilesDir(), myScheduleFilename);
-            if (file.exists()) {
-                final FileInputStream fis = new FileInputStream(file);
-                final ObjectInputStream is = new ObjectInputStream(fis);
-                result = (MySchedule) is.readObject();
-                is.close();
-                fis.close();
-            }
-        } catch (Exception e) {
-            // TODO Fehlermeldung
-            e.printStackTrace();
-            Log.d(TAG, "Fehler beim Laden der MySchedule Datei");
-        }
-        return result;
+        this.saveObject(context, this.getMySchedule(context), myScheduleFilename);
     }
 
     private MySchedule getMySchedule(final Context context) {
         if (this.mySchedule == null) {
-            this.mySchedule = DataManager.readMySchedule(context);
+            Object object = DataManager.readObject(context, myScheduleFilename);
+            if (object == null) {
+                this.mySchedule = new MySchedule();
+            } else {
+                this.mySchedule = (MySchedule) object;
+            }
         }
         return this.mySchedule;
     }
@@ -331,12 +396,12 @@ public class DataManager {
         return this.getMySchedule(context).getIds().size();
     }
 
-    private void saveSchedule(final Context context, Schedule schedule) {
+    private void saveObject(final Context context, Object object, String filename) {
         try {
-            final File file = new File(context.getFilesDir(), scheduleFilename);
+            final File file = new File(context.getFilesDir(), filename);
             final FileOutputStream fos = new FileOutputStream(file);
             final ObjectOutputStream os = new ObjectOutputStream(fos);
-            os.writeObject(schedule);
+            os.writeObject(object);
             os.close();
             fos.close();
         } catch (IOException e) {
@@ -345,14 +410,14 @@ public class DataManager {
         }
     }
 
-    private static Schedule readSchedule(final Context context) {
-        Schedule result = new Schedule();
+    private static Object readObject(final Context context, String filename) {
+        Object result = null;
         try {
-            final File file = new File(context.getFilesDir(), scheduleFilename);
+            final File file = new File(context.getFilesDir(), filename);
             if (file.exists()) {
                 final FileInputStream fis = new FileInputStream(file);
                 final ObjectInputStream is = new ObjectInputStream(fis);
-                result = (Schedule) is.readObject();
+                result = is.readObject();
                 is.close();
                 fis.close();
             }
