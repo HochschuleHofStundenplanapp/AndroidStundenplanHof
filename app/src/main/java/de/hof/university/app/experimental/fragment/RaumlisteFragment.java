@@ -145,6 +145,14 @@ public class RaumlisteFragment extends Fragment {
         item.getSubMenu().findItem(R.id.nav_raumsuche).setChecked(true);
     }
 
+    @Override
+    public void onPause() {
+        MainActivity mainActivity = (MainActivity) getActivity();
+        NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+        navigationView.getMenu().findItem(R.id.nav_experimental).getSubMenu().findItem(R.id.nav_raumsuche).setChecked(false);
+        super.onPause();
+    }
+
     private void updateData() {
         String[] params = new String[9];
         params[0] = user;
