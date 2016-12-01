@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * Studiengang
  */
-public class StudyCourse implements Serializable{
+public class StudyCourse implements Serializable {
     private long id = 0L;
     private String name;
     private String tag;
