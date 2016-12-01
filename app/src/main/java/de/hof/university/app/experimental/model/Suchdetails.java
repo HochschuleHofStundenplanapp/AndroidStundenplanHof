@@ -16,10 +16,12 @@
 
 package de.hof.university.app.experimental.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Lukas on 05.07.2016.
  */
-public class Suchdetails implements Level {
+public class Suchdetails implements Level, Serializable {
 
 	public final String TAG = "Suchdetails";
 

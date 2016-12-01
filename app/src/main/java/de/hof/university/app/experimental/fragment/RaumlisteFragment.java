@@ -20,6 +20,7 @@ package de.hof.university.app.experimental.fragment;
  * Created by Lukas on 05.07.2016.
  */
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -38,9 +39,16 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InterruptedIOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
@@ -48,6 +56,7 @@ import de.hof.university.app.experimental.adapter.RaumlistAdapter;
 import de.hof.university.app.experimental.model.Level;
 import de.hof.university.app.experimental.model.Raum;
 import de.hof.university.app.experimental.model.Raumkategorie;
+import de.hof.university.app.experimental.model.Raumliste;
 import de.hof.university.app.experimental.model.Suchdetails;
 
 
@@ -84,6 +93,7 @@ public class RaumlisteFragment extends Fragment {
     private SwipeRefreshLayout swipeContainer;
     private RaumlisteFragment.GetRaumTask task;
 
+    private static final String raumlistFilenmae = "raumliste";
 
     public RaumlisteFragment() {
         // Required empty public constructor
@@ -194,98 +204,127 @@ public class RaumlisteFragment extends Fragment {
 
         @Override
         protected final ArrayList<Level> doInBackground(String... params) {
+            Object object = RaumlisteFragment.readObject(getActivity().getApplicationContext(), raumlistFilenmae);
+            Raumliste raumliste = new Raumliste();
+            Date lastCached = new Date();
 
-            System.setProperty("jsse.enableSNIExtension", "false");
-            String user = params[0];
-            String password = params[1];
-            String year = params[2];
-            String month = params[3];
-            String day = params[4];
-            String timeFrom = params[5];
-            String timeTo = params[6];
-            String raumTyp = params[7];
-            String prettyDate = params[8];
+            if (object != null) {
+                raumliste = (Raumliste) object;
 
-            ArrayList<Level> tmpRaumList = new ArrayList<Level>();
+                if ( raumliste.getLastSaved() != null ) {
+                    lastCached = raumliste.getLastSaved();
 
-            tmpRaumList.add(new Suchdetails(getString(R.string.date) + ' ' + prettyDate, getString(R.string.timeFrom) + ": " + timeFrom, getString(R.string.timeTo) + ": " + timeTo));
-
-            Connection.Response loginForm = null;
-            Document document;
-
-            // TODO Temporäre Lösung durch gleich mehrere Versuche.
-            int networkRetry = 5;
-
-            while (networkRetry > 0) {
-                try {
-                    // Thread beenden wenn gecancelt
-                    if (isCancelled()) break;
-                    loginForm = Jsoup
-                            .connect("https://www.hof-university.de/anmelden.html")
-                            .timeout(5 * 1000) //4 Sekunden würden reichen aber 1 Sekunde zur Sicherheit
-                            .data("user", user, "pass", password)
-                            .data("logintype", "login")
-                            .data("pid", "27")
-                            .data("redirect_url",
-                                    "http://www.hof-university.de/anmeldung-erfolgreich.html")
-                            .data("tx_felogin_pi1[noredirect]", "0")
-                            .method(Connection.Method.POST).execute();
-                    networkRetry = 0;
-                } catch (IOException e) {
-                    networkRetry--;
-                    if (networkRetry <= 0) {
-                        errorText = getString(R.string.loginFailed);
-                        return null;
-                    }
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(lastCached);
+                    cal.add(Calendar.MINUTE, 15);
+                    lastCached = cal.getTime();
                 }
             }
 
-            // Daten lesen
-            try {
-                document = Jsoup
-                        .connect(
-                                "https://www.hof-university.de/studierende/info-service/it-service/raumhardsoftwaresuche.html"
-                                        + raumTyp)
-                        .timeout(6 * 1000) //5 Sekunden würden reichen aber 1 Sekunde zur Sicherheit
-                        .data("tx_raumsuche_pi1[day]", day)
-                        .data("tx_raumsuche_pi1[month]", month)
-                        .data("tx_raumsuche_pi1[year]", year)
-                        .data("tx_raumsuche_pi1[timestart]",
-                                timeFrom)
-                        .data("tx_raumsuche_pi1[timeend]", timeTo)
-                        .cookies(loginForm.cookies()).get();
+            if (object == null || raumliste.getLastSaved() == null || !lastCached.after(new Date()) || !raumliste.getTimeStart().equals(params[5]) || !raumliste.getTimeEnd().equals(params[6]) || !raumliste.getRaumTyp().equals(params[7]) || !raumliste.getDate().equals(params[8])) {
 
-                Elements tables = document.getElementsByTag("table");
-                String curCategory = "";
-                for (Element td : tables.first().getElementsByTag("td")) {
-                    // Thread beenden wenn gecancelt
-                    if (isCancelled()) break;
-                    String room = td.text();
+                System.setProperty("jsse.enableSNIExtension", "false");
+                String user = params[ 0 ];
+                String password = params[ 1 ];
+                String year = params[ 2 ];
+                String month = params[ 3 ];
+                String day = params[ 4 ];
+                String timeFrom = params[ 5 ];
+                String timeTo = params[ 6 ];
+                String raumTyp = params[ 7 ];
+                String prettyDate = params[ 8 ];
+
+                ArrayList<Level> tmpRaumList = new ArrayList<Level>();
+
+                tmpRaumList.add(new Suchdetails(getString(R.string.date) + ' ' + prettyDate, getString(R.string.timeFrom) + ": " + timeFrom, getString(R.string.timeTo) + ": " + timeTo));
+
+                Connection.Response loginForm = null;
+                Document document;
+
+                // TODO Temporäre Lösung durch gleich mehrere Versuche.
+                int networkRetry = 5;
+
+                while ( networkRetry > 0 ) {
+                    try {
+                        // Thread beenden wenn gecancelt
+                        if ( isCancelled() ) break;
+                        loginForm = Jsoup
+                                            .connect("https://www.hof-university.de/anmelden.html")
+                                            .timeout(5 * 1000) //4 Sekunden würden reichen aber 1 Sekunde zur Sicherheit
+                                            .data("user", user, "pass", password)
+                                            .data("logintype", "login")
+                                            .data("pid", "27")
+                                            .data("redirect_url",
+                                                    "http://www.hof-university.de/anmeldung-erfolgreich.html")
+                                            .data("tx_felogin_pi1[noredirect]", "0")
+                                            .method(Connection.Method.POST).execute();
+                        networkRetry = 0;
+                    } catch ( IOException e ) {
+                        networkRetry--;
+                        if ( networkRetry <= 0 ) {
+                            errorText = getString(R.string.loginFailed);
+                            return null;
+                        }
+                    }
+                }
+
+                // Daten lesen
+                try {
+                    document = Jsoup
+                                       .connect(
+                                               "https://www.hof-university.de/studierende/info-service/it-service/raumhardsoftwaresuche.html"
+                                                       + raumTyp)
+                                       .timeout(6 * 1000) //5 Sekunden würden reichen aber 1 Sekunde zur Sicherheit
+                                       .data("tx_raumsuche_pi1[day]", day)
+                                       .data("tx_raumsuche_pi1[month]", month)
+                                       .data("tx_raumsuche_pi1[year]", year)
+                                       .data("tx_raumsuche_pi1[timestart]",
+                                               timeFrom)
+                                       .data("tx_raumsuche_pi1[timeend]", timeTo)
+                                       .cookies(loginForm.cookies()).get();
+
+                    Elements tables = document.getElementsByTag("table");
+                    String curCategory = "";
+                    for ( Element td : tables.first().getElementsByTag("td") ) {
+                        // Thread beenden wenn gecancelt
+                        if ( isCancelled() ) break;
+                        String room = td.text();
                     /* Füge Kategorie ein, wenn:
                             wenn Stringlänge > 2    >> da Kategorie 2 Zeichen
                             neue Kategorie != curCategory
                      */
-                    if ((room.length() > 2) && !room.substring(0, 2).equals(curCategory)) {
-                        room = room.substring(0, 2); // Erzeuge Kategorie
-                        tmpRaumList.add(new Raumkategorie(room));
-                        curCategory = room; // Lege neue Kategorie fest
+                        if ( (room.length() > 2) && !room.substring(0, 2).equals(curCategory) ) {
+                            room = room.substring(0, 2); // Erzeuge Kategorie
+                            tmpRaumList.add(new Raumkategorie(room));
+                            curCategory = room; // Lege neue Kategorie fest
+                        }
+                        tmpRaumList.add(new Raum(td.text()));
                     }
-                    tmpRaumList.add(new Raum(td.text()));
+
+                } catch ( IOException e ) {
+                    if ( e.getClass() == InterruptedIOException.class ) //Wurde einfach abgebrochen -> nichts tun
+                    {
+                        errorText = getString(R.string.raumsuchefehler);
+                        return null;
+                    } else {
+                        errorText = getString(R.string.raumsuchefehler);
+                    }
                 }
 
-            } catch (IOException e) {
-                if (e.getClass() == InterruptedIOException.class) //Wurde einfach abgebrochen -> nichts tun
-                {
-                    errorText = getString(R.string.raumsuchefehler);
-                    return null;
-                } else {
-                    errorText = getString(R.string.raumsuchefehler);
-                }
+                // System.out.println(loginForm.cookie("fe_typo_user"));
+
+                raumliste.setRaumlist(tmpRaumList);
+
+                raumliste.setTimeStart(params[5]);
+                raumliste.setTimeEnd(params[6]);
+                raumliste.setRaumTyp(params[7]);
+                raumliste.setDate(params[8]);
+
+                raumliste.setLastSaved(new Date());
+                RaumlisteFragment.saveObject(getActivity().getApplicationContext(), raumliste, raumlistFilenmae);
             }
 
-            // System.out.println(loginForm.cookie("fe_typo_user"));
-
-            return tmpRaumList;
+            return raumliste.getRaumlist();
         }
 
         @Override
@@ -294,7 +333,7 @@ public class RaumlisteFragment extends Fragment {
 
             // Wenn ein schlimmer Fehler passiert ist, dann kann das Objekt null sein
             if (result != null && errorText.isEmpty()) {
-                if (!result.isEmpty()) {
+                if (result.size() > 1) {
                     raumList.clear();
                     raumList.addAll(result);
                     adapter.notifyDataSetChanged();
@@ -308,5 +347,37 @@ public class RaumlisteFragment extends Fragment {
 
             super.onPostExecute(result);
         }
+    }
+
+    private static void saveObject(final Context context, Object object, String filename) {
+        try {
+            final File file = new File(context.getFilesDir(), filename);
+            final FileOutputStream fos = new FileOutputStream(file);
+            final ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(object);
+            os.close();
+            fos.close();
+        } catch (IOException e) {
+            // TODO Fehlermeldung
+            e.printStackTrace();
+        }
+    }
+
+    private static Object readObject(final Context context, String filename) {
+        Object result = null;
+        try {
+            final File file = new File(context.getFilesDir(), filename);
+            if (file.exists()) {
+                final FileInputStream fis = new FileInputStream(file);
+                final ObjectInputStream is = new ObjectInputStream(fis);
+                result = is.readObject();
+                is.close();
+                fis.close();
+            }
+        } catch (Exception e) {
+            // TODO Fehlermeldung
+            e.printStackTrace();
+        }
+        return result;
     }
 }
