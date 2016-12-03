@@ -137,7 +137,11 @@ public class DataManager {
             final String xmlString = this.getData(context, forceRefresh, url, DataManager.CONNECTION.MEAL.getCache());
 
             if ( xmlString.equals("") ) {
-                return null;
+                if (!forceRefresh && meals != null) {
+                    return meals.getMeals();
+                } else {
+                    return null;
+                }
             }
 
             final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -177,7 +181,11 @@ public class DataManager {
             final String jsonString = this.getData(context, forceRefresh, String.format(DataManager.CONNECTION.SCHEDULE.getUrl(), DataManager.replaceWhitespace(course), DataManager.replaceWhitespace(semester), DataManager.replaceWhitespace(termTime)), DataManager.CONNECTION.SCHEDULE.getCache());
 
             if ( jsonString.equals("") ) {
-                return null;
+                if (!forceRefresh && schedule != null) {
+                    return schedule.getLectures();
+                } else {
+                    return null;
+                }
             }
 
             final String[] params = { jsonString, language };
@@ -235,7 +243,11 @@ public class DataManager {
             final String jsonString = this.getData(context, forceRefresh, url, DataManager.CONNECTION.MYSCHEDULE.getCache());
 
             if ( jsonString.equals("") ) {
-                return null;
+                if (!forceRefresh && mySchedule != null) {
+                    return mySchedule.getLectures();
+                } else {
+                    return null;
+                }
             }
 
             final String[] params = { jsonString, language };
@@ -291,7 +303,11 @@ public class DataManager {
             String jsonString = this.getData(context, forceRefresh, url, DataManager.CONNECTION.CHANGES.getCache());
 
             if ( jsonString.equals("") ) {
-                return null;
+                if (!forceRefresh && changes != null) {
+                    return changes.getChanges();
+                } else {
+                    return null;
+                }
             }
 
             final String[] params = { jsonString };
@@ -328,6 +344,16 @@ public class DataManager {
             final Parser parser = ParserFactory.create(EParser.COURSES);
 
             final String jsonString = this.getData(context, forceRefresh, String.format(DataManager.CONNECTION.COURSE.getUrl(), DataManager.replaceWhitespace(termTime)), DataManager.CONNECTION.COURSE.getCache());
+
+            if ( jsonString.equals("") ) {
+                if (!forceRefresh && courses != null) {
+                    return courses.getCourses();
+                } else {
+                    // TODO schauen ob das nicht zu einem Problem wird
+                    return null;
+                }
+            }
+
             final String[] params = { jsonString, language };
             assert parser != null;
 
@@ -383,10 +409,10 @@ public class DataManager {
     private MySchedule getMySchedule(final Context context) {
         if (this.mySchedule == null) {
             Object object = DataManager.readObject(context, myScheduleFilename);
-            if (object == null) {
-                this.mySchedule = new MySchedule();
-            } else {
+            if (object != null && object instanceof MySchedule) {
                 this.mySchedule = (MySchedule) object;
+            } else {
+                this.mySchedule = new MySchedule();
             }
         }
         return this.mySchedule;
