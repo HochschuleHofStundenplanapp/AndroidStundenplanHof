@@ -36,11 +36,9 @@ import de.hof.university.app.Util.Log;
 import de.hof.university.app.data.parser.Parser;
 import de.hof.university.app.data.parser.ParserFactory;
 import de.hof.university.app.data.parser.ParserFactory.EParser;
-import de.hof.university.app.model.SaveObject;
 import de.hof.university.app.model.meal.Meal;
 import de.hof.university.app.model.meal.Meals;
 import de.hof.university.app.model.schedule.Changes;
-import de.hof.university.app.model.schedule.LectureChange;
 import de.hof.university.app.model.schedule.LectureItem;
 import de.hof.university.app.model.schedule.MySchedule;
 import de.hof.university.app.model.schedule.Schedule;
@@ -130,14 +128,14 @@ public class DataManager {
             }
         }
 
-        if (forceRefresh == true || object == null || meals.getMeals().size() == 0 || meals.getLastSaved() == null || !lastCached.after(new Date())) {
+        if (forceRefresh || object == null || meals.getMeals().size() == 0 || meals.getLastSaved() == null || !lastCached.after(new Date())) {
             final Parser parser = ParserFactory.create(EParser.MENU);
             final Calendar calendar = Calendar.getInstance();
             final String url = DataManager.CONNECTION.MEAL.getUrl() + calendar.get(Calendar.YEAR) + '-' + (calendar.get(Calendar.MONTH) + 1) + '-' + calendar.get(Calendar.DAY_OF_MONTH);
             final String xmlString = this.getData(context, forceRefresh, url, DataManager.CONNECTION.MEAL.getCache());
 
             if ( xmlString.equals("") ) {
-                if (!forceRefresh && meals != null) {
+                if (!forceRefresh && object != null) {
                     return meals.getMeals();
                 } else {
                     return null;
@@ -176,12 +174,12 @@ public class DataManager {
             }
         }
 
-        if (forceRefresh == true || object == null || schedule.getLectures().size() == 0 || schedule.getLastSaved() == null || !lastCached.after(new Date()) || !schedule.getCourse().equals(course) || !schedule.getSemester().equals(semester) || !schedule.getTermtime().equals(termTime)) {
+        if (forceRefresh || object == null || schedule.getLectures().size() == 0 || schedule.getLastSaved() == null || !lastCached.after(new Date()) || !schedule.getCourse().equals(course) || !schedule.getSemester().equals(semester) || !schedule.getTermtime().equals(termTime)) {
             final Parser parser = ParserFactory.create(EParser.SCHEDULE);
             final String jsonString = this.getData(context, forceRefresh, String.format(DataManager.CONNECTION.SCHEDULE.getUrl(), DataManager.replaceWhitespace(course), DataManager.replaceWhitespace(semester), DataManager.replaceWhitespace(termTime)), DataManager.CONNECTION.SCHEDULE.getCache());
 
             if ( jsonString.equals("") ) {
-                if (!forceRefresh && schedule != null) {
+                if (!forceRefresh && object != null) {
                     return schedule.getLectures();
                 } else {
                     return null;
@@ -223,7 +221,7 @@ public class DataManager {
             lastCached = cal.getTime();
         }
 
-        if (forceRefresh == true || mySchedule.getLectures().size() == 0 || mySchedule.getLastSaved() == null || !lastCached.after(new Date()) || mySchedule.getIds().size() != mySchedule.getLectures().size()) {
+        if (forceRefresh || mySchedule.getLectures().size() == 0 || mySchedule.getLastSaved() == null || !lastCached.after(new Date()) || mySchedule.getIds().size() != mySchedule.getLectures().size()) {
             Object object = this.readObject(context, changesFilename);
 
             Changes changes = (Changes) object;
@@ -243,7 +241,7 @@ public class DataManager {
             final String jsonString = this.getData(context, forceRefresh, url, DataManager.CONNECTION.MYSCHEDULE.getCache());
 
             if ( jsonString.equals("") ) {
-                if (!forceRefresh && mySchedule != null) {
+                if (!forceRefresh && mySchedule.getLectures().size() > 0) {
                     return mySchedule.getLectures();
                 } else {
                     return null;
@@ -282,7 +280,7 @@ public class DataManager {
             }
         }
 
-        if (forceRefresh == true || object == null || changes.getChanges().size() == 0 || changes.getLastSaved() == null || !lastCached.after(new Date())) {
+        if (forceRefresh || object == null || changes.getChanges().size() == 0 || changes.getLastSaved() == null || !lastCached.after(new Date())) {
             final Iterator<String> iterator = this.getMySchedule(context).getIds().iterator();
 
             String url = DataManager.CONNECTION.CHANGES.getUrl();
@@ -303,7 +301,7 @@ public class DataManager {
             String jsonString = this.getData(context, forceRefresh, url, DataManager.CONNECTION.CHANGES.getCache());
 
             if ( jsonString.equals("") ) {
-                if (!forceRefresh && changes != null) {
+                if (!forceRefresh && object != null) {
                     return changes.getChanges();
                 } else {
                     return null;
@@ -340,13 +338,13 @@ public class DataManager {
             }
         }
 
-        if (forceRefresh == true || object == null || courses.getCourses().size() == 0 || courses.getLastSaved() == null || !lastCached.after(new Date())) {
+        if (forceRefresh || object == null || courses.getCourses().size() == 0 || courses.getLastSaved() == null || !lastCached.after(new Date())) {
             final Parser parser = ParserFactory.create(EParser.COURSES);
 
             final String jsonString = this.getData(context, forceRefresh, String.format(DataManager.CONNECTION.COURSE.getUrl(), DataManager.replaceWhitespace(termTime)), DataManager.CONNECTION.COURSE.getCache());
 
             if ( jsonString.equals("") ) {
-                if (!forceRefresh && courses != null) {
+                if (!forceRefresh && object != null) {
                     return courses.getCourses();
                 } else {
                     // TODO schauen ob das nicht zu einem Problem wird
