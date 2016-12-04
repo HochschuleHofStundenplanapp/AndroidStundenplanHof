@@ -88,8 +88,12 @@ public class SettingsFragment extends PreferenceFragment {
 		edtLogin.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
-				loginController.showLoginDialog();
-				return true;
+				if (isVisible()) { //nur wenn die Activity sichtbar ist den Dialog anzeigen
+					loginController.showLoginDialog();
+					return true;
+				} else {
+					return false;
+				}
 			}
 		});
 
