@@ -407,7 +407,10 @@ public class DataManager {
     private MySchedule getMySchedule(final Context context) {
         if (this.mySchedule == null) {
             Object object = DataManager.readObject(context, myScheduleFilename);
-            if (object != null && object instanceof MySchedule) {
+            if (object != null && object instanceof Set) {
+                this.mySchedule = new MySchedule();
+                this.mySchedule.setIds((Set<String>) object);
+            } else if (object != null && object instanceof MySchedule) {
                 this.mySchedule = (MySchedule) object;
             } else {
                 this.mySchedule = new MySchedule();
