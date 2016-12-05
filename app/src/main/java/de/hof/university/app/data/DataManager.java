@@ -166,6 +166,14 @@ public class DataManager {
         }
 
         if (forceRefresh || object == null || schedule.getLectures().size() == 0 || schedule.getLastSaved() == null || !cacheStillValid(schedule, CONNECTION.SCHEDULE.getCache()) || !schedule.getCourse().equals(course) || !schedule.getSemester().equals(semester) || !schedule.getTermtime().equals(termTime)) {
+            Object changesObject = this.readObject(context, changesFilename);
+
+            Changes changes = (Changes) changesObject;
+            if ( changes != null ) {
+                changes.setLastSaved(null);
+                saveObject(context, changes, changesFilename);
+            }
+
             final Parser parser = ParserFactory.create(EParser.SCHEDULE);
             final String jsonString = this.getData(context, forceRefresh, String.format(DataManager.CONNECTION.SCHEDULE.getUrl(), DataManager.replaceWhitespace(course), DataManager.replaceWhitespace(semester), DataManager.replaceWhitespace(termTime)), DataManager.CONNECTION.SCHEDULE.getCache());
 
