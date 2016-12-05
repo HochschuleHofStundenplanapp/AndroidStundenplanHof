@@ -140,7 +140,7 @@ public class DataManager {
             ArrayList<Meal> tmpMeals = (ArrayList<Meal>) parser.parse(params);
 
             if (tmpMeals.isEmpty()) {
-                if (!forceRefresh && tmpMeals.size() > 0) {
+                if (!forceRefresh && meals.getMeals().size() > 0) {
                     return meals.getMeals();
                 } else {
                     return null;
@@ -183,7 +183,7 @@ public class DataManager {
             ArrayList<LectureItem> lectures = (ArrayList<LectureItem>) parser.parse(params);
 
             if (lectures.isEmpty()) {
-                if (!forceRefresh && lectures.size() > 0) {
+                if (!forceRefresh && schedule.getLectures().size() > 0) {
                     return schedule.getLectures();
                 } else {
                     return null;
@@ -236,9 +236,9 @@ public class DataManager {
 
             final String[] params = { jsonString, language };
 
-            ArrayList<LectureItem> myschedule = (ArrayList<LectureItem>) parser.parse(params);
+            ArrayList<LectureItem> tmpMySchedule = (ArrayList<LectureItem>) parser.parse(params);
 
-            if (myschedule.isEmpty()) {
+            if (tmpMySchedule.isEmpty()) {
                 if (!forceRefresh && mySchedule.getLectures().size() > 0) {
                     return mySchedule.getLectures();
                 } else {
@@ -246,7 +246,7 @@ public class DataManager {
                 }
             }
 
-            getMySchedule(context).setLectures(myschedule);
+            getMySchedule(context).setLectures(tmpMySchedule);
 
             getMySchedule(context).setLastSaved(new Date());
             this.saveObject(context, getMySchedule(context), myScheduleFilename);
@@ -297,13 +297,14 @@ public class DataManager {
 
             ArrayList<Object> tmpChanges = (ArrayList<Object>) parser.parse(params);
 
-            if (tmpChanges.isEmpty()) {
-                if (!forceRefresh && tmpChanges.size() > 0) {
-                    return changes.getChanges();
-                } else {
-                    return null;
-                }
-            }
+            // führt hier zum falschen Verhalten
+//            if (tmpChanges.isEmpty()) {
+//                if (!forceRefresh && changes.getChanges().size() > 0) {
+//                    return changes.getChanges();
+//                } else {
+//                    return new ArrayList<>(); //oder null aber dann sagt er "Aktualisierung fehlgeschlagen"
+//                }
+//            }
 
             changes.setChanges(tmpChanges);
 
@@ -342,7 +343,7 @@ public class DataManager {
             ArrayList<StudyCourse> tmpCourses = (ArrayList<StudyCourse>) parser.parse(params);
 
             if (tmpCourses.isEmpty()) {
-                if (!forceRefresh && tmpCourses.size() > 0) {
+                if (!forceRefresh && courses.getCourses().size() > 0) {
                     return courses.getCourses();
                 } else {
                     return null;
