@@ -166,12 +166,14 @@ public class DataManager {
         }
 
         if (forceRefresh || object == null || schedule.getLectures().size() == 0 || schedule.getLastSaved() == null || !cacheStillValid(schedule, CONNECTION.SCHEDULE.getCache()) || !schedule.getCourse().equals(course) || !schedule.getSemester().equals(semester) || !schedule.getTermtime().equals(termTime)) {
+            // Änderungen sollen neu geholt werden
             Object changesObject = this.readObject(context, changesFilename);
-
-            Changes changes = (Changes) changesObject;
-            if ( changes != null ) {
-                changes.setLastSaved(null);
-                saveObject(context, changes, changesFilename);
+            if ( changesObject instanceof Changes ) {
+                Changes changes = (Changes) changesObject;
+                if ( changes != null ) {
+                    changes.setLastSaved(null);
+                    saveObject(context, changes, changesFilename);
+                }
             }
 
             final Parser parser = ParserFactory.create(EParser.SCHEDULE);
@@ -216,12 +218,14 @@ public class DataManager {
         MySchedule mySchedule = this.getMySchedule(context);
 
         if (forceRefresh || mySchedule.getLectures().size() == 0 || mySchedule.getLastSaved() == null || !cacheStillValid(mySchedule, CONNECTION.MYSCHEDULE.getCache()) || mySchedule.getIds().size() != mySchedule.getLectures().size()) {
-            Object object = this.readObject(context, changesFilename);
-
-            Changes changes = (Changes) object;
-            if ( changes != null ) {
-                changes.setLastSaved(null);
-                saveObject(context, changes, changesFilename);
+            // Änderungen sollen neu geholt werden
+            Object changesObject = this.readObject(context, changesFilename);
+            if ( changesObject instanceof Changes ) {
+                Changes changes = (Changes) changesObject;
+                if ( changes != null ) {
+                    changes.setLastSaved(null);
+                    saveObject(context, changes, changesFilename);
+                }
             }
 
             final Iterator<String> iterator = this.getMySchedule(context).getIds().iterator();
@@ -329,6 +333,16 @@ public class DataManager {
 
         if (object != null) {
             courses = (Courses) object;
+        }
+
+        // Änderungen sollen neu geholt werden
+        Object changesObject = this.readObject(context, changesFilename);
+        if ( changesObject instanceof Changes ) {
+            Changes changes = (Changes) changesObject;
+            if ( changes != null ) {
+                changes.setLastSaved(null);
+                saveObject(context, changes, changesFilename);
+            }
         }
 
         if (forceRefresh || object == null || courses.getCourses().size() == 0 || courses.getLastSaved() == null || !cacheStillValid(courses, CONNECTION.COURSE.getCache())) {
