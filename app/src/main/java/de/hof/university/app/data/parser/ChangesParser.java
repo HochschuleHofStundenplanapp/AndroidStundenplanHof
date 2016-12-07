@@ -28,7 +28,7 @@ import de.hof.university.app.model.schedule.LectureChange;
 /**
  * Created by larsg on 17.06.2016.
  */
-public class ChangesParser implements Parser<LectureChange> {
+public final class ChangesParser implements Parser<LectureChange> {
 
     public final String TAG = "ChangesParser";
 

@@ -32,7 +32,7 @@ import de.hof.university.app.model.schedule.LectureItem;
 /**
  * Created by Lars on 29.11.2015.
  */
-public class ScheduleAdapter extends ArrayAdapter<Object> {
+public final class ScheduleAdapter extends ArrayAdapter<Object> {
 
     public final String TAG = "ScheduleAdapter";
 

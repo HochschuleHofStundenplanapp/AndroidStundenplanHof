@@ -43,9 +43,9 @@ public class MyScheduleParser extends ScheduleParser {
         }
         language = params[1];
         try {
-            JSONArray jsonArray = new JSONObject(params[0]).getJSONArray("myschedule");
+            final JSONArray jsonArray = new JSONObject(params[0]).getJSONArray("myschedule");
             for (int i = 0; i < jsonArray.length(); ++i) {
-                LectureItem lectureItem = convertJsonObject(jsonArray.getJSONObject(i));
+                final LectureItem lectureItem = convertJsonObject(jsonArray.getJSONObject(i));
                 if ( lectureItem != null) {
                     // schauen ob diese Vorlesung bereits enthalten ist
                     boolean contains = false;

@@ -32,7 +32,7 @@ import de.hof.university.app.model.schedule.LectureChange;
 /**
  *
  */
-public class ChangesAdapter extends ArrayAdapter<Object> {
+public final class ChangesAdapter extends ArrayAdapter<Object> {
 
     public final String TAG = "ChangesAdapter";
 

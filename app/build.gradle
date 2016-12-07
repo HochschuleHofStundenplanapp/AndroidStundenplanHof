@@ -71,14 +71,14 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
     // jsoup HTML parser library @ http://jsoup.org/
     compile 'com.android.support:appcompat-v7:25.0.1'
     compile 'com.android.support:design:25.0.1'
-    compile 'com.android.support:support-v4:25.0.0'
+    compile 'com.android.support:support-v4:25.0.1'
     compile 'org.jsoup:jsoup:1.9.2'
     compile 'com.android.support:recyclerview-v7:25.0.1'
+    compile 'com.google.android.gms:play-services-gcm:10.0.1'
+    testCompile 'junit:junit:4.12'
 }
-
 
 // apply plugin: 'com.google.gms.google-services'

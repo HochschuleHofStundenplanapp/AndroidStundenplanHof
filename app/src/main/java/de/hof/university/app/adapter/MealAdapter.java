@@ -33,7 +33,7 @@ import de.hof.university.app.model.meal.Meal;
 /**
  * Created by Lukas on 25.11.2015.
  */
-public class MealAdapter extends ArrayAdapter<Object> {
+public final class MealAdapter extends ArrayAdapter<Object> {
 
     public final String TAG = "MealAdapter";
 
