@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import de.hof.university.app.BuildConfig;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.model.schedule.LectureChange;
 
@@ -43,27 +44,30 @@ public final class ChangesParser implements Parser<LectureChange> {
                 return result;
             }
 
+            JSONArray jsonArray = null;
             try {
-                final JSONArray jsonArray = new JSONObject(jsonString).getJSONArray(Define.PARSER_CHANGES);
-                for (int i = 0; i < jsonArray.length(); ++i) {
+                JSONObject jsonObject = new JSONObject(jsonString);
+                jsonArray = jsonObject.optJSONArray(Define.PARSER_CHANGES);
+            } catch (final JSONException e) {
+                if ( BuildConfig.DEBUG) e.printStackTrace();
+                return result;
+            }
 
-                    // Gibt es Änderungen überhaupt
-                    final LectureChange change = convertJsonObject(jsonArray.getJSONObject(i));
-                    if (null != change) {
-                        // schauen ob diese Änderung bereits enthalten ist.
-                        boolean contains = false;
-                        for (LectureChange c : result) {
-                            if (c.toString().equals(change.toString())) {
-                                contains = true;
-                            }
-                        }
-                        if (contains == false) {
-                            result.add(change);
+            for (int i = 0; i < jsonArray.length(); ++i) {
+                // Gibt es Änderungen überhaupt
+                final LectureChange change = convertJsonObject(jsonArray.optJSONObject(i));
+                if (null != change) {
+                    // schauen ob diese Änderung bereits enthalten ist.
+                    boolean contains = false;
+                    for (LectureChange c : result) {
+                        if (c.toString().equals(change.toString())) {
+                            contains = true;
                         }
                     }
+                    if (contains == false) {
+                        result.add(change);
+                    }
                 }
-            } catch (final JSONException ignored) {
-
             }
         }
         return result;

@@ -28,6 +28,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import de.hof.university.app.BuildConfig;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.model.schedule.LectureItem;
 
@@ -44,22 +45,30 @@ public class ScheduleParser implements Parser<LectureItem> {
         }
         ArrayList<LectureItem> result = new ArrayList<>();
 
+        // Zerlegen des JSON Strings in die Kurse
+        final String jsonString = params[0];
         //Escape, if String is empty
-        if (params[0].isEmpty()) {
+        if (jsonString.isEmpty()) {
             return result;
         }
         language = params[1];
-        try {
-            JSONArray jsonArray = new JSONObject(params[0]).getJSONArray(Define.PARSER_SCHEDULE);
-            for (int i = 0; i < jsonArray.length(); ++i) {
-                LectureItem lectureItem = convertJsonObject(jsonArray.getJSONObject(i));
-                if ( lectureItem != null) {
-                    result.add(lectureItem);
-                }
-            }
-        } catch (final JSONException ignored) {
 
+        JSONArray jsonArray = null;
+        try {
+            JSONObject jsonObject = new JSONObject(jsonString);
+            jsonArray = jsonObject.optJSONArray(Define.PARSER_SCHEDULE);
+        } catch (final JSONException e) {
+            if ( BuildConfig.DEBUG) e.printStackTrace();
+            return result;
         }
+
+        for (int i = 0; i < jsonArray.length(); ++i) {
+            LectureItem lectureItem = convertJsonObject(jsonArray.optJSONObject(i));
+            if ( lectureItem != null) {
+                result.add(lectureItem);
+            }
+        }
+
         return result;
     }
 
