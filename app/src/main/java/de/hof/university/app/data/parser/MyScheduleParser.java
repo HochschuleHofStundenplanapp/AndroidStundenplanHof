@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import de.hof.university.app.BuildConfig;
 import de.hof.university.app.model.schedule.LectureItem;
 
 /**
@@ -37,31 +38,42 @@ public class MyScheduleParser extends ScheduleParser {
         }
         ArrayList<LectureItem> result = new ArrayList<>();
 
+        // Zerlegen des JSON Strings in die Kurse
+        final String jsonString = params[0];
         //Escape, if String is empty
-        if (params[0].isEmpty()) {
+        if (jsonString.isEmpty()) {
             return result;
         }
         language = params[1];
+
+        JSONArray jsonArray = null;
         try {
-            final JSONArray jsonArray = new JSONObject(params[0]).getJSONArray("myschedule");
-            for (int i = 0; i < jsonArray.length(); ++i) {
-                final LectureItem lectureItem = convertJsonObject(jsonArray.getJSONObject(i));
-                if ( lectureItem != null) {
-                    // schauen ob diese Vorlesung bereits enthalten ist
-                    boolean contains = false;
-                    for (LectureItem s : result) {
-                        if (s.toString().equals(lectureItem.toString())) {
-                            contains = true;
-                        }
-                    }
-                    if (contains == false) {
-                        result.add(lectureItem);
+            JSONObject jsonObject = new JSONObject(jsonString);
+            jsonArray = jsonObject.optJSONArray("myschedule");
+        } catch (final JSONException e) {
+            if ( BuildConfig.DEBUG) e.printStackTrace();
+            return result;
+        }
+        if (jsonArray == null)
+        {
+            return result;
+        }
+        for (int i = 0; i < jsonArray.length(); ++i) {
+            final LectureItem lectureItem = convertJsonObject(jsonArray.optJSONObject(i));
+            if ( lectureItem != null) {
+                // schauen ob diese Vorlesung bereits enthalten ist
+                boolean contains = false;
+                for (LectureItem s : result) {
+                    if (s.toString().equals(lectureItem.toString())) {
+                        contains = true;
                     }
                 }
+                if (contains == false) {
+                    result.add(lectureItem);
+                }
             }
-        } catch (final JSONException ignored) {
-
         }
+
         return result;
     }
 

@@ -57,9 +57,10 @@ public class DataConnector {
                 //} else {
                     return "";
                 //}
-            } else if (!result.isEmpty()) {
-                //saveToSharedPreferences(context, strUrl, result);
             }
+            //else if (!result.isEmpty()) {
+                //saveToSharedPreferences(context, strUrl, result);
+            //}
             return result;
         //}
     }
