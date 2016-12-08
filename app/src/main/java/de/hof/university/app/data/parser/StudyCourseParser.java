@@ -37,6 +37,8 @@ public class StudyCourseParser implements Parser<StudyCourse> {
     private String language;
 
     @Override
+    // [0]: json Antwort
+    // [1]: language
     public final ArrayList<StudyCourse> parse(String[] params) {
 
         ArrayList<StudyCourse> result = new ArrayList<>();
@@ -54,10 +56,16 @@ public class StudyCourseParser implements Parser<StudyCourse> {
             JSONArray jsonArray = null;
             try {
                 // TODO gibt es da vielleicht eine andere Möglichkeit
-                jsonArray = new JSONObject(jsonString).optJSONArray("courses");
+	            JSONObject jsonObject = new JSONObject(jsonString);
+                jsonArray = jsonObject.optJSONArray("courses");
             } catch (final JSONException e) {
                 if (BuildConfig.DEBUG) e.printStackTrace();
+	            return result;
             }
+	        if (jsonArray == null)
+	        {
+		        return result;
+	        }
             for (int i = 0; i < jsonArray.length(); ++i) {
                 final StudyCourse studyCourse = convertJsonObject(jsonArray.optJSONObject(i));
                 if ( studyCourse != null) {
