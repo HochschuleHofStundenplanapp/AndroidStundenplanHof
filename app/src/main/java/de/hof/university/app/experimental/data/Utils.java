@@ -14,7 +14,7 @@
  * For copyright information, see NOTICE.txt file.
  ******************************************************************************/
 
-package de.tudarmstadt.ukp.shibhttpclient;
+package de.hof.university.app.experimental.data;;
 
 import java.io.IOException;
 import java.io.InputStream;

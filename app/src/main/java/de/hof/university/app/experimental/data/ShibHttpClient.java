@@ -14,10 +14,10 @@
  * For copyright information, see NOTICE.txt file.
  ******************************************************************************/
 
-package de.tudarmstadt.ukp.shibhttpclient;
+package de.hof.university.app.experimental.data;;
 
-import static de.tudarmstadt.ukp.shibhttpclient.Utils.unmarshallMessage;
-import static de.tudarmstadt.ukp.shibhttpclient.Utils.xmlToString;
+import android.util.Log;
+
 import static java.util.Arrays.asList;
 
 import java.io.IOException;
@@ -25,29 +25,9 @@ import java.net.ProxySelector;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
-import javax.security.sasl.AuthenticationException;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpException;
-import org.apache.http.HttpHeaders;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpRequestInterceptor;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpResponseInterceptor;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.NonRepeatableRequestException;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpHead;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpRequestWrapper;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
@@ -55,33 +35,13 @@ import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLContextBuilder;
 import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
-import org.apache.http.cookie.Cookie;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.client.BasicCookieStoreHC4;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.impl.conn.SystemDefaultRoutePlanner;
-import org.apache.http.protocol.HttpContext;
-import org.apache.http.util.EntityUtils;
-import org.opensaml.common.xml.SAMLConstants;
-import org.opensaml.saml2.core.StatusCode;
-import org.opensaml.saml2.ecp.RelayState;
-import org.opensaml.saml2.ecp.Response;
-import org.opensaml.ws.soap.soap11.Body;
-import org.opensaml.ws.soap.soap11.Envelope;
-import org.opensaml.ws.soap.soap11.Header;
-import org.opensaml.ws.soap.soap11.impl.EnvelopeBuilder;
-import org.opensaml.ws.soap.soap11.impl.HeaderBuilder;
-import org.opensaml.xml.XMLObject;
-import org.opensaml.xml.parse.BasicParserPool;
-import org.opensaml.xml.util.Base64;
-
-// deprecated classes we should try to find alternatives for
-import org.apache.http.client.params.HttpClientParams;
-import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.message.BasicLineParserHC4;
 import org.apache.http.params.HttpParams;
 
 /**
@@ -97,7 +57,7 @@ import org.apache.http.params.HttpParams;
 @SuppressWarnings("deprecation")
 public class ShibHttpClient
 {
-    private final Log log = LogFactory.getLog(getClass());
+
 
     private static final String AUTH_IN_PROGRESS = ShibHttpClient.class.getName()
             + ".AUTH_IN_PROGRESS";
@@ -108,7 +68,7 @@ public class ShibHttpClient
 
     private CloseableHttpClient client;
 
-    private BasicCookieStore cookieStore;
+    private BasicCookieStoreHC4 cookieStore;
 
     private String idpUrl;
 
@@ -116,7 +76,7 @@ public class ShibHttpClient
 
     private String password;
 
-    private BasicParserPool parserPool;
+    private BasicLineParserHC4 parserPool;
 
     private static final List<String> REDIRECTABLE = asList("HEAD", "GET", "CONNECT");
 
@@ -211,7 +171,7 @@ public class ShibHttpClient
                 Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder
                         .<ConnectionSocketFactory> create()
                         .register("http", new PlainConnectionSocketFactory())
-                        .register("https", new SSLConnectionSocketFactory(builder.build(), 
+                        .register("https", new SSLConnectionSocketFactory(builder.build(),
                                 SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER))
                         .build();
                 connMgr = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
@@ -229,7 +189,7 @@ public class ShibHttpClient
         connMgr.setDefaultMaxPerRoute(5);
         
         // The client needs to remember the auth cookie
-        cookieStore = new BasicCookieStore();
+        cookieStore = new BasicCookieStoreHC4();
         RequestConfig globalRequestConfig = RequestConfig.custom()
                 .setCookieSpec(CookieSpecs.BROWSER_COMPATIBILITY)
                 .build();

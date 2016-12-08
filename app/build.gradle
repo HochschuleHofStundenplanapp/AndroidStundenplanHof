@@ -76,6 +76,9 @@ dependencies {
     compile 'com.android.support:design:25.0.1'
     compile 'com.android.support:support-v4:25.0.1'
     compile 'org.jsoup:jsoup:1.9.2'
+    compile 'org.apache.httpcomponents:httpclient-android:4.3.5.1'
+    // https://mvnrepository.com/artifact/org.opensaml/opensaml
+    compile group: 'org.opensaml', name: 'opensaml', version: '+'
     compile 'com.android.support:recyclerview-v7:25.0.1'
     compile 'com.google.android.gms:play-services-gcm:10.0.1'
     testCompile 'junit:junit:4.12'
