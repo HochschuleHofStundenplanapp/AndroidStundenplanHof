@@ -1,8 +1,6 @@
 package de.hof.university.app.model.settings;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 
 import de.hof.university.app.model.SaveObject;
 
@@ -10,10 +8,10 @@ import de.hof.university.app.model.SaveObject;
  * Created by danie on 01.12.2016.
  */
 
-public class Courses extends SaveObject {
+public class StudyCourses extends SaveObject {
 	private ArrayList<StudyCourse> courses;
 
-	public Courses() {
+	public StudyCourses() {
 		this.courses = new ArrayList<>();
 	}
 
