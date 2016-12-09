@@ -63,4 +63,7 @@ public final class Define {
 	// show Notenblatt and Notenfreigabe
 	// TODO Weil ausblenden solange die neue Authentifizierungsmethode noch nicht funktioniert
 	public static final int SHOW_NOTEN = 0 ;
+	// publish notification FMC von Google verwenden
+	public static final int SHOW_PUSHNOTIFICATION = 0 ;
+
 }
