@@ -29,6 +29,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -259,6 +260,13 @@ public class DataManager {
 
 			getMySchedule(context).setLectures(tmpMySchedule);
 
+			Set<String> ids = new HashSet<>();
+			for (LectureItem li : tmpMySchedule) {
+				ids.add(String.valueOf(li.getId()));
+			}
+
+			getMySchedule(context).setIds(ids);
+
 			getMySchedule(context).setLastSaved(new Date());
 			this.saveObject(context, getMySchedule(context), myScheduleFilename);
 		}
@@ -410,8 +418,15 @@ public class DataManager {
 
 	public final void deleteFromMySchedule(final Context context, final LectureItem s) {
 		this.getMySchedule(context).getIds().remove(String.valueOf(s.getId()));
-		// TODO Objekt mit der ID finden und löschen
-		//this.getMySchedule(context).getLectures().remove();
+		LectureItem lectureToRemove = null;
+		for (LectureItem li: this.getMySchedule(context).getLectures()) {
+			if (li.getId() == s.getId()) {
+				lectureToRemove = li;
+			}
+		}
+		if (lectureToRemove != null) {
+			this.getMySchedule(context).getLectures().remove(lectureToRemove);
+		}
 		this.saveObject(context, this.getMySchedule(context), myScheduleFilename);
 	}
 
