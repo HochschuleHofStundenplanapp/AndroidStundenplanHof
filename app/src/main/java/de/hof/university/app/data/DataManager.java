@@ -359,7 +359,6 @@ public class DataManager {
 				if ( !forceRefresh && studyCourses != null ) {
 					return studyCourses.getCourses();
 				} else {
-					// TODO schauen ob das nicht zu einem Problem wird
 					return null;
 				}
 			}
