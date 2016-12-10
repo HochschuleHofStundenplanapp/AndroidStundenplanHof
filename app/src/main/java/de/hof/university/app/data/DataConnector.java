@@ -41,7 +41,7 @@ import de.hof.university.app.Util.Log;
  */
 public class DataConnector {
 
-    public final String TAG = "DataConnector";
+    public static final String TAG = "DataConnector";
 
     public static final String TIME_APPEND = "_url_cache_time";
 
@@ -154,9 +154,9 @@ public class DataConnector {
             return sb.toString();
 
         } catch (final MalformedURLException | UnsupportedEncodingException ignored) {
-
+            Log.d(TAG, "readStringFromUrl: MalformedURLException | UnsupportedEncodingException: " + ignored);
         } catch (final IOException ignored) {
-            //System.out.println(ignored);
+            Log.d(TAG, "readStringFromUrl: IOExcepton: " + ignored);
         }
 
         return null;
