@@ -242,7 +242,6 @@ public class SettingsFragment extends PreferenceFragment {
 	 */
 	private void updateCourseListPreference(String term, boolean forceRefresh) {
 
-
 		if ( term.isEmpty() ) {
 			ListPreference lpTermTime = (ListPreference) findPreference("term_time");
 			term = lpTermTime.getValue();
@@ -251,6 +250,11 @@ public class SettingsFragment extends PreferenceFragment {
 		//Cancel, if no termTime is set!
 		if ( term == null ) {
 			Toast.makeText(getActivity(), getString(R.string.noTermTimeSelected), Toast.LENGTH_LONG).show();
+			return;
+		}
+
+		// Beim ersten Start braucht er noch keine Abfrage zu machen weil noch keine termTime ausgewählt wurde.
+		if (term.equals("")) {
 			return;
 		}
 
@@ -350,16 +354,18 @@ public class SettingsFragment extends PreferenceFragment {
 
 			studyCourseList = DataManager.getInstance().getCourses(getActivity().getBaseContext(), getString(R.string.language), termTime, pForceRefresh);
 
-			entries = new CharSequence[ studyCourseList.size() ];
-			entryValues = new CharSequence[ studyCourseList.size() ];
+			if (studyCourseList != null) {
+				entries = new CharSequence[studyCourseList.size()];
+				entryValues = new CharSequence[studyCourseList.size()];
 
-			StudyCourse studyCourse;
-			for ( int i = 0; i < studyCourseList.size(); ++i ) {
-				if ( studyCourseList.get(i) instanceof StudyCourse ) {
-					studyCourse = studyCourseList.get(i);
-					entries[ i ] = studyCourse.getName();
-					entryValues[ i ] = studyCourse.getTag();
-					//entryValues[i]= String.valueOf(studyCourseList.get(i).getId());
+				StudyCourse studyCourse;
+				for (int i = 0; i < studyCourseList.size(); ++i) {
+					if (studyCourseList.get(i) instanceof StudyCourse) {
+						studyCourse = studyCourseList.get(i);
+						entries[i] = studyCourse.getName();
+						entryValues[i] = studyCourse.getTag();
+						//entryValues[i]= String.valueOf(studyCourseList.get(i).getId());
+					}
 				}
 			}
 			return null;
@@ -369,11 +375,13 @@ public class SettingsFragment extends PreferenceFragment {
 		protected final void onPostExecute(Void aVoid) {
 			super.onPostExecute(aVoid);
 			ListPreference lpCourse = (ListPreference) findPreference("studiengang");
-			if ( entries.length > 0 ) {
-				lpCourse.setEntries(entries);
-				lpCourse.setEntryValues(entryValues);
-				lpCourse.setEnabled(true);
-				updateSemesterData(lpCourse.getValue());
+			if (entries != null) {
+				if (entries.length > 0) {
+					lpCourse.setEntries(entries);
+					lpCourse.setEntryValues(entryValues);
+					lpCourse.setEnabled(true);
+					updateSemesterData(lpCourse.getValue());
+				}
 			}
 
 			progressDialog.dismiss();

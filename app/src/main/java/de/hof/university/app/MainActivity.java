@@ -130,17 +130,20 @@ public class MainActivity extends AppCompatActivity
 		final boolean showExperimentalFeatures = sharedPreferences.getBoolean("experimental_features", false);
 		displayExperimentalFeaturesMenuEntries(showExperimentalFeatures);
 
-		// Habe ich schon einen eigenen Stundenplan "Mein Stundeplan" erstellt, dann damit beeginnen
-		if ( DataManager.getInstance().getMyScheduleSize(getApplicationContext()) > 0 ) {
-			onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_mySchedule));
-		} else {
-			// Ich habe keinen Stundenplan erstellt,
-			// habe ich denn wenigstens schon Einstellungen vorgenommen?
-			if ( sharedPreferences.getString("term_time", "").isEmpty() ) {
-				// Noch nicht mal Einstellungen sind vorhanden, also gehen wir direkt in diesen Dialog
-				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_einstellungen));
+		// wurde die App gerade neu gestartet
+		if(savedInstanceState == null) {
+			// Habe ich schon einen eigenen Stundenplan "Mein Stundeplan" erstellt, dann damit beeginnen
+			if (DataManager.getInstance().getMyScheduleSize(getApplicationContext()) > 0) {
+				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_mySchedule));
 			} else {
-				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_stundenplan));
+				// Ich habe keinen Stundenplan erstellt,
+				// habe ich denn wenigstens schon Einstellungen vorgenommen?
+				if (sharedPreferences.getString("term_time", "").isEmpty()) {
+					// Noch nicht mal Einstellungen sind vorhanden, also gehen wir direkt in diesen Dialog
+					onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_einstellungen));
+				} else {
+					onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_stundenplan));
+				}
 			}
 		}
 	}
