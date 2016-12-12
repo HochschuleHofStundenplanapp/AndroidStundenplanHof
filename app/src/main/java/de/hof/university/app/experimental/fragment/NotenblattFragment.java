@@ -125,12 +125,12 @@ public class NotenblattFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                updateData(getView());
+                updateData();
             }
         });
 
         if (html.isEmpty()) {
-            updateData(v);
+            updateData();
         } else {
             webView.loadData(html, "text/html", null);
         }
@@ -138,7 +138,7 @@ public class NotenblattFragment extends Fragment {
     }
 
 
-    private void updateData(View v) {
+    private void updateData() {
         String[] params = new String[2];
         if (loginController.showDialog()) {
             params[0] = loginController.getUsername();

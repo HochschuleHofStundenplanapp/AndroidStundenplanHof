@@ -126,7 +126,7 @@ public class RaumlisteFragment extends Fragment {
             }
         });
 
-        raumList = new ArrayList<Level>();
+        raumList = new ArrayList<>();
 
 
         adapter = new RaumlistAdapter(getActivity(), raumList);
@@ -234,7 +234,7 @@ public class RaumlisteFragment extends Fragment {
                 String raumTyp = params[ 7 ];
                 String prettyDate = params[ 8 ];
 
-                ArrayList<Level> tmpRaumList = new ArrayList<Level>();
+                ArrayList<Level> tmpRaumList = new ArrayList<>();
 
                 tmpRaumList.add(new Suchdetails(getString(R.string.date) + ' ' + prettyDate, getString(R.string.timeFrom) + ": " + timeFrom, getString(R.string.timeTo) + ": " + timeTo));
 

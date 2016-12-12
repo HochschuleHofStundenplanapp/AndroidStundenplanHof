@@ -137,7 +137,7 @@ public class Meal implements Serializable{
             if (tmpAttributes != "") {
                 tmpAttributes += ", ";
             }
-            if (a == 1) {
+            if (a == 1) {                          // TODO Schöner machen nicht hardcoded
                 tmpAttributes += "hausgemacht";
             } else if (a == 2) {
                 tmpAttributes += "Wild";

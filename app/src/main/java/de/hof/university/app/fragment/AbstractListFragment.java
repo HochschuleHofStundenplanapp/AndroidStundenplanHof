@@ -153,11 +153,11 @@ public abstract class AbstractListFragment extends Fragment {
 					// Damit man unter Änderungen ein Feedback bekommt.
 					final ChangesFragment changesFragment = (ChangesFragment) getFragmentManager().findFragmentByTag("CHANGES_FRAGMENT");
 					if ( changesFragment != null && changesFragment.isVisible() && dataList.size() == 0 ) {
-						Toast.makeText(getView().getContext(), getString(R.string.noChanges), Toast.LENGTH_SHORT).show();
+						Toast.makeText(getActivity().getApplicationContext(), getString(R.string.noChanges), Toast.LENGTH_SHORT).show();
 					}
 				} else {
 					if ( DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) > 0 ) {
-						Toast.makeText(getView().getContext(), getString(R.string.refreshFailed), Toast.LENGTH_SHORT).show();
+						Toast.makeText(getActivity().getApplicationContext(), getString(R.string.refreshFailed), Toast.LENGTH_SHORT).show();
 					}
 				}
 			}

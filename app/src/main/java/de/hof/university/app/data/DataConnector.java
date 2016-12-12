@@ -45,7 +45,7 @@ public class DataConnector {
 
     public static final String TIME_APPEND = "_url_cache_time";
 
-    public final String getStringFromUrl(Context context, final String strUrl, final int cacheTime) {
+    public final String getStringFromUrl(final String strUrl) {
         //if (cacheStillValid(strUrl + TIME_APPEND, cacheTime)) {
         //    return loadFromSharedPreferences(strUrl);
         //} else {
@@ -65,6 +65,7 @@ public class DataConnector {
         //}
     }
 
+    /*
     private void saveToSharedPreferences(Context context, String strUrl, String result) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         sharedPreferences.edit()
@@ -75,11 +76,11 @@ public class DataConnector {
 
     private String loadFromSharedPreferences(Context context, String strUrl) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        final String result = sharedPreferences.getString(strUrl, "");
-        return result;
+        return sharedPreferences.getString(strUrl, "");
     }
+    */
 
-    //TODO Shared Preferences leeren
+    // Shared Preferences leeren weil wir sie nicht mehr für's Cachen nutzen
     public final void cleanCache(final Context context, final int maxAge) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         Map<String, ?> allEntries = sharedPreferences.getAll();

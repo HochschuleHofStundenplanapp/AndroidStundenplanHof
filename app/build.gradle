@@ -22,7 +22,7 @@ android {
     defaultConfig {
         applicationId 'de.hof.university.app'
         minSdkVersion 16
-        targetSdkVersion 24
+        targetSdkVersion 24 // TODO Können wir hier auch 25 nehmen?
         versionCode 11
         versionName '1.4'
     }
