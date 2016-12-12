@@ -94,6 +94,7 @@ public class RaumlisteFragment extends Fragment {
     private RaumlisteFragment.GetRaumTask task;
 
     private static final String raumlistFilenmae = "raumliste";
+    private int raumlisteCache = 1;
 
     public RaumlisteFragment() {
         // Required empty public constructor
@@ -216,7 +217,7 @@ public class RaumlisteFragment extends Fragment {
 
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(lastCached);
-                    cal.add(Calendar.MINUTE, 15);
+                    cal.add(Calendar.MINUTE, raumlisteCache);
                     lastCached = cal.getTime();
                 }
             }
@@ -274,7 +275,7 @@ public class RaumlisteFragment extends Fragment {
                                        .connect(
                                                "https://www.hof-university.de/studierende/info-service/it-service/raumhardsoftwaresuche.html"
                                                        + raumTyp)
-                                       .timeout(6 * 1000) //5 Sekunden würden reichen aber 1 Sekunde zur Sicherheit
+                                       .timeout(10 * 1000) //5 Sekunden würden reichen aber auf älteren Geräten braucht es mehr
                                        .data("tx_raumsuche_pi1[day]", day)
                                        .data("tx_raumsuche_pi1[month]", month)
                                        .data("tx_raumsuche_pi1[year]", year)
