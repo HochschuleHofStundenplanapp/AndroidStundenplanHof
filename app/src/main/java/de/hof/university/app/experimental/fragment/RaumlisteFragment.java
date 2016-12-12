@@ -123,7 +123,7 @@ public class RaumlisteFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                updateData();
+                updateData(true);
             }
         });
 
@@ -138,7 +138,7 @@ public class RaumlisteFragment extends Fragment {
         //Aktualisieren, wenn noch keine Daten darin stehen. 1. Element ist immer da
         //wegen Kopfzeile mit Infos zur Suchanfrage, daher >2 prüfen
         if (raumList.size() < 2) {
-            updateData();
+            updateData(false);
         }
 
         return v;
@@ -164,8 +164,8 @@ public class RaumlisteFragment extends Fragment {
         super.onPause();
     }
 
-    private void updateData() {
-        String[] params = new String[9];
+    private void updateData(boolean forceRefresh) {
+        String[] params = new String[10];
         params[0] = user;
         params[1] = password;
         params[2] = year;
@@ -175,6 +175,7 @@ public class RaumlisteFragment extends Fragment {
         params[6] = timeEnd;
         params[7] = raumTyp;
         params[8] = prettyDate;
+        params[9] = String.valueOf(forceRefresh);
 
         task = new RaumlisteFragment.GetRaumTask();
         task.execute(params);
@@ -222,7 +223,9 @@ public class RaumlisteFragment extends Fragment {
                 }
             }
 
-            if (object == null || raumliste.getLastSaved() == null || !lastCached.after(new Date()) || !raumliste.getTimeStart().equals(params[5]) || !raumliste.getTimeEnd().equals(params[6]) || !raumliste.getRaumTyp().equals(params[7]) || !raumliste.getDate().equals(params[8])) {
+            boolean forceRefresh = Boolean.valueOf(params[9]);
+
+            if (forceRefresh || object == null || raumliste.getLastSaved() == null || !lastCached.after(new Date()) || !raumliste.getTimeStart().equals(params[5]) || !raumliste.getTimeEnd().equals(params[6]) || !raumliste.getRaumTyp().equals(params[7]) || !raumliste.getDate().equals(params[8])) {
 
                 System.setProperty("jsse.enableSNIExtension", "false");
                 String user = params[ 0 ];
