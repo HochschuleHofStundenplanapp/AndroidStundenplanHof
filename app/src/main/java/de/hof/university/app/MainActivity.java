@@ -39,6 +39,7 @@ import de.hof.university.app.Util.Define;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.fragment.NotenbekanntgabeFragment;
 import de.hof.university.app.experimental.fragment.NotenblattFragment;
+import de.hof.university.app.experimental.fragment.PrimussTabFragment;
 import de.hof.university.app.experimental.fragment.RaumsucheFragment;
 import de.hof.university.app.fragment.ImpressumFragment;
 import de.hof.university.app.fragment.MealFragment;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity
 	private ImpressumFragment impressumFragment;
 
 	// Experimentelle Fragmente
+	private PrimussTabFragment primussTabFragment;
 	private NotenblattFragment notenblattFragment;
 	private NotenbekanntgabeFragment notenbekanntgabeFragment;
 	private RaumsucheFragment raumsucheFragment;
@@ -113,7 +115,7 @@ public class MainActivity extends AppCompatActivity
 			/** Called when a drawer has settled in a completely open state. */
 			public void onDrawerOpened(View drawerView) {
 				super.onDrawerOpened(drawerView);
-				//getActionBar().setTitle(mDrawerTitle);
+				//getActionBar().setTitle("mTitle");
 				invalidateOptionsMenu();
 			}
 		};
@@ -353,6 +355,11 @@ public class MainActivity extends AppCompatActivity
 		} else if ( R.id.nav_datenschutz == id ) {
 			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.datenschutzURL)));
 			startActivity(browserIntent);
+		}
+			else if (R.id.nav_primuss == id){
+			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhh"));
+			startActivity(browserIntent);
+
 		}
 
 		final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

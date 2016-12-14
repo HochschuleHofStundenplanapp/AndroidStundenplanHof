@@ -31,6 +31,7 @@
     <string name="einstellungen">Einstellungen</string>
     <string name="stundenplan">Stundenplan</string>
     <string name="speiseplan">Speiseplan</string>
+    <string name ="primuss">Primuss Portal</string>
     <string name="loginFailed">Anmelden fehlgeschlagen!</string>
     <string name="from">Von:</string>
     <string name="to">Bis:</string>

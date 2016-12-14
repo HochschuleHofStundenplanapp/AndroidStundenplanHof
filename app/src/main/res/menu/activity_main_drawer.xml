@@ -15,24 +15,26 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group
         android:id="@+id/menu_top"
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_stundenplan"
-            android:icon="@android:drawable/ic_menu_sort_by_size"
-            android:title="@string/stundenplan" />
+            android:icon="@drawable/ic_view_list_black_24dp"
+            android:title="@string/stundenplan"
+            />
 
         <item
             android:id="@+id/nav_mySchedule"
-            android:icon="@android:drawable/ic_menu_sort_by_size"
+            android:icon="@drawable/ic_view_list_black_24dp"
             android:title="@string/myschedule" />
 
         <item
             android:id="@+id/nav_aenderung"
-            android:icon="@android:drawable/ic_menu_sort_by_size"
+            android:icon="@drawable/ic_view_list_black_24dp"
             android:title="@string/aenderung" />
 
     </group>
@@ -45,7 +47,7 @@
 
         <item
             android:id="@+id/nav_speiseplan"
-            android:icon="@android:drawable/ic_dialog_dialer"
+            android:icon="@drawable/ic_apps_black_24dp"
             android:title="@string/speiseplan" />
     </group>
 
@@ -59,18 +61,18 @@
             <menu >
                 <item
                     android:id="@+id/nav_notenbekanntgabe"
-                    android:icon="@android:drawable/ic_lock_idle_low_battery"
+                    android:icon="@drawable/ic_poll_black_24dp"
                     android:checkable="true"
                     android:title="@string/notenbekanntgabe" />
 
                 <item
                     android:id="@+id/nav_notenblatt"
-                    android:icon="@android:drawable/ic_lock_idle_low_battery"
+                    android:icon="@drawable/ic_poll_black_24dp"
                     android:checkable="true"
                     android:title="@string/notenblatt" />
                 <item
                     android:id="@+id/nav_raumsuche"
-                    android:icon="@android:drawable/ic_lock_idle_low_battery"
+                    android:icon="@drawable/ic_poll_black_24dp"
                     android:checkable="true"
                     android:title="@string/raumsuche" />
             </menu>
@@ -81,9 +83,13 @@
     <group
     android:id="@+id/menu_bottom"
     android:checkableBehavior="single">
-    <item
+        <item
+            android:id="@+id/nav_primuss"
+            android:icon="@drawable/ic_build_black_24dp"
+            android:title="@string/primuss" />
+        <item
         android:id="@+id/nav_einstellungen"
-        android:icon="@android:drawable/ic_menu_preferences"
+        android:icon="@drawable/ic_build_black_24dp"
         android:title="@string/einstellungen" />
     </group>
     <group
@@ -91,15 +97,15 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/nav_aboutus"
-            android:icon="@android:drawable/ic_dialog_info"
+            android:icon="@drawable/ic_info_outline_black_24dp"
             android:title="@string/aboutus" />
         <item
             android:id="@+id/nav_impressum"
-            android:icon="@android:drawable/ic_dialog_info"
+            android:icon="@drawable/ic_info_outline_black_24dp"
             android:title="@string/impressum" />
         <item
             android:id="@+id/nav_datenschutz"
-            android:icon="@android:drawable/ic_dialog_info"
+            android:icon="@drawable/ic_info_outline_black_24dp"
             android:title="@string/datenschutz" />
     </group>
 </menu>
