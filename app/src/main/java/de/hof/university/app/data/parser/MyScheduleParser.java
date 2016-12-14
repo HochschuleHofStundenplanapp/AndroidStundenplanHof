@@ -68,7 +68,7 @@ public class MyScheduleParser extends ScheduleParser {
                         contains = true;
                     }
                 }
-                if (contains == false) {
+                if ( !contains ) {
                     result.add(lectureItem);
                 }
             }

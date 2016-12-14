@@ -29,7 +29,6 @@ import de.hof.university.app.R;
 import de.hof.university.app.adapter.ChangesAdapter;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.fragment.AbstractListFragment;
-import de.hof.university.app.model.schedule.LectureChange;
 
 
 /**
