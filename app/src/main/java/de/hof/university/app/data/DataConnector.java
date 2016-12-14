@@ -125,6 +125,15 @@ public class DataConnector {
 
             //Für die Schnittstelle der Hochschule wird Authentifizerung benötigt
             if (strUrl.contains("www.hof-university.de/soap/client.php")) {
+
+                // Beispielaufruf
+                // https://soapuser:F%98z&12@www.hof-university.de/soap/client.php?
+	            //
+	            // https://www.hof-university.de/soap/client.php?f=Courses&tt=WS
+	            //
+	            // https://soapuser:F%98z&12@www.hof-university.de/soap/client.php?f=Schedule&stg=MC&tt=WS&sem=1
+	            // https://soapuser:F%98z&12@www.hof-university.de/soap/client.php?f=Changes&stg=MC&tt=WS&sem=1
+
                 // user
                 //password                  F%98z&12
 	            final String username = "soapuser";
