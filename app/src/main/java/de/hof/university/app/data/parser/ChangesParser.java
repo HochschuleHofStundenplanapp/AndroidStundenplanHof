@@ -64,7 +64,7 @@ public final class ChangesParser implements Parser<LectureChange> {
                             contains = true;
                         }
                     }
-                    if (contains == false) {
+                    if ( !contains ) {
                         result.add(change);
                     }
                 }

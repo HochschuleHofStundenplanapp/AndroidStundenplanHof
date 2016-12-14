@@ -69,7 +69,7 @@ public class NotenbekanntgabeFragment extends Fragment {
         super.onCreate(savedInstanceState);
         loginController = LoginController.getInstance(getActivity());
 
-        items = new ArrayList<Noten>();
+        items = new ArrayList<>();
     }
 
 
@@ -102,7 +102,7 @@ public class NotenbekanntgabeFragment extends Fragment {
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                updateData(getView());
+                updateData();
             }
         });
         adapter = new NotenAdapter(getActivity(), items);
@@ -111,7 +111,7 @@ public class NotenbekanntgabeFragment extends Fragment {
 
         //Wenn noch keine Daten gelesen wurden
         if (items.isEmpty()) {
-            updateData(v);
+            updateData();
         }
 
         return v;
@@ -126,7 +126,7 @@ public class NotenbekanntgabeFragment extends Fragment {
         super.onDestroyView();
     }
 
-    private void updateData(View v) {
+    private void updateData() {
         String[] params = new String[2];
         if (loginController.showDialog()) {
             params[0] = loginController.getUsername();

@@ -26,9 +26,7 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import de.hof.university.app.BuildConfig;
 import de.hof.university.app.MainActivity;
@@ -126,10 +124,12 @@ public class MyScheduleFragment extends ScheduleFragment {
     @Override
     protected final ArrayList<Object> background(String[] params) {
         if (DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) > 0) {
+            /*
             final String course = params[0];
             final String semester = params[1];
             final String termTime = params[2];
-            List<LectureItem> scheduleList = DataManager.getInstance().getMySchedule(getActivity().getApplicationContext(), getString(R.string.language), course, semester, termTime, Boolean.valueOf(params[3]));
+            */
+            List<LectureItem> scheduleList = DataManager.getInstance().getMySchedule(getActivity().getApplicationContext(), getString(R.string.language), Boolean.valueOf(params[3]));
 
             if (BuildConfig.DEBUG) assert (scheduleList != null); // ob etwas zurück kommt
 

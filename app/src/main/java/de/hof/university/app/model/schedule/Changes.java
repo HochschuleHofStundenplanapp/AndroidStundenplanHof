@@ -1,8 +1,6 @@
 package de.hof.university.app.model.schedule;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 
 import de.hof.university.app.model.SaveObject;
 

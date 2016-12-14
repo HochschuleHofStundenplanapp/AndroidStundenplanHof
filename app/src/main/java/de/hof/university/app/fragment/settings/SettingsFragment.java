@@ -242,7 +242,6 @@ public class SettingsFragment extends PreferenceFragment {
 	 */
 	private void updateCourseListPreference(String term, boolean forceRefresh) {
 
-
 		if ( term.isEmpty() ) {
 			ListPreference lpTermTime = (ListPreference) findPreference("term_time");
 			term = lpTermTime.getValue();
@@ -254,7 +253,7 @@ public class SettingsFragment extends PreferenceFragment {
 			return;
 		}
 
-		// Beim ersten Start braucht er noch keine Abfrage zu machen weil noch keine termtime ausgewählt wurde.
+		// Beim ersten Start braucht er noch keine Abfrage zu machen weil noch keine termTime ausgewählt wurde.
 		if (term.equals("")) {
 			return;
 		}

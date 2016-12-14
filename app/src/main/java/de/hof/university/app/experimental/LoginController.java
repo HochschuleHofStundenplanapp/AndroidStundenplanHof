@@ -52,7 +52,7 @@ public class LoginController {
 
 	private String password;
 
-	public static final LoginController getInstance(Context context) {
+	public static LoginController getInstance(Context context) {
 		if ( null == controller ) {
 			controller = new LoginController(context);
 		}

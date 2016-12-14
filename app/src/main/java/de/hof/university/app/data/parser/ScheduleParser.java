@@ -78,8 +78,7 @@ public class ScheduleParser implements Parser<LectureItem> {
         final Date date = dayFormat.parse(day);
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        final int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-        return dayOfWeek;
+        return calendar.get(Calendar.DAY_OF_WEEK);
     }
 
     protected final LectureItem convertJsonObject(JSONObject jsonObject) {
