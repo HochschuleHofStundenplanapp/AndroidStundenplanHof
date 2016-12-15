@@ -37,8 +37,7 @@ public class PrimussTabFragment extends Fragment {
 		// Inflate the layout for this fragment
 		View v = inflater.inflate(R.layout.fragment_webview, container, false);
 
-		MainActivity mainActivity = (MainActivity) getActivity();
-		WebView myWebView = (WebView) mainActivity.findViewById(R.id.webview);
+		WebView myWebView = (WebView) v.findViewById(R.id.webview);
 		WebSettings webSettings = myWebView.getSettings();
 		webSettings.setJavaScriptEnabled(true);
 

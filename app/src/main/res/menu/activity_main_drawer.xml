@@ -66,6 +66,10 @@
                     android:title="@string/notenbekanntgabe" />
 
                 <item
+                    android:id="@+id/nav_primuss"
+                    android:icon="@drawable/ic_poll_black_24dp"
+                    android:title="@string/primuss" />
+                <item
                     android:id="@+id/nav_notenblatt"
                     android:icon="@drawable/ic_poll_black_24dp"
                     android:checkable="true"
@@ -83,10 +87,6 @@
     <group
     android:id="@+id/menu_bottom"
     android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_primuss"
-            android:icon="@drawable/ic_build_black_24dp"
-            android:title="@string/primuss" />
         <item
         android:id="@+id/nav_einstellungen"
         android:icon="@drawable/ic_build_black_24dp"
