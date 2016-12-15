@@ -163,10 +163,10 @@ public class DataConnector {
             }
             return sb.toString();
 
-        } catch (final MalformedURLException | UnsupportedEncodingException ignored) {
-            Log.d(TAG, "readStringFromUrl: MalformedURLException | UnsupportedEncodingException: " + ignored);
-        } catch (final IOException ignored) {
-            Log.d(TAG, "readStringFromUrl: IOExcepton: " + ignored);
+        } catch (final MalformedURLException | UnsupportedEncodingException exception) {
+            Log.e(TAG, "readStringFromUrl: MalformedURLException | UnsupportedEncodingException: ", exception);
+        } catch (final IOException exception) {
+            Log.e(TAG, "readStringFromUrl: IOExcepton: ", exception);
         }
 
         return null;

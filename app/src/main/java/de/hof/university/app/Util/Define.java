@@ -47,11 +47,12 @@ public final class Define {
 	public static final String PARSER_ORIGNAL = "original"; //NON-NLS
 	public static final String PARSER_ALTERNATIVE = "alternative"; //NON-NLS
 
+
 	// Semester term: Winterterm, summerterm (Wintersemester, Sommersemester)
 
 
-/*	public static final String PARSER_ = "" ; //NON-NLS
 	public static final String PARSER_ = "" ; //NON-NLS
+/*	public static final String PARSER_ = "" ; //NON-NLS
 	public static final String PARSER_ = "" ; //NON-NLS
 	public static final String PARSER_ = "" ; //NON-NLS
 	public static final String PARSER_ = "" ; //NON-NLS
