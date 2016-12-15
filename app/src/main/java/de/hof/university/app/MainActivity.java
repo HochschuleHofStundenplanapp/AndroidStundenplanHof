@@ -33,15 +33,17 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Toast;
 
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.fragment.NotenbekanntgabeFragment;
 import de.hof.university.app.experimental.fragment.NotenblattFragment;
-import de.hof.university.app.experimental.fragment.PrimussTabFragment;
+import de.hof.university.app.fragment.PrimussTabFragment;
 import de.hof.university.app.experimental.fragment.RaumsucheFragment;
 import de.hof.university.app.fragment.ImpressumFragment;
+import de.hof.university.app.fragment.PrimussTabFragment;
 import de.hof.university.app.fragment.MealFragment;
 import de.hof.university.app.fragment.schedule.ChangesFragment;
 import de.hof.university.app.fragment.schedule.MyScheduleFragment;
@@ -358,10 +360,18 @@ public class MainActivity extends AppCompatActivity
 		} else if ( R.id.nav_datenschutz == id ) {
 			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.datenschutzURL)));
 			startActivity(browserIntent);
-		}
-			else if (R.id.nav_primuss == id){
-			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhh"));
-			startActivity(browserIntent);
+		} else if (R.id.nav_primuss == id){
+			FragmentManager manager = getFragmentManager();
+			if ( !manager.popBackStackImmediate(PrimussTabFragment.class.getName(), 0) ) {
+
+				FragmentTransaction trans = manager.beginTransaction();
+				trans.addToBackStack(PrimussTabFragment.class.getName());
+				if ( primussTabFragment == null ) {
+					primussTabFragment = new PrimussTabFragment();
+				}
+				trans.replace(R.id.content_main, primussTabFragment);
+				trans.commit();
+			}
 
 		}
 
