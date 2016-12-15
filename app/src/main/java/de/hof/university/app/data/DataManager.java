@@ -123,7 +123,7 @@ public class DataManager {
 			final Parser parser = ParserFactory.create(EParser.MENU);
 			final Calendar calendar = Calendar.getInstance();
 			final String url = DataManager.CONNECTION.MEAL.getUrl() + calendar.get(Calendar.YEAR) + '-' + (calendar.get(Calendar.MONTH) + 1) + '-' + calendar.get(Calendar.DAY_OF_MONTH);
-			final String xmlString = this.getData(forceRefresh, url);
+			final String xmlString = this.getData(url);
 
 			if ( xmlString.equals("") ) {
 				if ( !forceRefresh && object != null ) {
@@ -170,7 +170,7 @@ public class DataManager {
 			resetChangesLastSave(context);
 
 			final Parser parser = ParserFactory.create(EParser.SCHEDULE);
-			final String jsonString = this.getData(forceRefresh, String.format(DataManager.CONNECTION.SCHEDULE.getUrl(), DataManager.replaceWhitespace(course), DataManager.replaceWhitespace(semester), DataManager.replaceWhitespace(termTime)));
+			final String jsonString = this.getData(String.format(DataManager.CONNECTION.SCHEDULE.getUrl(), DataManager.replaceWhitespace(course), DataManager.replaceWhitespace(semester), DataManager.replaceWhitespace(termTime)));
 
 			if ( jsonString.equals("") ) {
 				if ( !forceRefresh && object != null ) {
@@ -222,7 +222,7 @@ public class DataManager {
 
 			final Parser parser = ParserFactory.create(EParser.MYSCHEDULE);
 
-			final String jsonString = this.getData(forceRefresh, url);
+			final String jsonString = this.getData(url);
 
 			if ( jsonString.equals("") ) {
 				if ( !forceRefresh && mySchedule.getLectures().size() > 0 ) {
@@ -287,7 +287,7 @@ public class DataManager {
 			}
 
 			Parser parser = ParserFactory.create(EParser.CHANGES);
-			String jsonString = this.getData(forceRefresh, url);
+			String jsonString = this.getData(url);
 
 			if ( jsonString.equals("") ) {
 				if ( !forceRefresh && object != null ) {
@@ -338,7 +338,7 @@ public class DataManager {
 				     || !cacheStillValid(studyCourses, CONNECTION.COURSE.getCache()) ) {
 			final Parser parser = ParserFactory.create(EParser.COURSES);
 
-			final String jsonString = this.getData(forceRefresh, String.format(DataManager.CONNECTION.COURSE.getUrl(), DataManager.replaceWhitespace(termTime)));
+			final String jsonString = this.getData(String.format(DataManager.CONNECTION.COURSE.getUrl(), DataManager.replaceWhitespace(termTime)));
 
 			if ( jsonString.equals("") ) {
 				if ( !forceRefresh ) {
@@ -377,7 +377,7 @@ public class DataManager {
 	}
 
 
-	private String getData(boolean forceRefresh, String url) {
+	private String getData(String url) {
 		return dataConnector.getStringFromUrl(url);
 	}
 
