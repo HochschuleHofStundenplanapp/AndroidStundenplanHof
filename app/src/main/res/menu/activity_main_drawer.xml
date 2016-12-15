@@ -68,6 +68,7 @@
                 <item
                     android:id="@+id/nav_primuss"
                     android:icon="@drawable/ic_poll_black_24dp"
+                    android:checkable="true"
                     android:title="@string/primuss" />
                 <item
                     android:id="@+id/nav_notenblatt"

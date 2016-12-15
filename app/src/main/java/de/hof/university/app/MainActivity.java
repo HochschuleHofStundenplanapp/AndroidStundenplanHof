@@ -176,6 +176,7 @@ public class MainActivity extends AppCompatActivity
 		if ( enabled ) {
 			navigationView.getMenu().findItem(R.id.nav_experimental).setVisible(true);
 			navigationView.getMenu().findItem(R.id.nav_raumsuche).setVisible(true); //Raumsuche anzeigen
+			navigationView.getMenu().findItem(R.id.nav_primuss).setVisible(true); //Primuss anzeigen
 
 			// TODO Weil ausblenden solange die neue Authentifizierungsmethode noch nicht funktioniert
 			if ( Define.SHOW_NOTEN == 0 ) {
