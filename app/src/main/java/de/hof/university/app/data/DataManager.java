@@ -366,8 +366,14 @@ public class DataManager {
 		return studyCourses.getCourses();
 	}
 
+	// Änderungen sollen neu geholt werden
 	private void resetChangesLastSave(Context context) {
 		Changes changes = (Changes) readObject(context, Define.changesFilename);
+		// Überprüfen ob Datei leer ist dann neu anlegen
+		if (changes == null) {
+			changes = new Changes();
+		}
+		// LastSaved zurücksetzten damit Änderungen neu geholt werden
 		changes.setLastSaved(null);
 		saveObject(context, changes, Define.changesFilename);
 	}
