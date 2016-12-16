@@ -50,15 +50,6 @@ public final class Define {
 
 	// Semester term: Winterterm, summerterm (Wintersemester, Sommersemester)
 
-
-	public static final String PARSER_ = "" ; //NON-NLS
-/*	public static final String PARSER_ = "" ; //NON-NLS
-	public static final String PARSER_ = "" ; //NON-NLS
-	public static final String PARSER_ = "" ; //NON-NLS
-	public static final String PARSER_ = "" ; //NON-NLS
-	public static final String PARSER_ = "" ; //NON-NLS
-*/
-
 	// show the fragments dealing with the location of the user
 	public static final int SHOW_LOCATION_FRAGMENT = 0 ;
 	// show Notenblatt and Notenfreigabe
@@ -67,4 +58,5 @@ public final class Define {
 	// publish notification FMC von Google verwenden
 	public static final int SHOW_PUSHNOTIFICATION = 0 ;
 
+	public static final long serialVersionUID = 1L;
 }
