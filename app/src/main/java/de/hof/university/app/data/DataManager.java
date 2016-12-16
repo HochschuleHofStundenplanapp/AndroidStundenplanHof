@@ -38,7 +38,7 @@ import de.hof.university.app.Util.Log;
 import de.hof.university.app.data.parser.Parser;
 import de.hof.university.app.data.parser.ParserFactory;
 import de.hof.university.app.data.parser.ParserFactory.EParser;
-import de.hof.university.app.model.SaveObject;
+import de.hof.university.app.model.HofObject;
 import de.hof.university.app.model.meal.Meal;
 import de.hof.university.app.model.meal.Meals;
 import de.hof.university.app.model.schedule.Changes;
@@ -322,6 +322,7 @@ public class DataManager {
 	public final ArrayList<StudyCourse> getCourses(final Context context, final String language,
 	                                               final String termTime, boolean forceRefresh) {
 		StudyCourses studyCourses = (StudyCourses) readObject(context, Define.coursesFilename);
+		// wenn noch keine StudyCourses cohanden sind neu anlegen
 		if ( studyCourses == null ) {
 			studyCourses = new StudyCourses();
 		}
@@ -475,26 +476,20 @@ public class DataManager {
 		return result;
 	}
 
-	private boolean cacheStillValid(Object object, final int cacheTime) {
+	private boolean cacheStillValid(HofObject hofObject, final int cacheTime) {
 		final Date today = new Date();
 		Date lastCached = new Date();
 
-		if ( object instanceof SaveObject ) {
-			SaveObject saveObject = (SaveObject) object;
+		if ( hofObject.getLastSaved() != null ) {
+			lastCached = hofObject.getLastSaved();
 
-			if ( saveObject.getLastSaved() != null ) {
-				lastCached = saveObject.getLastSaved();
-
-				Calendar cal = Calendar.getInstance();
-				cal.setTime(lastCached);
-				cal.add(Calendar.MINUTE, cacheTime);
-				lastCached = cal.getTime();
-			}
-
-			return lastCached.after(today);
-		} else {
-			return false;
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(lastCached);
+			cal.add(Calendar.MINUTE, cacheTime);
+			lastCached = cal.getTime();
 		}
+
+		return lastCached.after(today);
 	}
 
 	public final void cleanCache(final Context context) {

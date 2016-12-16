@@ -2,13 +2,13 @@ package de.hof.university.app.model.schedule;
 
 import java.util.ArrayList;
 
-import de.hof.university.app.model.SaveObject;
+import de.hof.university.app.model.HofObject;
 
 /**
  * Created by danie on 30.11.2016.
  */
 
-public class Schedule extends SaveObject {
+public class Schedule extends HofObject {
 	ArrayList<LectureItem> lectures;
 	String course;
 	String semester;

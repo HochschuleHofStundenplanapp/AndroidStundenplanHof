@@ -2,13 +2,13 @@ package de.hof.university.app.model.settings;
 
 import java.util.ArrayList;
 
-import de.hof.university.app.model.SaveObject;
+import de.hof.university.app.model.HofObject;
 
 /**
  * Created by danie on 01.12.2016.
  */
 
-public class StudyCourses extends SaveObject {
+public class StudyCourses extends HofObject {
 	private ArrayList<StudyCourse> courses;
 
 	public StudyCourses() {
