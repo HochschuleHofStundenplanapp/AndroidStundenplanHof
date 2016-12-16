@@ -33,6 +33,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import de.hof.university.app.Util.Define;
+import de.hof.university.app.Util.Log;
 import de.hof.university.app.data.parser.Parser;
 import de.hof.university.app.data.parser.ParserFactory;
 import de.hof.university.app.data.parser.ParserFactory.EParser;
@@ -43,8 +45,8 @@ import de.hof.university.app.model.schedule.Changes;
 import de.hof.university.app.model.schedule.LectureItem;
 import de.hof.university.app.model.schedule.MySchedule;
 import de.hof.university.app.model.schedule.Schedule;
-import de.hof.university.app.model.settings.StudyCourses;
 import de.hof.university.app.model.settings.StudyCourse;
+import de.hof.university.app.model.settings.StudyCourses;
 
 /**
  * Created by Lukas on 14.06.2016.
@@ -96,11 +98,6 @@ public class DataManager {
 
 	private MySchedule mySchedule;
 
-	private static final String myScheduleFilename = "mySchedule";
-	private static final String scheduleFilename = "schedule";
-	private static final String changesFilename = "changes";
-	private static final String coursesFilename = "courses";
-	private static final String mealsFilename = "meals";
 
 	private static final DataManager dataManager = new DataManager();
 
@@ -112,7 +109,7 @@ public class DataManager {
 	}
 
 	public final ArrayList<Meal> getMeals(Context context, boolean forceRefresh) {
-		Object object = readObject(context, mealsFilename);
+		Object object = readObject(context, Define.mealsFilename);
 		Meals meals = new Meals();
 
 		if ( object != null ) {
@@ -150,7 +147,7 @@ public class DataManager {
 			meals.setMeals(tmpMeals);
 
 			meals.setLastSaved(new Date());
-			saveObject(context, meals, mealsFilename);
+			saveObject(context, meals, Define.mealsFilename);
 		}
 
 		return meals.getMeals();
@@ -158,7 +155,7 @@ public class DataManager {
 
 	public final ArrayList<LectureItem> getSchedule(Context context, String language, String course, String semester,
 	                                                String termTime, boolean forceRefresh) {
-		Object object = readObject(context, scheduleFilename);
+		Object object = readObject(context, Define.scheduleFilename);
 		Schedule schedule = new Schedule();
 
 		if ( object != null ) {
@@ -200,7 +197,7 @@ public class DataManager {
 			schedule.setTermtime(termTime);
 
 			schedule.setLastSaved(new Date());
-			saveObject(context, schedule, scheduleFilename);
+			saveObject(context, schedule, Define.scheduleFilename);
 		}
 
 		return schedule.getLectures();
@@ -247,14 +244,14 @@ public class DataManager {
 			getMySchedule(context).setLectures(tmpMySchedule);
 
 			Set<String> ids = new HashSet<>();
-			for (LectureItem li : tmpMySchedule) {
+			for ( LectureItem li : tmpMySchedule ) {
 				ids.add(String.valueOf(li.getId()));
 			}
 
 			getMySchedule(context).setIds(ids);
 
 			getMySchedule(context).setLastSaved(new Date());
-			this.saveObject(context, getMySchedule(context), myScheduleFilename);
+			this.saveObject(context, getMySchedule(context), Define.myScheduleFilename);
 		}
 
 		return this.getMySchedule(context).getLectures();
@@ -262,7 +259,7 @@ public class DataManager {
 
 	public final ArrayList<Object> getChanges(Context context, String course, String semester,
 	                                          String termTime, boolean forceRefresh) {
-		Object object = readObject(context, changesFilename);
+		Object object = readObject(context, Define.changesFilename);
 		Changes changes = new Changes();
 
 		if ( object != null ) {
@@ -314,7 +311,7 @@ public class DataManager {
 			changes.setChanges(tmpChanges);
 
 			changes.setLastSaved(new Date());
-			saveObject(context, changes, changesFilename);
+			saveObject(context, changes, Define.changesFilename);
 		}
 
 		return changes.getChanges();
@@ -324,9 +321,8 @@ public class DataManager {
 	// wenn es aber
 	public final ArrayList<StudyCourse> getCourses(final Context context, final String language,
 	                                               final String termTime, boolean forceRefresh) {
-		StudyCourses studyCourses = (StudyCourses) readObject(context, coursesFilename);
-		if ( studyCourses == null )
-		{
+		StudyCourses studyCourses = (StudyCourses) readObject(context, Define.coursesFilename);
+		if ( studyCourses == null ) {
 			studyCourses = new StudyCourses();
 		}
 
@@ -364,16 +360,16 @@ public class DataManager {
 			studyCourses.setCourses(tmpCourses);
 
 			studyCourses.setLastSaved(new Date());
-			saveObject(context, studyCourses, coursesFilename);
+			saveObject(context, studyCourses, Define.coursesFilename);
 		}
 
 		return studyCourses.getCourses();
 	}
 
 	private void resetChangesLastSave(Context context) {
-		Changes changes = (Changes) readObject(context, changesFilename);
+		Changes changes = (Changes) readObject(context, Define.changesFilename);
 		changes.setLastSaved(null);
-		saveObject(context, changes, changesFilename);
+		saveObject(context, changes, Define.changesFilename);
 	}
 
 
@@ -387,7 +383,7 @@ public class DataManager {
 
 	public final void addToMySchedule(final Context context, final LectureItem s) {
 		this.getMySchedule(context).getIds().add(String.valueOf(s.getId()));
-		this.saveObject(context, this.getMySchedule(context), myScheduleFilename);
+		this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
 	}
 
 	public final boolean myScheduleContains(final Context context, final LectureItem s) {
@@ -397,31 +393,31 @@ public class DataManager {
 	public final void deleteFromMySchedule(final Context context, final LectureItem s) {
 		this.getMySchedule(context).getIds().remove(String.valueOf(s.getId()));
 		LectureItem lectureToRemove = null;
-		for (LectureItem li: this.getMySchedule(context).getLectures()) {
-			if (li.getId() == s.getId()) {
+		for ( LectureItem li : this.getMySchedule(context).getLectures() ) {
+			if ( li.getId() == s.getId() ) {
 				lectureToRemove = li;
 			}
 		}
-		if (lectureToRemove != null) {
+		if ( lectureToRemove != null ) {
 			this.getMySchedule(context).getLectures().remove(lectureToRemove);
 		}
-		this.saveObject(context, this.getMySchedule(context), myScheduleFilename);
+		this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
 	}
 
 	public final void addAllToMySchedule(final Context context, final Set<String> schedulesIds) {
 		this.getMySchedule(context).getIds().addAll(schedulesIds);
-		this.saveObject(context, this.getMySchedule(context), myScheduleFilename);
+		this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
 	}
 
 	public final void deleteAllFromMySchedule(final Context context) {
 		this.getMySchedule(context).getIds().clear();
 		this.getMySchedule(context).getLectures().clear();
-		this.saveObject(context, this.getMySchedule(context), myScheduleFilename);
+		this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
 	}
 
 	private MySchedule getMySchedule(final Context context) {
 		if ( this.mySchedule == null ) {
-			Object object = DataManager.readObject(context, myScheduleFilename);
+			Object object = DataManager.readObject(context, Define.myScheduleFilename);
 			if ( object != null && object instanceof Set ) {
 				this.mySchedule = new MySchedule();
 				this.mySchedule.setIds((Set<String>) object);
@@ -438,7 +434,9 @@ public class DataManager {
 		return this.getMySchedule(context).getIds().size();
 	}
 
-	private void saveObject(final Context context, Object object, String filename) {
+	// this is the general method to serialize an object
+	//
+	private void saveObject(final Context context, Object object, final String filename) {
 		try {
 			final File file = new File(context.getFilesDir(), filename);
 			final FileOutputStream fos = new FileOutputStream(file);
@@ -447,11 +445,13 @@ public class DataManager {
 			os.close();
 			fos.close();
 		} catch ( IOException e ) {
-			// TODO Fehlermeldung
-			e.printStackTrace();
+			Log.e( TAG, "Fehler beim Speichern des Objektes", e );
 		}
+
+		// TODO Fehlerwert zurückgeben?
 	}
 
+	// this is the general method to serialize an object
 	private static Object readObject(final Context context, String filename) {
 		Object result = null;
 		try {
@@ -464,8 +464,7 @@ public class DataManager {
 				fis.close();
 			}
 		} catch ( Exception e ) {
-			// TODO Fehlermeldung
-			e.printStackTrace();
+			Log.e( TAG, "Fehler beim Einlesen", e );
 		}
 		return result;
 	}

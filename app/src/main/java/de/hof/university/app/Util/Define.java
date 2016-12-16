@@ -50,6 +50,12 @@ public final class Define {
 
 	// Semester term: Winterterm, summerterm (Wintersemester, Sommersemester)
 
+	public static final String myScheduleFilename = "mySchedule";
+	public static final String scheduleFilename = "schedule";
+	public static final String changesFilename = "changes";
+	public static final String coursesFilename = "courses";
+	public static final String mealsFilename = "meals";
+
 	// show the fragments dealing with the location of the user
 	public static final int SHOW_LOCATION_FRAGMENT = 0 ;
 	// show Notenblatt and Notenfreigabe
