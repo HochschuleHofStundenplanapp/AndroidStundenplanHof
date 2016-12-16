@@ -2,6 +2,7 @@ package de.hof.university.app.model.schedule;
 
 import java.util.ArrayList;
 
+import de.hof.university.app.Util.Define;
 import de.hof.university.app.model.HofObject;
 
 /**
@@ -9,6 +10,7 @@ import de.hof.university.app.model.HofObject;
  */
 
 public class Changes extends HofObject {
+	private static final long serialVersionUID = Define.serialVersionUID;
 	private ArrayList<Object> changes;
 
 	public Changes() {
