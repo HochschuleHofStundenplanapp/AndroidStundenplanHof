@@ -42,3 +42,19 @@ captures/
 
 # Keystore files
 *.jks
+
+.idea/codeStyleSettings.xml
+
+.idea/codeStyleSettings.xml
+
+.idea/compiler.xml
+
+.idea/gradle.xml
+
+.idea/misc.xml
+
+.idea/vcs.xml
+
+gradlew
+
+gradlew.bat
