@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1064815333976-8js27db8ovg6k8bfiqg1uv32n0t70l8i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "de.hof.university.app",
+            "certificate_hash": "72F4621F6A722CE74DF92EB502184EE208EB74E1"
+          }
+        },
+        {
           "client_id": "1064815333976-avqsnkqsdn2ha08jfl8oaoi8o69s2pv8.apps.googleusercontent.com",
           "client_type": 3
         }
