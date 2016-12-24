@@ -65,4 +65,43 @@ public final class Define {
 	public static final int SHOW_PUSHNOTIFICATION = 0 ;
 
 	public static final long serialVersionUID = 1L;
+
+	// Beispielaufruf
+	// https://soapuser:F%98z&12@www.hof-university.de/soap/client.php?
+	//
+	// https://www.hof-university.de/soap/client.php?f=Courses&tt=WS
+	//
+	// https://soapuser:F%98z&12@www.hof-university.de/soap/client.php?f=Schedule&stg=MC&tt=WS&sem=1
+	// https://soapuser:F%98z&12@www.hof-university.de/soap/client.php?f=Changes&stg=MC&tt=WS&sem=1
+
+	/* Communication with the Web-Services SOAP API */
+	public final static String sAuthSoapUserName = "soapuser";
+	public final static String sAuthSoapPassword = "F%98z&12";
+
+	// Testserver
+	public final static String sAuthSoapUserNameTest = "test";
+	public final static String sAuthSoapPasswordTest = "test";
+
+
+	// Essensplan
+	public final static String URL_STUDENTENWERK = "https://www.studentenwerk-oberfranken.de/?eID=bwrkSpeiseplanRss&tx_bwrkspeiseplan_pi2%5Bbar%5D=340&tx_bwrkspeiseplan_pi2%5Bdate%5D=";
+
+
+	// Produktiv-Server Web-Services
+	public final static String URL_WEBSERVICE_HOF = "https://www.hof-university.de/soap/client.php";
+	// Test-Server
+	public final static String URL_WEBSERVICE_HOF_TEST = "http://sh-web02.hof-university.de/soap/client.php";
+
+	public final static String URL_STUDYCOURSE = URL_WEBSERVICE_HOF+"?f=Courses&tt=%s";
+	public final static String URL_SCHEDULE =   (URL_WEBSERVICE_HOF+"?f=Schedule&stg=%s&sem=%s&tt=%s");
+	public final static String URL_CHANGES =    (URL_WEBSERVICE_HOF+"?f=Changes");
+	public final static String URL_MYSCHEDULE =     (URL_WEBSERVICE_HOF+"?f=MySchedule");
+
+	// how long to store content from
+	public static final int MAX_CACHE_TIME = 60 * 24 * 2;
+
+	// Raumsuche
+	public final static String URL_RAUMSUCHE_LOGIN = "https://www.hof-university.de/anmelden.html";
+	public final static String URL_RAUMSUCHE_LOGIN_SUCCESS = "http://www.hof-university.de/anmeldung-erfolgreich.html";
+	public final static String URL_RAUMSUCHE = "https://www.hof-university.de/studierende/info-service/it-service/raumhardsoftwaresuche.html";
 }
