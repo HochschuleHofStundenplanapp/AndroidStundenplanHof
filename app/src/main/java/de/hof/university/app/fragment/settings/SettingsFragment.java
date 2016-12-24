@@ -254,7 +254,7 @@ public class SettingsFragment extends PreferenceFragment {
 		}
 
 		// Beim ersten Start braucht er noch keine Abfrage zu machen weil noch keine termTime ausgewählt wurde.
-		if (term.equals("")) {
+		if (term.isEmpty()) {
 			return;
 		}
 

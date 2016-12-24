@@ -34,6 +34,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 
+import de.hof.university.app.Util.Define;
 import de.hof.university.app.Util.Log;
 
 /**
@@ -124,32 +125,9 @@ public class DataConnector {
             urlConnection = (HttpURLConnection) url.openConnection();
 
             //Für die Schnittstelle der Hochschule wird Authentifizerung benötigt
-            if (strUrl.contains("www.hof-university.de/soap/client.php")) {
-
-                // Beispielaufruf
-                // https://soapuser:F%98z&12@www.hof-university.de/soap/client.php?
-	            //
-	            // https://www.hof-university.de/soap/client.php?f=Courses&tt=WS
-	            //
-	            // https://soapuser:F%98z&12@www.hof-university.de/soap/client.php?f=Schedule&stg=MC&tt=WS&sem=1
-	            // https://soapuser:F%98z&12@www.hof-university.de/soap/client.php?f=Changes&stg=MC&tt=WS&sem=1
-
-                // user
-                //password                  F%98z&12
-	            final String username = "soapuser";
-	            final String password = "F%98z&12";
-	            final String userPassword = username + ':' + password;
-				final String encoding = Base64.encodeToString(userPassword.getBytes(), Base64.DEFAULT);
-                urlConnection.setRequestProperty("Authorization", "Basic " + encoding);
-            } else if (strUrl.contains("http://sh-web02.hof-university.de/soap/client.php")) {
-                // Testserver
-                final String username = "test";
-                final String password = "test";
-
-                final String userPassword = username + ':' + password;
-                final String encoding = Base64.encodeToString(userPassword.getBytes(), Base64.DEFAULT);
-                urlConnection.setRequestProperty("Authorization", "Basic " + encoding);
-            }
+            final String userPassword = Define.sAuthSoapUserName + ':' + Define.sAuthSoapPassword;
+            final String encoding = Base64.encodeToString(userPassword.getBytes(), Base64.DEFAULT);
+            urlConnection.setRequestProperty("Authorization", "Basic " + encoding);
 
             urlConnection.setConnectTimeout(timeoutInSeconds);
             inputStream = new BufferedInputStream(urlConnection.getInputStream());

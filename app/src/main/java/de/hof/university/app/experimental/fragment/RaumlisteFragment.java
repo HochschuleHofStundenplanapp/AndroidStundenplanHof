@@ -52,6 +52,7 @@ import java.util.Date;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
+import de.hof.university.app.Util.Define;
 import de.hof.university.app.experimental.adapter.RaumlistAdapter;
 import de.hof.university.app.experimental.model.Level;
 import de.hof.university.app.experimental.model.Raum;
@@ -225,8 +226,18 @@ public class RaumlisteFragment extends Fragment {
 
             boolean forceRefresh = Boolean.valueOf(params[9]);
 
-            if (forceRefresh || object == null || raumliste.getLastSaved() == null || !lastCached.after(new Date()) || !raumliste.getTimeStart().equals(params[5]) || !raumliste.getTimeEnd().equals(params[6]) || !raumliste.getRaumTyp().equals(params[7]) || !raumliste.getDate().equals(params[8])) {
+            if (
+                forceRefresh
+                || object == null
+                || raumliste.getLastSaved() == null
+                || !lastCached.after(new Date())
+                || !raumliste.getTimeStart().equals(params[5])
+                || !raumliste.getTimeEnd().equals(params[6])
+                || !raumliste.getRaumTyp().equals(params[7])
+                || !raumliste.getDate().equals(params[8])
+	            ) {
 
+				//TODO hier stand mal ein Kommentar, wofür...
                 System.setProperty("jsse.enableSNIExtension", "false");
                 String user = params[ 0 ];
                 String password = params[ 1 ];
@@ -253,13 +264,12 @@ public class RaumlisteFragment extends Fragment {
                         // Thread beenden wenn gecancelt
                         if ( isCancelled() ) break;
                         loginForm = Jsoup
-                                            .connect("https://www.hof-university.de/anmelden.html")
+                                            .connect(Define.URL_RAUMSUCHE_LOGIN)
                                             .timeout(5 * 1000) //4 Sekunden würden reichen aber 1 Sekunde zur Sicherheit
                                             .data("user", user, "pass", password)
                                             .data("logintype", "login")
                                             .data("pid", "27")
-                                            .data("redirect_url",
-                                                    "http://www.hof-university.de/anmeldung-erfolgreich.html")
+                                            .data("redirect_url", Define.URL_RAUMSUCHE_LOGIN_SUCCESS)
                                             .data("tx_felogin_pi1[noredirect]", "0")
                                             .method(Connection.Method.POST).execute();
                         networkRetry = 0;
@@ -275,19 +285,16 @@ public class RaumlisteFragment extends Fragment {
                 // Daten lesen
                 try {
                     document = Jsoup
-                                       .connect(
-                                               "https://www.hof-university.de/studierende/info-service/it-service/raumhardsoftwaresuche.html"
-                                                       + raumTyp)
-                                       .timeout(10 * 1000) //5 Sekunden würden reichen aber auf älteren Geräten braucht es mehr
-                                       .data("tx_raumsuche_pi1[day]", day)
-                                       .data("tx_raumsuche_pi1[month]", month)
-                                       .data("tx_raumsuche_pi1[year]", year)
-                                       .data("tx_raumsuche_pi1[timestart]",
-                                               timeFrom)
-                                       .data("tx_raumsuche_pi1[timeend]", timeTo)
-                                       .cookies(loginForm.cookies()).get();
+                       .connect( Define.URL_RAUMSUCHE + raumTyp)
+                       .timeout(10 * 1000) //5 Sekunden würden reichen aber auf älteren Geräten braucht es mehr
+                       .data("tx_raumsuche_pi1[day]", day)
+                       .data("tx_raumsuche_pi1[month]", month)
+                       .data("tx_raumsuche_pi1[year]", year)
+                       .data("tx_raumsuche_pi1[timestart]",timeFrom)
+                       .data("tx_raumsuche_pi1[timeend]", timeTo)
+                       .cookies(loginForm.cookies()).get();
 
-                    Elements tables = document.getElementsByTag("table");
+                    final Elements tables = document.getElementsByTag("table");
                     String curCategory = "";
                     for ( Element td : tables.first().getElementsByTag("td") ) {
                         // Thread beenden wenn gecancelt
@@ -353,6 +360,7 @@ public class RaumlisteFragment extends Fragment {
         }
     }
 
+	//TODO saveObject
     private static void saveObject(final Context context, Object object, String filename) {
         try {
             final File file = new File(context.getFilesDir(), filename);

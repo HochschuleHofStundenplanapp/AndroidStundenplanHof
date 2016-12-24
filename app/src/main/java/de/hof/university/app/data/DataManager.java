@@ -35,6 +35,7 @@ import java.util.Set;
 
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.Util.Log;
+import de.hof.university.app.Util.MyString;
 import de.hof.university.app.data.parser.Parser;
 import de.hof.university.app.data.parser.ParserFactory;
 import de.hof.university.app.data.parser.ParserFactory.EParser;
@@ -49,31 +50,17 @@ import de.hof.university.app.model.settings.StudyCourse;
 import de.hof.university.app.model.settings.StudyCourses;
 
 /**
- * Created by Lukas on 14.06.2016.
+ *
  */
 public class DataManager {
 
 	public static final String TAG = "DataManager";
 
-	private static final int MAX_CACHE_TIME = 60 * 24 * 2;
-
 	private enum CONNECTION {
 
 		// Essen
-		MEAL("https://www.studentenwerk-oberfranken.de/?eID=bwrkSpeiseplanRss&tx_bwrkspeiseplan_pi2%5Bbar%5D=340&tx_bwrkspeiseplan_pi2%5Bdate%5D=", 60 * 24),
-
-		COURSE("https://www.hof-university.de/soap/client.php?f=Courses&tt=%s", MAX_CACHE_TIME),
-
-		//TODO change for tests and release
-		// Testserver: http://sh-web02.hof-university.de
-		//SCHEDULE("http://sh-web02.hof-university.de/soap/client.php?f=Schedule&stg=%s&sem=%s&tt=%s",60*24),
-		//CHANGES("http://sh-web02.hof-university.de/soap/client.php?f=Changes",60*3),
-		//MYSCHEDULE("http://sh-web02.hof-university.de/soap/client.php?f=MySchedule",60*24),
-
-		//Produktivserver
-		SCHEDULE("https://www.hof-university.de/soap/client.php?f=Schedule&stg=%s&sem=%s&tt=%s", 60 * 24),
-		CHANGES("https://www.hof-university.de/soap/client.php?f=Changes", 60 * 3),
-		MYSCHEDULE("https://www.hof-university.de/soap/client.php?f=MySchedule", 60 * 24),;
+		MEAL(Define.URL_STUDENTENWERK, Define.MAX_CACHE_TIME ),
+		STUDYCOURSE(Define.URL_STUDYCOURSE, Define.MAX_CACHE_TIME);
 
 		private final String url;
 		private final int cache;
@@ -98,8 +85,8 @@ public class DataManager {
 
 	private MySchedule mySchedule;
 
-
 	private static final DataManager dataManager = new DataManager();
+
 
 	public static DataManager getInstance() {
 		return DataManager.dataManager;
@@ -122,7 +109,8 @@ public class DataManager {
 			final String url = DataManager.CONNECTION.MEAL.getUrl() + calendar.get(Calendar.YEAR) + '-' + (calendar.get(Calendar.MONTH) + 1) + '-' + calendar.get(Calendar.DAY_OF_MONTH);
 			final String xmlString = this.getData(url);
 
-			if ( xmlString.equals("") ) {
+//TODO check
+			if ( xmlString.isEmpty() ) {
 				if ( !forceRefresh && object != null ) {
 					return meals.getMeals();
 				} else {
@@ -162,14 +150,23 @@ public class DataManager {
 			schedule = (Schedule) object;
 		}
 
-		if ( forceRefresh || object == null || schedule.getLectures().size() == 0 || schedule.getLastSaved() == null || !cacheStillValid(schedule, CONNECTION.SCHEDULE.getCache()) || !schedule.getCourse().equals(course) || !schedule.getSemester().equals(semester) || !schedule.getTermtime().equals(termTime) ) {
+		if ( forceRefresh
+				     || object == null
+				     || schedule.getLectures().size() == 0
+				     || schedule.getLastSaved() == null
+//TODO				     || !cacheStillValid(schedule, Define.URL_SCHEDULE.getCache())
+				     || !schedule.getCourse().equals(course)
+				     || !schedule.getSemester().equals(semester)
+				     || !schedule.getTermtime().equals(termTime) )
+			{
 			// Änderungen sollen neu geholt werden
 			resetChangesLastSave(context);
 
 			final Parser parser = ParserFactory.create(EParser.SCHEDULE);
-			final String jsonString = this.getData(String.format(DataManager.CONNECTION.SCHEDULE.getUrl(), DataManager.replaceWhitespace(course), DataManager.replaceWhitespace(semester), DataManager.replaceWhitespace(termTime)));
+			final String aString = String.format(Define.URL_SCHEDULE, MyString.URLReplaceWhitespace(course), MyString.URLReplaceWhitespace(semester), MyString.URLReplaceWhitespace(termTime));
+			final String jsonString = this.getData( aString );
 
-			if ( jsonString.equals("") ) {
+			if ( jsonString.isEmpty() ) {
 				if ( !forceRefresh && object != null ) {
 					return schedule.getLectures();
 				} else {
@@ -207,12 +204,18 @@ public class DataManager {
 	                                                  boolean forceRefresh) {
 		MySchedule mySchedule = this.getMySchedule(context);
 
-		if ( forceRefresh || mySchedule.getLectures().size() == 0 || mySchedule.getLastSaved() == null || !cacheStillValid(mySchedule, CONNECTION.MYSCHEDULE.getCache()) || mySchedule.getIds().size() != mySchedule.getLectures().size() ) {
+		if ( forceRefresh
+			|| mySchedule.getLectures().size() == 0
+		     || mySchedule.getLastSaved() == null
+//TODO		     || !cacheStillValid(mySchedule, CONNECTION.MYSCHEDULE.getCache())
+		     || mySchedule.getIds().size() != mySchedule.getLectures().size()
+			)
+		{
 			// Änderungen sollen neu geholt werden
 			resetChangesLastSave(context);
 
 			final Iterator<String> iterator = this.getMySchedule(context).getIds().iterator();
-			String url = DataManager.CONNECTION.MYSCHEDULE.getUrl();
+			String url = Define.URL_MYSCHEDULE;
 			while ( iterator.hasNext() ) {
 				url += "&id[]=" + iterator.next();
 			}
@@ -221,7 +224,7 @@ public class DataManager {
 
 			final String jsonString = this.getData(url);
 
-			if ( jsonString.equals("") ) {
+			if ( jsonString.isEmpty() ) {
 				if ( !forceRefresh && mySchedule.getLectures().size() > 0 ) {
 					return mySchedule.getLectures();
 				} else {
@@ -266,15 +269,19 @@ public class DataManager {
 			changes = (Changes) object;
 		}
 
-		if ( forceRefresh || object == null || changes.getChanges().size() == 0 || changes.getLastSaved() == null || !cacheStillValid(changes, CONNECTION.CHANGES.getCache()) ) {
+		if ( forceRefresh || object == null
+				     || changes.getChanges().size() == 0
+				     || changes.getLastSaved() == null
+//TODO				     || !cacheStillValid(changes, CONNECTION.CHANGES.getCache())
+				) {
 			final Iterator<String> iterator = this.getMySchedule(context).getIds().iterator();
 
-			String url = DataManager.CONNECTION.CHANGES.getUrl();
+			String url = Define.URL_CHANGES;
 
 			if ( !iterator.hasNext() ) {
-				url += "&stg=" + DataManager.replaceWhitespace(course);
-				url += "&sem=" + DataManager.replaceWhitespace(semester);
-				url += "&tt=" + DataManager.replaceWhitespace(termTime);
+				url += "&stg=" + MyString.URLReplaceWhitespace(course);
+				url += "&sem=" + MyString.URLReplaceWhitespace(semester);
+				url += "&tt=" + MyString.URLReplaceWhitespace(termTime);
 			} else {
 				// Fügt die ID's der Vorlesungen hinzu die in Mein Stundenplan sind
 				// dadurch werden nur Änderungen von Mein Stundenplan geholt
@@ -283,10 +290,10 @@ public class DataManager {
 				}
 			}
 
-			Parser parser = ParserFactory.create(EParser.CHANGES);
-			String jsonString = this.getData(url);
+			final Parser parser = ParserFactory.create(EParser.CHANGES);
+			final String jsonString = this.getData(url);
 
-			if ( jsonString.equals("") ) {
+			if ( jsonString.isEmpty() ) {
 				if ( !forceRefresh && object != null ) {
 					return changes.getChanges();
 				} else {
@@ -298,16 +305,6 @@ public class DataManager {
 			assert parser != null;
 
 			ArrayList<Object> tmpChanges = (ArrayList<Object>) parser.parse(params);
-
-			// führt hier zum falschen Verhalten
-//            if (tmpChanges.isEmpty()) {
-//                if (!forceRefresh && changes.getChanges().size() > 0) {
-//                    return changes.getChanges();
-//                } else {
-//                    return new ArrayList<>(); //oder null aber dann sagt er "Aktualisierung fehlgeschlagen"
-//                }
-//            }
-
 			changes.setChanges(tmpChanges);
 
 			changes.setLastSaved(new Date());
@@ -330,14 +327,19 @@ public class DataManager {
 		// Änderungen sollen neu geholt werden
 		resetChangesLastSave(context);
 
-		if ( forceRefresh || studyCourses.getCourses().size() == 0 ||
-				     studyCourses.getLastSaved() == null
-				     || !cacheStillValid(studyCourses, CONNECTION.COURSE.getCache()) ) {
+		if ( forceRefresh
+		     || studyCourses.getCourses().size() == 0
+		     || studyCourses.getLastSaved() == null
+		//     || !cacheStillValid(studyCourses, CONNECTION.COURSE.getCache())
+			) {
 			final Parser parser = ParserFactory.create(EParser.COURSES);
 
-			final String jsonString = this.getData(String.format(DataManager.CONNECTION.COURSE.getUrl(), DataManager.replaceWhitespace(termTime)));
+			final String sTermType = MyString.URLReplaceWhitespace(termTime);
+			final String sURL = String.format(Define.URL_STUDYCOURSE, sTermType );
+			final String jsonString = this.getData( sURL );
 
-			if ( jsonString.equals("") ) {
+//TODO checken
+			if ( jsonString.isEmpty() ) {
 				if ( !forceRefresh ) {
 					return studyCourses.getCourses();
 				} else {
@@ -350,6 +352,7 @@ public class DataManager {
 
 			ArrayList<StudyCourse> tmpCourses = (ArrayList<StudyCourse>) parser.parse(params);
 
+//TODO checken
 			if ( tmpCourses.isEmpty() ) {
 				if ( !forceRefresh && studyCourses.getCourses().size() > 0 ) {
 					return studyCourses.getCourses();
@@ -382,10 +385,6 @@ public class DataManager {
 
 	private String getData(String url) {
 		return dataConnector.getStringFromUrl(url);
-	}
-
-	private static String replaceWhitespace(final String str) {
-		return str.replace(" ", "%20");
 	}
 
 	public final void addToMySchedule(final Context context, final LectureItem s) {
@@ -493,6 +492,6 @@ public class DataManager {
 	}
 
 	public final void cleanCache(final Context context) {
-		dataConnector.cleanCache(context, DataManager.MAX_CACHE_TIME);
+		dataConnector.cleanCache(context, Define.MAX_CACHE_TIME);
 	}
 }
