@@ -23,7 +23,7 @@ import java.io.Serializable;
  */
 public class Noten implements Serializable {
 
-    public final String TAG = "Noten";
+    public final static String TAG = "Noten";
 
     private final String fach;
     private final String note;

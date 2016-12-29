@@ -34,7 +34,7 @@ import de.hof.university.app.R;
  */
 public class ImpressumFragment extends Fragment {
 
-	public final String TAG = "ImpressumFragment";
+	public final static String TAG = "ImpressumFragment";
 
 	@Override
 	public final void onResume() {

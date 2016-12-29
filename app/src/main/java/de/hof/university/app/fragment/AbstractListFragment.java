@@ -42,7 +42,7 @@ import de.hof.university.app.fragment.schedule.ChangesFragment;
  */
 public abstract class AbstractListFragment extends Fragment {
 
-	public final String TAG = "AbstractListFragment";
+	public final static String TAG = "AbstractListFragment";
 
 	private SwipeRefreshLayout swipeContainer;
 	protected ListView listView;

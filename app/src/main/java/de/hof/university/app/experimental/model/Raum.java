@@ -23,11 +23,11 @@ import java.io.Serializable;
  */
 public class Raum implements Level, Serializable {
 
-    public final String TAG = "Raum";
+    public final static String TAG = "Raum";
 
     private final String name;
 
-    public Raum(String name) {
+    public Raum(final String name) {
         this.name = name;
     }
 

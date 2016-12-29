@@ -36,6 +36,9 @@ import de.hof.university.app.model.schedule.LectureItem;
  * Created by larsg on 17.06.2016.
  */
 public class ScheduleParser implements Parser<LectureItem> {
+
+    public final static String TAG = "ScheduleParser";
+
     protected String language;
 
     @Override

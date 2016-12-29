@@ -53,7 +53,7 @@ import de.hof.university.app.experimental.LoginController;
  */
 public class RaumsucheFragment extends Fragment {
 
-    public final String TAG = "RaumsucheFragment";
+    public final static String TAG = "RaumsucheFragment";
 
     // TODO: Rename and change types of parameters
     private EditText edt_date = null;

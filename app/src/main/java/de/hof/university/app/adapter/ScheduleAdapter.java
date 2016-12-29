@@ -34,7 +34,7 @@ import de.hof.university.app.model.schedule.LectureItem;
  */
 public final class ScheduleAdapter extends ArrayAdapter<Object> {
 
-    public final String TAG = "ScheduleAdapter";
+    public final static String TAG = "ScheduleAdapter";
 
     private final ArrayList<Object> items;
     private final LayoutInflater vi;

@@ -36,7 +36,7 @@ import de.hof.university.app.fragment.AbstractListFragment;
  */
 public class ChangesFragment extends AbstractListFragment {
 
-	public final String TAG = "ChangesFragment";
+	public final static String TAG = "ChangesFragment";
 
 	@Override
 	protected final ArrayAdapter setArrayAdapter() {

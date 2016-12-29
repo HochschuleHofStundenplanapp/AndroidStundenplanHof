@@ -31,7 +31,7 @@ import de.hof.university.app.model.settings.StudyCourse;
  */
 public class StudyCourseParser implements Parser<StudyCourse> {
 
-    public final String TAG = "StudyCourseParser";
+    public final static String TAG = "StudyCourseParser";
 
     // Die Sprache der Meldungen aus der Datenbank werden in diese Zielsprache überführt
     private String language;

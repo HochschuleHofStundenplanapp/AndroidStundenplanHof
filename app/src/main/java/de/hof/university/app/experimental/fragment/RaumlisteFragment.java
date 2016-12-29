@@ -53,6 +53,7 @@ import java.util.Date;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.Util.Define;
+import de.hof.university.app.Util.Log;
 import de.hof.university.app.experimental.adapter.RaumlistAdapter;
 import de.hof.university.app.experimental.model.Level;
 import de.hof.university.app.experimental.model.Raum;
@@ -66,7 +67,7 @@ import de.hof.university.app.experimental.model.Suchdetails;
  */
 public class RaumlisteFragment extends Fragment {
 
-    public final String TAG = "RaumlisteFragment";
+    public final static String TAG = "RaumlisteFragment";
 
     private static final String ARG_PARAM1 = "user";
     private static final String ARG_PARAM2 = "password";
@@ -361,7 +362,7 @@ public class RaumlisteFragment extends Fragment {
     }
 
 	//TODO saveObject
-    private static void saveObject(final Context context, Object object, String filename) {
+    private static void saveObject(final Context context, final Object object, final String filename) {
         try {
             final File file = new File(context.getFilesDir(), filename);
             final FileOutputStream fos = new FileOutputStream(file);
@@ -371,11 +372,11 @@ public class RaumlisteFragment extends Fragment {
             fos.close();
         } catch (IOException e) {
             // TODO Fehlermeldung
-            e.printStackTrace();
+            Log.e(TAG, "saveObject failed", e);
         }
     }
 
-    private static Object readObject(final Context context, String filename) {
+    private static Object readObject(final Context context, final String filename) {
         Object result = null;
         try {
             final File file = new File(context.getFilesDir(), filename);
@@ -386,9 +387,9 @@ public class RaumlisteFragment extends Fragment {
                 is.close();
                 fis.close();
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             // TODO Fehlermeldung
-            e.printStackTrace();
+            Log.e(TAG, "readObject failed", e);
         }
         return result;
     }
