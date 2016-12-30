@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity
 				}
 				FragmentTransaction trans = manager.beginTransaction();
 				trans.addToBackStack(MealFragment.class.getName());
-				trans.replace(R.id.content_main, mealFragment);
+				trans.replace(R.id.content_main, mealFragment, "MEAL_FRAGMENT");
 				trans.commit();
 			}
 		} else if ( R.id.nav_notenbekanntgabe == id ) {
@@ -313,7 +313,7 @@ public class MainActivity extends AppCompatActivity
 				} else {
 					trans.addToBackStack(MyScheduleFragment.class.getName());
 				}
-				trans.replace(R.id.content_main, myScheduleFragment);
+				trans.replace(R.id.content_main, myScheduleFragment, "MYSCHEDULE_FRAGMENT");
 				trans.commit();
 
 				// den Menüpunkt markieren

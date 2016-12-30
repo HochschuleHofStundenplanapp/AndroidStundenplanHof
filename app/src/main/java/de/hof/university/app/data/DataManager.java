@@ -128,7 +128,7 @@ public class DataManager {
 				if ( !forceRefresh && meals.getMeals().size() > 0 ) {
 					return meals.getMeals();
 				} else {
-					return null;
+					return new ArrayList<>();
 				}
 			}
 

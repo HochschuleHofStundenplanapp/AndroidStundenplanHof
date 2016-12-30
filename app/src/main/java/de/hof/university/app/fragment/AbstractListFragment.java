@@ -35,6 +35,7 @@ import de.hof.university.app.R;
 import de.hof.university.app.Util.Log;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.fragment.schedule.ChangesFragment;
+import de.hof.university.app.fragment.schedule.MyScheduleFragment;
 
 
 /**
@@ -150,13 +151,26 @@ public abstract class AbstractListFragment extends Fragment {
 					adapter.notifyDataSetChanged();
 					modifyListViewAfterDataSetChanged();
 
-					// Damit man unter Änderungen ein Feedback bekommt.
+					// Damit man unter Änderungen ein Feedback bekommt wenn es keine Änderungen gibt.
 					final ChangesFragment changesFragment = (ChangesFragment) getFragmentManager().findFragmentByTag("CHANGES_FRAGMENT");
 					if ( changesFragment != null && changesFragment.isVisible() && dataList.size() == 0 ) {
 						Toast.makeText(getActivity().getApplicationContext(), getString(R.string.noChanges), Toast.LENGTH_SHORT).show();
 					}
+
+					// Damit man unter Speiseplan ein Feedback bekommt wenn es keinen Speiseplan gibt.
+					final MealFragment mealFragment = (MealFragment) getFragmentManager().findFragmentByTag("MEAL_FRAGMENT");
+					if ( mealFragment != null && mealFragment.isVisible() && dataList.size() == 0 ) {
+						Toast.makeText(getActivity().getApplicationContext(), getString(R.string.noMeal), Toast.LENGTH_SHORT).show();
+					}
 				} else {
-					if ( DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) > 0 ) {
+					final ChangesFragment changesFragment = (ChangesFragment) getFragmentManager().findFragmentByTag("CHANGES_FRAGMENT");
+					final MyScheduleFragment myScheduleFragment = (MyScheduleFragment) getFragmentManager().findFragmentByTag("MYSCHEDULE_FRAGMENT");
+					if ( ( changesFragment != null && changesFragment.isVisible() )
+							|| ( myScheduleFragment != null && myScheduleFragment.isVisible() ) ) {
+						if (DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) > 0) {
+							Toast.makeText(getActivity().getApplicationContext(), getString(R.string.refreshFailed), Toast.LENGTH_SHORT).show();
+						}
+					} else {
 						Toast.makeText(getActivity().getApplicationContext(), getString(R.string.refreshFailed), Toast.LENGTH_SHORT).show();
 					}
 				}
