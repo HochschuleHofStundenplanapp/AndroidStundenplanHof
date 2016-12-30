@@ -88,18 +88,6 @@ public class RaumsucheFragment extends Fragment {
     }
 
     @Override
-    public final void onResume() {
-        super.onResume();
-        MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().setTitle(R.string.raumsuche);
-
-        NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
-        MenuItem item = navigationView.getMenu().findItem(R.id.nav_experimental);
-        item.setChecked(true);
-        item.getSubMenu().findItem(R.id.nav_raumsuche).setChecked(true);
-    }
-
-    @Override
     public void onPause() {
         MainActivity mainActivity = (MainActivity) getActivity();
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);

@@ -72,20 +72,6 @@ public class NotenbekanntgabeFragment extends Fragment {
         items = new ArrayList<>();
     }
 
-
-    @Override
-    public final void onResume() {
-        super.onResume();
-        MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().setTitle(R.string.notenbekanntgabe);
-
-        NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
-        MenuItem item = navigationView.getMenu().findItem(R.id.nav_experimental);
-        item.setChecked(true);
-        item.getSubMenu().findItem(R.id.nav_notenbekanntgabe).setChecked(true);
-    }
-
-
     @Override
     public void onPause() {
         MainActivity mainActivity = (MainActivity) getActivity();

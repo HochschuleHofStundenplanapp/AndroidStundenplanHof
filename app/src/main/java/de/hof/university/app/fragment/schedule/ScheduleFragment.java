@@ -114,14 +114,6 @@ public class ScheduleFragment extends AbstractListFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-        final MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().setTitle(R.string.stundenplan);
-    }
-
-    @Override
     protected final ArrayAdapter setArrayAdapter() {
         return new ScheduleAdapter(getActivity(), dataList);
     }
