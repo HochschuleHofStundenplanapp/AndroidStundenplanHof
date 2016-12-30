@@ -65,9 +65,6 @@ public class MyScheduleFragment extends ScheduleFragment {
         final MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.getSupportActionBar().setTitle(R.string.myschedule);
 
-        final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
-        navigationView.getMenu().findItem(R.id.nav_mySchedule).setChecked(true);
-
         if (DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) == 0) {
             Toast.makeText(getView().getContext(), getString(R.string.myScheduleInfo), Toast.LENGTH_LONG).show();
         }
