@@ -23,13 +23,13 @@ import java.io.Serializable;
  */
 public class Suchdetails implements Level, Serializable {
 
-	public final String TAG = "Suchdetails";
+	public final static String TAG = "Suchdetails";
 
 	final String datum;
 	final String timeFrom;
 	final String timeTo;
 
-	public Suchdetails(String datum, String timeFrom, String timeTo) {
+	public Suchdetails(final String datum, final String timeFrom, final String timeTo) {
 		this.datum = datum;
 		this.timeFrom = timeFrom;
 		this.timeTo = timeTo;
@@ -50,7 +50,6 @@ public class Suchdetails implements Level, Serializable {
 	@Override
 	public final int getLevel() {
 		return 2;
-
 	}
 
 

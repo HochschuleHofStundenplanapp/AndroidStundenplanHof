@@ -35,9 +35,13 @@ import de.hof.university.app.model.meal.Meal;
 /**
  * Created by larsg on 17.06.2016.
  */
-public class MealParser implements Parser<Meal> {
+final public class MealParser implements Parser<Meal> {
+
+	public final static String TAG = "MealParser";
+
     private static final SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY);
     private Integer tariff;
+
 
     public MealParser() {
     }

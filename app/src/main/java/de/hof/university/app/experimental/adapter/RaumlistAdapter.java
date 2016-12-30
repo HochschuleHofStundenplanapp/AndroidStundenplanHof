@@ -41,7 +41,7 @@ import de.hof.university.app.experimental.model.Suchdetails;
  */
 public class RaumlistAdapter extends ArrayAdapter<Level> {
 
-    public final String TAG = "RaumlistAdapter";
+    public final static String TAG = "RaumlistAdapter";
 
     private final ArrayList<Level> items;
     private final LayoutInflater vi;

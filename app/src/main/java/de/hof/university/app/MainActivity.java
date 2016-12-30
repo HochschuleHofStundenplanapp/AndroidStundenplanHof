@@ -33,18 +33,16 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.Toast;
 
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.fragment.NotenbekanntgabeFragment;
 import de.hof.university.app.experimental.fragment.NotenblattFragment;
-import de.hof.university.app.fragment.PrimussTabFragment;
 import de.hof.university.app.experimental.fragment.RaumsucheFragment;
 import de.hof.university.app.fragment.ImpressumFragment;
-import de.hof.university.app.fragment.PrimussTabFragment;
 import de.hof.university.app.fragment.MealFragment;
+import de.hof.university.app.fragment.PrimussTabFragment;
 import de.hof.university.app.fragment.schedule.ChangesFragment;
 import de.hof.university.app.fragment.schedule.MyScheduleFragment;
 import de.hof.university.app.fragment.schedule.ScheduleFragment;
@@ -54,7 +52,7 @@ import de.hof.university.app.fragment.settings.SettingsFragment;
 public class MainActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener {
 
-	public final String TAG = "MainActivity";
+	public final static String TAG = "MainActivity";
 
 	private MealFragment mealFragment;
 	private ScheduleFragment scheduleFragment;

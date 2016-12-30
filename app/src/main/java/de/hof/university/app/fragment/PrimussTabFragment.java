@@ -19,7 +19,7 @@ import de.hof.university.app.R;
  */
 
 public class PrimussTabFragment extends Fragment {
-	public final String TAG = "PrimussFragment";
+	public final static String TAG = "PrimussFragment";
 
 	@Override
 	public final void onResume() {

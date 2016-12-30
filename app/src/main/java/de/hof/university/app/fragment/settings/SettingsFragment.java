@@ -47,7 +47,7 @@ import de.hof.university.app.model.settings.StudyCourse;
  */
 public class SettingsFragment extends PreferenceFragment {
 
-	public final String TAG = "SettingsFragment";
+	public final static String TAG = "SettingsFragment";
 
 	private ProgressDialog progressDialog;
 	private List<StudyCourse> studyCourseList;

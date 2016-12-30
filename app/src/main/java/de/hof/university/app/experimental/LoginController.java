@@ -39,7 +39,7 @@ import de.hof.university.app.R;
 
 public class LoginController {
 
-	public final String TAG = "LoginController";
+	public final static String TAG = "LoginController";
 
 	//singleton
 	private static LoginController controller = null;

@@ -53,7 +53,7 @@ import de.hof.university.app.experimental.model.Noten;
 
 public class NotenbekanntgabeFragment extends Fragment {
 
-    public final String TAG = "NotenbekanntgabeFragment";
+    public final static String TAG = "NotenbekanntgabeFragment";
 
     private NotenAdapter adapter;
     private ArrayList<Noten> items;

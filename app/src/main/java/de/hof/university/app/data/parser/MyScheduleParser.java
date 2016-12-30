@@ -22,7 +22,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import de.hof.university.app.BuildConfig;
+import de.hof.university.app.Util.Log;
 import de.hof.university.app.model.schedule.LectureItem;
 
 /**
@@ -30,6 +30,7 @@ import de.hof.university.app.model.schedule.LectureItem;
  */
 public class MyScheduleParser extends ScheduleParser {
 
+    public final static String TAG = "MyScheduleParser";
 
     @Override
     public final ArrayList<LectureItem> parse(String[] params) {
@@ -51,7 +52,7 @@ public class MyScheduleParser extends ScheduleParser {
             JSONObject jsonObject = new JSONObject(jsonString);
             jsonArray = jsonObject.optJSONArray("myschedule");
         } catch (final JSONException e) {
-            if ( BuildConfig.DEBUG) e.printStackTrace();
+            Log.e(TAG, "readArrayList", e);
             return result;
         }
         if (jsonArray == null)

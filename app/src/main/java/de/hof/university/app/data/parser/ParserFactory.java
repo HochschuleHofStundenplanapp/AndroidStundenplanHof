@@ -21,6 +21,8 @@ package de.hof.university.app.data.parser;
  */
 public final class ParserFactory {
 
+    public final static String TAG = "ParserFactory";
+
     public static Parser create(Enum<ParserFactory.EParser> parserEnum) {
         if (parserEnum == ParserFactory.EParser.SCHEDULE) {
             return new ScheduleParser();

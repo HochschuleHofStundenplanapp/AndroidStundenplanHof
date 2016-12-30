@@ -37,7 +37,7 @@ import de.hof.university.app.model.meal.Meal;
 
 public class MealFragment extends AbstractListFragment {
 
-	public final String TAG = "MealFragment";
+	public final static String TAG = "MealFragment";
 
 	private int weekdayListPos;
 

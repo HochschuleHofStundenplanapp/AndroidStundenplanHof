@@ -38,7 +38,7 @@ import de.hof.university.app.experimental.model.Noten;
  */
 public class NotenAdapter extends ArrayAdapter<Noten> {
 
-    public final String TAG = "NotenAdapter";
+    public final static String TAG = "NotenAdapter";
 
     private final ArrayList<Noten> items;
     private final LayoutInflater vi;

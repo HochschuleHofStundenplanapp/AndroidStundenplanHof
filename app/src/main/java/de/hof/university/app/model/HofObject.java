@@ -19,10 +19,11 @@ import de.hof.university.app.Util.Log;
  */
 
 public class HofObject implements Serializable {
-	public static String TAG = "SaveObject";
-	private String filename = "SaveObect";
+	public final static String TAG = "SaveObject";
 
+	private final static String filename = "SaveObject";
 	private static final long serialVersionUID = Define.serialVersionUID;
+
 	private Date lastSaved;
 
 	public HofObject() {
@@ -33,7 +34,7 @@ public class HofObject implements Serializable {
 		return lastSaved;
 	}
 
-	public void setLastSaved(Date lastSaved) {
+	public void setLastSaved(final Date lastSaved) {
 		this.lastSaved = lastSaved;
 	}
 
@@ -47,7 +48,7 @@ public class HofObject implements Serializable {
 			os.writeObject(this);
 			os.close();
 			fos.close();
-		} catch ( IOException e ) {
+		} catch ( final IOException e ) {
 			Log.e( TAG, "Fehler beim Speichern des Objektes", e );
 		}
 
@@ -66,7 +67,7 @@ public class HofObject implements Serializable {
 				is.close();
 				fis.close();
 			}
-		} catch ( Exception e ) {
+		} catch ( final Exception e ) {
 			Log.e( TAG, "Fehler beim Einlesen", e );
 		}
 		return result;
