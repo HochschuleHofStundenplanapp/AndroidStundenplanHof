@@ -56,6 +56,12 @@ public final class Define {
 	public static final String coursesFilename = "courses";
 	public static final String mealsFilename = "meals";
 
+	// Namen für die Fragmente
+	public static final String myScheduleFragmentName = "MYSCHEDULE_FRAGMENT";
+	public static final String scheduleFragmentName = "SCHEDULE_FRAGMENT";
+	public static final String changesFragmentName = "CHANGES_FRAGMENT";
+	public static final String mealsFragmentName = "MEALS_FRAGMENT";
+
 	// show the fragments dealing with the location of the user
 	public static final int SHOW_LOCATION_FRAGMENT = 0 ;
 	// show Notenblatt and Notenfreigabe

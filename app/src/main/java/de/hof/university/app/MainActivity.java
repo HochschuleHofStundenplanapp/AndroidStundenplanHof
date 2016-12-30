@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity
 				}
 				FragmentTransaction trans = manager.beginTransaction();
 				trans.addToBackStack(MealFragment.class.getName());
-				trans.replace(R.id.content_main, mealFragment, "MEAL_FRAGMENT");
+				trans.replace(R.id.content_main, mealFragment, Define.mealsFragmentName);
 				trans.commit();
 			}
 		} else if ( R.id.nav_notenbekanntgabe == id ) {
@@ -292,7 +292,7 @@ public class MainActivity extends AppCompatActivity
 				} else {
 					trans.addToBackStack(ScheduleFragment.class.getName());
 				}
-				trans.replace(R.id.content_main, scheduleFragment);
+				trans.replace(R.id.content_main, scheduleFragment, Define.scheduleFragmentName);
 				trans.commit();
 
 				// den Menüpunkt markieren
@@ -313,7 +313,7 @@ public class MainActivity extends AppCompatActivity
 				} else {
 					trans.addToBackStack(MyScheduleFragment.class.getName());
 				}
-				trans.replace(R.id.content_main, myScheduleFragment, "MYSCHEDULE_FRAGMENT");
+				trans.replace(R.id.content_main, myScheduleFragment, Define.myScheduleFragmentName);
 				trans.commit();
 
 				// den Menüpunkt markieren
@@ -329,7 +329,7 @@ public class MainActivity extends AppCompatActivity
 				}
 				FragmentTransaction trans = manager.beginTransaction();
 				trans.addToBackStack(ChangesFragment.class.getName());
-				trans.replace(R.id.content_main, changesFragment, "CHANGES_FRAGMENT");
+				trans.replace(R.id.content_main, changesFragment, Define.changesFragmentName);
 				trans.commit();
 			}
 		} else if ( R.id.nav_einstellungen == id ) {
