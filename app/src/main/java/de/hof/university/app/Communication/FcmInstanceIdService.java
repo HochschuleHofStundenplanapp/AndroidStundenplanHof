@@ -1,8 +1,14 @@
 package de.hof.university.app.Communication;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
+import de.hof.university.app.MainActivity;
+import de.hof.university.app.R;
 import de.hof.university.app.Util.Log;
 
 /**
@@ -29,10 +35,15 @@ public class FcmInstanceIdService extends FirebaseInstanceIdService {
 	@Override
 	public void onTokenRefresh() {
 		// Get updated InstanceID token.
-		final String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-		Log.d(TAG, "Refreshed token: " + refreshedToken);
+		String recent_token = FirebaseInstanceId.getInstance().getToken();
+		android.util.Log.d("Recent Token: ", recent_token);
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.contextOfApplication);
 
-		sendRegistrationToServer(refreshedToken);
+		//SharedPreferences sharedPreferences = getApplicationContext().getApplicationContext().getSharedPreferences(getString(R.string.FCM_PREF), Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sharedPref.edit();
+		System.out.println("RECENT TOKEN: " + recent_token);
+		editor.putString(getString(R.string.FCM_TOKEN), recent_token);
+		editor.commit();
 	}
 
 	// After you have obtained the token, you can send it to your app server.

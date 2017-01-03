@@ -36,6 +36,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.Toast;
 
+import de.hof.university.app.Communication.RegisterLectures;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.fragment.NotenbekanntgabeFragment;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener {
 
 	public final String TAG = "MainActivity";
+	public static Context contextOfApplication;
 
 	private MealFragment mealFragment;
 	private ScheduleFragment scheduleFragment;
@@ -82,6 +84,9 @@ public class MainActivity extends AppCompatActivity
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
+		contextOfApplication = getApplicationContext();
+		RegisterLectures regLeg = new RegisterLectures();
+		regLeg.registerLectures();
 
 		//Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		//setSupportActionBar(toolbar);

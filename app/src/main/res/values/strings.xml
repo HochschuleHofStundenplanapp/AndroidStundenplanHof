@@ -103,4 +103,6 @@
     <string name="details">Details</string>
     <string name="changesMyScheduleText">Schedule changes are based on \"My Schedule\"</string>
     <string name="changesScheduleText">\"My Schedule\" is empty. All schedule changes are shown.</string>
+    <string name="FCM_TOKEN" translatable="false" >de.hof-university.app.fcm_token</string>
+    <string name="FCM_PREF" translatable="false">de.hof-university.app.fcm_pref</string>
 </resources>
