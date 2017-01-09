@@ -116,9 +116,13 @@ public class ScheduleFragment extends AbstractListFragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (getClass().getSimpleName().equals(TAG)) {
+            final MainActivity mainActivity = (MainActivity) getActivity();
+            mainActivity.getSupportActionBar().setTitle(R.string.stundenplan);
 
-        final MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().setTitle(R.string.stundenplan);
+            NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+            navigationView.getMenu().findItem(R.id.nav_stundenplan).setChecked(true);
+        }
     }
 
     @Override

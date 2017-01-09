@@ -294,10 +294,6 @@ public class MainActivity extends AppCompatActivity
 				}
 				trans.replace(R.id.content_main, scheduleFragment, Define.scheduleFragmentName);
 				trans.commit();
-
-				// den Menüpunkt markieren
-				NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-				navigationView.getMenu().findItem(R.id.nav_stundenplan).setChecked(true);
 			}
 		} else if ( R.id.nav_mySchedule == id ) {
 			FragmentManager manager = getFragmentManager();
@@ -315,11 +311,8 @@ public class MainActivity extends AppCompatActivity
 				}
 				trans.replace(R.id.content_main, myScheduleFragment, Define.myScheduleFragmentName);
 				trans.commit();
-
-				// den Menüpunkt markieren
-				NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-				navigationView.getMenu().findItem(R.id.nav_mySchedule).setChecked(true);
 			}
+
 		} else if ( R.id.nav_aenderung == id ) {
 			FragmentManager manager = getFragmentManager();
 			if ( !manager.popBackStackImmediate(ChangesFragment.class.getName(), 0) ) {
@@ -332,6 +325,7 @@ public class MainActivity extends AppCompatActivity
 				trans.replace(R.id.content_main, changesFragment, Define.changesFragmentName);
 				trans.commit();
 			}
+
 		} else if ( R.id.nav_einstellungen == id ) {
 			FragmentManager manager = getFragmentManager();
 			if ( !manager.popBackStackImmediate(SettingsFragment.class.getName(), 0) ) {
