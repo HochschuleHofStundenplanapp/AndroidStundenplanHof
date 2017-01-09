@@ -62,6 +62,8 @@ public class MyScheduleFragment extends ScheduleFragment {
     @Override
     public final void onResume() {
         super.onResume();
+        final MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.getSupportActionBar().setTitle(R.string.myschedule);
 
         if (DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) == 0) {
             Toast.makeText(getView().getContext(), getString(R.string.myScheduleInfo), Toast.LENGTH_LONG).show();

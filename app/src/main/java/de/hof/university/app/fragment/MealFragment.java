@@ -60,6 +60,17 @@ public class MealFragment extends AbstractListFragment {
 	}
 
 	@Override
+	public final void onResume() {
+		super.onResume();
+		MainActivity mainActivity = (MainActivity) getActivity();
+		mainActivity.getSupportActionBar().setTitle(R.string.speiseplan);
+
+		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+		navigationView.getMenu().findItem(R.id.nav_speiseplan).setChecked(true);
+	}
+
+
+	@Override
 	protected final void modifyListViewAfterDataSetChanged() {
 		listView.setSelection(weekdayListPos);
 	}

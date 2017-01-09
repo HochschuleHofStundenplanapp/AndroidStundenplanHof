@@ -242,13 +242,6 @@ public class MainActivity extends AppCompatActivity
 				trans.addToBackStack(MealFragment.class.getName());
 				trans.replace(R.id.content_main, mealFragment, Define.mealsFragmentName);
 				trans.commit();
-
-				// Titel setzen
-				getSupportActionBar().setTitle(R.string.speiseplan);
-
-				// den Menüpunkt markieren
-				NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-				navigationView.getMenu().findItem(R.id.nav_speiseplan).setChecked(true);
 			}
 		} else if ( R.id.nav_notenbekanntgabe == id ) {
 			FragmentManager manager = getFragmentManager();
@@ -261,15 +254,6 @@ public class MainActivity extends AppCompatActivity
 				}
 				trans.replace(R.id.content_main, notenbekanntgabeFragment);
 				trans.commit();
-
-				// Titel setzen
-				getSupportActionBar().setTitle(R.string.notenbekanntgabe);
-
-				// den Menüpunkt markieren
-				NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-				MenuItem experimentalNavItem = navigationView.getMenu().findItem(R.id.nav_experimental);
-				experimentalNavItem.setChecked(true);
-				experimentalNavItem.getSubMenu().findItem(R.id.nav_notenbekanntgabe).setChecked(true);
 			}
 		} else if ( R.id.nav_notenblatt == id ) {
 			FragmentManager manager = getFragmentManager();
@@ -282,15 +266,6 @@ public class MainActivity extends AppCompatActivity
 				}
 				trans.replace(R.id.content_main, notenblattFragment);
 				trans.commit();
-
-				// Titel setzen
-				getSupportActionBar().setTitle(R.string.notenblatt);
-
-				// den Menüpunkt markieren
-				NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-				MenuItem experimentalNavItem = navigationView.getMenu().findItem(R.id.nav_experimental);
-				experimentalNavItem.setChecked(true);
-				experimentalNavItem.getSubMenu().findItem(R.id.nav_notenblatt).setChecked(true);
 			}
 		} else if ( R.id.nav_raumsuche == id ) {
 			FragmentManager manager = getFragmentManager();
@@ -302,15 +277,6 @@ public class MainActivity extends AppCompatActivity
 				trans.addToBackStack(RaumsucheFragment.class.getName());
 				trans.replace(R.id.content_main, raumsucheFragment);
 				trans.commit();
-
-				// Titel setzen
-				getSupportActionBar().setTitle(R.string.raumsuche);
-
-				// den Menüpunkt markieren
-				NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-				MenuItem experimentalNavItem = navigationView.getMenu().findItem(R.id.nav_experimental);
-				experimentalNavItem.setChecked(true);
-				experimentalNavItem.getSubMenu().findItem(R.id.nav_raumsuche).setChecked(true);
 			}
 		} else if ( R.id.nav_stundenplan == id ) {
 			FragmentManager manager = getFragmentManager();
@@ -328,9 +294,6 @@ public class MainActivity extends AppCompatActivity
 				}
 				trans.replace(R.id.content_main, scheduleFragment, Define.scheduleFragmentName);
 				trans.commit();
-
-				// Titel setzen
-				getSupportActionBar().setTitle(R.string.stundenplan);
 
 				// den Menüpunkt markieren
 				NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -353,9 +316,6 @@ public class MainActivity extends AppCompatActivity
 				trans.replace(R.id.content_main, myScheduleFragment, Define.myScheduleFragmentName);
 				trans.commit();
 
-				// Titel setzen
-				getSupportActionBar().setTitle(R.string.myschedule);
-
 				// den Menüpunkt markieren
 				NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 				navigationView.getMenu().findItem(R.id.nav_mySchedule).setChecked(true);
@@ -371,13 +331,6 @@ public class MainActivity extends AppCompatActivity
 				trans.addToBackStack(ChangesFragment.class.getName());
 				trans.replace(R.id.content_main, changesFragment, Define.changesFragmentName);
 				trans.commit();
-
-				// Titel setzen
-				getSupportActionBar().setTitle(R.string.aenderung);
-
-				// den Menüpunkt markieren
-				NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-				navigationView.getMenu().findItem(R.id.nav_aenderung).setChecked(true);
 			}
 		} else if ( R.id.nav_einstellungen == id ) {
 			FragmentManager manager = getFragmentManager();
@@ -393,13 +346,6 @@ public class MainActivity extends AppCompatActivity
 				}
 				trans.replace(R.id.content_main, new SettingsFragment());
 				trans.commit();
-
-				// Titel setzen
-				getSupportActionBar().setTitle(R.string.einstellungen);
-
-				// den Menüpunkt markieren
-				NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-				navigationView.getMenu().findItem(R.id.nav_einstellungen).setChecked(true);
 			}
 		} else if ( R.id.nav_impressum == id ) {
 			FragmentManager manager = getFragmentManager();
@@ -412,13 +358,6 @@ public class MainActivity extends AppCompatActivity
 				}
 				trans.replace(R.id.content_main, impressumFragment);
 				trans.commit();
-
-				// Titel setzen
-				getSupportActionBar().setTitle(R.string.impressum);
-
-				// den Menüpunkt markieren
-				NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-				navigationView.getMenu().findItem(R.id.nav_impressum).setChecked(true);
 			}
 		} else if ( R.id.nav_aboutus == id ) {
 			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.aboutusURL)));
@@ -437,13 +376,6 @@ public class MainActivity extends AppCompatActivity
 				}
 				trans.replace(R.id.content_main, primussTabFragment);
 				trans.commit();
-
-				// Titel setzen
-				getSupportActionBar().setTitle(R.string.primuss);
-
-				// den Menüpunkt markieren
-				NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-				navigationView.getMenu().findItem(R.id.nav_primuss).setChecked(true);
 			}
 
 		}

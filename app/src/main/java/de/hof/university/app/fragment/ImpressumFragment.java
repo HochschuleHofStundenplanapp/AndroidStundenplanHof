@@ -37,6 +37,16 @@ public class ImpressumFragment extends Fragment {
 	public final static String TAG = "ImpressumFragment";
 
 	@Override
+	public final void onResume() {
+		super.onResume();
+		MainActivity mainActivity = (MainActivity) getActivity();
+		mainActivity.getSupportActionBar().setTitle(R.string.impressum);
+
+		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+		navigationView.getMenu().findItem(R.id.nav_impressum).setChecked(true);
+	}
+
+	@Override
 	public final View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                               Bundle savedInstanceState) {
 		// Inflate the layout for this fragment

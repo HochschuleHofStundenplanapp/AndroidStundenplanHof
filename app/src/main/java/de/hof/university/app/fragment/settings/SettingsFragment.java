@@ -143,6 +143,11 @@ public class SettingsFragment extends PreferenceFragment {
 	@Override
 	public final void onResume() {
 		super.onResume();
+		MainActivity mainActivity = (MainActivity) getActivity();
+		mainActivity.getSupportActionBar().setTitle(R.string.einstellungen);
+
+		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+		navigationView.getMenu().findItem(R.id.nav_einstellungen).setChecked(true);
 
 		if ( studyCourseList == null ) {
 			updateCourseListPreference("", false);
