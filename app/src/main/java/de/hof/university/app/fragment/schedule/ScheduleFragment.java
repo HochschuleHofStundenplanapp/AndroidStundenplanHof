@@ -116,7 +116,7 @@ public class ScheduleFragment extends AbstractListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (getClass().getSimpleName().equals(TAG)) {
+        if (getClass().getSimpleName().equals(ScheduleFragment.class.getSimpleName())) {
             final MainActivity mainActivity = (MainActivity) getActivity();
             mainActivity.getSupportActionBar().setTitle(R.string.stundenplan);
 
