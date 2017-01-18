@@ -115,10 +115,10 @@ public class NotenblattFragment extends Fragment {
                                    Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_notenblatt, container, false);
-        webView = (WebView) v.findViewById(R.id.webView);
-        webView.getSettings().setBuiltInZoomControls(true);
-        webView.getSettings().setLoadWithOverviewMode(true);
-        webView.getSettings().setUseWideViewPort(true);
+        webView = (WebView) v.findViewById(R.id.webview);
+        webView.getSettings().setSupportZoom(true);
+        //webView.getSettings().setLoadWithOverviewMode(true);
+        webView.getSettings().setDisplayZoomControls(false);
 
         swipeContainer = (SwipeRefreshLayout) v.findViewById(R.id.webViewSwipeContainer);
 
