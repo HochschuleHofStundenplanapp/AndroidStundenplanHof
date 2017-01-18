@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/swipeContainer"
+    android:clickable="false"
+    android:contextClickable="false">
 <WebView xmlns:android="http://schemas.android.com/apk/res/android"
          android:id="@+id/webview"
          android:layout_width="fill_parent"
@@ -11,3 +18,4 @@
         android:layout_height="wrap_content"
         style="@android:style/Widget.Material.ProgressBar.Small"/>
 </WebView>
+</android.support.v4.widget.SwipeRefreshLayout>

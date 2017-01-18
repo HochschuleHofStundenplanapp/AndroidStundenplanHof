@@ -18,12 +18,15 @@ import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.Util.Log;
 
+import static de.hof.university.app.R.id.swipeContainer;
+
 /**
  * Created by Christian Pfeiffer on 14.12.16.
  */
 
 public class PrimussTabFragment extends Fragment {
 	public final static String TAG = "PrimussFragment";
+	private SwipeRefreshLayout swipeLayout;
 
 	private ProgressBar mPbar = null;
 
@@ -43,10 +46,20 @@ public class PrimussTabFragment extends Fragment {
 		// Inflate the layout for this fragment
 		View v = inflater.inflate(R.layout.fragment_webview, container, false);
 
-		WebView myWebView = (WebView) v.findViewById(R.id.webview);
+		final WebView myWebView = (WebView) v.findViewById(R.id.webview);
 		mPbar = (ProgressBar) v.findViewById(R.id.web_view_progress);
 		WebSettings webSettings = myWebView.getSettings();
 		webSettings.setJavaScriptEnabled(true);
+
+		swipeLayout = (SwipeRefreshLayout) v.findViewById(swipeContainer);
+		swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+			@Override
+			public void onRefresh() {
+				// Insert your code here
+				myWebView.loadUrl("https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhh");
+				swipeLayout.setRefreshing(false);
+			}
+		});
 
 		myWebView.setWebChromeClient(new WebChromeClient());
 		myWebView.setWebViewClient(new WebViewClient() {
@@ -60,14 +73,18 @@ public class PrimussTabFragment extends Fragment {
 										   mPbar.setVisibility(View.GONE);
 									   }
 								   });
+
 		myWebView.getSettings().setSupportZoom(true);
 		myWebView.getSettings().setBuiltInZoomControls(true);
 		myWebView.getSettings().setDisplayZoomControls(false);
 		myWebView.loadUrl("https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhh");
 
+
 		return v;
 
 	}
+
+
 
 
 }
