@@ -29,7 +29,7 @@ import de.hof.university.app.R;
 
 public class RegisterLectures {
     public void registerLectures(){
-        new MyAcyncTask().execute("http://10.0.2.2:8888/fcmtest/fcm_insert.php");
+        new MyAcyncTask().execute("http://10.0.2.2:8888/fcmtest/fcm_register_user.php");
     }
 
     public String makeJSONString(String data[]){
@@ -38,7 +38,7 @@ public class RegisterLectures {
         for(int i = 0; i<data.length; i++){
             JSONObject jo = new JSONObject();
             try {
-                jo.put("name", data[i]);
+                jo.put("vorlesung_id", data[i]);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -55,7 +55,7 @@ public class RegisterLectures {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.contextOfApplication);
             final String token = sharedPref.getString(MainActivity.contextOfApplication.getString(R.string.FCM_TOKEN),"Token ist leer");
 
-            String[] lectures = {"Mathematik","Android Programmierung", "iOS Programmierung"};
+            String[] lectures = {"1","2", "3"};
 
             URL url = null;
             try {
@@ -70,7 +70,7 @@ public class RegisterLectures {
                 String data = URLEncoder.encode("fcm_token", "UTF-8")
                         + "=" + URLEncoder.encode(token, "UTF-8");
 
-                data += "&" + URLEncoder.encode("lecture", "UTF-8") + "="
+                data += "&" + URLEncoder.encode("vorlesung_id", "UTF-8") + "="
                         + URLEncoder.encode(makeJSONString(lectures), "UTF-8");
 
                 client.setRequestMethod("POST");
