@@ -94,7 +94,6 @@ public final class Define {
 
 
 	// Produktiv-Server Web-Services
-	public final static String URL_WEBSERVICE_HOF_NEU = "https://app.hof-university.de/soap/client.php";
 	public final static String URL_WEBSERVICE_HOF = "https://www.hof-university.de/soap/client.php";
 	// Test-Server
 	public final static String URL_WEBSERVICE_HOF_TEST = "http://sh-web02.hof-university.de/soap/client.php";
@@ -102,7 +101,7 @@ public final class Define {
 	public final static String URL_STUDYCOURSE = URL_WEBSERVICE_HOF+"?f=Courses&tt=%s";
 	public final static String URL_SCHEDULE =   (URL_WEBSERVICE_HOF+"?f=Schedule&stg=%s&sem=%s&tt=%s");
 	public final static String URL_CHANGES =    (URL_WEBSERVICE_HOF+"?f=Changes");
-	public final static String URL_MYSCHEDULE = (URL_WEBSERVICE_HOF+"?f=MySchedule");
+	public final static String URL_MYSCHEDULE =     (URL_WEBSERVICE_HOF+"?f=MySchedule");
 
 	// how long to store content from
 	public static final int MAX_CACHE_TIME = 60 * 24 * 2;

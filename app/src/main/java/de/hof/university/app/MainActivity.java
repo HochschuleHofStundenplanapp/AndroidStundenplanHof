@@ -37,6 +37,7 @@ import android.widget.Toast;
 
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.data.DataManager;
+import de.hof.university.app.experimental.fragment.MapFragment;
 import de.hof.university.app.experimental.fragment.NotenbekanntgabeFragment;
 import de.hof.university.app.experimental.fragment.NotenblattFragment;
 import de.hof.university.app.experimental.fragment.RaumsucheFragment;
@@ -65,6 +66,8 @@ public class MainActivity extends AppCompatActivity
 	private NotenblattFragment notenblattFragment;
 	private NotenbekanntgabeFragment notenbekanntgabeFragment;
 	private RaumsucheFragment raumsucheFragment;
+	private MapFragment mapFragment;
+
 
 	private NavigationView navigationView;
 
@@ -175,6 +178,7 @@ public class MainActivity extends AppCompatActivity
 			navigationView.getMenu().findItem(R.id.nav_experimental).setVisible(true);
 			navigationView.getMenu().findItem(R.id.nav_raumsuche).setVisible(true); //Raumsuche anzeigen
 			navigationView.getMenu().findItem(R.id.nav_primuss).setVisible(true); //Primuss anzeigen
+			navigationView.getMenu().findItem(R.id.nav_map).setVisible(true);//Map anzeigen
 
 			// TODO Weil ausblenden solange die neue Authentifizierungsmethode noch nicht funktioniert
 			if ( Define.SHOW_NOTEN == 0 ) {
@@ -267,7 +271,20 @@ public class MainActivity extends AppCompatActivity
 				trans.replace(R.id.content_main, notenblattFragment);
 				trans.commit();
 			}
-		} else if ( R.id.nav_raumsuche == id ) {
+		}
+		else if(R.id.nav_map == id){
+			FragmentManager manager = getFragmentManager();
+			if( !manager.popBackStackImmediate(MapFragment.class.getName(), 0)){
+				if(mapFragment == null){
+					mapFragment = new MapFragment();
+				}
+				FragmentTransaction trans = manager.beginTransaction();
+				trans.addToBackStack(MapFragment.class.getName());
+				trans.replace(R.id.content_main, mapFragment);
+				trans.commit();
+			}
+		}
+		else if ( R.id.nav_raumsuche == id ) {
 			FragmentManager manager = getFragmentManager();
 			if ( !manager.popBackStackImmediate(RaumsucheFragment.class.getName(), 0) ) {
 				if ( raumsucheFragment == null ) {
