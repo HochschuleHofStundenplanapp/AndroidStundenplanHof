@@ -24,7 +24,7 @@ import java.io.Serializable;
 public class LectureItem implements Comparable<LectureItem>, Serializable {
     private static final String date_regex = "dd-MM-yyyy HH:mm:ss";
 
-    private int id;
+    private final String id;
     private final String weekday;
     private final String label;
     private final String type;
@@ -36,10 +36,9 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
     private final String room;
     private final String lecturer;
     private final String comment;
-    private final String splusname;
 
-    public LectureItem(final int id, final String weekday, final String label, final String type, final String group,
-                       final String begin, final String end, final String startdate, final String enddate, final String room, final String lecturer, final String comment, final String splusname) {
+    public LectureItem(final String id, final String weekday, final String label, final String type, final String group,
+                       final String begin, final String end, final String startdate, final String enddate, final String room, final String lecturer, final String comment) {
         this.id = id;
         this.weekday = weekday;
         this.label = label;
@@ -52,13 +51,12 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
         this.room = room;
         this.lecturer = lecturer;
         this.comment = comment;
-        this.splusname = splusname;
     }
 
     @Override
     public String toString() {
         return "LectureItem{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", weekday='" + weekday + '\'' +
                 ", label='" + label + '\'' +
                 ", type='" + type + '\'' +
@@ -70,16 +68,11 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
                 ", room='" + room + '\'' +
                 ", lecturer='" + lecturer + '\'' +
                 ", comment='" + comment + '\'' +
-                ", splusname='" + splusname + '\'' +
                 '}';
     }
 
-    public final int getId() {
+    public String getId() {
         return id;
-    }
-
-    public final void setId(int id) {
-        this.id = id;
     }
 
     public final String getWeekday() {
@@ -93,7 +86,6 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
     public final String getType() {
         return type;
     }
-
 
     public final String getGroup() {
         return group;
@@ -125,10 +117,6 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
 
     public final String getTime() {
         return begin + " - " + end;
-    }
-
-    public String getSplusname() {
-        return splusname;
     }
 
     public final String getDetails() {

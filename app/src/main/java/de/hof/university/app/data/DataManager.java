@@ -400,7 +400,7 @@ public class DataManager {
 		this.getMySchedule(context).getIds().remove(String.valueOf(s.getId()));
 		LectureItem lectureToRemove = null;
 		for ( LectureItem li : this.getMySchedule(context).getLectures() ) {
-			if ( li.getId() == s.getId() ) {
+			if ( li.getId().equals(s.getId()) ) {
 				lectureToRemove = li;
 			}
 		}

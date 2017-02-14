@@ -91,8 +91,7 @@ public final class ChangesParser implements Parser<LectureChange> {
         }
         final String room_old = jsonObject.optJSONObject(Define.PARSER_ORIGNAL).optString(Define.PARSER_ROOM);
         final String lecturer = jsonObject.optString(Define.PARSER_DOCENT);
-        final String splusname = jsonObject.optString(Define.PARSER_SPLUSNAME);
 
-        return new LectureChange(label, comment, group, reason, begin_old, begin_new, room_old, room_new, lecturer, splusname);
+        return new LectureChange(label, comment, group, reason, begin_old, begin_new, room_old, room_new, lecturer);
     }
 }
