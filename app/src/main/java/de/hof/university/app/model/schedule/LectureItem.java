@@ -36,9 +36,10 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
     private final String room;
     private final String lecturer;
     private final String comment;
+    private final String splusname;
 
     public LectureItem(final int id, final String weekday, final String label, final String type, final String group,
-                       final String begin, final String end, final String startdate, final String enddate, final String room, final String lecturer, final String comment) {
+                       final String begin, final String end, final String startdate, final String enddate, final String room, final String lecturer, final String comment, final String splusname) {
         this.id = id;
         this.weekday = weekday;
         this.label = label;
@@ -51,11 +52,13 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
         this.room = room;
         this.lecturer = lecturer;
         this.comment = comment;
+        this.splusname = splusname;
     }
 
     @Override
     public String toString() {
         return "LectureItem{" +
+                "id=" + id +
                 ", weekday='" + weekday + '\'' +
                 ", label='" + label + '\'' +
                 ", type='" + type + '\'' +
@@ -67,6 +70,7 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
                 ", room='" + room + '\'' +
                 ", lecturer='" + lecturer + '\'' +
                 ", comment='" + comment + '\'' +
+                ", splusname='" + splusname + '\'' +
                 '}';
     }
 
@@ -121,6 +125,10 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
 
     public final String getTime() {
         return begin + " - " + end;
+    }
+
+    public String getSplusname() {
+        return splusname;
     }
 
     public final String getDetails() {

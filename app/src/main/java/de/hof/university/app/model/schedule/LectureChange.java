@@ -34,9 +34,10 @@ public class LectureChange implements Serializable {
     private final String room_old;
     private final String room_new;
     private final String lecturer;
+    private final String splusname;
 
     public LectureChange(final String label, final String comment, final String group, final String reason,
-                         final String begin_old, final String begin_new, final String room_old, final String room_new, final String lecturer) {
+                         final String begin_old, final String begin_new, final String room_old, final String room_new, final String lecturer, final String splusname) {
         this.label = label;
         this.comment = comment;
         this.group = group;
@@ -46,6 +47,7 @@ public class LectureChange implements Serializable {
         this.room_old = room_old;
         this.room_new = room_new;
         this.lecturer = lecturer;
+        this.splusname = splusname;
     }
 
     public final String getLabel() {
@@ -84,8 +86,12 @@ public class LectureChange implements Serializable {
         return lecturer;
     }
 
+    public String getSplusname() {
+        return splusname;
+    }
+
     @Override
-    public final String toString() {
+    public String toString() {
         return "LectureChange{" +
                 "label='" + label + '\'' +
                 ", comment='" + comment + '\'' +
@@ -96,6 +102,7 @@ public class LectureChange implements Serializable {
                 ", room_old='" + room_old + '\'' +
                 ", room_new='" + room_new + '\'' +
                 ", lecturer='" + lecturer + '\'' +
+                ", splusname='" + splusname + '\'' +
                 '}';
     }
 

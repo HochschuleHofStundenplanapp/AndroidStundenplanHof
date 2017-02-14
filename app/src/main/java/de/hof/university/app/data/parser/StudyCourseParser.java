@@ -85,6 +85,7 @@ public class StudyCourseParser implements Parser<StudyCourse> {
         for (int i = 0; i < jsonArray.length(); ++i) {
             terms.add(jsonArray.optString(i));
         }
+
         return new StudyCourse(name, tag, terms);
     }
 }

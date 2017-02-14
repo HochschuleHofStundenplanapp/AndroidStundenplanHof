@@ -110,7 +110,8 @@ public class ScheduleParser implements Parser<LectureItem> {
             //Entferne alle Sonderzeichen bei den Dozenten, eingetragen durch SPLUS
         final String lecturer = jsonObject.optString(Define.PARSER_DOCENT).replace("§§", ",");
         final String comment = jsonObject.optString(Define.SCHEDULE_PARSER_COMMENT);
+        final String splusname = jsonObject.optString(Define.PARSER_SPLUSNAME);
 
-        return new LectureItem(id, weekday, label, type, group, begin, end, startdate, enddate, room, lecturer, comment);
+        return new LectureItem(id, weekday, label, type, group, begin, end, startdate, enddate, room, lecturer, comment, splusname);
     }
 }

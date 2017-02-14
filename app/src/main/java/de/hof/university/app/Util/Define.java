@@ -40,6 +40,7 @@ public final class Define {
 	public static final String PARSER_ENDDATE = "enddate"; //NON-NLS
 	public static final String PARSER_ROOM = "room"; //NON-NLS
 	public static final String PARSER_DOCENT = "docent"; //NON-NLS
+	public static final String PARSER_SPLUSNAME = "splusname"; 	//NON-NLS
 
 	public static final String PARSER_CHANGES = "changes"; //NON-NLS
 	public static final String PARSER_TIME = "time"; //NON-NLS
