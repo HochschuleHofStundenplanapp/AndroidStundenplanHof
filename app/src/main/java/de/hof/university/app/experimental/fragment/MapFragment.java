@@ -10,7 +10,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -32,9 +31,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import de.hof.university.app.BuildConfig;
 import de.hof.university.app.MainActivity;
-import de.hof.university.app.Manifest;
 import de.hof.university.app.R;
 
 /**
@@ -89,17 +86,11 @@ public class MapFragment extends Fragment {
 
         myOpenMapView.getOverlays().add(marker);
 
-        OpenStreetMapTileProviderConstants.DEBUG_TILE_PROVIDERS=true;
-        OpenStreetMapTileProviderConstants.DEBUGMODE=true;
-        MapTileDownloader.DEBUG = true;
+
         CloudmadeUtil.DEBUGMODE=true;
 
         TilesOverlay x=this.myOpenMapView.getOverlayManager().getTilesOverlay();
         x.setOvershootTileCache(x.getOvershootTileCache() * 2);
-
-
-
-        org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants.setNumberOfTileDownloadThreads(12);
 
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
