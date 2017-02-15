@@ -95,8 +95,8 @@ public final class Define {
 
 
 	// Produktiv-Server Web-Services
-	public final static String URL_WEBSERVICE_HOF_NEU = "https://app.hof-university.de/soap/client.php";
-	public final static String URL_WEBSERVICE_HOF = "https://www.hof-university.de/soap/client.php";
+	public final static String URL_WEBSERVICE_HOF = "https://app.hof-university.de/soap/client.php";
+	//public final static String URL_WEBSERVICE_HOF_ALT = "https://www.hof-university.de/soap/client.php";
 	// Test-Server
 	public final static String URL_WEBSERVICE_HOF_TEST = "http://sh-web02.hof-university.de/soap/client.php";
 
