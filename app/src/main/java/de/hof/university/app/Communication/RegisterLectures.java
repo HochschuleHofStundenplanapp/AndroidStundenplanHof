@@ -31,7 +31,7 @@ import de.hof.university.app.R;
 
 public class RegisterLectures {
     public void registerLectures(Set<String> ids){
-        ParamsClass params = new ParamsClass(ids, "https://app.hof-university.de/soap/fcm_register_user.php");
+        ParamsClass params = new ParamsClass(ids, "https://app.hof-university.de/soap/fcm_register_user.php?debug=1"); // TODO Debug ausschalten
 
         new MyAcyncTask().execute(params);
         Log.d("FCMService", "nach execute von Task");
