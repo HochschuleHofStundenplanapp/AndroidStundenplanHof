@@ -85,13 +85,16 @@ public class MainActivity extends AppCompatActivity
 
 		setContentView(R.layout.activity_main);
 		contextOfApplication = getApplicationContext();
-		RegisterLectures regLeg = new RegisterLectures();
-		regLeg.registerLectures();
 
 		//Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		//setSupportActionBar(toolbar);
 
 		DataManager.getInstance().cleanCache(getApplicationContext());
+
+		// TODO noch zum testten da, noch löschen
+		RegisterLectures regLeg = new RegisterLectures();
+		regLeg.registerLectures();
+
 
 		// Notifications müssen nicht mehr angezeigt werden
 		NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

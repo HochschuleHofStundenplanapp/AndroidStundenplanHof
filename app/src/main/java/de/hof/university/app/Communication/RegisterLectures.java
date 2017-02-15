@@ -19,6 +19,7 @@ import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Set;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
@@ -28,8 +29,10 @@ import de.hof.university.app.R;
  */
 
 public class RegisterLectures {
-    public void registerLectures(){
-        new MyAcyncTask().execute("http://10.0.2.2:8888/fcmtest/fcm_register_user.php");
+    public void registerLectures(Set<String> ids){
+        ParamsClass params = new ParamsClass(ids, "https://app.hof-university.de/fcmtest/fcm_register_user.php");
+
+        new MyAcyncTask().execute(params);
     }
 
     public String makeJSONString(String data[]){
@@ -48,19 +51,21 @@ public class RegisterLectures {
 
         return json.toString();
     }
-    public class MyAcyncTask extends AsyncTask<String, String, String> {
+    public class MyAcyncTask extends AsyncTask<ParamsClass, String, String> {
 
         @Override
-        protected String doInBackground(String... params) {
+        protected String doInBackground(ParamsClass... params) {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.contextOfApplication);
             final String token = sharedPref.getString(MainActivity.contextOfApplication.getString(R.string.FCM_TOKEN),"Token ist leer");
 
-            String[] lectures = {"1","2", "3"};
+            //String[] lectures = {"1","2", "3"};
+            String[] lectures = params[1].ids.toArray(new String[params[1].ids.size()]);
 
             URL url = null;
             try {
-                url = new URL(params[0]);
+                url = new URL(params[0].url);
             } catch (MalformedURLException e) {
+                Log.d("FCMService", "Register Token fehlgeschlagen");
                 e.printStackTrace();
             }
             HttpURLConnection client = null;
@@ -125,4 +130,15 @@ public class RegisterLectures {
             super.onPostExecute(result);
         }
     }
+
+    public class ParamsClass {
+        public Set<String> ids;
+        public String url;
+
+        public ParamsClass(Set<String> ids, String url) {
+            this.ids = ids;
+            this.url = url;
+        }
+    }
 }
+
