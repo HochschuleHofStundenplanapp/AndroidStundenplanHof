@@ -30,9 +30,10 @@ import de.hof.university.app.R;
 
 public class RegisterLectures {
     public void registerLectures(Set<String> ids){
-        ParamsClass params = new ParamsClass(ids, "https://app.hof-university.de/fcmtest/fcm_register_user.php");
+        ParamsClass params = new ParamsClass(ids, "https://app.hof-university.de/soap/fcm_register_user.php");
 
         new MyAcyncTask().execute(params);
+        Log.d("FCMService", "nach execute von Task");
     }
 
     public String makeJSONString(String data[]){
@@ -55,11 +56,12 @@ public class RegisterLectures {
 
         @Override
         protected String doInBackground(ParamsClass... params) {
+            Log.d("FCMService", "Beginn doInBackground");
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.contextOfApplication);
             final String token = sharedPref.getString(MainActivity.contextOfApplication.getString(R.string.FCM_TOKEN),"Token ist leer");
 
-            //String[] lectures = {"1","2", "3"};
-            String[] lectures = params[1].ids.toArray(new String[params[1].ids.size()]);
+            String[] lectures = {"1","2", "3"};
+            //String[] lectures = params[1].ids.toArray(new String[params[1].ids.size()]);
 
             URL url = null;
             try {
@@ -70,7 +72,9 @@ public class RegisterLectures {
             }
             HttpURLConnection client = null;
             try {
+                Log.d("FCMService", "bevor openConnection");
                 client = (HttpURLConnection) url.openConnection();
+                Log.d("FCMService", "nach openConnection");
 
                 String data = URLEncoder.encode("fcm_token", "UTF-8")
                         + "=" + URLEncoder.encode(token, "UTF-8");
@@ -81,28 +85,32 @@ public class RegisterLectures {
                 client.setRequestMethod("POST");
                 client.setDoOutput(true);
 
+                Log.d("FCMService", "vor getOutputStream");
                 OutputStreamWriter wr = new OutputStreamWriter(client.getOutputStream());
+                Log.d("FCMService", "nach getOutputStream");
                 wr.write( data );
                 wr.flush();
                 wr.close();
 
-                String text = "";
-                BufferedReader reader=null;
-
-                reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                StringBuilder sb = new StringBuilder();
-                String line = null;
-
-                // Read Server Response
-                while((line = reader.readLine()) != null)
-                {
-                    // Append server response in string
-                    sb.append(line + "\n");
-                }
-
-                text = sb.toString();
-
-                Log.d("SERVER RESPONSE: ", text);
+//                String text = "";
+//                BufferedReader reader=null;
+//
+//                Log.d("FCMService", "vor getInputStream");
+//                reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
+//                Log.d("FCMService", "nach getInputStream");
+//                StringBuilder sb = new StringBuilder();
+//                String line = null;
+//
+//                // Read Server Response
+//                while((line = reader.readLine()) != null)
+//                {
+//                    // Append server response in string
+//                    sb.append(line + "\n");
+//                }
+//
+//                text = sb.toString();
+//
+//                Log.d("SERVER RESPONSE: ", text);
             }
             catch(MalformedURLException error) {
                 Log.d("TAG", "MalformedURLException error");
@@ -113,7 +121,7 @@ public class RegisterLectures {
                 //Handles URL access timeout.
             }
             catch (IOException error) {
-                Log.d("TAG", "IOException");
+                Log.d("TAG", "IOException" + error.toString());
                 //Handles input and output errors
             }
             finally {

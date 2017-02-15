@@ -92,8 +92,8 @@ public class MainActivity extends AppCompatActivity
 		DataManager.getInstance().cleanCache(getApplicationContext());
 
 		// TODO noch zum testten da, noch löschen
-		RegisterLectures regLeg = new RegisterLectures();
-		regLeg.registerLectures();
+		//RegisterLectures regLeg = new RegisterLectures();
+		//regLeg.registerLectures();
 
 
 		// Notifications müssen nicht mehr angezeigt werden
