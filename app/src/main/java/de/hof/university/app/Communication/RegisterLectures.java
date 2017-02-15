@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.util.Base64;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -82,6 +83,15 @@ public class RegisterLectures {
                 data += "&" + URLEncoder.encode("vorlesung_id", "UTF-8") + "="
                         + URLEncoder.encode(makeJSONString(lectures), "UTF-8");
 
+                // Authentifizierung
+                // TODO noch neue Version nutzen
+                final String username = "soapuser";
+                final String password = "F%98z&12";
+                final String userPassword = username + ':' + password;
+                final String encoding = Base64.encodeToString(userPassword.getBytes(), Base64.DEFAULT);
+                client.setRequestProperty("Authorization", "Basic " + encoding);
+
+
                 client.setRequestMethod("POST");
                 client.setDoOutput(true);
 
@@ -92,25 +102,28 @@ public class RegisterLectures {
                 wr.flush();
                 wr.close();
 
-//                String text = "";
-//                BufferedReader reader=null;
-//
-//                Log.d("FCMService", "vor getInputStream");
-//                reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-//                Log.d("FCMService", "nach getInputStream");
-//                StringBuilder sb = new StringBuilder();
-//                String line = null;
-//
-//                // Read Server Response
-//                while((line = reader.readLine()) != null)
-//                {
-//                    // Append server response in string
-//                    sb.append(line + "\n");
-//                }
-//
-//                text = sb.toString();
-//
-//                Log.d("SERVER RESPONSE: ", text);
+                Log.d("FCMService", ""+client.getResponseCode());
+
+                if (client.getResponseCode() == 200) {
+                    String text = "";
+                    BufferedReader reader = null;
+
+                    Log.d("FCMService", "vor getInputStream");
+                    reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                    Log.d("FCMService", "nach getInputStream");
+                    StringBuilder sb = new StringBuilder();
+                    String line = null;
+
+                    // Read Server Response
+                    while ((line = reader.readLine()) != null) {
+                        // Append server response in string
+                        sb.append(line + "\n");
+                    }
+
+                    text = sb.toString();
+
+                    Log.d("SERVER RESPONSE: ", text);
+                }
             }
             catch(MalformedURLException error) {
                 Log.d("TAG", "MalformedURLException error");
