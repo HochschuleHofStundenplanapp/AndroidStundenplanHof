@@ -15,7 +15,7 @@
   -->
 
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="">
-    <string name="app_name" translatable="false">Hochschule Hof</string>
+    <string name="app_name">Hof University</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -64,9 +64,9 @@
     <string name="onclick_refresh">Study courses are updated ....</string>
     <string name="myschedule">My Schedule</string>
     <string name="SHOW_PASSWORD">Display password</string>
-    <string name="USERNAME">User name</string>
+    <string name="USERNAME">Username</string>
     <string name="PASSWORD">Password</string>
-    <string name="LOGIN_DIALOG">Primuss Login</string>
+    <string name="LOGIN_DIALOG">Roomsearch Login</string>
     <string name="SAVE_PASSWORD">Save password</string>
     <string name="impressum">Imprint</string>
     <string name="term_time">Study term</string>

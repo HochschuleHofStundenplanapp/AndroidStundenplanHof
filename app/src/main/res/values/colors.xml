@@ -16,13 +16,36 @@
   -->
 
 <resources>
+    //Appfarben
     <color name="colorPrimary">#2d4490</color>
     <color name="colorAccent">#4b4b4a</color>
+
+    //HSHof_CDFarben
     <color name="colorBlack">#000000</color>
     <color name="colorWhite">#FFFF</color>
+    <color name="colorGreentecGreen">#5c8f52</color>
+
+    //HS_Hof_grau
+    <color name="colorHSHofgrey">#4b4b4a</color>
+    <color name="colorHSHofgrey60P">#994b4b4a</color>
+    <color name="colorHSHofgrey30P">#4d4b4b4a</color>
+    <color name="colorHSHofgrey20P">#334b4b4a</color>
+
+    //Fak_Informatik
     <color name="colorINF">#eab81a</color>
+    <color name="colorINF60P">#99eab81a</color>
+    <color name="colorINF30P">#4deab81a</color>
+    <color name="colorINF20P">#33eab81a</color>
+
+    //Fak_Ingeneurwissenschaften
     <color name="colorING">#2d4490</color>
+    <color name="colorING60">#992d4490</color>
+    <color name="colorING30">#4d2d4490</color>
+    <color name="colorING20">#332d4490</color>
+
+    //Fak_Wirtschaftswissenschaften
     <color name="colorWR">#c2161c</color>
-    <color name="colorgrey">#4b4b4a</color>
-    <color name="colorgreen">#5c8f52</color>
+    <color name="colorWR60P">#99c2161c</color>
+    <color name="colorWR30P">#4dc2161c</color>
+    <color name="colorWR20P">#33c2161c</color>
 </resources>
