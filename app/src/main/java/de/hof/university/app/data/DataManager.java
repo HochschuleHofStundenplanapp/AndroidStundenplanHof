@@ -217,7 +217,11 @@ public class DataManager {
 			final Iterator<String> iterator = this.getMySchedule(context).getIds().iterator();
 			String url = Define.URL_MYSCHEDULE;
 			while ( iterator.hasNext() ) {
-				url += "&id[]=" + iterator.next();
+				// TODO URLEncoder.encode oder so was in der Art verwenden was aber funktioniert
+				String tmp = iterator.next().replace("%", "%25");
+				tmp = tmp.replace("$", "%24");
+				tmp = tmp.replace(" ", "%20");
+				url += "&id[]=" + tmp;
 			}
 
 			final Parser parser = ParserFactory.create(EParser.MYSCHEDULE);
