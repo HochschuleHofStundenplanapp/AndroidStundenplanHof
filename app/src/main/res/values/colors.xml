@@ -17,8 +17,14 @@
 
 <resources>
     //Appfarben
-    <color name="colorPrimary">#2d4490</color>
-    <color name="colorAccent">#4b4b4a</color>
+    <color name="Primary">#3F51B5</color>
+    <color name="Primary_dark">#303F9F</color>
+    <color name="Primary_light">#C5CAE9</color>
+    <color name="Accent">#9E9E9E</color>
+    <color name="Primary_text">#212121</color>
+    <color name="Secondary_text">#757575</color>
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#BDBDBD</color>
 
     //HSHof_CDFarben
     <color name="colorBlack">#000000</color>
