@@ -13,10 +13,12 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -66,6 +68,11 @@ public class MapFragment extends Fragment {
 
         myOpenMapView = (MapView) view.findViewById(R.id.mapView);
         myOpenMapView.setBuiltInZoomControls(true);
+        myOpenMapView.setMultiTouchControls(true);
+        // Falls man möchte das die Karte immmer zur aktuellen Position springt
+        //myOpenMapView.setFlingEnabled(true);
+        // Falls man möchte das man näher ran gezoomt ist
+        //myOpenMapView.setTilesScaledToDpi(true);
         myMapController = myOpenMapView.getController();
         myMapController.setZoom(40);
         marker = new Marker(myOpenMapView);
@@ -90,16 +97,13 @@ public class MapFragment extends Fragment {
             }
 
             @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-            }
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
 
             @Override
-            public void onProviderEnabled(String provider) {
-            }
+            public void onProviderEnabled(String provider) {}
 
             @Override
-            public void onProviderDisabled(String provider) {
-            }
+            public void onProviderDisabled(String provider) {}
         };
 
 
@@ -206,12 +210,21 @@ public class MapFragment extends Fragment {
 
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.getSupportActionBar().setTitle("Map");
+
+        NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+        MenuItem item = navigationView.getMenu().findItem(R.id.nav_experimental);
+        item.setChecked(true);
+        item.getSubMenu().findItem(R.id.nav_map).setChecked(true);
     }
 
     @Override
     public void onPause() {
         // TODO Auto-generated method stub
         super.onPause();
+        MainActivity mainActivity = (MainActivity) getActivity();
+        NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+        navigationView.getMenu().findItem(R.id.nav_experimental).getSubMenu().findItem(R.id.nav_map).setChecked(false);
+
         if (ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getActivity(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
