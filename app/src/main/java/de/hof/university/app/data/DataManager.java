@@ -26,6 +26,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -217,11 +219,11 @@ public class DataManager {
 			final Iterator<String> iterator = this.getMySchedule(context).getIds().iterator();
 			String url = Define.URL_MYSCHEDULE;
 			while ( iterator.hasNext() ) {
-				// TODO URLEncoder.encode oder so was in der Art verwenden was aber funktioniert
-				String tmp = iterator.next().replace("%", "%25");
-				tmp = tmp.replace("$", "%24");
-				tmp = tmp.replace(" ", "%20");
-				url += "&id[]=" + tmp;
+				try {
+					url += "&id[]=" + URLEncoder.encode(iterator.next(), "UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
 			}
 
 			final Parser parser = ParserFactory.create(EParser.MYSCHEDULE);
@@ -290,7 +292,11 @@ public class DataManager {
 				// Fügt die ID's der Vorlesungen hinzu die in Mein Stundenplan sind
 				// dadurch werden nur Änderungen von Mein Stundenplan geholt
 				while ( iterator.hasNext() ) {
-					url += "&id[]=" + iterator.next();
+					try {
+						url += "&id[]=" + URLEncoder.encode(iterator.next(), "UTF-8");
+					} catch (UnsupportedEncodingException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 
