@@ -104,4 +104,6 @@
     <string name="changesMyScheduleText">Schedule changes are based on \"My Schedule\"</string>
     <string name="changesScheduleText">\"My Schedule\" is empty. All schedule changes are shown.</string>
     <string name="noMeal">There is no new menu!</string>
+    <string name="needPermissionText">You need to allow access to location and external storage for this funtion</string>
+    <string name="needPermissionTitle">Permission required</string>
 </resources>

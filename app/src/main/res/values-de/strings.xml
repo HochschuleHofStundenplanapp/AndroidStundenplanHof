@@ -105,4 +105,6 @@
     <string name="details">Details</string>
     <string name="changesScheduleText">\"Mein Stundenplan\" ist leer. Alle Stundenplanänderungen werden angezeigt.</string>
     <string name="noMeal">Es gibt keinen neuen Speiseplan!</string>
+    <string name="needPermissionText">Für diese Funktion müssen Sie die Berechtigung für den Standort und externen Speicher erlauben</string>
+    <string name="needPermissionTitle">Berechtigung erforderlich</string>
 </resources>
