@@ -37,6 +37,7 @@ import de.hof.university.app.Util.Log;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.fragment.schedule.ChangesFragment;
 import de.hof.university.app.fragment.schedule.MyScheduleFragment;
+import de.hof.university.app.fragment.schedule.ScheduleFragment;
 
 
 /**
@@ -44,150 +45,160 @@ import de.hof.university.app.fragment.schedule.MyScheduleFragment;
  */
 public abstract class AbstractListFragment extends Fragment {
 
-	public final static String TAG = "AbstractListFragment";
+    public final static String TAG = "AbstractListFragment";
 
-	private SwipeRefreshLayout swipeContainer;
-	protected ListView listView;
-	protected ArrayAdapter adapter;
-	protected ArrayList<Object> dataList;
-	protected AbstractListFragment.Task task;
-	protected SharedPreferences sharedPref;
+    private SwipeRefreshLayout swipeContainer;
+    protected ListView listView;
+    protected ArrayAdapter adapter;
+    protected ArrayList<Object> dataList;
+    protected AbstractListFragment.Task task;
+    protected SharedPreferences sharedPref;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setHasOptionsMenu(false);
-		sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		dataList = new ArrayList<>();
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(false);
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        dataList = new ArrayList<>();
+    }
 
-	protected abstract ArrayAdapter setArrayAdapter();
+    protected abstract ArrayAdapter setArrayAdapter();
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	                         Bundle savedInstanceState) {
-		View v = inflater.inflate(R.layout.fragment_list, container, false);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_list, container, false);
 
-		swipeContainer = (SwipeRefreshLayout) v.findViewById(R.id.swipeContainer);
-		swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-			@Override
-			public void onRefresh() {
-				updateData(true);
-			}
-		});
+        swipeContainer = (SwipeRefreshLayout) v.findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                updateData(true);
+            }
+        });
 
-		adapter = setArrayAdapter();
-		listView = (ListView) v.findViewById(R.id.listView);
-		listView.setAdapter(adapter);
-		return v;
-	}
+        adapter = setArrayAdapter();
+        listView = (ListView) v.findViewById(R.id.listView);
+        listView.setAdapter(adapter);
+        return v;
+    }
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		updateData(false);
-		// falls es eine andere Toolbar Farbe soll
-		//MainActivity mainActivity = (MainActivity) getActivity();
-		//mainActivity.findViewById(R.id.toolbar).setBackgroundColor(getResources().getColor(R.color.colorBlue));
-	}
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateData(false);
+        // falls es eine andere Toolbar Farbe soll
+        //MainActivity mainActivity = (MainActivity) getActivity();
+        //mainActivity.findViewById(R.id.toolbar).setBackgroundColor(getResources().getColor(R.color.colorBlue));
+    }
 
 
-	@Override
-	public final void onDestroyView() {
-		if ( task != null ) {
-			task.cancel(true);
-		}
-		dataList.clear();
-		adapter.notifyDataSetChanged();
-		swipeContainer.setRefreshing(false);
-		super.onDestroyView();
-	}
+    @Override
+    public final void onDestroyView() {
+        if (task != null) {
+            task.cancel(true);
+        }
+        dataList.clear();
+        adapter.notifyDataSetChanged();
+        swipeContainer.setRefreshing(false);
+        super.onDestroyView();
+    }
 
-	protected abstract String[] setTaskParameter(boolean forceRefresh);
+    protected abstract String[] setTaskParameter(boolean forceRefresh);
 
-	private void updateData(boolean forceRefresh) {
-		String[] params = setTaskParameter(forceRefresh);
-		if ( params != null ) {
-			task = new AbstractListFragment.Task();
-			task.execute(params);
-		}
-	}
+    private void updateData(boolean forceRefresh) {
+        String[] params = setTaskParameter(forceRefresh);
+        if (params != null) {
+            task = new AbstractListFragment.Task();
+            task.execute(params);
+        }
+    }
 
-	private class Task extends AsyncTask<String, Void, ArrayList<Object>> {
+    private class Task extends AsyncTask<String, Void, ArrayList<Object>> {
 
-		@Override
-		protected final void onPreExecute() {
-			if ( !isCancelled() ) {
-				swipeContainer.post(new Runnable() {
-					@Override
-					public void run() {
-						swipeContainer.setRefreshing(true);
-					}
-				});
-			}
-		}
+        @Override
+        protected final void onPreExecute() {
+            if (!isCancelled()) {
+                swipeContainer.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeContainer.setRefreshing(true);
+                    }
+                });
+            }
+        }
 
-		@Override
-		protected final ArrayList<Object> doInBackground(String... params) {
-			if ( !isCancelled() ) {
-				return background(params);
-			}
-			return null;
-		}
+        @Override
+        protected final ArrayList<Object> doInBackground(String... params) {
+            if (!isCancelled()) {
+                return background(params);
+            }
+            return null;
+        }
 
-		@Override
-		protected final void onPostExecute(ArrayList<Object> result) {
-			Log.d(TAG, "isCancelled: " + this.isCancelled());
-			if ( !this.isCancelled() ) {
-				swipeContainer.post(new Runnable() {
-					@Override
-					public void run() {
-						swipeContainer.setRefreshing(false);
-					}
-				});
+        @Override
+        protected final void onPostExecute(ArrayList<Object> result) {
+            Log.d(TAG, "isCancelled: " + this.isCancelled());
+            if (!this.isCancelled()) {
+                swipeContainer.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        swipeContainer.setRefreshing(false);
+                    }
+                });
 
-				if ( result != null ) {
-					dataList.clear();
-					dataList.addAll(result);
-					adapter.notifyDataSetChanged();
-					modifyListViewAfterDataSetChanged();
+                if (result != null) {
+                    dataList.clear();
+                    dataList.addAll(result);
+                    adapter.notifyDataSetChanged();
+                    modifyListViewAfterDataSetChanged();
 
-					// Damit man unter Änderungen ein Feedback bekommt wenn es keine Änderungen gibt.
-					final ChangesFragment changesFragment = (ChangesFragment) getFragmentManager().findFragmentByTag(Define.changesFragmentName);
-					if ( changesFragment != null && changesFragment.isVisible() && dataList.size() == 0 ) {
-						Toast.makeText(getActivity().getApplicationContext(), getString(R.string.noChanges), Toast.LENGTH_SHORT).show();
-					}
+                    // Damit man unter Änderungen ein Feedback bekommt wenn es keine Änderungen gibt.
+                    final ChangesFragment changesFragment = (ChangesFragment) getFragmentManager().findFragmentByTag(Define.changesFragmentName);
+                    if ((changesFragment != null) && changesFragment.isVisible() && (dataList.size() == 0)) {
+                        Toast.makeText(getActivity().getApplicationContext(), getString(R.string.noChanges), Toast.LENGTH_SHORT).show();
+                    }
 
-					// Damit man unter Speiseplan ein Feedback bekommt wenn es keinen Speiseplan gibt.
-					final MealFragment mealFragment = (MealFragment) getFragmentManager().findFragmentByTag(Define.mealsFragmentName);
-					if ( mealFragment != null && mealFragment.isVisible() && dataList.size() == 0 ) {
-						Toast.makeText(getActivity().getApplicationContext(), getString(R.string.noMeal), Toast.LENGTH_SHORT).show();
-					}
-				} else {
-					final ChangesFragment changesFragment = (ChangesFragment) getFragmentManager().findFragmentByTag(Define.changesFragmentName);
-					final MyScheduleFragment myScheduleFragment = (MyScheduleFragment) getFragmentManager().findFragmentByTag(Define.myScheduleFragmentName);
-					if ( ( changesFragment != null && changesFragment.isVisible() )
-							|| ( myScheduleFragment != null && myScheduleFragment.isVisible() ) ) {
-						if (DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) > 0) {
-							Toast.makeText(getActivity().getApplicationContext(), getString(R.string.refreshFailed), Toast.LENGTH_SHORT).show();
-						}
-					} else {
-						Toast.makeText(getActivity().getApplicationContext(), getString(R.string.refreshFailed), Toast.LENGTH_SHORT).show();
-					}
-				}
-			}
-			super.onPostExecute(result);
-		}
+                    // Damit man unter Speiseplan ein Feedback bekommt wenn es keinen Speiseplan gibt.
+                    final MealFragment mealFragment = (MealFragment) getFragmentManager().findFragmentByTag(Define.mealsFragmentName);
+                    if ((mealFragment != null) && mealFragment.isVisible() && (dataList.size() == 0)) {
+                        Toast.makeText(getActivity().getApplicationContext(), getString(R.string.noMeal), Toast.LENGTH_SHORT).show();
+                    }
 
-		@Override
-		protected final void onCancelled(ArrayList<Object> result) {
-			Log.d(TAG, "onCancelled");
-		}
-	}
+                    // Damit man unter Stundenplan ein Feedback bekommt wenn kein Stundenplan vorhanden ist.
+                    final ScheduleFragment scheduleFragment = (ScheduleFragment) getFragmentManager().findFragmentByTag(Define.scheduleFragmentName);
+                    if ((scheduleFragment != null) && scheduleFragment.isVisible() && (dataList.size() == 0)) {
+                        Toast.makeText(getActivity().getApplicationContext(), getString(R.string.noScheduleText), Toast.LENGTH_SHORT).show();
+                    }
 
-	protected void modifyListViewAfterDataSetChanged() {
-	}
+                } else {
+                    final ChangesFragment changesFragment = (ChangesFragment) getFragmentManager().findFragmentByTag(Define.changesFragmentName);
+                    final MyScheduleFragment myScheduleFragment = (MyScheduleFragment) getFragmentManager().findFragmentByTag(Define.myScheduleFragmentName);
 
-	protected abstract ArrayList<Object> background(String[] params);
+                    if (((changesFragment != null) && changesFragment.isVisible())
+                            || ((myScheduleFragment != null) && myScheduleFragment.isVisible())) {
+                        if (DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) > 0) {
+                            // Damit man ein Feedback bekommt wenn das aktualisieren fehlgeschlagen ist
+                            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.refreshFailed), Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        // Damit man ein Feedback bekommt wenn das aktualisieren fehlgeschlagen ist
+                        Toast.makeText(getActivity().getApplicationContext(), getString(R.string.refreshFailed), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+            super.onPostExecute(result);
+        }
+
+        @Override
+        protected final void onCancelled(ArrayList<Object> result) {
+            Log.d(TAG, "onCancelled");
+        }
+    }
+
+    protected void modifyListViewAfterDataSetChanged() {
+    }
+
+    protected abstract ArrayList<Object> background(String[] params);
 
 }

@@ -110,4 +110,5 @@
     <string name="needPermissionTitle">Berechtigung erforderlich</string>
     <string name="notifications">Benachrichtigungen</string>
     <string name="changes">Änderungen</string>
+    <string name="noScheduleText">Für Ihre gewählten Einstellungen ist kein Stundenplan verfügtbar.</string>
 </resources>

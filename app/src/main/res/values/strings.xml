@@ -110,4 +110,5 @@
     <string name="FCM_PREF" translatable="false">de.hof-university.app.fcm_pref</string>
     <string name="notifications">Notifications</string>
     <string name="changes">Changes</string>
+    <string name="noScheduleText">For your selected settings is no schedule available.</string>
 </resources>
