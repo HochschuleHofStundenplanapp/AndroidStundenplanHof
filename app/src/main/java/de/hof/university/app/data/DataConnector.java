@@ -145,8 +145,9 @@ public class DataConnector {
             Log.e(TAG, "readStringFromUrl: MalformedURLException | UnsupportedEncodingException: ", exception);
         } catch (final IOException exception) {
             Log.e(TAG, "readStringFromUrl: IOExcepton: ", exception);
-        } finally {
-            return null;
         }
+
+        return null;
+
     }
 }
