@@ -65,7 +65,7 @@ public class RegisterLectures {
             // Test ID's
             //String[] lectures = {"1","2", "3"};
             // Richtige ID's
-            String[] lectures = params[1].ids.toArray(new String[params[1].ids.size()]);
+            String[] lectures = params[0].ids.toArray(new String[params[0].ids.size()]);
 
             URL url = null;
             try {
