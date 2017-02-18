@@ -30,17 +30,17 @@ import de.hof.university.app.R;
  */
 
 public class RegisterLectures {
-    public void registerLectures(Set<String> ids){
+    public void registerLectures(Set<String> ids) {
         ParamsClass params = new ParamsClass(ids, "https://app.hof-university.de/soap/fcm_register_user.php?debug=1"); // TODO Debug ausschalten
 
         new MyAcyncTask().execute(params);
         Log.d("FCMService", "nach execute von Task");
     }
 
-    public String makeJSONString(String data[]){
+    public String makeJSONString(String data[]) {
         JSONArray json = new JSONArray();
 
-        for(int i = 0; i<data.length; i++){
+        for (int i = 0; i < data.length; i++) {
             JSONObject jo = new JSONObject();
             try {
                 jo.put("vorlesung_id", data[i]);
@@ -53,13 +53,14 @@ public class RegisterLectures {
 
         return json.toString();
     }
+
     public class MyAcyncTask extends AsyncTask<ParamsClass, String, String> {
 
         @Override
         protected String doInBackground(ParamsClass... params) {
             Log.d("FCMService", "Beginn doInBackground");
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.contextOfApplication);
-            final String token = sharedPref.getString(MainActivity.contextOfApplication.getString(R.string.FCM_TOKEN),"Token ist leer");
+            final String token = sharedPref.getString(MainActivity.contextOfApplication.getString(R.string.FCM_TOKEN), "Token ist leer");
 
             // Vorlesungen setzen
             // Test ID's
@@ -101,11 +102,11 @@ public class RegisterLectures {
                 Log.d("FCMService", "vor getOutputStream");
                 OutputStreamWriter wr = new OutputStreamWriter(client.getOutputStream());
                 Log.d("FCMService", "nach getOutputStream");
-                wr.write( data );
+                wr.write(data);
                 wr.flush();
                 wr.close();
 
-                Log.d("FCMService", ""+client.getResponseCode());
+                Log.d("FCMService", "" + client.getResponseCode());
 
                 if (client.getResponseCode() == 200) {
                     String text = "";
@@ -127,21 +128,17 @@ public class RegisterLectures {
 
                     Log.d("SERVER RESPONSE: ", text);
                 }
-            }
-            catch(MalformedURLException error) {
+            } catch (MalformedURLException error) {
                 Log.d("TAG", "MalformedURLException error");
                 //Handles an incorrectly entered URL
-            }
-            catch(SocketTimeoutException error) {
+            } catch (SocketTimeoutException error) {
                 Log.d("TAG", "SocketTimeoutException");
                 //Handles URL access timeout.
-            }
-            catch (IOException error) {
+            } catch (IOException error) {
                 Log.d("TAG", "IOException" + error.toString());
                 //Handles input and output errors
-            }
-            finally {
-                if(client != null) // Make sure the connection is not null.
+            } finally {
+                if (client != null) // Make sure the connection is not null.
                     client.disconnect();
                 Log.d("TAG", "Disconnected");
                 System.out.println("token ist: " + token);
