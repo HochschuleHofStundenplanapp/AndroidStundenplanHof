@@ -513,37 +513,39 @@ public class DataManager {
 	}
 
 	private void registerFcmServer(Context context) {
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-		final boolean registerForChangesNotifications = sharedPreferences.getBoolean("changes_notifications", false);
+		if (Define.PUSH_NOTIFICATIONS_ENABLED) {
+			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+			final boolean registerForChangesNotifications = sharedPreferences.getBoolean("changes_notifications", false);
 
-		if (registerForChangesNotifications) {
-			Set<String> ids = new HashSet<>();
+			if (registerForChangesNotifications) {
+				Set<String> ids = new HashSet<>();
 
-			Object object = readObject(context, Define.scheduleFilename);
-			Schedule schedule = new Schedule();
+				Object object = readObject(context, Define.scheduleFilename);
+				Schedule schedule = new Schedule();
 
-			if (object != null) {
-				schedule = (Schedule) object;
-			}
-
-			if (getMySchedule(context).getIds().size() > 0) {
-				ids = getMySchedule(context).getIds();
-			} else if (schedule.getLectures().size() > 0) {
-				for (LectureItem li : schedule.getLectures()) {
-					// TODO ID muss splusname werden
-					ids.add(String.valueOf(li.getId()));
+				if (object != null) {
+					schedule = (Schedule) object;
 				}
+
+				if (getMySchedule(context).getIds().size() > 0) {
+					ids = getMySchedule(context).getIds();
+				} else if (schedule.getLectures().size() > 0) {
+					for (LectureItem li : schedule.getLectures()) {
+						// TODO ID muss splusname werden
+						ids.add(String.valueOf(li.getId()));
+					}
+				} else {
+					return;
+				}
+
+				RegisterLectures regLeg = new RegisterLectures();
+
+				regLeg.registerLectures(ids);
 			} else {
-				return;
+				// für keine Vorlesung registieren
+				RegisterLectures regLeg = new RegisterLectures();
+				regLeg.registerLectures(new HashSet<String>());
 			}
-
-			RegisterLectures regLeg = new RegisterLectures();
-
-			regLeg.registerLectures(ids);
-		} else {
-			// für keine Vorlesung registieren
-			RegisterLectures regLeg = new RegisterLectures();
-			regLeg.registerLectures(new HashSet<String>());
 		}
 	}
 }

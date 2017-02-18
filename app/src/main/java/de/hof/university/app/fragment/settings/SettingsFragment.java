@@ -26,8 +26,10 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.support.design.widget.NavigationView;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,6 +40,7 @@ import java.util.List;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
+import de.hof.university.app.Util.Define;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.LoginController;
 import de.hof.university.app.model.settings.StudyCourse;
@@ -98,7 +101,18 @@ public class SettingsFragment extends PreferenceFragment {
 		});
 
 		// Benachrichtigungen
+		final PreferenceCategory category_notification = (PreferenceCategory) findPreference("category_notification");
 		final CheckBoxPreference changes_notifications = (CheckBoxPreference) findPreference("changes_notifications");
+
+		PreferenceScreen preferenceScreen = getPreferenceScreen();
+
+		if (Define.PUSH_NOTIFICATIONS_ENABLED) {
+			preferenceScreen.addPreference(category_notification);
+			preferenceScreen.addPreference(changes_notifications);
+		} else {
+			preferenceScreen.removePreference(category_notification);
+			preferenceScreen.removePreference(changes_notifications);
+		}
 
 		final CheckBoxPreference experimentalFeatures = (CheckBoxPreference) findPreference("experimental_features");
 
@@ -129,12 +143,16 @@ public class SettingsFragment extends PreferenceFragment {
 							.setIcon(android.R.drawable.ic_dialog_alert)
 							.show();
 					edtLogin.setEnabled(true);
-					changes_notifications.setEnabled(true);
+					if (changes_notifications != null) {
+						changes_notifications.setEnabled(true);
+					}
 					activity.displayExperimentalFeaturesMenuEntries(true);
 
 				} else {
 					edtLogin.setEnabled(false);
-					changes_notifications.setEnabled(false);
+					if (changes_notifications != null) {
+						changes_notifications.setEnabled(false);
+					}
 					activity.displayExperimentalFeaturesMenuEntries(false);
 				}
 				return true;

@@ -112,4 +112,7 @@ public final class Define {
 	public final static String URL_RAUMSUCHE_LOGIN = "https://www.hof-university.de/anmelden.html";
 	public final static String URL_RAUMSUCHE_LOGIN_SUCCESS = "http://www.hof-university.de/anmeldung-erfolgreich.html";
 	public final static String URL_RAUMSUCHE = "https://www.hof-university.de/studierende/info-service/it-service/raumhardsoftwaresuche.html";
+
+	// Push-Notifications
+	public final static boolean PUSH_NOTIFICATIONS_ENABLED = false;
 }
