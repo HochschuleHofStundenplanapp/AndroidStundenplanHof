@@ -35,6 +35,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import de.hof.university.app.Communication.RegisterLectures;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.fragment.MapFragment;
@@ -53,7 +54,8 @@ import de.hof.university.app.fragment.settings.SettingsFragment;
 public class MainActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener {
 
-	public final static String TAG = "MainActivity";
+	public final String TAG = "MainActivity";
+	public static Context contextOfApplication;
 
 	private MealFragment mealFragment;
 	private ScheduleFragment scheduleFragment;
@@ -82,11 +84,13 @@ public class MainActivity extends AppCompatActivity
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
+		contextOfApplication = getApplicationContext();
 
 		//Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		//setSupportActionBar(toolbar);
 
 		DataManager.getInstance().cleanCache(getApplicationContext());
+
 
 		// Notifications müssen nicht mehr angezeigt werden
 		NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
