@@ -64,12 +64,15 @@ public final class Define {
 	public static final String mealsFragmentName = "MEALS_FRAGMENT";
 
 	// show the fragments dealing with the location of the user
-	public static final int SHOW_LOCATION_FRAGMENT = 0 ;
+	public static final int SHOW_LOCATION_FRAGMENT = 0;
 	// show Notenblatt and Notenfreigabe
 	// TODO Weil ausblenden solange die neue Authentifizierungsmethode noch nicht funktioniert
-	public static final int SHOW_NOTEN = 0 ;
+	public static final int SHOW_NOTEN = 0;
 	// publish notification FMC von Google verwenden
-	public static final int SHOW_PUSHNOTIFICATION = 0 ;
+	public static final int SHOW_PUSHNOTIFICATION = 0;
+	// TODO Ist für die Überprüfung die int oder boolean besser? Ich dachte boolean
+	// Push-Notifications
+	public final static boolean PUSH_NOTIFICATIONS_ENABLED = false;
 
 	public static final long serialVersionUID = 1L;
 
@@ -100,19 +103,23 @@ public final class Define {
 	// Test-Server
 	public final static String URL_WEBSERVICE_HOF_TEST = "http://sh-web02.hof-university.de/soap/client.php";
 
-	public final static String URL_STUDYCOURSE = URL_WEBSERVICE_HOF+"?f=Courses&tt=%s";
-	public final static String URL_SCHEDULE =   (URL_WEBSERVICE_HOF+"?f=Schedule&stg=%s&sem=%s&tt=%s");
-	public final static String URL_CHANGES =    (URL_WEBSERVICE_HOF+"?f=Changes");
-	public final static String URL_MYSCHEDULE = (URL_WEBSERVICE_HOF+"?f=MySchedule");
+	public final static String URL_STUDYCOURSE 	= (URL_WEBSERVICE_HOF+"?f=Courses&tt=%s");
+	public final static String URL_SCHEDULE 	= (URL_WEBSERVICE_HOF+"?f=Schedule&stg=%s&sem=%s&tt=%s");
+	public final static String URL_CHANGES 		= (URL_WEBSERVICE_HOF+"?f=Changes");
+	public final static String URL_MYSCHEDULE 	= (URL_WEBSERVICE_HOF+"?f=MySchedule");
+
+	public final static String URL_MEAL 		= URL_STUDENTENWERK;
 
 	// how long to store content from
-	public static final int MAX_CACHE_TIME = 60 * 24 * 2;
+	public static final int MAX_CACHE_TIME = 60 * 24 * 2;		// zwei Tage
+	public static final int SCHEDULE_CACHE_TIME = 60 * 24;		// ein Tag
+	public static final int MYSCHEDULE_CACHE_TIME = 60 * 24;	// ein Tag
+	public static final int CHANGES_CACHE_TIME = 60 * 1;		// eine Stunde
+	public static final int MEAL_CACHE_TIME = 60 * 24 * 2;		// zwei Tage
+	public static final int COURSES_CACHE_TIME = 60 * 24 * 7;	// eine Woche
 
 	// Raumsuche
 	public final static String URL_RAUMSUCHE_LOGIN = "https://www.hof-university.de/anmelden.html";
 	public final static String URL_RAUMSUCHE_LOGIN_SUCCESS = "http://www.hof-university.de/anmeldung-erfolgreich.html";
 	public final static String URL_RAUMSUCHE = "https://www.hof-university.de/studierende/info-service/it-service/raumhardsoftwaresuche.html";
-
-	// Push-Notifications
-	public final static boolean PUSH_NOTIFICATIONS_ENABLED = false;
 }

@@ -16,7 +16,9 @@
 
 package de.hof.university.app.data;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -37,6 +39,7 @@ import java.util.Set;
 
 import de.hof.university.app.Communication.RegisterLectures;
 import de.hof.university.app.MainActivity;
+import de.hof.university.app.R;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.Util.Log;
 import de.hof.university.app.Util.MyString;
@@ -58,494 +61,456 @@ import de.hof.university.app.model.settings.StudyCourses;
  */
 public class DataManager {
 
-	public static final String TAG = "DataManager";
+    public static final String TAG = "DataManager";
 
-	private enum CONNECTION {
+    // single instance of the Factories
+    static final private DataConnector dataConnector = new DataConnector();
 
-		// Essen
-		MEAL(Define.URL_STUDENTENWERK, Define.MAX_CACHE_TIME ),
-		STUDYCOURSE(Define.URL_STUDYCOURSE, Define.MAX_CACHE_TIME);
+    private MySchedule mySchedule;
 
-		private final String url;
-		private final int cache;
-
-		CONNECTION(final String url, final int cache) {
-			this.url = url;
-			this.cache = cache;
-		}
-
-		public final int getCache() {
-			return this.cache;
-		}
-
-		public final String getUrl() {
-			return this.url;
-		}
-	}
+    private static final DataManager dataManager = new DataManager();
 
 
-	// single instance of the Factories
-	static final private DataConnector dataConnector = new DataConnector();
+    public static DataManager getInstance() {
+        return DataManager.dataManager;
+    }
 
-	private MySchedule mySchedule;
+    private DataManager() {
+    }
 
-	private static final DataManager dataManager = new DataManager();
+    public final ArrayList<Meal> getMeals(Context context, boolean forceRefresh) {
+        Object object = readObject(context, Define.mealsFilename);
+        Meals meals = new Meals();
 
+        if (object != null) {
+            meals = (Meals) object;
+        }
 
-	public static DataManager getInstance() {
-		return DataManager.dataManager;
-	}
-
-	private DataManager() {
-	}
-
-	public final ArrayList<Meal> getMeals(Context context, boolean forceRefresh) {
-		Object object = readObject(context, Define.mealsFilename);
-		Meals meals = new Meals();
-
-		if ( object != null ) {
-			meals = (Meals) object;
-		}
-
-		if ( forceRefresh || object == null || meals.getMeals().size() == 0 || meals.getLastSaved() == null || !cacheStillValid(meals, CONNECTION.MEAL.getCache()) ) {
-			final Parser parser = ParserFactory.create(EParser.MENU);
-			final Calendar calendar = Calendar.getInstance();
-			final String url = DataManager.CONNECTION.MEAL.getUrl() + calendar.get(Calendar.YEAR) + '-' + (calendar.get(Calendar.MONTH) + 1) + '-' + calendar.get(Calendar.DAY_OF_MONTH);
-			final String xmlString = this.getData(url);
+        if (forceRefresh
+                || (object == null)
+                || (meals.getMeals().size() == 0)
+                || (meals.getLastSaved() == null)
+                || !cacheStillValid(meals, Define.MEAL_CACHE_TIME)) {
+            final Parser parser = ParserFactory.create(EParser.MENU);
+            final Calendar calendar = Calendar.getInstance();
+            final String url = Define.URL_MEAL + calendar.get(Calendar.YEAR) + '-' + (calendar.get(Calendar.MONTH) + 1) + '-' + calendar.get(Calendar.DAY_OF_MONTH);
+            final String xmlString = this.getData(url);
 
 //TODO check
-			if ( xmlString.isEmpty() ) {
-				if ( !forceRefresh && object != null ) {
-					return meals.getMeals();
-				} else {
-					return null;
-				}
-			}
+            // falls der String leer ist war ein Problem mit dem Internet
+            if (xmlString.isEmpty()) {
+                // prüfen ob es kein ForceRefreseh war, dann kann gecachtes zurück gegeben werden
+                if (!forceRefresh && object != null) {
+                    return meals.getMeals();
+                } else {
+                    // anderen falls null, damit dann die Fehlermeldung "Aktualisierung fehlgeschlagen" kommt
+                    return null;
+                }
+            }
 
-			final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-			final String[] params = { xmlString, sharedPreferences.getString("speiseplan_tarif", "1") };
-			assert parser != null;
+            final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            final String[] params = {xmlString, sharedPreferences.getString("speiseplan_tarif", "1")};
+            assert parser != null;
 
-			ArrayList<Meal> tmpMeals = (ArrayList<Meal>) parser.parse(params);
+            ArrayList<Meal> tmpMeals = (ArrayList<Meal>) parser.parse(params);
 
-			if ( tmpMeals.isEmpty() ) {
-				if ( !forceRefresh && meals.getMeals().size() > 0 ) {
-					return meals.getMeals();
-				} else {
-					return new ArrayList<>();
-				}
-			}
+            meals.setMeals(tmpMeals);
 
-			meals.setMeals(tmpMeals);
+            meals.setLastSaved(new Date());
+            saveObject(context, meals, Define.mealsFilename);
+        }
 
-			meals.setLastSaved(new Date());
-			saveObject(context, meals, Define.mealsFilename);
-		}
+        return meals.getMeals();
+    }
 
-		return meals.getMeals();
-	}
+    public final ArrayList<LectureItem> getSchedule(Context context, String language, String course, String semester,
+                                                    String termTime, boolean forceRefresh) {
+        Object object = readObject(context, Define.scheduleFilename);
+        Schedule schedule = new Schedule();
 
-	public final ArrayList<LectureItem> getSchedule(Context context, String language, String course, String semester,
-	                                                String termTime, boolean forceRefresh) {
-		Object object = readObject(context, Define.scheduleFilename);
-		Schedule schedule = new Schedule();
+        if (object != null) {
+            schedule = (Schedule) object;
+        }
 
-		if ( object != null ) {
-			schedule = (Schedule) object;
-		}
+        if (forceRefresh
+                || (object == null)
+                || (schedule.getLectures().size() == 0)
+                || (schedule.getLastSaved() == null)
+                || !cacheStillValid(schedule, Define.SCHEDULE_CACHE_TIME)
+                || !schedule.getCourse().equals(course)
+                || !schedule.getSemester().equals(semester)
+                || !schedule.getTermtime().equals(termTime)) {
+            // Änderungen sollen neu geholt werden
+            resetChangesLastSave(context);
 
-		if ( forceRefresh
-				     || object == null
-				     || schedule.getLectures().size() == 0
-				     || schedule.getLastSaved() == null
-//TODO				     || !cacheStillValid(schedule, Define.URL_SCHEDULE.getCache())
-				     || !schedule.getCourse().equals(course)
-				     || !schedule.getSemester().equals(semester)
-				     || !schedule.getTermtime().equals(termTime) )
-			{
-			// Änderungen sollen neu geholt werden
-			resetChangesLastSave(context);
+            final Parser parser = ParserFactory.create(EParser.SCHEDULE);
+            final String aString = String.format(Define.URL_SCHEDULE, MyString.URLReplaceWhitespace(course), MyString.URLReplaceWhitespace(semester), MyString.URLReplaceWhitespace(termTime));
+            final String jsonString = this.getData(aString);
 
-			final Parser parser = ParserFactory.create(EParser.SCHEDULE);
-			final String aString = String.format(Define.URL_SCHEDULE, MyString.URLReplaceWhitespace(course), MyString.URLReplaceWhitespace(semester), MyString.URLReplaceWhitespace(termTime));
-			final String jsonString = this.getData( aString );
+            // falls der String leer ist war ein Problem mit dem Internet
+            if (jsonString.isEmpty()) {
+                // prüfen ob es kein ForceRefreseh war, dann kann gecachtes zurück gegeben werden
+                if (!forceRefresh && object != null) {
+                    return schedule.getLectures();
+                } else {
+                    // anderen falls null, damit dann die Fehlermeldung "Aktualisierung fehlgeschlagen" kommt
+                    return null;
+                }
+            }
 
-			if ( jsonString.isEmpty() ) {
-				if ( !forceRefresh && object != null ) {
-					return schedule.getLectures();
-				} else {
-					return null;
-				}
-			}
+            final String[] params = {jsonString, language};
+            assert parser != null;
 
-			final String[] params = { jsonString, language };
-			assert parser != null;
+            ArrayList<LectureItem> lectures = (ArrayList<LectureItem>) parser.parse(params);
 
-			ArrayList<LectureItem> lectures = (ArrayList<LectureItem>) parser.parse(params);
+            schedule.setLectures(lectures);
 
-			if ( lectures.isEmpty() ) {
-				if ( !forceRefresh && schedule.getLectures().size() > 0 ) {
-					return schedule.getLectures();
-				} else {
-					return null;
-				}
-			}
+            schedule.setCourse(course);
+            schedule.setSemester(semester);
+            schedule.setTermtime(termTime);
 
-			schedule.setLectures(lectures);
+            schedule.setLastSaved(new Date());
+            saveObject(context, schedule, Define.scheduleFilename);
+        }
 
-			schedule.setCourse(course);
-			schedule.setSemester(semester);
-			schedule.setTermtime(termTime);
+        return schedule.getLectures();
+    }
 
-			schedule.setLastSaved(new Date());
-			saveObject(context, schedule, Define.scheduleFilename);
-		}
+    public final ArrayList<LectureItem> getMySchedule(Context context, String language,
+                                                      boolean forceRefresh) {
+        MySchedule mySchedule = this.getMySchedule(context);
 
-		return schedule.getLectures();
-	}
+        if (forceRefresh
+                || (mySchedule.getLectures().size() == 0)
+                || (mySchedule.getLastSaved() == null)
+                || !cacheStillValid(mySchedule, Define.MYSCHEDULE_CACHE_TIME)
+                || (mySchedule.getIds().size() != mySchedule.getLectures().size())
+                ) {
+            // Änderungen sollen neu geholt werden
+            resetChangesLastSave(context);
 
-	public final ArrayList<LectureItem> getMySchedule(Context context, String language,
-	                                                  boolean forceRefresh) {
-		MySchedule mySchedule = this.getMySchedule(context);
+            final Iterator<String> iterator = this.getMySchedule(context).getIds().iterator();
+            String url = Define.URL_MYSCHEDULE;
+            while (iterator.hasNext()) {
+                try {
+                    url += "&id[]=" + URLEncoder.encode(iterator.next(), "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
 
-		if ( forceRefresh
-			|| mySchedule.getLectures().size() == 0
-		     || mySchedule.getLastSaved() == null
-//TODO		     || !cacheStillValid(mySchedule, CONNECTION.MYSCHEDULE.getCache())
-		     || mySchedule.getIds().size() != mySchedule.getLectures().size()
-			)
-		{
-			// Änderungen sollen neu geholt werden
-			resetChangesLastSave(context);
+            final Parser parser = ParserFactory.create(EParser.MYSCHEDULE);
 
-			final Iterator<String> iterator = this.getMySchedule(context).getIds().iterator();
-			String url = Define.URL_MYSCHEDULE;
-			while ( iterator.hasNext() ) {
-				try {
-					url += "&id[]=" + URLEncoder.encode(iterator.next(), "UTF-8");
-				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
-			}
+            final String jsonString = this.getData(url);
 
-			final Parser parser = ParserFactory.create(EParser.MYSCHEDULE);
+            // falls der String leer ist war ein Problem mit dem Internet
+            if (jsonString.isEmpty()) {
+                // prüfen ob es kein ForceRefreseh war, dann kann gecachtes zurück gegeben werden
+                if (!forceRefresh && mySchedule.getLectures().size() > 0) {
+                    return mySchedule.getLectures();
+                } else {
+                    // anderen falls null, damit dann die Fehlermeldung "Aktualisierung fehlgeschlagen" kommt
+                    return null;
+                }
+            }
 
-			final String jsonString = this.getData(url);
+            final String[] params = {jsonString, language};
 
-			if ( jsonString.isEmpty() ) {
-				if ( !forceRefresh && mySchedule.getLectures().size() > 0 ) {
-					return mySchedule.getLectures();
-				} else {
-					return null;
-				}
-			}
+            ArrayList<LectureItem> tmpMySchedule = (ArrayList<LectureItem>) parser.parse(params);
 
-			final String[] params = { jsonString, language };
+            getMySchedule(context).setLectures(tmpMySchedule);
 
-			ArrayList<LectureItem> tmpMySchedule = (ArrayList<LectureItem>) parser.parse(params);
+            Set<String> ids = new HashSet<>();
+            for (LectureItem li : tmpMySchedule) {
+                ids.add(String.valueOf(li.getId()));
+            }
 
-			if ( tmpMySchedule.isEmpty() ) {
-				if ( !forceRefresh && mySchedule.getLectures().size() > 0 ) {
-					return mySchedule.getLectures();
-				} else {
-					return null;
-				}
-			}
+            getMySchedule(context).setIds(ids);
 
-			getMySchedule(context).setLectures(tmpMySchedule);
+            getMySchedule(context).setLastSaved(new Date());
+            this.saveObject(context, getMySchedule(context), Define.myScheduleFilename);
+        }
 
-			Set<String> ids = new HashSet<>();
-			for ( LectureItem li : tmpMySchedule ) {
-				ids.add(String.valueOf(li.getId()));
-			}
+        return this.getMySchedule(context).getLectures();
+    }
 
-			getMySchedule(context).setIds(ids);
+    public final ArrayList<Object> getChanges(Context context, String course, String semester,
+                                              String termTime, boolean forceRefresh) {
+        Object object = readObject(context, Define.changesFilename);
+        Changes changes = new Changes();
 
-			getMySchedule(context).setLastSaved(new Date());
-			this.saveObject(context, getMySchedule(context), Define.myScheduleFilename);
-		}
+        if (object != null) {
+            changes = (Changes) object;
+        }
 
-		return this.getMySchedule(context).getLectures();
-	}
+        if (forceRefresh
+                || (object == null)
+                || (changes.getChanges().size() == 0)
+                || (changes.getLastSaved() == null)
+                || !cacheStillValid(changes, Define.CHANGES_CACHE_TIME)
+                ) {
+            final Iterator<String> iterator = this.getMySchedule(context).getIds().iterator();
 
-	public final ArrayList<Object> getChanges(Context context, String course, String semester,
-	                                          String termTime, boolean forceRefresh) {
-		Object object = readObject(context, Define.changesFilename);
-		Changes changes = new Changes();
+            String url = Define.URL_CHANGES;
 
-		if ( object != null ) {
-			changes = (Changes) object;
-		}
+            if (!iterator.hasNext()) {
+                url += "&stg=" + MyString.URLReplaceWhitespace(course);
+                url += "&sem=" + MyString.URLReplaceWhitespace(semester);
+                url += "&tt=" + MyString.URLReplaceWhitespace(termTime);
+            } else {
+                // Fügt die ID's der Vorlesungen hinzu die in Mein Stundenplan sind
+                // dadurch werden nur Änderungen von Mein Stundenplan geholt
+                while (iterator.hasNext()) {
+                    try {
+                        url += "&id[]=" + URLEncoder.encode(iterator.next(), "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
 
-		if ( forceRefresh || object == null
-				     || changes.getChanges().size() == 0
-				     || changes.getLastSaved() == null
-//TODO				     || !cacheStillValid(changes, CONNECTION.CHANGES.getCache())
-				) {
-			final Iterator<String> iterator = this.getMySchedule(context).getIds().iterator();
+            final Parser parser = ParserFactory.create(EParser.CHANGES);
+            final String jsonString = this.getData(url);
 
-			String url = Define.URL_CHANGES;
+            // falls der String leer ist war ein Problem mit dem Internet
+            if (jsonString.isEmpty()) {
+                // prüfen ob es kein ForceRefreseh war, dann kann gecachtes zurück gegeben werden
+                if (!forceRefresh && object != null) {
+                    return changes.getChanges();
+                } else {
+                    // anderen falls null, damit dann die Fehlermeldung "Aktualisierung fehlgeschlagen" kommt
+                    return null;
+                }
+            }
 
-			if ( !iterator.hasNext() ) {
-				url += "&stg=" + MyString.URLReplaceWhitespace(course);
-				url += "&sem=" + MyString.URLReplaceWhitespace(semester);
-				url += "&tt=" + MyString.URLReplaceWhitespace(termTime);
-			} else {
-				// Fügt die ID's der Vorlesungen hinzu die in Mein Stundenplan sind
-				// dadurch werden nur Änderungen von Mein Stundenplan geholt
-				while ( iterator.hasNext() ) {
-					try {
-						url += "&id[]=" + URLEncoder.encode(iterator.next(), "UTF-8");
-					} catch (UnsupportedEncodingException e) {
-						e.printStackTrace();
-					}
-				}
-			}
+            final String[] params = {jsonString};
+            assert parser != null;
 
-			final Parser parser = ParserFactory.create(EParser.CHANGES);
-			final String jsonString = this.getData(url);
+            ArrayList<Object> tmpChanges = (ArrayList<Object>) parser.parse(params);
 
-			if ( jsonString.isEmpty() ) {
-				if ( !forceRefresh && object != null ) {
-					return changes.getChanges();
-				} else {
-					return null;
-				}
-			}
+            changes.setChanges(tmpChanges);
 
-			final String[] params = { jsonString };
-			assert parser != null;
+            changes.setLastSaved(new Date());
+            saveObject(context, changes, Define.changesFilename);
+        }
 
-			ArrayList<Object> tmpChanges = (ArrayList<Object>) parser.parse(params);
-			changes.setChanges(tmpChanges);
+        return changes.getChanges();
+    }
 
-			changes.setLastSaved(new Date());
-			saveObject(context, changes, Define.changesFilename);
-		}
+    // es muss immer ein StudyCourse zurückgegeben werden.
+    // wenn es aber
+    public final ArrayList<StudyCourse> getCourses(final Context context, final String language,
+                                                   final String termTime, boolean forceRefresh) {
+        StudyCourses studyCourses = (StudyCourses) readObject(context, Define.coursesFilename);
+        // wenn noch keine StudyCourses cohanden sind neu anlegen
+        if (studyCourses == null) {
+            studyCourses = new StudyCourses();
+        }
 
-		return changes.getChanges();
-	}
+        // Änderungen sollen neu geholt werden
+        resetChangesLastSave(context);
 
-	// es muss immer ein StudyCourse zurückgegeben werden.
-	// wenn es aber
-	public final ArrayList<StudyCourse> getCourses(final Context context, final String language,
-	                                               final String termTime, boolean forceRefresh) {
-		StudyCourses studyCourses = (StudyCourses) readObject(context, Define.coursesFilename);
-		// wenn noch keine StudyCourses cohanden sind neu anlegen
-		if ( studyCourses == null ) {
-			studyCourses = new StudyCourses();
-		}
+        if (forceRefresh
+                || (studyCourses.getCourses().size() == 0)
+                || (studyCourses.getLastSaved() == null)
+                || !cacheStillValid(studyCourses, Define.COURSES_CACHE_TIME)
+                ) {
+            final Parser parser = ParserFactory.create(EParser.COURSES);
 
-		// Änderungen sollen neu geholt werden
-		resetChangesLastSave(context);
-
-		if ( forceRefresh
-		     || studyCourses.getCourses().size() == 0
-		     || studyCourses.getLastSaved() == null
-		//     || !cacheStillValid(studyCourses, CONNECTION.COURSE.getCache())
-			) {
-			final Parser parser = ParserFactory.create(EParser.COURSES);
-
-			final String sTermType = MyString.URLReplaceWhitespace(termTime);
-			final String sURL = String.format(Define.URL_STUDYCOURSE, sTermType );
-			final String jsonString = this.getData( sURL );
+            final String sTermType = MyString.URLReplaceWhitespace(termTime);
+            final String sURL = String.format(Define.URL_STUDYCOURSE, sTermType);
+            final String jsonString = this.getData(sURL);
 
 //TODO checken
-			if ( jsonString.isEmpty() ) {
-				if ( !forceRefresh ) {
-					return studyCourses.getCourses();
-				} else {
-					return null;
-				}
-			}
+            // falls der String leer ist war ein Problem mit dem Internet
+            if (jsonString.isEmpty()) {
+                // prüfen ob es kein ForceRefreseh war, dann kann gecachtes zurück gegeben werden
+                if (!forceRefresh) {
+                    return studyCourses.getCourses();
+                } else {
+                    // anderen falls null, damit dann die Fehlermeldung "Aktualisierung fehlgeschlagen" kommt
+                    return null;
+                }
+            }
 
-			final String[] params = { jsonString, language };
-			assert parser != null;
+            final String[] params = {jsonString, language};
+            assert parser != null;
 
-			ArrayList<StudyCourse> tmpCourses = (ArrayList<StudyCourse>) parser.parse(params);
+            ArrayList<StudyCourse> tmpCourses = (ArrayList<StudyCourse>) parser.parse(params);
 
-//TODO checken
-			if ( tmpCourses.isEmpty() ) {
-				if ( !forceRefresh && studyCourses.getCourses().size() > 0 ) {
-					return studyCourses.getCourses();
-				} else {
-					return null;
-				}
-			}
+            studyCourses.setCourses(tmpCourses);
 
-			studyCourses.setCourses(tmpCourses);
+            studyCourses.setLastSaved(new Date());
+            saveObject(context, studyCourses, Define.coursesFilename);
+        }
 
-			studyCourses.setLastSaved(new Date());
-			saveObject(context, studyCourses, Define.coursesFilename);
-		}
+        return studyCourses.getCourses();
+    }
 
-		return studyCourses.getCourses();
-	}
-
-	// Änderungen sollen neu geholt werden
-	private void resetChangesLastSave(Context context) {
-		Changes changes = (Changes) readObject(context, Define.changesFilename);
-		// Überprüfen ob Datei leer ist dann neu anlegen
-		if (changes == null) {
-			changes = new Changes();
-		}
-		// LastSaved zurücksetzten damit Änderungen neu geholt werden
-		changes.setLastSaved(null);
-		saveObject(context, changes, Define.changesFilename);
-	}
+    // Änderungen sollen neu geholt werden
+    private void resetChangesLastSave(Context context) {
+        Changes changes = (Changes) readObject(context, Define.changesFilename);
+        // Überprüfen ob Datei leer ist dann neu anlegen
+        if (changes == null) {
+            changes = new Changes();
+        }
+        // LastSaved zurücksetzten damit Änderungen neu geholt werden
+        changes.setLastSaved(null);
+        saveObject(context, changes, Define.changesFilename);
+    }
 
 
-	private String getData(String url) {
-		return dataConnector.getStringFromUrl(url);
-	}
+    private String getData(String url) {
+        return dataConnector.getStringFromUrl(url);
+    }
 
-	public final void addToMySchedule(final Context context, final LectureItem s) {
-		this.getMySchedule(context).getIds().add(String.valueOf(s.getId()));
-		this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
-	}
+    public final void addToMySchedule(final Context context, final LectureItem s) {
+        this.getMySchedule(context).getIds().add(String.valueOf(s.getId()));
+        this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
+    }
 
-	public final boolean myScheduleContains(final Context context, final LectureItem s) {
-		return this.getMySchedule(context).getIds().contains(String.valueOf(s.getId()));
-	}
+    public final boolean myScheduleContains(final Context context, final LectureItem s) {
+        return this.getMySchedule(context).getIds().contains(String.valueOf(s.getId()));
+    }
 
-	public final void deleteFromMySchedule(final Context context, final LectureItem s) {
-		this.getMySchedule(context).getIds().remove(String.valueOf(s.getId()));
-		LectureItem lectureToRemove = null;
-		for ( LectureItem li : this.getMySchedule(context).getLectures() ) {
-			if ( li.getId().equals(s.getId()) ) {
-				lectureToRemove = li;
-			}
-		}
-		if ( lectureToRemove != null ) {
-			this.getMySchedule(context).getLectures().remove(lectureToRemove);
-		}
-		this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
-	}
+    public final void deleteFromMySchedule(final Context context, final LectureItem s) {
+        this.getMySchedule(context).getIds().remove(String.valueOf(s.getId()));
+        LectureItem lectureToRemove = null;
+        for (LectureItem li : this.getMySchedule(context).getLectures()) {
+            if (li.getId().equals(s.getId())) {
+                lectureToRemove = li;
+            }
+        }
+        if (lectureToRemove != null) {
+            this.getMySchedule(context).getLectures().remove(lectureToRemove);
+        }
+        this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
+    }
 
-	public final void addAllToMySchedule(final Context context, final Set<String> schedulesIds) {
-		this.getMySchedule(context).getIds().addAll(schedulesIds);
-		this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
-	}
+    public final void addAllToMySchedule(final Context context, final Set<String> schedulesIds) {
+        this.getMySchedule(context).getIds().addAll(schedulesIds);
+        this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
+    }
 
-	public final void deleteAllFromMySchedule(final Context context) {
-		this.getMySchedule(context).getIds().clear();
-		this.getMySchedule(context).getLectures().clear();
-		this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
-	}
+    public final void deleteAllFromMySchedule(final Context context) {
+        this.getMySchedule(context).getIds().clear();
+        this.getMySchedule(context).getLectures().clear();
+        this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
+    }
 
-	private MySchedule getMySchedule(final Context context) {
-		if ( this.mySchedule == null ) {
-			Object object = DataManager.readObject(context, Define.myScheduleFilename);
-			if ( object != null && object instanceof Set ) {
-				this.mySchedule = new MySchedule();
-				this.mySchedule.setIds((Set<String>) object);
-			} else if ( object != null && object instanceof MySchedule ) {
-				this.mySchedule = (MySchedule) object;
-			} else {
-				this.mySchedule = new MySchedule();
-			}
-		}
-		return this.mySchedule;
-	}
+    private MySchedule getMySchedule(final Context context) {
+        if (this.mySchedule == null) {
+            Object object = DataManager.readObject(context, Define.myScheduleFilename);
+            if (object != null && object instanceof Set) {
+                this.mySchedule = new MySchedule();
+                this.mySchedule.setIds((Set<String>) object);
+            } else if (object != null && object instanceof MySchedule) {
+                this.mySchedule = (MySchedule) object;
+            } else {
+                this.mySchedule = new MySchedule();
+            }
+        }
+        return this.mySchedule;
+    }
 
-	public final int getMyScheduleSize(final Context context) {
-		return this.getMySchedule(context).getIds().size();
-	}
+    public final int getMyScheduleSize(final Context context) {
+        return this.getMySchedule(context).getIds().size();
+    }
 
-	// this is the general method to serialize an object
-	//
-	private void saveObject(final Context context, Object object, final String filename) {
-		try {
-			final File file = new File(context.getFilesDir(), filename);
-			final FileOutputStream fos = new FileOutputStream(file);
-			final ObjectOutputStream os = new ObjectOutputStream(fos);
-			os.writeObject(object);
-			os.close();
-			fos.close();
-		} catch ( IOException e ) {
-			Log.e( TAG, "Fehler beim Speichern des Objektes", e );
-		}
+    // this is the general method to serialize an object
+    //
+    private void saveObject(final Context context, Object object, final String filename) {
+        try {
+            final File file = new File(context.getFilesDir(), filename);
+            final FileOutputStream fos = new FileOutputStream(file);
+            final ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(object);
+            os.close();
+            fos.close();
+        } catch (IOException e) {
+            Log.e(TAG, "Fehler beim Speichern des Objektes", e);
+        }
 
-		// TODO Fehlerwert zurückgeben?
+        // TODO Fehlerwert zurückgeben?
 
-		// Stundenplan registrieren
-		if (object instanceof Schedule || object instanceof MySchedule) {
-			registerFcmServer(context);
-		}
-	}
+        // Stundenplan registrieren
+        if (object instanceof Schedule || object instanceof MySchedule) {
+            registerFcmServer(context);
+        }
+    }
 
-	// this is the general method to serialize an object
-	private static Object readObject(final Context context, String filename) {
-		Object result = null;
-		try {
-			final File file = new File(context.getFilesDir(), filename);
-			if ( file.exists() ) {
-				final FileInputStream fis = new FileInputStream(file);
-				final ObjectInputStream is = new ObjectInputStream(fis);
-				result = is.readObject();
-				is.close();
-				fis.close();
-			}
-		} catch ( Exception e ) {
-			Log.e( TAG, "Fehler beim Einlesen", e );
-		}
-		return result;
-	}
+    // this is the general method to serialize an object
+    private static Object readObject(final Context context, String filename) {
+        Object result = null;
+        try {
+            final File file = new File(context.getFilesDir(), filename);
+            if (file.exists()) {
+                final FileInputStream fis = new FileInputStream(file);
+                final ObjectInputStream is = new ObjectInputStream(fis);
+                result = is.readObject();
+                is.close();
+                fis.close();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Fehler beim Einlesen", e);
+        }
+        return result;
+    }
 
-	private boolean cacheStillValid(HofObject hofObject, final int cacheTime) {
-		final Date today = new Date();
-		Date lastCached = new Date();
+    private boolean cacheStillValid(HofObject hofObject, final int cacheTime) {
+        final Date today = new Date();
+        Date lastCached = new Date();
 
-		if ( hofObject.getLastSaved() != null ) {
-			lastCached = hofObject.getLastSaved();
+        if (hofObject.getLastSaved() != null) {
+            lastCached = hofObject.getLastSaved();
 
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(lastCached);
-			cal.add(Calendar.MINUTE, cacheTime);
-			lastCached = cal.getTime();
-		}
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(lastCached);
+            cal.add(Calendar.MINUTE, cacheTime);
+            lastCached = cal.getTime();
+        }
 
-		return lastCached.after(today);
-	}
+        return lastCached.after(today);
+    }
 
-	public final void cleanCache(final Context context) {
-		dataConnector.cleanCache(context, Define.MAX_CACHE_TIME);
-	}
+    public final void cleanCache(final Context context) {
+        dataConnector.cleanCache(context, Define.MAX_CACHE_TIME);
+    }
 
-	private void registerFcmServer(Context context) {
-		if (Define.PUSH_NOTIFICATIONS_ENABLED) {
-			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-			final boolean registerForChangesNotifications = sharedPreferences.getBoolean("changes_notifications", false);
+    private void registerFcmServer(Context context) {
+        if (Define.PUSH_NOTIFICATIONS_ENABLED) {
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+            final boolean registerForChangesNotifications = sharedPreferences.getBoolean("changes_notifications", false);
 
-			if (registerForChangesNotifications) {
-				Set<String> ids = new HashSet<>();
+            if (registerForChangesNotifications) {
+                Set<String> ids = new HashSet<>();
 
-				Object object = readObject(context, Define.scheduleFilename);
-				Schedule schedule = new Schedule();
+                Object object = readObject(context, Define.scheduleFilename);
+                Schedule schedule = new Schedule();
 
-				if (object != null) {
-					schedule = (Schedule) object;
-				}
+                if (object != null) {
+                    schedule = (Schedule) object;
+                }
 
-				if (getMySchedule(context).getIds().size() > 0) {
-					ids = getMySchedule(context).getIds();
-				} else if (schedule.getLectures().size() > 0) {
-					for (LectureItem li : schedule.getLectures()) {
-						// TODO ID muss splusname werden
-						ids.add(String.valueOf(li.getId()));
-					}
-				} else {
-					return;
-				}
+                if (getMySchedule(context).getIds().size() > 0) {
+                    ids = getMySchedule(context).getIds();
+                } else if (schedule.getLectures().size() > 0) {
+                    for (LectureItem li : schedule.getLectures()) {
+                        // TODO ID muss splusname werden
+                        ids.add(String.valueOf(li.getId()));
+                    }
+                } else {
+                    return;
+                }
 
-				RegisterLectures regLeg = new RegisterLectures();
+                RegisterLectures regLeg = new RegisterLectures();
 
-				regLeg.registerLectures(ids);
-			} else {
-				// für keine Vorlesung registieren
-				RegisterLectures regLeg = new RegisterLectures();
-				regLeg.registerLectures(new HashSet<String>());
-			}
-		}
-	}
+                regLeg.registerLectures(ids);
+            } else {
+                // für keine Vorlesung registieren
+                RegisterLectures regLeg = new RegisterLectures();
+                regLeg.registerLectures(new HashSet<String>());
+            }
+        }
+    }
 }
