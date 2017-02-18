@@ -36,6 +36,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import de.hof.university.app.Communication.RegisterLectures;
+import de.hof.university.app.MainActivity;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.Util.Log;
 import de.hof.university.app.Util.MyString;
@@ -468,7 +469,9 @@ public class DataManager {
 		// TODO Fehlerwert zurückgeben?
 
 		// Stundenplan registrieren
-		registerFcmServer(context);
+		if (object instanceof Schedule || object instanceof MySchedule) {
+			registerFcmServer(context);
+		}
 	}
 
 	// this is the general method to serialize an object
@@ -510,29 +513,37 @@ public class DataManager {
 	}
 
 	private void registerFcmServer(Context context) {
-		Set<String> ids = new HashSet<>();
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+		final boolean registerForChangesNotifications = sharedPreferences.getBoolean("changes_notifications", false);
 
-		Object object = readObject(context, Define.scheduleFilename);
-		Schedule schedule = new Schedule();
+		if (registerForChangesNotifications) {
+			Set<String> ids = new HashSet<>();
 
-		if ( object != null ) {
-			schedule = (Schedule) object;
-		}
+			Object object = readObject(context, Define.scheduleFilename);
+			Schedule schedule = new Schedule();
 
-		if (getMySchedule(context).getIds().size() > 0) {
-			ids = getMySchedule(context).getIds();
-		} else if (schedule.getLectures().size() > 0) {
-			for (LectureItem li : schedule.getLectures()) {
-				// TODO ID muss splusname werden
-				ids.add(String.valueOf(li.getId()));
+			if (object != null) {
+				schedule = (Schedule) object;
 			}
+
+			if (getMySchedule(context).getIds().size() > 0) {
+				ids = getMySchedule(context).getIds();
+			} else if (schedule.getLectures().size() > 0) {
+				for (LectureItem li : schedule.getLectures()) {
+					// TODO ID muss splusname werden
+					ids.add(String.valueOf(li.getId()));
+				}
+			} else {
+				return;
+			}
+
+			RegisterLectures regLeg = new RegisterLectures();
+
+			regLeg.registerLectures(ids);
 		} else {
-			return;
+			// für keine Vorlesung registieren
+			RegisterLectures regLeg = new RegisterLectures();
+			regLeg.registerLectures(new HashSet<String>());
 		}
-
-		RegisterLectures regLeg = new RegisterLectures();
-
-		// TODO ID der Vorlesungen holen und dan Methode übergeben
-		regLeg.registerLectures(ids);
 	}
 }

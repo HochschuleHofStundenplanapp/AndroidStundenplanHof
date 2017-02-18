@@ -108,4 +108,6 @@
     <string name="app_name">Hochschule Hof</string>
     <string name="needPermissionText">Für diese Funktion müssen Sie die Berechtigung für den Standort erlauben</string>
     <string name="needPermissionTitle">Berechtigung erforderlich</string>
+    <string name="notifications">Benachrichtigungen</string>
+    <string name="changes">Änderungen</string>
 </resources>

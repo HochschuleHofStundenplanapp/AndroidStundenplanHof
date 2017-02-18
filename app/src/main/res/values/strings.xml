@@ -108,4 +108,6 @@
     <string name="needPermissionTitle">Permission required</string>
     <string name="FCM_TOKEN" translatable="false" >de.hof-university.app.fcm_token</string>
     <string name="FCM_PREF" translatable="false">de.hof-university.app.fcm_pref</string>
+    <string name="notifications">Notifications</string>
+    <string name="changes">Changes</string>
 </resources>

@@ -97,18 +97,24 @@ public class SettingsFragment extends PreferenceFragment {
 			}
 		});
 
+		// Benachrichtigungen
+		final CheckBoxPreference changes_notifications = (CheckBoxPreference) findPreference("changes_notifications");
+
 		final CheckBoxPreference experimentalFeatures = (CheckBoxPreference) findPreference("experimental_features");
 
 		if ( experimentalFeatures.isChecked() ) {
 			edtLogin.setEnabled(true);
+			changes_notifications.setEnabled(true);
 		} else {
 			edtLogin.setEnabled(false);
+			changes_notifications.setEnabled(false);
 		}
 
 		experimentalFeatures.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				final Preference edtLogin = findPreference("login");
+				final CheckBoxPreference changes_notifications = (CheckBoxPreference) findPreference("changes_notifications");
 				final MainActivity activity = (MainActivity) getActivity();
 				if ( (Boolean) newValue ) {
 					new AlertDialog.Builder(getView().getContext())
@@ -123,16 +129,17 @@ public class SettingsFragment extends PreferenceFragment {
 							.setIcon(android.R.drawable.ic_dialog_alert)
 							.show();
 					edtLogin.setEnabled(true);
+					changes_notifications.setEnabled(true);
 					activity.displayExperimentalFeaturesMenuEntries(true);
 
 				} else {
 					edtLogin.setEnabled(false);
+					changes_notifications.setEnabled(false);
 					activity.displayExperimentalFeaturesMenuEntries(false);
 				}
 				return true;
 			}
 		});
-
 
 		enableSettingsSummary();
 	}
@@ -386,10 +393,5 @@ public class SettingsFragment extends PreferenceFragment {
 
 			progressDialog.dismiss();
 		}
-
-
 	}
-
-
 }
-

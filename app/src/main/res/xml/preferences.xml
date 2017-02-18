@@ -108,4 +108,18 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/notifications"
+        android:key="category_notification"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <CheckBoxPreference
+            android:key="changes_notifications"
+            android:title="@string/changes"
+            android:defaultValue="false"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

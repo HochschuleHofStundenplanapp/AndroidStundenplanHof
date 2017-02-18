@@ -61,8 +61,11 @@ public class RegisterLectures {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.contextOfApplication);
             final String token = sharedPref.getString(MainActivity.contextOfApplication.getString(R.string.FCM_TOKEN),"Token ist leer");
 
-            String[] lectures = {"1","2", "3"};
-            //String[] lectures = params[1].ids.toArray(new String[params[1].ids.size()]);
+            // Vorlesungen setzen
+            // Test ID's
+            //String[] lectures = {"1","2", "3"};
+            // Richtige ID's
+            String[] lectures = params[1].ids.toArray(new String[params[1].ids.size()]);
 
             URL url = null;
             try {
