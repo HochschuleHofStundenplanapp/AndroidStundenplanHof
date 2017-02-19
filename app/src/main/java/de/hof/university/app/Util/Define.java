@@ -72,7 +72,8 @@ public final class Define {
 	public static final int SHOW_PUSHNOTIFICATION = 0;
 	// TODO Ist für die Überprüfung die int oder boolean besser? Ich dachte boolean
 	// Push-Notifications
-	public final static boolean PUSH_NOTIFICATIONS_ENABLED = false;
+	public final static boolean PUSH_NOTIFICATIONS_ENABLED = true;
+	public final static String URL_REGISTER_PUSH_NOTIFICATIONS_HOF = "https://app.hof-university.de/soap/fcm_register_user.php";
 
 	public static final long serialVersionUID = 1L;
 

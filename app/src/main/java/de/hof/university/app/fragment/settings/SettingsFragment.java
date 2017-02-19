@@ -30,6 +30,7 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.provider.ContactsContract;
 import android.support.design.widget.NavigationView;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,6 +39,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import de.hof.university.app.Communication.RegisterLectures;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.Util.Define;
@@ -107,8 +109,20 @@ public class SettingsFragment extends PreferenceFragment {
 		PreferenceScreen preferenceScreen = getPreferenceScreen();
 
 		if (Define.PUSH_NOTIFICATIONS_ENABLED) {
-			preferenceScreen.addPreference(category_notification);
-			preferenceScreen.addPreference(changes_notifications);
+			changes_notifications.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+				@Override
+				public boolean onPreferenceChange(Preference preference, Object newValue) {
+					if ( (Boolean) newValue ) {
+						// für Push-Notifications registrieren,
+						// falls schon ein Stundenplan angelegt wurde
+						DataManager.getInstance().registerFCMServerForce(MainActivity.contextOfApplication);
+					} else {
+						// von Push-Notifications abmelden
+						new RegisterLectures().deRegisterLectures();
+					}
+					return true;
+				}
+			});
 		} else {
 			preferenceScreen.removePreference(category_notification);
 			preferenceScreen.removePreference(changes_notifications);
@@ -145,6 +159,12 @@ public class SettingsFragment extends PreferenceFragment {
 					edtLogin.setEnabled(true);
 					if (changes_notifications != null) {
 						changes_notifications.setEnabled(true);
+						// falls ausgewählt war
+						if (changes_notifications.isChecked()) {
+							// für Push-Notifications registrieren,
+							// falls schon ein Stundenplan angelegt wurde
+							DataManager.getInstance().registerFCMServerForce(MainActivity.contextOfApplication);
+						}
 					}
 					activity.displayExperimentalFeaturesMenuEntries(true);
 
@@ -152,6 +172,8 @@ public class SettingsFragment extends PreferenceFragment {
 					edtLogin.setEnabled(false);
 					if (changes_notifications != null) {
 						changes_notifications.setEnabled(false);
+						// von Push-Notifications abmelden
+						new RegisterLectures().deRegisterLectures();
 					}
 					activity.displayExperimentalFeaturesMenuEntries(false);
 				}
