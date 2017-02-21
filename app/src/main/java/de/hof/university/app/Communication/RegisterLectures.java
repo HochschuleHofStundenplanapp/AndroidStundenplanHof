@@ -78,7 +78,7 @@ public class RegisterLectures {
 
             URL url = null;
             try {
-                url = new URL(Define.URL_REGISTER_PUSH_NOTIFICATIONS_HOF + "?debug=1"); // TODO Debug ausschalten
+                url = new URL(Define.URL_REGISTER_PUSH_NOTIFICATIONS_HOF); // TODO Debug ausschalten Debug: ( + "?debug=1")
             } catch (MalformedURLException e) {
                 Log.d(TAG, "URL ist nicht URL-konform: " + url);
                 e.printStackTrace();
