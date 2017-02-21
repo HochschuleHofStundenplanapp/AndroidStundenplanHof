@@ -77,7 +77,13 @@ public final class Define {
 
 	public static final long serialVersionUID = 1L;
 
-	// Beispielaufruf
+	// Essensplan
+	public final static String URL_STUDENTENWERK = "https://www.studentenwerk-oberfranken.de/?eID=bwrkSpeiseplanRss&tx_bwrkspeiseplan_pi2%5Bbar%5D=340&tx_bwrkspeiseplan_pi2%5Bdate%5D=";
+
+
+	// Server Web-Services
+
+	// Beispielaufrufe
 	// https://soapuser:F%98z&12@www.hof-university.de/soap/client.php?
 	//
 	// https://www.hof-university.de/soap/client.php?f=Courses&tt=WS
@@ -85,24 +91,21 @@ public final class Define {
 	// https://soapuser:F%98z&12@www.hof-university.de/soap/client.php?f=Schedule&stg=MC&tt=WS&sem=1
 	// https://soapuser:F%98z&12@www.hof-university.de/soap/client.php?f=Changes&stg=MC&tt=WS&sem=1
 
+	// Server-URL
+	// alt:		https://www.hof-university.de/soap/client.php
+	// neu:		https://app.hof-university.de/soap/client.php
+	// test:	http://sh-web02.hof-university.de/soap/client.php
+	public final static String URL_WEBSERVICE_HOF = "https://app.hof-university.de/soap/client.php";
+
 	/* Communication with the Web-Services SOAP API */
+	// Produktiv-Server:
+	// user:		soapuser
+	// password:	F%98z&12
+	// Test-Server:
+	// user: 		test
+	// password:	test
 	public final static String sAuthSoapUserName = "soapuser";
 	public final static String sAuthSoapPassword = "F%98z&12";
-
-	// Testserver
-	public final static String sAuthSoapUserNameTest = "test";
-	public final static String sAuthSoapPasswordTest = "test";
-
-
-	// Essensplan
-	public final static String URL_STUDENTENWERK = "https://www.studentenwerk-oberfranken.de/?eID=bwrkSpeiseplanRss&tx_bwrkspeiseplan_pi2%5Bbar%5D=340&tx_bwrkspeiseplan_pi2%5Bdate%5D=";
-
-
-	// Produktiv-Server Web-Services
-	public final static String URL_WEBSERVICE_HOF = "https://app.hof-university.de/soap/client.php";
-	//public final static String URL_WEBSERVICE_HOF_ALT = "https://www.hof-university.de/soap/client.php";
-	// Test-Server
-	public final static String URL_WEBSERVICE_HOF_TEST = "http://sh-web02.hof-university.de/soap/client.php";
 
 	public final static String URL_STUDYCOURSE 	= (URL_WEBSERVICE_HOF+"?f=Courses&tt=%s");
 	public final static String URL_SCHEDULE 	= (URL_WEBSERVICE_HOF+"?f=Schedule&stg=%s&sem=%s&tt=%s");
