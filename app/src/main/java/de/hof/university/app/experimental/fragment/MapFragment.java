@@ -213,7 +213,7 @@ public class MapFragment extends Fragment {
 
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
         MenuItem item = navigationView.getMenu().findItem(R.id.nav_experimental);
-        item.setChecked(true);
+        //item.setChecked(true);
         item.getSubMenu().findItem(R.id.nav_map).setChecked(true);
     }
 

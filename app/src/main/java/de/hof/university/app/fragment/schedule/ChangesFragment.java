@@ -54,6 +54,15 @@ public class ChangesFragment extends AbstractListFragment {
 	}
 
 	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		MainActivity mainActivity = (MainActivity) getActivity();
+		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+		navigationView.getMenu().findItem(R.id.nav_aenderung).setChecked(false);
+	}
+
+	@Override
 	protected final String[] setTaskParameter(boolean forceRefresh) {
 		String[] params = new String[ 4 ];
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());

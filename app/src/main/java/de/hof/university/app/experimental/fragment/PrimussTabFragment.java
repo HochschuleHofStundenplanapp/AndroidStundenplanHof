@@ -1,4 +1,4 @@
-package de.hof.university.app.fragment;
+package de.hof.university.app.experimental.fragment;
 
 import android.app.Fragment;
 import android.graphics.Bitmap;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
@@ -16,7 +17,6 @@ import android.widget.ProgressBar;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
-import de.hof.university.app.Util.Log;
 
 import static de.hof.university.app.R.id.swipeContainer;
 
@@ -37,7 +37,18 @@ public class PrimussTabFragment extends Fragment {
 		mainActivity.getSupportActionBar().setTitle(R.string.primuss);
 
 		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
-		navigationView.getMenu().findItem(R.id.nav_primuss).setChecked(true);
+		MenuItem item = navigationView.getMenu().findItem(R.id.nav_experimental);
+		//item.setChecked(true);
+		item.getSubMenu().findItem(R.id.nav_primuss).setChecked(true);
+	}
+
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		MainActivity mainActivity = (MainActivity) getActivity();
+		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+		navigationView.getMenu().findItem(R.id.nav_experimental).getSubMenu().findItem(R.id.nav_primuss).setChecked(false);
 	}
 
 	@Override
@@ -83,8 +94,4 @@ public class PrimussTabFragment extends Fragment {
 		return v;
 
 	}
-
-
-
-
 }

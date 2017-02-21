@@ -69,6 +69,15 @@ public class MealFragment extends AbstractListFragment {
 		navigationView.getMenu().findItem(R.id.nav_speiseplan).setChecked(true);
 	}
 
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		MainActivity mainActivity = (MainActivity) getActivity();
+		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+		navigationView.getMenu().findItem(R.id.nav_speiseplan).setChecked(false);
+	}
+
 
 	@Override
 	protected final void modifyListViewAfterDataSetChanged() {

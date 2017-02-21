@@ -47,6 +47,15 @@ public class ImpressumFragment extends Fragment {
 	}
 
 	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		MainActivity mainActivity = (MainActivity) getActivity();
+		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+		navigationView.getMenu().findItem(R.id.nav_impressum).setChecked(false);
+	}
+
+	@Override
 	public final View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                               Bundle savedInstanceState) {
 		// Inflate the layout for this fragment

@@ -35,7 +35,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import de.hof.university.app.Communication.RegisterLectures;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.fragment.MapFragment;
@@ -44,7 +43,7 @@ import de.hof.university.app.experimental.fragment.NotenblattFragment;
 import de.hof.university.app.experimental.fragment.RaumsucheFragment;
 import de.hof.university.app.fragment.ImpressumFragment;
 import de.hof.university.app.fragment.MealFragment;
-import de.hof.university.app.fragment.PrimussTabFragment;
+import de.hof.university.app.experimental.fragment.PrimussTabFragment;
 import de.hof.university.app.fragment.schedule.ChangesFragment;
 import de.hof.university.app.fragment.schedule.MyScheduleFragment;
 import de.hof.university.app.fragment.schedule.ScheduleFragment;

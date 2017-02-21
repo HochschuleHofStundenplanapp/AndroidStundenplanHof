@@ -205,6 +205,15 @@ public class SettingsFragment extends PreferenceFragment {
 		refreshSummaries();
 	}
 
+	@Override
+	public void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		MainActivity mainActivity = (MainActivity) getActivity();
+		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+		navigationView.getMenu().findItem(R.id.nav_einstellungen).setChecked(false);
+	}
+
 	private void refreshSummaries() {
 	    /*
         EditTextPreference edtName = (EditTextPreference) findPreference("primuss_user");

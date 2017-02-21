@@ -74,6 +74,15 @@ public class MyScheduleFragment extends ScheduleFragment {
     }
 
     @Override
+    public void onPause() {
+        // TODO Auto-generated method stub
+        super.onPause();
+        MainActivity mainActivity = (MainActivity) getActivity();
+        NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+        navigationView.getMenu().findItem(R.id.nav_mySchedule).setChecked(false);
+    }
+
+    @Override
     public final boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         final LectureItem lectureItem = (LectureItem) listView.getItemAtPosition(info.position);
