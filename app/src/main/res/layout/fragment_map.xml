@@ -15,7 +15,7 @@
         android:layout_alignParentStart="true">
 
         <TextView
-            android:text="Wo bin ich?"
+            android:text="@string/where_am_i"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textView"
@@ -26,7 +26,7 @@
             android:textAlignment="center" />
 
         <TextView
-            android:text="Addresse:"
+            android:text="@string/address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/textView"

@@ -111,4 +111,8 @@
     <string name="notifications">Notifications</string>
     <string name="changes">Changes</string>
     <string name="noScheduleText">For your selected settings is no schedule available.</string>
+    <string name="karte">Map</string>
+    <string name="where_am_i">Where am I?</string>
+    <string name="address">Address:</string>
+    <string name="no_address">Could not find address</string>
 </resources>

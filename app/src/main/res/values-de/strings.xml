@@ -111,4 +111,8 @@
     <string name="notifications">Benachrichtigungen</string>
     <string name="changes">Änderungen</string>
     <string name="noScheduleText">Für Ihre gewählten Einstellungen ist kein Stundenplan verfügtbar.</string>
+    <string name="karte">Karte</string>
+    <string name="where_am_i">Wo bin ich?</string>
+    <string name="address">Adresse:</string>
+    <string name="no_address">Es konnte keine Adresse gefunden werden</string>
 </resources>

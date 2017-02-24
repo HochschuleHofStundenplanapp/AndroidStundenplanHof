@@ -191,6 +191,15 @@ public class MapFragment extends Fragment {
     public void onResume() {
         // TODO Auto-generated method stub
         super.onResume();
+
+        MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.getSupportActionBar().setTitle(R.string.karte);
+
+        NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+        MenuItem item = navigationView.getMenu().findItem(R.id.nav_experimental);
+        //item.setChecked(true);
+        item.getSubMenu().findItem(R.id.nav_map).setChecked(true);
+
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -207,14 +216,6 @@ public class MapFragment extends Fragment {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-
-        MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().setTitle("Map");
-
-        NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
-        MenuItem item = navigationView.getMenu().findItem(R.id.nav_experimental);
-        //item.setChecked(true);
-        item.getSubMenu().findItem(R.id.nav_map).setChecked(true);
     }
 
     @Override
@@ -254,14 +255,14 @@ public class MapFragment extends Fragment {
         Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
 
         try {
-            String address = "Could not find address";
+            String address = getString(R.string.no_address);
 
             List<Address> listAddresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
 
             if (listAddresses != null && listAddresses.size() > 0) {
                 Log.i("PlaceInfo", listAddresses.get(0).toString());
 
-                address = "Addresse:\n";
+                address = getString(R.string.address) + "\n";
 
                 if (listAddresses.get(0).getThoroughfare() != null) {
                     address += listAddresses.get(0).getThoroughfare() + " ";
