@@ -129,6 +129,20 @@ public class RegisterLectures {
                     Log.d(TAG, "SERVER RESPONSE: " + text);
                 } else {
                     Log.d(TAG, "Der ResponseCode war: " + client.getResponseCode());
+
+                    BufferedReader reader = null;
+
+                    reader = new BufferedReader(new InputStreamReader(client.getErrorStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String line = null;
+
+                    // Read Server Response
+                    while ((line = reader.readLine()) != null) {
+                        // Append server response in string
+                        sb.append(line + "\n");
+                    }
+
+                    Log.d(TAG, "SERVER ERROR RESPONSE: " + sb.toString());
                 }
             } catch (MalformedURLException error) {
                 Log.d(TAG, "MalformedURLException error");
