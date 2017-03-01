@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity
 		DataManager.getInstance().cleanCache(getApplicationContext());
 
 
+        // TODO scheint noch nicht zu funktionieren
 		// Notifications müssen nicht mehr angezeigt werden
 		NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		nm.cancelAll();
@@ -137,21 +138,51 @@ public class MainActivity extends AppCompatActivity
 		final boolean showExperimentalFeatures = sharedPreferences.getBoolean("experimental_features", false);
 		displayExperimentalFeaturesMenuEntries(showExperimentalFeatures);
 
-		// wurde die App gerade neu gestartet
-		if(savedInstanceState == null) {
-			// Habe ich schon einen eigenen Stundenplan "Mein Stundeplan" erstellt, dann damit beeginnen
-			if (DataManager.getInstance().getMyScheduleSize(getApplicationContext()) > 0) {
-				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_mySchedule));
-			} else {
-				// Ich habe keinen Stundenplan erstellt,
-				// habe ich denn wenigstens schon Einstellungen vorgenommen?
-				if (sharedPreferences.getString("term_time", "").isEmpty()) {
-					// Noch nicht mal Einstellungen sind vorhanden, also gehen wir direkt in diesen Dialog
-					onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_einstellungen));
+
+        // Schauen ob auf eine Benachrichtigung gedrückt wurde
+        String notification_type = getIntent().getStringExtra("notification_type");
+
+		if (notification_type != null) {
+			// Falls auf eine Änderungs-Benachrichtigung gedrückt wurde
+			if (notification_type.equals("change")) {
+				// Direkt zu den Änderungen springen
+				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_aenderung));
+			}
+			// Hier noch weitere Überprüfung für andere Intents falls nötig
+		} else {
+			// wurde die App gerade neu gestartet?
+			if(savedInstanceState == null) {
+				// Habe ich schon einen eigenen Stundenplan "Mein Stundeplan" erstellt, dann damit beeginnen
+				if (DataManager.getInstance().getMyScheduleSize(getApplicationContext()) > 0) {
+					onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_mySchedule));
 				} else {
-					onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_stundenplan));
+					// Ich habe keinen Stundenplan erstellt,
+					// habe ich denn wenigstens schon Einstellungen vorgenommen?
+					if (sharedPreferences.getString("term_time", "").isEmpty()) {
+						// Noch nicht mal Einstellungen sind vorhanden, also gehen wir direkt in diesen Dialog
+						onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_einstellungen));
+					} else {
+						onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_stundenplan));
+					}
 				}
 			}
+		}
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+
+		// Schauen ob auf eine Benachrichtigung gedrückt wurde
+		String notification_type = intent.getStringExtra("notification_type");
+
+		if (notification_type != null) {
+			// Falls auf eine Änderungs-Benachrichtigung gedrückt wurde
+			if (notification_type.equals("change")) {
+				// Direkt zu den Änderungen springen
+				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_aenderung));
+			}
+			// Hier noch weitere Überprüfung für andere Intents falls nötig
 		}
 	}
 
@@ -338,7 +369,13 @@ public class MainActivity extends AppCompatActivity
 					changesFragment = new ChangesFragment();
 				}
 				FragmentTransaction trans = manager.beginTransaction();
-				trans.addToBackStack(ChangesFragment.class.getName());
+                // starting ist ein leerer Bildschirm
+                // deswegen wollen wir beim Zurückgehen diesen Bildschirm nicht auf den BackStack... legen
+                if ( firstStart ) {
+                    firstStart = false;
+                } else {
+                    trans.addToBackStack(ChangesFragment.class.getName());
+                }
 				trans.replace(R.id.content_main, changesFragment, Define.changesFragmentName);
 				trans.commit();
 			}

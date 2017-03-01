@@ -16,6 +16,7 @@
 
 package de.hof.university.app.Communication;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -67,7 +68,16 @@ public final class FcmMessagingService extends FirebaseMessagingService {
     //Zeigt die Notification
     private void showNotification(String title, String message) {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        // Activity wird über die aktuelle Activity gelegt, damit der zurück weg normal ist.
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        intent.setAction(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+
+        // damit später geprüft werden kann welcher intent gestartet wurde
+        intent.putExtra("notification_type", "change");
+
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
@@ -76,6 +86,9 @@ public final class FcmMessagingService extends FirebaseMessagingService {
         notificationBuilder.setSmallIcon(R.mipmap.ic_launcher);
         notificationBuilder.setAutoCancel(true);
         notificationBuilder.setContentIntent(pendingIntent);
+		// damit bei der Benachrichtigung den Standard Sound wiedergegeben wird
+        notificationBuilder.setDefaults(Notification.DEFAULT_SOUND);
+
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, notificationBuilder.build());
     }
