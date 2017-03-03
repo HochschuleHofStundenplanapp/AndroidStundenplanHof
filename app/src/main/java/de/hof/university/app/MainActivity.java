@@ -353,11 +353,9 @@ public class MainActivity extends AppCompatActivity
 				trans.replace(R.id.content_main, myScheduleFragment, Define.myScheduleFragmentName);
 				trans.commit();
 			}
-
 		} else if ( R.id.nav_aenderung == id ) {
 			FragmentManager manager = getFragmentManager();
 			if ( !manager.popBackStackImmediate(ChangesFragment.class.getName(), 0) ) {
-
 				if ( changesFragment == null ) {
 					changesFragment = new ChangesFragment();
 				}
@@ -371,16 +369,14 @@ public class MainActivity extends AppCompatActivity
                 }
 				trans.replace(R.id.content_main, changesFragment, Define.changesFragmentName);
 				trans.commit();
-
-				// Notifications entfernen wenn man zu den Änderungen geht
-				NotificationManager nm = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-				nm.cancelAll();
 			}
 
+            // Notifications entfernen wenn man zu den Änderungen geht
+            NotificationManager nm = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+            nm.cancelAll();
 		} else if ( R.id.nav_einstellungen == id ) {
 			FragmentManager manager = getFragmentManager();
 			if ( !manager.popBackStackImmediate(SettingsFragment.class.getName(), 0) ) {
-
 				// starting ist ein leerer Bildschirm
 				// deswegen wollen wir beim Zurückgehen diesen Bildschirm nicht auf den BackStack... legen
 				FragmentTransaction trans = manager.beginTransaction();
@@ -422,7 +418,6 @@ public class MainActivity extends AppCompatActivity
 				trans.replace(R.id.content_main, primussTabFragment);
 				trans.commit();
 			}
-
 		}
 
 		final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
