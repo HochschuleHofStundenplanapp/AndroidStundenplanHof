@@ -35,8 +35,6 @@ android {
         }
     }
 
-
-
     buildTypes {
         release {
             minifyEnabled true
@@ -48,8 +46,6 @@ android {
         debug {
             debuggable true
         }
-
-
     }
     productFlavors {
     }
@@ -62,11 +58,8 @@ android {
         // but continue the build even when errors are found:
         abortOnError false
 
-
         disable 'MissingTranslation'
     }
-
-
 }
 
 //NOTICE: Die Versionsnummer sollte pro Block gleich sein
@@ -92,6 +85,5 @@ dependencies {
 }
 
 // apply plugin: 'com.google.gms.google-services'
-
 
 apply plugin: 'com.google.gms.google-services'

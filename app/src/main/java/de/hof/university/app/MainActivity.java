@@ -90,13 +90,6 @@ public class MainActivity extends AppCompatActivity
 
 		DataManager.getInstance().cleanCache(getApplicationContext());
 
-
-        // TODO scheint noch nicht zu funktionieren
-		// Notifications müssen nicht mehr angezeigt werden
-		NotificationManager nm = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		nm.cancelAll();
-
-
 		// getActionBar geht nicht wahrscheinlich weil doch noch irgendwo dafür die Support Libary eingebunden wird
 		// zum Nachlesen: http://codetheory.in/difference-between-setdisplayhomeasupenabled-sethomebuttonenabled-and-setdisplayshowhomeenabled/
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -378,6 +371,10 @@ public class MainActivity extends AppCompatActivity
                 }
 				trans.replace(R.id.content_main, changesFragment, Define.changesFragmentName);
 				trans.commit();
+
+				// Notifications entfernen wenn man zu den Änderungen geht
+				NotificationManager nm = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+				nm.cancelAll();
 			}
 
 		} else if ( R.id.nav_einstellungen == id ) {

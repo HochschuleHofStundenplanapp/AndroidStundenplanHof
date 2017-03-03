@@ -93,14 +93,10 @@ public class RegisterLectures {
                 data += "&" + URLEncoder.encode("vorlesung_id", "UTF-8") + "="
                         + URLEncoder.encode(makeJSONString(lectures), "UTF-8");
 
-                // Authentifizierung
-                // TODO noch neue Version nutzen
-                final String username = "soapuser";
-                final String password = "F%98z&12";
-                final String userPassword = username + ':' + password;
+                //Für die Schnittstelle der Hochschule wird Authentifizerung benötigt
+                final String userPassword = Define.sAuthSoapUserName + ':' + Define.sAuthSoapPassword;
                 final String encoding = Base64.encodeToString(userPassword.getBytes(), Base64.DEFAULT);
                 client.setRequestProperty("Authorization", "Basic " + encoding);
-
 
                 client.setRequestMethod("POST");
                 client.setDoOutput(true);
