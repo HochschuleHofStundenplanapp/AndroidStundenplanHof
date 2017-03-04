@@ -132,42 +132,36 @@ public class MainActivity extends AppCompatActivity
 		displayExperimentalFeaturesMenuEntries(showExperimentalFeatures);
 
 
-        // Schauen ob auf eine Benachrichtigung gedrückt wurde
-        String notification_type = getIntent().getStringExtra("notification_type");
+        // wurde die App gerade neu gestartet?
+        if(savedInstanceState == null) {
+            // Habe ich schon einen eigenen Stundenplan "Mein Stundeplan" erstellt, dann damit beeginnen
+            if (DataManager.getInstance().getMyScheduleSize(getApplicationContext()) > 0) {
+                onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_mySchedule));
+            } else {
+                // Ich habe keinen Stundenplan erstellt,
+                // habe ich denn wenigstens schon Einstellungen vorgenommen?
+                if (sharedPreferences.getString("term_time", "").isEmpty()) {
+                    // Noch nicht mal Einstellungen sind vorhanden, also gehen wir direkt in diesen Dialog
+                    onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_einstellungen));
+                } else {
+                    onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_stundenplan));
+                }
+            }
+        }
 
-		if (notification_type != null) {
-			// Falls auf eine Änderungs-Benachrichtigung gedrückt wurde
-			if (notification_type.equals("change")) {
-				// Direkt zu den Änderungen springen
-				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_aenderung));
-			}
-			// Hier noch weitere Überprüfung für andere Intents falls nötig
-		} else {
-			// wurde die App gerade neu gestartet?
-			if(savedInstanceState == null) {
-				// Habe ich schon einen eigenen Stundenplan "Mein Stundeplan" erstellt, dann damit beeginnen
-				if (DataManager.getInstance().getMyScheduleSize(getApplicationContext()) > 0) {
-					onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_mySchedule));
-				} else {
-					// Ich habe keinen Stundenplan erstellt,
-					// habe ich denn wenigstens schon Einstellungen vorgenommen?
-					if (sharedPreferences.getString("term_time", "").isEmpty()) {
-						// Noch nicht mal Einstellungen sind vorhanden, also gehen wir direkt in diesen Dialog
-						onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_einstellungen));
-					} else {
-						onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_stundenplan));
-					}
-				}
-			}
-		}
+        // wurde die Activity durch ein Intent gestartet, vermutlich durch klicken auf eine Benachrichtigung?
+        handleIntent();
 	}
 
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
+		setIntent(intent);
+		handleIntent();
+	}
 
-		// Schauen ob auf eine Benachrichtigung gedrückt wurde
-		String notification_type = intent.getStringExtra("notification_type");
+	private void handleIntent() {
+		String notification_type = getIntent().getStringExtra("notification_type");
 
 		if (notification_type != null) {
 			// Falls auf eine Änderungs-Benachrichtigung gedrückt wurde
@@ -175,7 +169,7 @@ public class MainActivity extends AppCompatActivity
 				// Direkt zu den Änderungen springen
 				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_aenderung));
 			}
-			// Hier noch weitere Überprüfung für andere Intents falls nötig
+			// Hier noch weitere Überprüfungen für andere Intents falls nötig
 		}
 	}
 
