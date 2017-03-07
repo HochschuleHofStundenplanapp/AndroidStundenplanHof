@@ -34,6 +34,7 @@ public final class Define {
 	public static final String PARSER_SCHEDULE = "schedule"; // NON-NLS
 	public static final String PARSER_DAY = "day"; //NON-NLS
 	public static final String PARSER_TYPE = "type"; //NON-NLS
+	public static final String PARSER_STYLE = "style"; //NON-NLS
 	public static final String PARSER_STARTTIME = "starttime"; //NON-NLS
 	public static final String PARSER_ENDTIME = "endtime"; //NON-NLS
 	public static final String PARSER_STARTDATE = "startdate"; //NON-NLS

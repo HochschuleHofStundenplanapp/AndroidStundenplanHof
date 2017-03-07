@@ -102,6 +102,7 @@ public class ScheduleParser implements Parser<LectureItem> {
         final String id = jsonObject.optString(Define.PARSER_SPLUSNAME);
         final String label = jsonObject.optString(Define.SCHEDULE_PARSER_LABEL);
         final String type = jsonObject.optString(Define.PARSER_TYPE);
+        final String style = jsonObject.optString(Define.PARSER_STYLE);
         final String group = jsonObject.optString(Define.SCHEDULE_PARSER_GROUP);
         final String begin = jsonObject.optString(Define.PARSER_STARTTIME);
         final String end = jsonObject.optString(Define.PARSER_ENDTIME);
@@ -112,6 +113,6 @@ public class ScheduleParser implements Parser<LectureItem> {
         final String lecturer = jsonObject.optString(Define.PARSER_DOCENT).replace("§§", ",");
         final String comment = jsonObject.optString(Define.SCHEDULE_PARSER_COMMENT);
 
-        return new LectureItem(id, weekday, label, type, group, begin, end, startdate, enddate, room, lecturer, comment);
+        return new LectureItem(id, weekday, label, type, style, group, begin, end, startdate, enddate, room, lecturer, comment);
     }
 }

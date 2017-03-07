@@ -28,6 +28,7 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
     private final String weekday;
     private final String label;
     private final String type;
+    private final String style;
     private final String group;
     private final String begin;
     private final String end;
@@ -37,12 +38,13 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
     private final String lecturer;
     private final String comment;
 
-    public LectureItem(final String id, final String weekday, final String label, final String type, final String group,
+    public LectureItem(final String id, final String weekday, final String label, final String type, final String style, final String group,
                        final String begin, final String end, final String startdate, final String enddate, final String room, final String lecturer, final String comment) {
         this.id = id;
         this.weekday = weekday;
         this.label = label;
         this.type = type;
+        this.style = style;
         this.group = group;
         this.begin = begin;
         this.end = end;
@@ -50,7 +52,7 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
         this.enddate = enddate;
         this.room = room;
         this.lecturer = lecturer;
-        this.comment = comment;
+        this.comment = comment.replaceFirst("^- ", "");
     }
 
     @Override
@@ -122,16 +124,21 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
     public final String getDetails() {
         String result = label;
 
-        result += '\n' + lecturer;
-
-        if ((group != null) && !group.isEmpty()) {
-            result += '\n' + group;
+        // Bisher nur FWPM oder AWPM anzeigen
+        if (type.equals("FWPM") || type.equals("AWPM")) {
+            result += " (" + type + ")";
         }
 
         // Hier steht unter anderem "Beginn ab KW XY"
         if ((comment != null) && !comment.isEmpty()) {
             result += '\n' + comment;
         }
+
+        if ((group != null) && !group.isEmpty()) {
+            result += '\n' + group;
+        }
+
+        result += '\n' + lecturer;
 
         return result;
     }
