@@ -122,7 +122,7 @@ public class RaumlisteFragment extends Fragment {
         }
 
         swipeContainer = (SwipeRefreshLayout) v.findViewById(R.id.swipeContainer);
-        if (swipeContainer.isActivated()) {
+        if (swipeContainer != null) {
             swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
                 public void onRefresh() {
