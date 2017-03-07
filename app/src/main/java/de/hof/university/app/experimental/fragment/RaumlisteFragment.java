@@ -95,7 +95,7 @@ public class RaumlisteFragment extends Fragment {
     private SwipeRefreshLayout swipeContainer;
     private RaumlisteFragment.GetRaumTask task;
 
-    private static final String raumlistFilenmae = "raumliste";
+    private static final String raumlistFilename = "raumliste";
     private int raumlisteCache = 1;
 
     public RaumlisteFragment() {
@@ -122,12 +122,14 @@ public class RaumlisteFragment extends Fragment {
         }
 
         swipeContainer = (SwipeRefreshLayout) v.findViewById(R.id.swipeContainer);
-        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                updateData(true);
-            }
-        });
+        if (swipeContainer.isActivated()) {
+            swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    updateData(true);
+                }
+            });
+        }
 
         raumList = new ArrayList<>();
 
@@ -137,10 +139,12 @@ public class RaumlisteFragment extends Fragment {
         ListView raumListe = (ListView) v.findViewById(R.id.listView);
         raumListe.setAdapter(adapter);
 
-        //Aktualisieren, wenn noch keine Daten darin stehen. 1. Element ist immer da
-        //wegen Kopfzeile mit Infos zur Suchanfrage, daher >2 prüfen
-        if (raumList.size() < 2) {
-            updateData(false);
+        if (getArguments() != null) {
+            //Aktualisieren, wenn noch keine Daten darin stehen. 1. Element ist immer da
+            //wegen Kopfzeile mit Infos zur Suchanfrage, daher >2 prüfen
+            if (raumList.size() < 2) {
+                updateData(false);
+            }
         }
 
         return v;
@@ -208,7 +212,7 @@ public class RaumlisteFragment extends Fragment {
 
         @Override
         protected final ArrayList<Level> doInBackground(String... params) {
-            Object object = RaumlisteFragment.readObject(getActivity().getApplicationContext(), raumlistFilenmae);
+            Object object = RaumlisteFragment.readObject(getActivity().getApplicationContext(), raumlistFilename);
             Raumliste raumliste = new Raumliste();
             Date lastCached = new Date();
 
@@ -333,7 +337,7 @@ public class RaumlisteFragment extends Fragment {
                 raumliste.setDate(params[8]);
 
                 raumliste.setLastSaved(new Date());
-                RaumlisteFragment.saveObject(getActivity().getApplicationContext(), raumliste, raumlistFilenmae);
+                RaumlisteFragment.saveObject(getActivity().getApplicationContext(), raumliste, raumlistFilename);
             }
 
             return raumliste.getRaumlist();
