@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
@@ -66,7 +67,27 @@ public class ImpressumFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.impressumURL)));
-				startActivity(browserIntent);
+                if (browserIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(browserIntent);
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), R.string.noBrowserApp, Toast.LENGTH_SHORT).show();
+                }
+			}
+		});
+
+		Button btnFeedback = (Button) v.findViewById(R.id.btnFeedback);
+		btnFeedback.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent mailIntent = new Intent(Intent.ACTION_SENDTO);
+				mailIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
+				mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {getString(R.string.FEEDBACKEMAILADDRESS)});
+				mailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.feedbackSubject));
+                if (mailIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                    startActivity(mailIntent);
+                } else {
+                    Toast.makeText(getActivity().getApplicationContext(), R.string.noEmailApp, Toast.LENGTH_SHORT).show();
+                }
 			}
 		});
 

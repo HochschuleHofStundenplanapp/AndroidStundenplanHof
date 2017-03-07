@@ -115,4 +115,11 @@
     <string name="where_am_i">Where am I?</string>
     <string name="address">Address:</string>
     <string name="no_address">Could not find address</string>
+
+    <string name="feedbackBtn">Give feedback</string>
+    <string name="feedbackSubject">Feedback</string>
+    <string name="FEEDBACKEMAILADDRESS" translatable="false">androidapps@hof-university.de</string>
+
+    <string name="noEmailApp">No e-mail app installed</string>
+    <string name="noBrowserApp">No browser App installed</string>
 </resources>

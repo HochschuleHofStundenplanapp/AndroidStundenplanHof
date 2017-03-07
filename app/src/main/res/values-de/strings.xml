@@ -115,4 +115,10 @@
     <string name="where_am_i">Wo bin ich?</string>
     <string name="address">Adresse:</string>
     <string name="no_address">Es konnte keine Adresse gefunden werden</string>
+
+    <string name="feedbackBtn">Feedback geben</string>
+    <string name="feedbackSubject">Feedback</string>
+
+    <string name="noEmailApp">Keine E-Mail App installiert</string>
+    <string name="noBrowserApp">Keine Browser App installiert</string>
 </resources>
