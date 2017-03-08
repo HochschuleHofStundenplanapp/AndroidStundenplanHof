@@ -75,6 +75,19 @@ public class ImpressumFragment extends Fragment {
 			}
 		});
 
+		Button btnRate = (Button) v.findViewById(R.id.btnRate);
+		btnRate.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.PLAYSTOREURL)));
+				if (browserIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+					startActivity(browserIntent);
+				} else {
+					Toast.makeText(getActivity().getApplicationContext(), R.string.noBrowserApp, Toast.LENGTH_SHORT).show();
+				}
+			}
+		});
+
 		Button btnFeedback = (Button) v.findViewById(R.id.btnFeedback);
 		btnFeedback.setOnClickListener(new View.OnClickListener() {
 			@Override

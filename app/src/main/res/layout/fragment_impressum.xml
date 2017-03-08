@@ -25,7 +25,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="15dp">
+        android:padding="15dp"
+        android:weightSum="1">
 
         <TextView
             android:id="@+id/textView"
@@ -43,27 +44,44 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textStyle="bold" />
 
-        <LinearLayout
+        <GridLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="20dp">
-
-            <Button
-                android:id="@+id/btnImpressum"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/toImpressum" />
 
             <Button
                 android:id="@+id/btnFeedback"
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_column="0"
+                android:layout_marginTop="5dp"
+                android:layout_row="1"
                 android:text="@string/feedbackBtn" />
 
-        </LinearLayout>
+            <Button
+                android:id="@+id/btnRate"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_row="1"
+                android:layout_toEndOf="@+id/btnImpressum"
+                android:layout_toRightOf="@+id/btnImpressum"
+                android:text="@string/rateThisAppBtn" />
+
+            <Button
+                android:id="@+id/btnImpressum"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_row="0"
+                android:text="@string/toImpressum" />
+
+        </GridLayout>
 
     </LinearLayout>
 

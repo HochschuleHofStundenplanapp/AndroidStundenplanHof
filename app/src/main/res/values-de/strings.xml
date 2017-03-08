@@ -87,7 +87,10 @@
                                - Victor Dienstbier\n
                                - Michael Stepping\n
                                - Theresa Vogel\n
-                               - Daniel Glaser</string>
+                               - Daniel Glaser\n
+                               - Christian Pfeiffer\n
+                               - Jonas Beetz\n
+                               - Angelina Scheler</string>
     <string name="toImpressum">Zum Impressum</string>
     <!--URLs -->
     <string name="aboutusURL">http://www.hof-university.de/ueber-uns.html</string>
@@ -121,4 +124,5 @@
 
     <string name="noEmailApp">Keine E-Mail App installiert</string>
     <string name="noBrowserApp">Keine Browser App installiert</string>
+    <string name="rateThisAppBtn">Bewerte diese App</string>
 </resources>
