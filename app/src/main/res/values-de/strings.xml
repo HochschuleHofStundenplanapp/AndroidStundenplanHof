@@ -125,4 +125,5 @@
     <string name="noEmailApp">Keine E-Mail App installiert</string>
     <string name="noBrowserApp">Keine Browser App installiert</string>
     <string name="rateThisAppBtn">Bewerte diese App</string>
+    <string name="experimental_features_infotext">Es gibt experimentelle Funktionen, die in den Einstellungen aktiviert werden können</string>
 </resources>

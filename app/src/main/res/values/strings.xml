@@ -128,4 +128,5 @@
     <string name="noEmailApp">No e-mail app installed</string>
     <string name="noBrowserApp">No browser App installed</string>
     <string name="rateThisAppBtn">Rate this App</string>
+    <string name="experimental_features_infotext">There are experimental features that can be activated in the settings</string>
 </resources>

@@ -16,10 +16,12 @@
 
 package de.hof.university.app;
 
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -97,13 +99,12 @@ public class MainActivity extends AppCompatActivity
 
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerToggle = new ActionBarDrawerToggle(
-				                                         this,                  /* host Activity */
-				                                         mDrawerLayout,         /* DrawerLayout object */
-				                                         //R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
-				                                         R.string.navigation_drawer_open,  /* "open drawer" description */
-				                                         R.string.navigation_drawer_close  /* "close drawer" description */
+				this,                  /* host Activity */
+				mDrawerLayout,         /* DrawerLayout object */
+				//R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
+				R.string.navigation_drawer_open,  /* "open drawer" description */
+				R.string.navigation_drawer_close  /* "close drawer" description */
 		) {
-
 			/** Called when a drawer has settled in a completely closed state. */
 			public void onDrawerClosed(View view) {
 				super.onDrawerClosed(view);
@@ -143,6 +144,7 @@ public class MainActivity extends AppCompatActivity
                 if (sharedPreferences.getString("term_time", "").isEmpty()) {
                     // Noch nicht mal Einstellungen sind vorhanden, also gehen wir direkt in diesen Dialog
                     onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_einstellungen));
+					return;
                 } else {
                     onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_stundenplan));
                 }
@@ -151,9 +153,12 @@ public class MainActivity extends AppCompatActivity
 
         // wurde die Activity durch ein Intent gestartet, vermutlich durch klicken auf eine Benachrichtigung?
         handleIntent();
+
+        // beim ersten Start einen Hinweis auf die experimentellen Funktionen geben
+        showExperimentalFeaturesInfoDialog(sharedPreferences);
 	}
 
-	@Override
+    @Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		setIntent(intent);
@@ -219,6 +224,38 @@ public class MainActivity extends AppCompatActivity
 			navigationView.getMenu().findItem(R.id.nav_experimental).setVisible(false);
 		}
 	}
+
+    private final void showExperimentalFeaturesInfoDialog(SharedPreferences sharedPreferences) {
+        final boolean showExperimentalFeaturesInfo = sharedPreferences.getBoolean("show_experimental_features_info", true);
+        final boolean showExperimentalFeatures = sharedPreferences.getBoolean("experimental_features", false);
+
+        if (showExperimentalFeaturesInfo) {
+            sharedPreferences.edit()
+                    .putBoolean("show_experimental_features_info", false)
+                    .apply();
+
+            // Anzeigen falls nicht schon aktiviert
+            if (!showExperimentalFeatures) {
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.experimental_features)
+                        .setMessage(R.string.experimental_features_infotext)
+                        .setPositiveButton(R.string.einstellungen, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_einstellungen));
+                            }
+                        })
+                        .setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //nothing to do here. Just close the message
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .show();
+            }
+        }
+    }
 
 	@Override
 	// Idee: Wir wollen beim Rückwärtsgehen in den Activities nicht aus Versehen die App
