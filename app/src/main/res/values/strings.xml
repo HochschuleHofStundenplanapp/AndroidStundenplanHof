@@ -129,4 +129,5 @@
     <string name="noBrowserApp">No browser App installed</string>
     <string name="rateThisAppBtn">Rate this App</string>
     <string name="experimental_features_infotext">There are experimental features that can be activated in the settings</string>
+    <string name="notifications_infotext">You will now receive notifications for new changes according to your settings.\nPlease do not rely 100% on it!</string>
 </resources>

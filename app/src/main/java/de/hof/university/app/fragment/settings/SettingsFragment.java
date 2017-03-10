@@ -116,6 +116,17 @@ public class SettingsFragment extends PreferenceFragment {
 						// für Push-Notifications registrieren,
 						// falls schon ein Stundenplan angelegt wurde
 						DataManager.getInstance().registerFCMServerForce(MainActivity.contextOfApplication);
+                        new AlertDialog.Builder(getView().getContext())
+                                .setTitle(R.string.notifications)
+                                .setMessage(R.string.notifications_infotext)
+                                .setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        //nothing to do here. Just close the message
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
 					} else {
 						// von Push-Notifications abmelden
 						new RegisterLectures().deRegisterLectures();
