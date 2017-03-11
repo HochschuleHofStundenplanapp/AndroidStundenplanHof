@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="aenderung"
+        android:enabled="true"
+        android:icon="@drawable/ic_view_list_black_24dp"
+        android:shortcutShortLabel="@string/aenderung"
+        android:shortcutLongLabel="@string/aenderung"
+        android:shortcutDisabledMessage="@string/aenderung"
+        tools:targetApi="n_mr1">
+        <intent
+            android:action="de.hof.university.app.CHANGES"
+            android:targetPackage="de.hof.university.app"
+            android:targetClass="de.hof.university.app.MainActivity" />
+        <!-- If your shortcut is associated with multiple intents, include them
+             here. The last intent in the list determines what the user sees when
+             they launch this shortcut. -->
+        <categories android:name="android.shortcut" />
+    </shortcut>
+    <!-- Specify more shortcuts here. -->
+</shortcuts>

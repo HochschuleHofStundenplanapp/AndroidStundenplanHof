@@ -175,7 +175,14 @@ public class MainActivity extends AppCompatActivity
 				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_aenderung));
 			}
 			// Hier noch weitere Überprüfungen für andere Intents falls nötig
-		}
+		} else {
+            String action = getIntent().getAction();
+
+            if (action.equals("de.hof.university.app.CHANGES")) {
+                firstStart = true;
+                onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_aenderung));
+            }
+        }
 	}
 
 	@Override
