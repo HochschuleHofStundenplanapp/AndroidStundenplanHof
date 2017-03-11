@@ -295,7 +295,7 @@ public class SettingsFragment extends PreferenceFragment {
 					int index = listPreference.findIndexOfValue(newValue.toString());
 					if ( index >= 0 ) {
 						listPreference.setSummary(listPreference.getEntries()[ index ]);
-						updateCourseListPreference(newValue.toString(), false);
+						updateCourseListPreference(newValue.toString(), true);
 						return true;
 					}
 				}

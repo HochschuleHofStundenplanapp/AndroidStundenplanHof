@@ -61,7 +61,6 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
                 "id='" + id + '\'' +
                 ", weekday='" + weekday + '\'' +
                 ", label='" + label + '\'' +
-                ", type='" + type + '\'' +
                 ", group='" + group + '\'' +
                 ", begin='" + begin + '\'' +
                 ", end='" + end + '\'' +
