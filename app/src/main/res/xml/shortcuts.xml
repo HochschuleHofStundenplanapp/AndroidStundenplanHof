@@ -7,7 +7,7 @@
         android:icon="@drawable/ic_info_white_24dp"
         android:shortcutShortLabel="@string/aenderung"
         android:shortcutLongLabel="@string/aenderung"
-        android:shortcutDisabledMessage="@string/aenderung"
+        android:shortcutDisabledMessage="@string/disabled_shortcut"
         tools:targetApi="n_mr1">
         <intent
             android:action="de.hof.university.app.CHANGES"
