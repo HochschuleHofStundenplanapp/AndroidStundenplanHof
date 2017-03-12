@@ -4,7 +4,7 @@
     <shortcut
         android:shortcutId="aenderung"
         android:enabled="true"
-        android:icon="@drawable/ic_view_list_black_24dp"
+        android:icon="@drawable/ic_info_white_24dp"
         android:shortcutShortLabel="@string/aenderung"
         android:shortcutLongLabel="@string/aenderung"
         android:shortcutDisabledMessage="@string/aenderung"
