@@ -109,7 +109,7 @@
     <string name="changesMyScheduleText">Schedule changes are based on \"My Schedule\"</string>
     <string name="changesScheduleText">\"My Schedule\" is empty. All schedule changes are shown.</string>
     <string name="noMeal">There is no new menu!</string>
-    <string name="needPermissionText">You need to allow access to location for this funtion</string>
+    <string name="needPermissionText">You need to allow access to location for this function</string>
     <string name="needPermissionTitle">Permission required</string>
     <string name="FCM_TOKEN" translatable="false">de.hof-university.app.fcm_token</string>
     <string name="FCM_PREF" translatable="false">de.hof-university.app.fcm_pref</string>
@@ -128,8 +128,8 @@
     <string name="noEmailApp">No e-mail app installed</string>
     <string name="noBrowserApp">No browser App installed</string>
     <string name="rateThisAppBtn">Rate this App</string>
-    <string name="experimental_features_infotext">There are experimental features that can be activated in the settings</string>
-    <string name="notifications_infotext">You will now receive notifications for new changes according to your settings.\nPlease do not rely 100% on it!</string>
+    <string name="experimental_features_infotext">Experimental features can be enabled in the settings.</string>
+    <string name="notifications_infotext">You receive now notifications for changes according.\n(Beta-version)</string>
 
-    <string name="disabled_shortcut">The shortcut was disabled</string>
+    <string name="disabled_shortcut">The shortcut is disabled.</string>
 </resources>

@@ -126,7 +126,7 @@
     <string name="noBrowserApp">Keine Browser App installiert</string>
     <string name="rateThisAppBtn">Bewerte diese App</string>
     <string name="experimental_features_infotext">Es gibt experimentelle Funktionen, die in den Einstellungen aktiviert werden können</string>
-    <string name="notifications_infotext">Sie erhalten nun Benachrichtigungen für neue Änderungen gemäß Ihren Einstellungen.\nBitte verlassen sie sich nicht zu 100% darauf!</string>
+    <string name="notifications_infotext">Sie erhalten nun Benachrichtigungen für neue Änderungen.\n(Probebetrieb!)</string>
 
     <string name="disabled_shortcut">Der Shortcut wurde deaktiviert</string>
 </resources>
