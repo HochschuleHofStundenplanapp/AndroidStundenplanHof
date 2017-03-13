@@ -64,15 +64,15 @@ public class RegisterLectures {
     public String makeJSONString(String data[]) {
         JSONArray json = new JSONArray();
 
-        for (int i = 0; i < data.length; i++) {
-            JSONObject jo = new JSONObject();
-            try {
-                jo.put("vorlesung_id", data[i]);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            json.put(jo);
-        }
+	    for ( final String aData : data ) {
+		    JSONObject jo = new JSONObject();
+		    try {
+			    jo.put("vorlesung_id", aData);
+		    } catch ( JSONException e ) {
+			    e.printStackTrace();
+		    }
+		    json.put(jo);
+	    }
         System.out.println(json.toString());
 
         return json.toString();
@@ -80,8 +80,9 @@ public class RegisterLectures {
 
     public class MyAcyncTask extends AsyncTask<Set<String>, String, String> {
 
+        @SafeVarargs
         @Override
-        protected String doInBackground(Set<String>... params) {
+        protected final String doInBackground(Set<String>... params) {
             Log.d("FCMService", "Beginn doInBackground");
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.contextOfApplication);
             final String token = sharedPref.getString(MainActivity.contextOfApplication.getString(R.string.FCM_TOKEN), "Token ist leer");
@@ -133,7 +134,7 @@ public class RegisterLectures {
                     // Read Server Response
                     while ((line = reader.readLine()) != null) {
                         // Append server response in string
-                        sb.append(line + "\n");
+                        sb.append(line).append("\n");
                     }
 
                     text = sb.toString();
@@ -149,7 +150,7 @@ public class RegisterLectures {
                     // Read Server Response
                     while ((line = reader.readLine()) != null) {
                         // Append server response in string
-                        sb.append(line + "\n");
+                        sb.append(line).append("\n");
                     }
 
                     Log.d(TAG, "SERVER ERROR RESPONSE: " + sb.toString());

@@ -58,7 +58,7 @@ public class FcmInstanceIdService extends FirebaseInstanceIdService {
         SharedPreferences.Editor editor = sharedPref.edit();
         System.out.println("RECENT TOKEN: " + recent_token);
         editor.putString(getString(R.string.FCM_TOKEN), recent_token);
-        editor.commit();
+        editor.apply();
     }
 
     // After you have obtained the token, you can send it to your app server.
