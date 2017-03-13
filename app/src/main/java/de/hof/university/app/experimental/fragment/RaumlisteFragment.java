@@ -20,10 +20,10 @@ package de.hof.university.app.experimental.fragment;
  * Created by Lukas on 05.07.2016.
  */
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;

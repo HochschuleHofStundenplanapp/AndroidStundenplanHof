@@ -30,7 +30,6 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.provider.ContactsContract;
 import android.support.design.widget.NavigationView;
 import android.view.Menu;
 import android.view.MenuInflater;
