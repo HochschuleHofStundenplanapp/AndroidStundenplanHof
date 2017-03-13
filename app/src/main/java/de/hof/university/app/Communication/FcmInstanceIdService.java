@@ -16,7 +16,6 @@
 
 package de.hof.university.app.Communication;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -52,7 +51,7 @@ public class FcmInstanceIdService extends FirebaseInstanceIdService {
     public void onTokenRefresh() {
         // Get updated InstanceID token.
         String recent_token = FirebaseInstanceId.getInstance().getToken();
-        android.util.Log.d("Recent Token: ", recent_token);
+        Log.d("Recent Token: ", recent_token);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.contextOfApplication);
 
         //SharedPreferences sharedPreferences = getApplicationContext().getApplicationContext().getSharedPreferences(getString(R.string.FCM_PREF), Context.MODE_PRIVATE);

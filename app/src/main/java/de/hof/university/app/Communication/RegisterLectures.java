@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Base64;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +24,7 @@ import java.util.Set;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.Util.Define;
+import de.hof.university.app.Util.Log;
 
 /**
  * Created by jonasbeetz on 22.12.16.
@@ -126,9 +126,7 @@ public class RegisterLectures {
                 } else {
                     Log.d(TAG, "Der ResponseCode war: " + client.getResponseCode());
 
-                    BufferedReader reader = null;
-
-                    reader = new BufferedReader(new InputStreamReader(client.getErrorStream()));
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(client.getErrorStream()));
                     StringBuilder sb = new StringBuilder();
                     String line = null;
 
