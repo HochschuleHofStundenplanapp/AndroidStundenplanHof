@@ -65,12 +65,12 @@ public final class Define {
 	public static final String mealsFragmentName = "MEALS_FRAGMENT";
 
 	// show the fragments dealing with the location of the user
-	public static final int SHOW_LOCATION_FRAGMENT = 0;
+	public static final int SHOW_LOCATION_FRAGMENT = 1;
 	// show Notenblatt and Notenfreigabe
 	// TODO Weil ausblenden solange die neue Authentifizierungsmethode noch nicht funktioniert
 	public static final int SHOW_NOTEN = 0;
 	// publish notification FMC von Google verwenden
-	public static final int SHOW_PUSHNOTIFICATION = 0;
+	public static final int SHOW_PUSHNOTIFICATION = 1;
 	// TODO Ist für die Überprüfung die int oder boolean besser? Ich dachte boolean
 	// Push-Notifications
 	public final static boolean PUSH_NOTIFICATIONS_ENABLED = true;
