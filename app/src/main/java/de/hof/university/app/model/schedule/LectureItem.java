@@ -16,13 +16,17 @@
 
 package de.hof.university.app.model.schedule;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
+
+import de.hof.university.app.BuildConfig;
 
 /**
  * Created by larsg on 09.05.2016.
  */
 public class LectureItem implements Comparable<LectureItem>, Serializable {
-    private static final String date_regex = "dd-MM-yyyy HH:mm:ss";
+    //not used: private static final String date_regex = "dd-MM-yyyy HH:mm:ss";
 
     private final String id;
     private final String weekday;
@@ -149,7 +153,7 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
     /*
     ** Sortiert nach Sartzeit
      */
-    public int compareTo(LectureItem lectureItem) {
+    public int compareTo(@NonNull LectureItem lectureItem) {
         // Jahr
         if (Integer.parseInt(getStartdate().substring(6)) > Integer.parseInt(lectureItem.getStartdate().substring(6))) {
             return +1;
@@ -171,7 +175,8 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
             }
         }
         else
-            assert (false);
+            if ( BuildConfig.DEBUG) //noinspection ConstantConditions
+                assert (false);
 
         return -1;
     }

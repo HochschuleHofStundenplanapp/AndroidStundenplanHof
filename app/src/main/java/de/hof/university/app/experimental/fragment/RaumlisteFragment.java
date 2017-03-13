@@ -96,7 +96,7 @@ public class RaumlisteFragment extends Fragment {
     private RaumlisteFragment.GetRaumTask task;
 
     private static final String raumlistFilename = "raumliste";
-    private int raumlisteCache = 1;
+
 
     public RaumlisteFragment() {
         // Required empty public constructor
@@ -218,6 +218,9 @@ public class RaumlisteFragment extends Fragment {
 
             if (object != null) {
                 raumliste = (Raumliste) object;
+
+                //TODO was ist das? Warum 1? Kann man das wegwerfen?
+                int raumlisteCache = 1;
 
                 if ( raumliste.getLastSaved() != null ) {
                     lastCached = raumliste.getLastSaved();

@@ -16,6 +16,8 @@
 
 package de.hof.university.app.data.parser;
 
+import de.hof.university.app.BuildConfig;
+
 /**
  * Created by larsg on 17.06.2016.
  */
@@ -35,7 +37,7 @@ public final class ParserFactory {
         } else if (parserEnum == ParserFactory.EParser.MYSCHEDULE) {
             return new MyScheduleParser();
         } else
-            assert (false);
+        if ( BuildConfig.DEBUG) assert (false);
         return null;
     }
 

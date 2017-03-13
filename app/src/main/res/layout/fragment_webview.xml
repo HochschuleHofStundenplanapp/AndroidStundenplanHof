@@ -16,6 +16,6 @@
         android:id="@id/web_view_progress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@android:style/Widget.Material.ProgressBar.Small"/>
+        />
 </WebView>
 </android.support.v4.widget.SwipeRefreshLayout>

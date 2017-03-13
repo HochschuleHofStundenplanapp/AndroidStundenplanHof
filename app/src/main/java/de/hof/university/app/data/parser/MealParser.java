@@ -132,10 +132,7 @@ final public class MealParser implements Parser<Meal> {
                     }
                     eventType = xmlParser.next();
                 }
-            } catch (final XmlPullParserException e) {
-                if (BuildConfig.DEBUG) e.printStackTrace();
-                result.clear();
-            } catch (final IOException e) {
+            } catch (final XmlPullParserException | IOException e) {
                 if (BuildConfig.DEBUG) e.printStackTrace();
                 result.clear();
             }

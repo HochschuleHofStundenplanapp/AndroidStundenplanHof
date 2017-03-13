@@ -17,6 +17,7 @@
 package de.hof.university.app.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,8 +47,9 @@ public final class ScheduleAdapter extends ArrayAdapter<Object> {
         vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+    @NonNull
     @Override
-    public final View getView(final int position, final View convertView, final ViewGroup parent) {
+    public final View getView(final int position, final View convertView, @NonNull final ViewGroup parent) {
         View v = convertView;
 
         final Object obj = items.get(position);

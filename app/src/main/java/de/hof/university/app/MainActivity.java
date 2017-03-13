@@ -28,6 +28,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -232,7 +233,7 @@ public class MainActivity extends AppCompatActivity
 		}
 	}
 
-    private final void showExperimentalFeaturesInfoDialog(SharedPreferences sharedPreferences) {
+    private void showExperimentalFeaturesInfoDialog(SharedPreferences sharedPreferences) {
         final boolean showExperimentalFeaturesInfo = sharedPreferences.getBoolean("show_experimental_features_info", true);
         final boolean showExperimentalFeatures = sharedPreferences.getBoolean("experimental_features", false);
 
@@ -297,7 +298,7 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	@Override
-	public final boolean onNavigationItemSelected(final MenuItem item) {
+	public final boolean onNavigationItemSelected(@NonNull final MenuItem item) {
 		final int id = item.getItemId();
 
 		if ( R.id.nav_speiseplan == id ) {

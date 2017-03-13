@@ -21,6 +21,7 @@ package de.hof.university.app.experimental.adapter;
  */
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,8 +54,9 @@ public class RaumlistAdapter extends ArrayAdapter<Level> {
         vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+    @NonNull
     @Override
-    public final View getView(int position, View convertView, ViewGroup parent) {
+    public final View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View v = convertView;
         switch (items.get(position).getLevel()) {
             case 0:
