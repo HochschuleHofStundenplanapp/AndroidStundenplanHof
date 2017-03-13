@@ -16,9 +16,6 @@
 
 package de.hof.university.app.model.schedule;
 
-//import de.hof.university.app.R;
-//import android.content.Context;
-
 import java.io.Serializable;
 
 /**
