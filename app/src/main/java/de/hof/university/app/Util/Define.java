@@ -51,7 +51,6 @@ public final class Define {
 
 
 	// Semester term: Winterterm, summerterm (Wintersemester, Sommersemester)
-
 	public static final String myScheduleFilename = "mySchedule";
 	public static final String scheduleFilename = "schedule";
 	public static final String changesFilename = "changes";
@@ -64,17 +63,6 @@ public final class Define {
 	public static final String changesFragmentName = "CHANGES_FRAGMENT";
 	public static final String mealsFragmentName = "MEALS_FRAGMENT";
 
-	// show the fragments dealing with the location of the user
-	public static final int SHOW_LOCATION_FRAGMENT = 1;
-	// show Notenblatt and Notenfreigabe
-	// TODO Weil ausblenden solange die neue Authentifizierungsmethode noch nicht funktioniert
-	public static final int SHOW_NOTEN = 0;
-	// publish notification FMC von Google verwenden
-	public static final int SHOW_PUSHNOTIFICATION = 1;
-	// TODO Ist für die Überprüfung die int oder boolean besser? Ich dachte boolean
-	// Push-Notifications
-	public final static boolean PUSH_NOTIFICATIONS_ENABLED = true;
-	public final static String URL_REGISTER_PUSH_NOTIFICATIONS_HOF = "https://app.hof-university.de/soap/fcm_register_user.php";
 
 	public static final long serialVersionUID = 1L;
 
@@ -85,18 +73,19 @@ public final class Define {
 	// Server Web-Services
 
 	// Beispielaufrufe
-	// https://soapuser:F%98z&12@www.hof-university.de/soap/client.php?
+	// https://soapuser:F%98z&12@app.hof-university.de/soap/client.php?
 	//
-	// https://www.hof-university.de/soap/client.php?f=Courses&tt=WS
+	// https://app.hof-university.de/soap/client.php?f=Courses&tt=WS
 	//
-	// https://soapuser:F%98z&12@www.hof-university.de/soap/client.php?f=Schedule&stg=MC&tt=WS&sem=1
-	// https://soapuser:F%98z&12@www.hof-university.de/soap/client.php?f=Changes&stg=MC&tt=WS&sem=1
+	// https://soapuser:F%98z&12@app.hof-university.de/soap/client.php?f=Schedule&stg=MC&tt=WS&sem=1
+	// https://soapuser:F%98z&12@app.hof-university.de/soap/client.php?f=Changes&stg=MC&tt=WS&sem=1
 
 	// Server-URL
-	// alt:		https://www.hof-university.de/soap/client.php
-	// neu:		https://app.hof-university.de/soap/client.php
-	// test:	http://sh-web02.hof-university.de/soap/client.php
-	public final static String URL_WEBSERVICE_HOF = "https://app.hof-university.de/soap/client.php";
+	// alt:		https://www.hof-university.de/
+	// neu:		https://app.hof-university.de/
+	// test:	http://sh-web02.hof-university.de/
+	public final static String APP_SERVER_HOF = "https://app.hof-university.de";
+
 
 	/* Communication with the Web-Services SOAP API */
 	// Produktiv-Server:
@@ -105,6 +94,7 @@ public final class Define {
 	// Test-Server:
 	// user: 		test
 	// password:	test
+	public final static String URL_WEBSERVICE_HOF = APP_SERVER_HOF + "/soap/client.php";
 	public final static String sAuthSoapUserName = "soapuser";
 	public final static String sAuthSoapPassword = "F%98z&12";
 
@@ -114,6 +104,18 @@ public final class Define {
 	public final static String URL_MYSCHEDULE 	= (URL_WEBSERVICE_HOF+"?f=MySchedule");
 
 	public final static String URL_MEAL 		= URL_STUDENTENWERK;
+
+
+	// show the fragments dealing with the location of the user
+	public static final boolean SHOW_LOCATION_FRAGMENT = true;
+	// show Notenblatt and Notenfreigabe
+	// TODO Weil ausblenden solange die neue Authentifizierungsmethode noch nicht funktioniert
+	public static final boolean SHOW_NOTEN = false;
+	// publish notification FMC von Google verwenden
+	// Push-Notifications
+	public final static boolean PUSH_NOTIFICATIONS_ENABLED = true;
+	public final static String URL_REGISTER_PUSH_NOTIFICATIONS_HOF = APP_SERVER_HOF + "/soap/fcm_register_user.php";
+
 
 	// how long to store content from
 	public static final int MAX_CACHE_TIME = 60 * 24 * 2;		// zwei Tage

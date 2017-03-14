@@ -214,7 +214,7 @@ public class MainActivity extends AppCompatActivity
 			navigationView.getMenu().findItem(R.id.nav_map).setVisible(true); //Map anzeigen
 
 			// TODO Weil ausblenden solange die neue Authentifizierungsmethode noch nicht funktioniert
-			if ( Define.SHOW_NOTEN == 0 ) {
+			if ( Define.SHOW_NOTEN == false ) {
 				navigationView.getMenu().findItem(R.id.nav_notenbekanntgabe).setVisible(false);
 				navigationView.getMenu().findItem(R.id.nav_notenblatt).setVisible(false);
 			} else {
