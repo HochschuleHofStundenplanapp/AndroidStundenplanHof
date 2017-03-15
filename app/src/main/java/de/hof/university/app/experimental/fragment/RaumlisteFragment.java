@@ -220,6 +220,9 @@ public class RaumlisteFragment extends Fragment {
                 raumliste = (Raumliste) object;
 
                 //TODO was ist das? Warum 1? Kann man das wegwerfen?
+                // Zeit in Minuten wie lange die Raumliste gecached wird, könnte auch in die Define.
+                // 1 Minute da länger nicht von nöten ist. Dann hat man wahrscheinlich eh weil eine andere Zeit.
+                // Ist quasi nur falls man gleich hintereinander der selbe Abfrage nochmal macht, dann wird sie gleich wieder angezeigt und nicht neu geholt.
                 int raumlisteCache = 1;
 
                 if ( raumliste.getLastSaved() != null ) {
@@ -237,7 +240,7 @@ public class RaumlisteFragment extends Fragment {
             if (
                 forceRefresh
                 || object == null
-                || raumliste.getLastSaved() == null
+                || (raumliste != null && raumliste.getLastSaved() == null)
                 || !lastCached.after(new Date())
                 || !raumliste.getTimeStart().equals(params[5])
                 || !raumliste.getTimeEnd().equals(params[6])
