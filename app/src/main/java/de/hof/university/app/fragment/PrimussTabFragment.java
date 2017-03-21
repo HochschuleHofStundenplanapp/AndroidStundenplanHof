@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.hof.university.app.experimental.fragment;
+package de.hof.university.app.fragment;
 
 import android.app.Fragment;
 import android.graphics.Bitmap;
@@ -48,9 +48,7 @@ public class PrimussTabFragment extends Fragment {
 		mainActivity.getSupportActionBar().setTitle(R.string.primuss);
 
 		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
-		MenuItem item = navigationView.getMenu().findItem(R.id.nav_experimental);
-		//item.setChecked(true);
-		item.getSubMenu().findItem(R.id.nav_primuss).setChecked(true);
+		navigationView.getMenu().findItem(R.id.nav_primuss).setChecked(true);
 	}
 
 	@Override
@@ -59,7 +57,7 @@ public class PrimussTabFragment extends Fragment {
 		super.onPause();
 		MainActivity mainActivity = (MainActivity) getActivity();
 		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
-		navigationView.getMenu().findItem(R.id.nav_experimental).getSubMenu().findItem(R.id.nav_primuss).setChecked(false);
+		navigationView.getMenu().findItem(R.id.nav_primuss).setChecked(false);
 	}
 
 	@Override

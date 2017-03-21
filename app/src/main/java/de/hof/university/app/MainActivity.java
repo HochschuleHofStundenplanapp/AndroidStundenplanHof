@@ -43,7 +43,7 @@ import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.fragment.MapFragment;
 import de.hof.university.app.experimental.fragment.NotenbekanntgabeFragment;
 import de.hof.university.app.experimental.fragment.NotenblattFragment;
-import de.hof.university.app.experimental.fragment.PrimussTabFragment;
+import de.hof.university.app.fragment.PrimussTabFragment;
 import de.hof.university.app.experimental.fragment.RaumsucheFragment;
 import de.hof.university.app.fragment.ImpressumFragment;
 import de.hof.university.app.fragment.MealFragment;
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity
 		if ( enabled ) {
 			navigationView.getMenu().findItem(R.id.nav_experimental).setVisible(true);
 			navigationView.getMenu().findItem(R.id.nav_raumsuche).setVisible(true); //Raumsuche anzeigen
-			navigationView.getMenu().findItem(R.id.nav_primuss).setVisible(true); //Primuss anzeigen
+//			navigationView.getMenu().findItem(R.id.nav_primuss).setVisible(true); //Primuss anzeigen
 			navigationView.getMenu().findItem(R.id.nav_map).setVisible(true); //Map anzeigen
 
 			// TODO Weil ausblenden solange die neue Authentifizierungsmethode noch nicht funktioniert

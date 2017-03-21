@@ -20,12 +20,11 @@
 
     <group
         android:id="@+id/menu_top"
-        android:checkableBehavior="single">
+        android:checkableBehavior="single" >
         <item
             android:id="@+id/nav_stundenplan"
             android:icon="@drawable/ic_view_list_black_24dp"
-            android:title="@string/stundenplan"
-            />
+            android:title="@string/stundenplan" />
 
         <item
             android:id="@+id/nav_mySchedule"
@@ -39,26 +38,29 @@
 
     </group>
 
-
-
     <group
         android:id="@+id/menu_middle"
-        android:checkableBehavior="single">
+        android:checkableBehavior="single" >
 
         <item
             android:id="@+id/nav_speiseplan"
             android:icon="@drawable/ic_apps_black_24dp"
             android:title="@string/speiseplan" />
+
+        <item
+            android:id="@+id/nav_primuss"
+            android:icon="@drawable/ic_poll_black_24dp"
+            android:title="@string/primuss" />
     </group>
 
     <group
         android:id="@+id/menu_experimental"
-        android:checkableBehavior="single"
-        >
+        android:checkableBehavior="single" >
+
         <item
             android:title="@string/experimental"
             android:id="@+id/nav_experimental">
-            <menu >
+            <menu>
                 <item
                     android:id="@+id/nav_notenbekanntgabe"
                     android:icon="@drawable/ic_poll_black_24dp"
@@ -66,25 +68,23 @@
                     android:title="@string/notenbekanntgabe" />
 
                 <item
-                    android:id="@+id/nav_primuss"
-                    android:icon="@drawable/ic_poll_black_24dp"
-                    android:checkable="true"
-                    android:title="@string/primuss" />
-                <item
                     android:id="@+id/nav_notenblatt"
                     android:icon="@drawable/ic_poll_black_24dp"
                     android:checkable="true"
                     android:title="@string/notenblatt" />
+
                 <item
                     android:id="@+id/nav_raumsuche"
                     android:icon="@drawable/ic_poll_black_24dp"
                     android:checkable="true"
                     android:title="@string/raumsuche" />
+
                 <item
                     android:id="@+id/nav_map"
                     android:icon="@drawable/ic_poll_black_24dp"
                     android:checkable="true"
                     android:title="@string/karte" />
+
             </menu>
         </item>
 
