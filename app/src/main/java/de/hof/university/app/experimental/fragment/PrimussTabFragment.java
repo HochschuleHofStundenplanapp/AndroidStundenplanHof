@@ -29,12 +29,9 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ProgressBar;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
-
-import static de.hof.university.app.R.id.swipeContainer;
 
 /**
  * Created by Christian Pfeiffer on 14.12.16.
@@ -42,9 +39,7 @@ import static de.hof.university.app.R.id.swipeContainer;
 
 public class PrimussTabFragment extends Fragment {
 	public final static String TAG = "PrimussFragment";
-	private SwipeRefreshLayout swipeLayout;
-
-	private ProgressBar mPbar = null;
+	private SwipeRefreshLayout swipeContainer;
 
 	@Override
 	public final void onResume() {
@@ -74,17 +69,16 @@ public class PrimussTabFragment extends Fragment {
 		View v = inflater.inflate(R.layout.fragment_webview, container, false);
 
 		final WebView myWebView = (WebView) v.findViewById(R.id.webview);
-		mPbar = (ProgressBar) v.findViewById(R.id.web_view_progress);
 		WebSettings webSettings = myWebView.getSettings();
 		webSettings.setJavaScriptEnabled(true);
 
-		swipeLayout = (SwipeRefreshLayout) v.findViewById(swipeContainer);
-		swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+		swipeContainer = (SwipeRefreshLayout) v.findViewById(R.id.swipeContainer);
+		swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
 			public void onRefresh() {
 				// Insert your code here
 				myWebView.loadUrl("https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhh");
-				swipeLayout.setRefreshing(false);
+				swipeContainer.setRefreshing(false);
 			}
 		});
 
@@ -93,11 +87,11 @@ public class PrimussTabFragment extends Fragment {
 
 									   @Override
 									   public void onPageStarted(WebView view, String url, Bitmap favicon) {
-										   mPbar.setVisibility(View.VISIBLE);
+										   swipeContainer.setRefreshing(true);
 									   }
 
 									   public void onPageFinished(WebView view, String url) {
-										   mPbar.setVisibility(View.GONE);
+										   swipeContainer.setRefreshing(false);
 									   }
 								   });
 
