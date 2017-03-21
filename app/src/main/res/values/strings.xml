@@ -129,7 +129,7 @@
     <string name="noBrowserApp">No browser App installed</string>
     <string name="rateThisAppBtn">Rate this App</string>
     <string name="experimental_features_infotext">Experimental features can be enabled in the settings.</string>
-    <string name="notifications_infotext">You receive now notifications for changes according.\n(Beta-version)</string>
+    <string name="notifications_infotext">You receive now notifications for changes according.</string>
 
     <string name="disabled_shortcut">The shortcut is disabled.</string>
 </resources>
