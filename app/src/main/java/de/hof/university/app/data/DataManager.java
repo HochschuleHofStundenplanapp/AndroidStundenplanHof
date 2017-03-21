@@ -216,12 +216,15 @@ public class DataManager {
 
             getMySchedule(context).setLectures(tmpMySchedule);
 
-            Set<String> ids = new HashSet<>();
+            // ID's vom Server überschreiben
+            // auskommentiert da sonst falls der Server keinen vollständigen oder sogar gar keinen
+            // Stundenplan liefert der eingestellte Mein Stundenplan überschrieben wird.
+            /*Set<String> ids = new HashSet<>();
             for (LectureItem li : tmpMySchedule) {
                 ids.add(String.valueOf(li.getId()));
             }
 
-            getMySchedule(context).setIds(ids);
+            getMySchedule(context).setIds(ids);*/
 
             getMySchedule(context).setLastSaved(new Date());
             this.saveObject(context, getMySchedule(context), Define.myScheduleFilename);
