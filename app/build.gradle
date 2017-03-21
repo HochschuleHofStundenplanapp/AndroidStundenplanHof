@@ -22,9 +22,9 @@ android {
     defaultConfig {
         applicationId 'de.hof.university.app'
         minSdkVersion 16
-        targetSdkVersion 25 // TODO Können wir hier auch 25 nehmen?
-        versionCode 16
-        versionName '2.0'
+        targetSdkVersion 25
+        versionCode 17
+        versionName '2.0.1'
     }
 
     signingConfigs {
@@ -47,8 +47,8 @@ android {
             debuggable true
         }
     }
-	productFlavors {
-	}
+    productFlavors {
+    }
 
     // Lint found fatal errors while assembling a release target
     lintOptions {
@@ -64,20 +64,20 @@ android {
 
 //NOTICE: Die Versionsnummer sollte pro Block gleich sein
 dependencies {
-	compile fileTree(include: ['*.jar'], dir: 'libs')
-	// jsoup HTML parser library @ http://jsoup.org/
-	// Die Versionsnummer sollte die gleiche sein
-	compile 'com.android.support:appcompat-v7:25.2.0'
-	compile 'com.android.support:design:25.2.0'
-	compile 'com.android.support:support-v4:25.2.0'
-	compile 'com.android.support:recyclerview-v7:25.2.0'
-	compile 'org.jsoup:jsoup:1.9.2'
-	// Die Versionsnummer sollte die gleiche sein
-	compile 'com.google.android.gms:play-services-gcm:10.2.0'
-	compile 'com.google.firebase:firebase-messaging:10.2.0'
-	compile 'org.osmdroid:osmdroid-android:5.6.3'
-	testCompile 'junit:junit:4.12'
-	compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    // jsoup HTML parser library @ http://jsoup.org/
+    // Die Versionsnummer sollte die gleiche sein
+    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.android.support:design:25.2.0'
+    compile 'com.android.support:support-v4:25.2.0'
+    compile 'com.android.support:recyclerview-v7:25.2.0'
+    compile 'org.jsoup:jsoup:1.9.2'
+    // Die Versionsnummer sollte die gleiche sein
+    compile 'com.google.android.gms:play-services-gcm:10.2.0'
+    compile 'com.google.firebase:firebase-messaging:10.2.0'
+    compile 'org.osmdroid:osmdroid-android:5.6.3'
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }
 
 // apply plugin: 'com.google.gms.google-services'
