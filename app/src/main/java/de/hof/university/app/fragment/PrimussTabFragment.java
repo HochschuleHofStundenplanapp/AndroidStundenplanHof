@@ -76,7 +76,6 @@ public class PrimussTabFragment extends Fragment {
 			public void onRefresh() {
 				// Insert your code here
 				myWebView.loadUrl("https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhh");
-				swipeContainer.setRefreshing(false);
 			}
 		});
 
