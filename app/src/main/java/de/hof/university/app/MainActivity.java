@@ -157,6 +157,9 @@ public class MainActivity extends AppCompatActivity
 
         // beim ersten Start einen Hinweis auf die experimentellen Funktionen geben
         showExperimentalFeaturesInfoDialog(sharedPreferences);
+
+        // Fragen ob die Push-Benachrichtungen aktiviert werden sollen
+        showPushNotificationDialog(sharedPreferences);
 	}
 
     @Override
@@ -233,6 +236,40 @@ public class MainActivity extends AppCompatActivity
 		}
 	}
 
+	private void showPushNotificationDialog(final SharedPreferences sharedPreferences) {
+        final boolean showPushNotificationsDialog = sharedPreferences.getBoolean("show_push_notifications_dialog", true);
+        final boolean getPushNotifications = sharedPreferences.getBoolean("changes_notifications", false);
+
+        if (showPushNotificationsDialog) {
+            sharedPreferences.edit()
+                    .putBoolean("show_push_notifications_dialog", false)
+                    .apply();
+
+            if (!getPushNotifications) {
+                new AlertDialog.Builder(this)
+                        .setTitle(R.string.notifications)
+                        .setMessage(R.string.notifications_question)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                sharedPreferences.edit()
+                                        .putBoolean("changes_notifications", true)
+                                        .apply();
+                                DataManager.getInstance().registerFCMServerForce(contextOfApplication);
+                            }
+                        })
+                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //nothing to do here. Just close the dialog
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .show();
+            }
+        }
+	}
+
     private void showExperimentalFeaturesInfoDialog(SharedPreferences sharedPreferences) {
         final boolean showExperimentalFeaturesInfo = sharedPreferences.getBoolean("show_experimental_features_info", true);
         final boolean showExperimentalFeatures = sharedPreferences.getBoolean("experimental_features", false);
@@ -256,7 +293,7 @@ public class MainActivity extends AppCompatActivity
                         .setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                //nothing to do here. Just close the message
+                                //nothing to do here. Just close the dialog
                             }
                         })
                         .setIcon(android.R.drawable.ic_dialog_info)

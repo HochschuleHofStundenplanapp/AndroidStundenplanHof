@@ -132,4 +132,7 @@
     <string name="notifications_infotext">You receive now notifications for changes according.</string>
 
     <string name="disabled_shortcut">The shortcut is disabled.</string>
+    <string name="yes">yes</string>
+    <string name="no">no</string>
+    <string name="notifications_question">Do you want to be notified of changes?</string>
 </resources>

@@ -129,4 +129,7 @@
     <string name="notifications_infotext">Sie erhalten nun Benachrichtigungen für neue Änderungen.</string>
 
     <string name="disabled_shortcut">Der Shortcut wurde deaktiviert</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
+    <string name="notifications_question">Möchten Sie über Änderungen benachrichtigt werden?</string>
 </resources>
