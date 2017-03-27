@@ -118,12 +118,13 @@ public final class Define {
 
 
 	// how long to store content from
-	public static final int MAX_CACHE_TIME = 60 * 24 * 2;		// zwei Tage
-	public static final int SCHEDULE_CACHE_TIME = 60 * 24;		// ein Tag
-	public static final int MYSCHEDULE_CACHE_TIME = 60 * 24;	// ein Tag
-	public static final int CHANGES_CACHE_TIME = 60 * 1;		// eine Stunde
-	public static final int MEAL_CACHE_TIME = 60 * 24 * 2;		// zwei Tage
-	public static final int COURSES_CACHE_TIME = 60 * 24 * 7;	// eine Woche
+	public static final int MAX_CACHE_TIME = 60 * 24 * 2;			// zwei Tage
+
+	public static final int SCHEDULE_CACHE_TIME = 60 * 24 * 7;		// eine Woche
+	public static final int MYSCHEDULE_CACHE_TIME = 60 * 24 * 7;	// eine Woche
+	public static final int CHANGES_CACHE_TIME = 60 * 8;			// acht Stunden
+	public static final int MEAL_CACHE_TIME = 60 * 24 * 7;			// eine Woche
+	public static final int COURSES_CACHE_TIME = 60 * 24 * 7;		// eine Woche
 
 	// Raumsuche
 	public final static String URL_RAUMSUCHE_LOGIN = "https://www.hof-university.de/anmelden.html";
