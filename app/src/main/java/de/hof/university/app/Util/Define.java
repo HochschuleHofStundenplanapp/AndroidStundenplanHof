@@ -120,11 +120,16 @@ public final class Define {
 	// how long to store content from
 	public static final int MAX_CACHE_TIME = 60 * 24 * 2;			// zwei Tage
 
+	//how long to not auto refresh
 	public static final int SCHEDULE_CACHE_TIME = 60 * 24 * 7;		// eine Woche
 	public static final int MYSCHEDULE_CACHE_TIME = 60 * 24 * 7;	// eine Woche
 	public static final int CHANGES_CACHE_TIME = 60 * 8;			// acht Stunden
 	public static final int MEAL_CACHE_TIME = 60 * 24 * 7;			// eine Woche
 	public static final int COURSES_CACHE_TIME = 60 * 24 * 7;		// eine Woche
+
+	//timeouts
+	public static final int shortTimeout = 1000;		// eine Sekunde
+	public static final int longTimeout = 3000;			// drei Sekunden
 
 	// Raumsuche
 	public final static String URL_RAUMSUCHE_LOGIN = "https://www.hof-university.de/anmelden.html";

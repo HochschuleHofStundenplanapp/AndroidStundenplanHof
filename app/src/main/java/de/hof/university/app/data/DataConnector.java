@@ -112,8 +112,6 @@ public class DataConnector {
         return lastCached.after(today);
     }
 
-	static final int timeoutInSeconds = 1000;
-
     private static String readStringFromUrl(final String strUrl) {
         InputStream inputStream;
 
@@ -129,7 +127,8 @@ public class DataConnector {
             final String encoding = Base64.encodeToString(userPassword.getBytes(), Base64.DEFAULT);
             urlConnection.setRequestProperty("Authorization", "Basic " + encoding);
 
-            urlConnection.setConnectTimeout(timeoutInSeconds);
+            urlConnection.setConnectTimeout(Define.shortTimeout);
+            urlConnection.setReadTimeout(Define.longTimeout);
             inputStream = new BufferedInputStream(urlConnection.getInputStream());
 
             final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
