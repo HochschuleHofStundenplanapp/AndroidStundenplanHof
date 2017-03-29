@@ -212,12 +212,12 @@ public class RaumlisteFragment extends Fragment {
 
         @Override
         protected final ArrayList<Level> doInBackground(String... params) {
-            Object object = RaumlisteFragment.readObject(getActivity().getApplicationContext(), raumlistFilename);
+            Object optRaumliste = RaumlisteFragment.readObject(getActivity().getApplicationContext(), raumlistFilename);
             Raumliste raumliste = new Raumliste();
             Date lastCached = new Date();
 
-            if (object != null) {
-                raumliste = (Raumliste) object;
+            if (optRaumliste != null) {
+                raumliste = (Raumliste) optRaumliste;
 
                 //TODO was ist das? Warum 1? Kann man das wegwerfen?
                 // Zeit in Minuten wie lange die Raumliste gecached wird, könnte auch in die Define.
@@ -239,8 +239,8 @@ public class RaumlisteFragment extends Fragment {
 
             if (
                 forceRefresh
-                || object == null
-                || (raumliste != null && raumliste.getLastSaved() == null)
+                || optRaumliste == null
+                // || (raumliste != null && raumliste.getLastSaved() == null) // raus zum testen ob es so auch in der Release Version funktioniert.
                 || !lastCached.after(new Date())
                 || !raumliste.getTimeStart().equals(params[5])
                 || !raumliste.getTimeEnd().equals(params[6])

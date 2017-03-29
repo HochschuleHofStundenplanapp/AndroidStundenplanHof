@@ -23,8 +23,8 @@ android {
         applicationId 'de.hof.university.app'
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 17
-        versionName '2.1'
+        versionCode 18
+        versionName '2.1.1'
     }
 
 	signingConfigs {
@@ -42,6 +42,7 @@ android {
 			signingConfig signingConfigs.release
 			pseudoLocalesEnabled true
 			/* proguardFile 'D:/Projekt/Mobile.AndroidStudio/VideoChat/app/proguard-project.txt' */
+			proguardFile 'proguard-rules.pro'
 		}
 		debug {
 			debuggable true
