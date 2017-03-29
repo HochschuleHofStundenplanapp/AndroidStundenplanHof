@@ -24,31 +24,31 @@ android {
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 17
-        versionName '2.0.5'
+        versionName '2.1'
     }
 
-    signingConfigs {
-        release {
-            //Folgender Pfad führt zum Absturz des Gradle Wrappers auf manchen Systemen (wie meinen Mac)!
-            //storeFile file('D:\\Projekt\\Mobile.AndroidStudio\\Hof.Stundenplaner\\fhhkey.jks')
-            keyAlias "fhhkey"
-        }
-    }
+	signingConfigs {
+		release {
+			//Folgender Pfad führt zum Absturz des Gradle Wrappers auf manchen Systemen (wie meinen Mac)!
+			//storeFile file('D:\\Projekt\\Mobile.AndroidStudio\\Hof.Stundenplaner\\fhhkey.jks')
+			keyAlias "fhhkey"
+		}
+	}
 
-    buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-            pseudoLocalesEnabled true
-            /* proguardFile 'D:/Projekt/Mobile.AndroidStudio/VideoChat/app/proguard-project.txt' */
-        }
-        debug {
-            debuggable true
-        }
-    }
-    productFlavors {
-    }
+	buildTypes {
+		release {
+			minifyEnabled true
+			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+			signingConfig signingConfigs.release
+			pseudoLocalesEnabled true
+			/* proguardFile 'D:/Projekt/Mobile.AndroidStudio/VideoChat/app/proguard-project.txt' */
+		}
+		debug {
+			debuggable true
+		}
+	}
+	productFlavors {
+	}
 
     // Lint found fatal errors while assembling a release target
     lintOptions {
@@ -64,20 +64,20 @@ android {
 
 //NOTICE: Die Versionsnummer sollte pro Block gleich sein
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    // jsoup HTML parser library @ http://jsoup.org/
-    // Die Versionsnummer sollte die gleiche sein
-    compile 'com.android.support:appcompat-v7:25.2.0'
-    compile 'com.android.support:design:25.2.0'
-    compile 'com.android.support:support-v4:25.2.0'
-    compile 'com.android.support:recyclerview-v7:25.2.0'
-    compile 'org.jsoup:jsoup:1.9.2'
-    // Die Versionsnummer sollte die gleiche sein
-    compile 'com.google.android.gms:play-services-gcm:10.2.0'
-    compile 'com.google.firebase:firebase-messaging:10.2.0'
-    compile 'org.osmdroid:osmdroid-android:5.6.3'
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+	compile fileTree(include: ['*.jar'], dir: 'libs')
+	// jsoup HTML parser library @ http://jsoup.org/
+	// Die Versionsnummer sollte die gleiche sein
+	compile 'com.android.support:appcompat-v7:25.2.0'
+	compile 'com.android.support:design:25.2.0'
+	compile 'com.android.support:support-v4:25.2.0'
+	compile 'com.android.support:recyclerview-v7:25.2.0'
+	compile 'org.jsoup:jsoup:1.9.2'
+	// Die Versionsnummer sollte die gleiche sein
+	compile 'com.google.android.gms:play-services-gcm:10.2.0'
+	compile 'com.google.firebase:firebase-messaging:10.2.0'
+	compile 'org.osmdroid:osmdroid-android:5.6.3'
+	testCompile 'junit:junit:4.12'
+	compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }
 
 // apply plugin: 'com.google.gms.google-services'
