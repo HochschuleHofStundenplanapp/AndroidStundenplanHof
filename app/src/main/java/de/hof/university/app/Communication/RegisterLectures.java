@@ -38,7 +38,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.hof.university.app.MainActivity;
-import de.hof.university.app.R;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.Util.Log;
 
@@ -73,7 +72,7 @@ public class RegisterLectures {
 		    }
 		    json.put(jo);
 	    }
-        System.out.println(json.toString());
+        Log.d(TAG, json.toString());
 
         return json.toString();
     }
@@ -85,7 +84,7 @@ public class RegisterLectures {
         protected final String doInBackground(Set<String>... params) {
             Log.d("FCMService", "Beginn doInBackground");
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.contextOfApplication);
-            final String token = sharedPref.getString(MainActivity.contextOfApplication.getString(R.string.FCM_TOKEN), "Token ist leer");
+            final String token = sharedPref.getString(Define.FCM_TOKEN, "Token ist leer");
 
             // Vorlesungen setzen
             // Test ID's

@@ -71,7 +71,6 @@ public class MealFragment extends AbstractListFragment {
 
 	@Override
 	public void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
 		MainActivity mainActivity = (MainActivity) getActivity();
 		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);

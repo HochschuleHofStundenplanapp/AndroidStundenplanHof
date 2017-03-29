@@ -92,7 +92,7 @@ public class DataManager {
             final String url = Define.URL_MEAL + calendar.get(Calendar.YEAR) + '-' + (calendar.get(Calendar.MONTH) + 1) + '-' + calendar.get(Calendar.DAY_OF_MONTH);
             final String xmlString = this.getData(url);
 
-//TODO check
+
             // falls der String leer ist war ein Problem mit dem Internet
             if (xmlString.isEmpty()) {
                 // prüfen ob es kein ForceRefreseh war, dann kann gecachtes zurück gegeben werden
@@ -320,7 +320,7 @@ public class DataManager {
             final String sURL = String.format(Define.URL_STUDYCOURSE, sTermType);
             final String jsonString = this.getData(sURL);
 
-//TODO checken
+
             // falls der String leer ist war ein Problem mit dem Internet
             if (jsonString.isEmpty()) {
                 // prüfen ob es kein ForceRefreseh war, dann kann gecachtes zurück gegeben werden
@@ -430,7 +430,7 @@ public class DataManager {
             Log.e(TAG, "Fehler beim Speichern des Objektes", e);
         }
 
-        // TODO Fehlerwert zurückgeben?
+
 
         // Stundenplan registrieren
         if (object instanceof Schedule || object instanceof MySchedule) {
@@ -501,7 +501,6 @@ public class DataManager {
             ids = getMySchedule(context).getIds();
         } else if (schedule.getLectures().size() > 0) {
             for (LectureItem li : schedule.getLectures()) {
-                // TODO ID muss splusname werden
                 ids.add(String.valueOf(li.getId()));
             }
         } else {

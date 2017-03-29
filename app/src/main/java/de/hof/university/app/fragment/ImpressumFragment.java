@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
+import de.hof.university.app.Util.Define;
 
 /**
  * Created by larsg on 28.06.2016.
@@ -49,7 +50,6 @@ public class ImpressumFragment extends Fragment {
 
 	@Override
 	public void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
 		MainActivity mainActivity = (MainActivity) getActivity();
 		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
@@ -66,7 +66,7 @@ public class ImpressumFragment extends Fragment {
 		btnImpressum.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.impressumURL)));
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Define.IMPRESSUMURL));
                 if (browserIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivity(browserIntent);
                 } else {
@@ -79,7 +79,7 @@ public class ImpressumFragment extends Fragment {
 		btnRate.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.PLAYSTOREURL)));
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Define.PLAYSTOREURL));
 				if (browserIntent.resolveActivity(getActivity().getPackageManager()) != null) {
 					startActivity(browserIntent);
 				} else {
@@ -94,7 +94,7 @@ public class ImpressumFragment extends Fragment {
 			public void onClick(View v) {
 				Intent mailIntent = new Intent(Intent.ACTION_SENDTO);
 				mailIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
-				mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {getString(R.string.FEEDBACKEMAILADDRESS)});
+				mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {Define.FEEDBACKEMAILADDRESS});
 				mailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.feedbackSubject));
                 if (mailIntent.resolveActivity(getActivity().getPackageManager()) != null) {
                     startActivity(mailIntent);

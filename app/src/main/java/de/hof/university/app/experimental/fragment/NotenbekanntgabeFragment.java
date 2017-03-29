@@ -232,7 +232,7 @@ public class NotenbekanntgabeFragment extends Fragment {
                 //Notenblatt
 //			DBConnection.Response res4 = Jsoup.connect("https://www1.primuss.de/cgi/pg_Notenblatt/index.pl").data(
 //					"Session", session, "User", user, "Language", "de", "FH", fh, "Portal", portal, "Javascript", javascript).method(Method.POST).execute();
-//			System.out.println(res4.body());
+//			Log.d(TAG, res4.body());
             } catch (IOException e) {
 
                 if (e.getClass() == InterruptedIOException.class) //Wurde einfach abgebrochen -> nichts tun

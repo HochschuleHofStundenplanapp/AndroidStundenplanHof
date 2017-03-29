@@ -333,7 +333,7 @@ public class RaumlisteFragment extends Fragment {
                     }
                 }
 
-                // System.out.println(loginForm.cookie("fe_typo_user"));
+                // Log.d(TAG, loginForm.cookie("fe_typo_user"));
 
                 raumliste.setRaumlist(tmpRaumList);
 

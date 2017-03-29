@@ -67,8 +67,6 @@ public class HofObject implements Serializable {
 		} catch ( final IOException e ) {
 			Log.e( TAG, "Fehler beim Speichern des Objektes", e );
 		}
-
-		// TODO Fehlerwert zurückgeben?
 	}
 
 	// this is the general method to serialize an object

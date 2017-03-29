@@ -93,9 +93,6 @@
                                - Angelina Scheler</string>
     <string name="toImpressum">Zum Impressum</string>
     <!--URLs -->
-    <string name="aboutusURL">http://www.hof-university.de/ueber-uns.html</string>
-    <string name="impressumURL">http://www.hof-university.de/impressum.html</string>
-    <string name="datenschutzURL">http://www.hof-university.de/datenschutz.html</string>
     <string name="doubleBackOnClose">Zum Beenden erneut Zurück tippen</string>
     <string name="noChanges">Es gibt keine Änderungen</string>
     <string name="refreshFailed">Aktualisierung fehlgeschlagen</string>

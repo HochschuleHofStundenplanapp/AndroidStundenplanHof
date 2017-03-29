@@ -22,7 +22,6 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
@@ -53,7 +52,6 @@ public class PrimussTabFragment extends Fragment {
 
 	@Override
 	public void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
 		MainActivity mainActivity = (MainActivity) getActivity();
 		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);

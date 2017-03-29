@@ -477,10 +477,10 @@ public class MainActivity extends AppCompatActivity
 				trans.commit();
 			}
 		} else if ( R.id.nav_aboutus == id ) {
-			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.aboutusURL)));
+			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse( Define.ABOUTUSURL ));
 			startActivity(browserIntent);
 		} else if ( R.id.nav_datenschutz == id ) {
-			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.datenschutzURL)));
+			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse( Define.DATENSCHUTZURL));
 			startActivity(browserIntent);
 		} else if (R.id.nav_primuss == id){
 			FragmentManager manager = getFragmentManager();

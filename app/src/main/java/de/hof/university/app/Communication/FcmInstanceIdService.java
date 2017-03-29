@@ -23,7 +23,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
 import de.hof.university.app.MainActivity;
-import de.hof.university.app.R;
+import de.hof.university.app.Util.Define;
 import de.hof.university.app.Util.Log;
 
 /**
@@ -56,16 +56,15 @@ public class FcmInstanceIdService extends FirebaseInstanceIdService {
 
         //SharedPreferences sharedPreferences = getApplicationContext().getApplicationContext().getSharedPreferences(getString(R.string.FCM_PREF), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        System.out.println("RECENT TOKEN: " + recent_token);
-        editor.putString(getString(R.string.FCM_TOKEN), recent_token);
+        Log.d(TAG, "RECENT TOKEN: " + recent_token);
+        editor.putString( Define.FCM_TOKEN, recent_token);
         editor.apply();
     }
 
     // After you have obtained the token, you can send it to your app server.
     // See the Instance ID API reference for full detail on the API.
-    // TODO: Implement this method to send any registration to your app's servers.
-    private void sendRegistrationToServer(final String refreshedToken) {
-
-        // TODO Jonas :-)
-    }
+    //  Implement this method to send any registration to your app's servers.
+    //private void sendRegistrationToServer(final String refreshedToken) {
+        // Jonas :-)
+    //}
 }

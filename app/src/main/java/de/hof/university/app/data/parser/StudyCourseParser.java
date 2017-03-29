@@ -22,8 +22,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import de.hof.university.app.BuildConfig;
 import de.hof.university.app.Util.Define;
+import de.hof.university.app.Util.Log;
 import de.hof.university.app.model.settings.StudyCourse;
 
 /**
@@ -55,11 +55,10 @@ public class StudyCourseParser implements Parser<StudyCourse> {
 
             JSONArray jsonArray = null;
             try {
-                // TODO gibt es da vielleicht eine andere Möglichkeit
 	            JSONObject jsonObject = new JSONObject(jsonString);
                 jsonArray = jsonObject.optJSONArray("courses");
             } catch (final JSONException e) {
-                if (BuildConfig.DEBUG) e.printStackTrace();
+                Log.e(TAG, "fehlerhaftes JSONObject", e);
 	            return result;
             }
 	        if (jsonArray == null)

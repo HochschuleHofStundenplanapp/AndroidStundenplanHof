@@ -207,7 +207,6 @@ public class MapFragment extends Fragment {
 
     @Override
     public void onResume() {
-        // TODO Auto-generated method stub
         super.onResume();
 
         MainActivity mainActivity = (MainActivity) getActivity();
@@ -238,7 +237,6 @@ public class MapFragment extends Fragment {
 
     @Override
     public void onPause() {
-        // TODO Auto-generated method stub
         super.onPause();
         MainActivity mainActivity = (MainActivity) getActivity();
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);

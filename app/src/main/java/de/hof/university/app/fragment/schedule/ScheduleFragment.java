@@ -66,10 +66,6 @@ public class ScheduleFragment extends AbstractListFragment {
 
     @Override
     public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO Versuch den Fehler mit alten Fragment im Hintergrund zu beheben
-        /*if (container != null) {
-            container.removeAllViews();
-        }*/
         View v = super.onCreateView(inflater, container, savedInstanceState);
         registerForContextMenu(listView);
         return v;
@@ -127,7 +123,6 @@ public class ScheduleFragment extends AbstractListFragment {
 
     @Override
     public void onPause() {
-        // TODO Auto-generated method stub
         super.onPause();
         MainActivity mainActivity = (MainActivity) getActivity();
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);

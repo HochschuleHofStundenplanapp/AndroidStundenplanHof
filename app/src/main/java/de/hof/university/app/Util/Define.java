@@ -117,6 +117,13 @@ public final class Define {
 	public final static String URL_REGISTER_PUSH_NOTIFICATIONS_HOF = APP_SERVER_HOF + "/soap/fcm_register_user.php";
 
 
+	// Additional URLS
+	public final static String ABOUTUSURL="http://www.hof-university.de/ueber-uns.html";
+	public final static String IMPRESSUMURL="http://www.hof-university.de/impressum.html";
+	public final static String DATENSCHUTZURL="http://www.hof-university.de/datenschutz.html";
+	public final static String PLAYSTOREURL="https://play.google.com/store/apps/details?id=de.hof.university.app";
+
+
 	// how long to store content from
 	public static final int MAX_CACHE_TIME = 60 * 24 * 2;			// zwei Tage
 
@@ -135,4 +142,14 @@ public final class Define {
 	public final static String URL_RAUMSUCHE_LOGIN = "https://www.hof-university.de/anmelden.html";
 	public final static String URL_RAUMSUCHE_LOGIN_SUCCESS = "http://www.hof-university.de/anmeldung-erfolgreich.html";
 	public final static String URL_RAUMSUCHE = "https://www.hof-university.de/studierende/info-service/it-service/raumhardsoftwaresuche.html";
+
+
+	// Pushnotifications
+	public final static String FCM_TOKEN="de.hof-university.app.fcm_token";
+	public final static String FCM_PREF="de.hof-university.app.fcm_pref";
+
+
+	//EMail
+	public final static String FEEDBACKEMAILADDRESS = "androidapps@hof-university.de";
+
 }

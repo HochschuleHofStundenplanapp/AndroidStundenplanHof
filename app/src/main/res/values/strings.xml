@@ -88,13 +88,7 @@
                                - Christian Pfeiffer\n
                                - Jonas Beetz\n
                                - Angelina Scheler</string>
-    <string name="toImpressum">Go to the imprint</string>
-    <!--URLs -->
-    <string name="aboutusURL">http://www.hof-university.de/ueber-uns.html</string>
-    <string name="impressumURL">http://www.hof-university.de/impressum.html</string>
-    <string name="datenschutzURL">http://www.hof-university.de/datenschutz.html</string>
-    <string name="PLAYSTOREURL" translatable="false">https://play.google.com/store/apps/details?id=de.hof.university.app</string>
-
+    <string name="toImpressum">To the imprint</string>
     <string name="noCourseSelected">No course of studies selected!</string>
     <string name="to">To:</string>
     <string name="doubleBackOnClose">To close press back again</string>
@@ -111,8 +105,6 @@
     <string name="noMeal">There is no new menu!</string>
     <string name="needPermissionText">You need to allow access to location for this function</string>
     <string name="needPermissionTitle">Permission required</string>
-    <string name="FCM_TOKEN" translatable="false">de.hof-university.app.fcm_token</string>
-    <string name="FCM_PREF" translatable="false">de.hof-university.app.fcm_pref</string>
     <string name="notifications">Notifications</string>
     <string name="changes">Changes</string>
     <string name="noScheduleText">For your selected settings is no schedule available.</string>
@@ -123,7 +115,6 @@
 
     <string name="feedbackBtn">Give feedback</string>
     <string name="feedbackSubject">Feedback</string>
-    <string name="FEEDBACKEMAILADDRESS" translatable="false">androidapps@hof-university.de</string>
 
     <string name="noEmailApp">No e-mail app installed</string>
     <string name="noBrowserApp">No browser App installed</string>
@@ -134,5 +125,5 @@
     <string name="disabled_shortcut">The shortcut is disabled.</string>
     <string name="yes">yes</string>
     <string name="no">no</string>
-    <string name="notifications_question">Do you want to be notified of changes?</string>
+    <string name="notifications_question">Do you want to get notified for changes?</string>
 </resources>

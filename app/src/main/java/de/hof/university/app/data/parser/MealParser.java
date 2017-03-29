@@ -81,14 +81,14 @@ final public class MealParser implements Parser<Meal> {
                             if (xmlTag.equalsIgnoreCase("gericht")) {
                                 // create a new instance of employee
                                 meal = new Meal(xmlDay, xmlWeekday, xmlCategory, xmlParser.getAttributeValue(null, "name"));
-//                                System.out.println(xmlParser.getAttributeValue(null, "name"));
+//                                Log.d(TAG, xmlParser.getAttributeValue(null, "name"));
                             }
                             if (xmlTag.equalsIgnoreCase("kategorie")) {
                                 xmlCategory = xmlParser.getAttributeValue(null, "name");
                                 if (xmlCategory.equalsIgnoreCase("Salat_suppe")) {
                                     xmlCategory = "Salat";
                                 }
-//                                System.out.println(xmlParser.getAttributeValue(null, "name"));
+//                                Log.d(TAG, xmlParser.getAttributeValue(null, "name"));
                             }
                             if (xmlTag.equalsIgnoreCase("tag")) {
                                 try {
@@ -97,7 +97,7 @@ final public class MealParser implements Parser<Meal> {
                                     if (BuildConfig.DEBUG) e.printStackTrace();
                                 }
                                 xmlWeekday = xmlParser.getAttributeValue(null, "wochentag");
-//                                System.out.println(xmlParser.getAttributeValue(null, "wochentag"));
+//                                Log.d(TAG, xmlParser.getAttributeValue(null, "wochentag"));
                             }
                             if (xmlTag.equalsIgnoreCase("preis")) {
                                 try {
