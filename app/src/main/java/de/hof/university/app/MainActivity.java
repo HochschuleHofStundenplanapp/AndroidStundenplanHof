@@ -43,9 +43,9 @@ import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.fragment.MapFragment;
 import de.hof.university.app.experimental.fragment.NotenbekanntgabeFragment;
 import de.hof.university.app.experimental.fragment.NotenblattFragment;
+import de.hof.university.app.fragment.AboutusFragment;
 import de.hof.university.app.fragment.PrimussTabFragment;
 import de.hof.university.app.experimental.fragment.RaumsucheFragment;
-import de.hof.university.app.fragment.ImpressumFragment;
 import de.hof.university.app.fragment.MealFragment;
 import de.hof.university.app.fragment.schedule.ChangesFragment;
 import de.hof.university.app.fragment.schedule.MyScheduleFragment;
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity
 	private ScheduleFragment scheduleFragment;
 	private ChangesFragment changesFragment;
 	private MyScheduleFragment myScheduleFragment;
-	private ImpressumFragment impressumFragment;
+	private AboutusFragment aboutusFragment;
 
 	// Experimentelle Fragmente
 	private PrimussTabFragment primussTabFragment;
@@ -465,20 +465,20 @@ public class MainActivity extends AppCompatActivity
 				trans.commit();
 			}
 		} else if ( R.id.nav_impressum == id ) {
+			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse( Define.IMPRESSUMURL ));
+			startActivity(browserIntent);
+		} else if ( R.id.nav_aboutus == id ) {
 			FragmentManager manager = getFragmentManager();
-			if ( !manager.popBackStackImmediate(ImpressumFragment.class.getName(), 0) ) {
+			if ( !manager.popBackStackImmediate(AboutusFragment.class.getName(), 0) ) {
 
 				FragmentTransaction trans = manager.beginTransaction();
-				trans.addToBackStack(ImpressumFragment.class.getName());
-				if ( impressumFragment == null ) {
-					impressumFragment = new ImpressumFragment();
+				trans.addToBackStack(AboutusFragment.class.getName());
+				if (aboutusFragment == null) {
+					aboutusFragment = new AboutusFragment();
 				}
-				trans.replace(R.id.content_main, impressumFragment);
+				trans.replace(R.id.content_main, aboutusFragment);
 				trans.commit();
 			}
-		} else if ( R.id.nav_aboutus == id ) {
-			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse( Define.ABOUTUSURL ));
-			startActivity(browserIntent);
 		} else if ( R.id.nav_datenschutz == id ) {
 			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse( Define.DATENSCHUTZURL));
 			startActivity(browserIntent);
