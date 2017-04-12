@@ -34,18 +34,18 @@ import de.hof.university.app.Util.Define;
 /**
  * Created by larsg on 28.06.2016.
  */
-public class ImpressumFragment extends Fragment {
+public class AboutusFragment extends Fragment {
 
-	public final static String TAG = "ImpressumFragment";
+	public final static String TAG = "AboutusFragment";
 
 	@Override
 	public final void onResume() {
 		super.onResume();
 		MainActivity mainActivity = (MainActivity) getActivity();
-		mainActivity.getSupportActionBar().setTitle(R.string.impressum);
+		mainActivity.getSupportActionBar().setTitle(R.string.aboutus);
 
 		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
-		navigationView.getMenu().findItem(R.id.nav_impressum).setChecked(true);
+		navigationView.getMenu().findItem(R.id.nav_aboutus).setChecked(true);
 	}
 
 	@Override
@@ -53,27 +53,14 @@ public class ImpressumFragment extends Fragment {
 		super.onPause();
 		MainActivity mainActivity = (MainActivity) getActivity();
 		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
-		navigationView.getMenu().findItem(R.id.nav_impressum).setChecked(false);
+		navigationView.getMenu().findItem(R.id.nav_aboutus).setChecked(false);
 	}
 
 	@Override
 	public final View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                               Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		View v = inflater.inflate(R.layout.fragment_impressum, container, false);
-
-		Button btnImpressum = (Button) v.findViewById(R.id.btnImpressum);
-		btnImpressum.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Define.IMPRESSUMURL));
-                if (browserIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    startActivity(browserIntent);
-                } else {
-                    Toast.makeText(getActivity().getApplicationContext(), R.string.noBrowserApp, Toast.LENGTH_SHORT).show();
-                }
-			}
-		});
+		View v = inflater.inflate(R.layout.fragment_aboutus, container, false);
 
 		Button btnRate = (Button) v.findViewById(R.id.btnRate);
 		btnRate.setOnClickListener(new View.OnClickListener() {
