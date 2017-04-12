@@ -25,6 +25,7 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.Util.Log;
+import de.hof.university.app.data.DataManager;
 
 /**
  * Created by stepping on 15.12.2016.
@@ -59,6 +60,9 @@ public class FcmInstanceIdService extends FirebaseInstanceIdService {
         Log.d(TAG, "RECENT TOKEN: " + recent_token);
         editor.putString( Define.FCM_TOKEN, recent_token);
         editor.apply();
+
+        //erneut Registrieren falls es einen neuen Token gibt
+        DataManager.getInstance().registerFCMServer(MainActivity.contextOfApplication);
     }
 
     // After you have obtained the token, you can send it to your app server.

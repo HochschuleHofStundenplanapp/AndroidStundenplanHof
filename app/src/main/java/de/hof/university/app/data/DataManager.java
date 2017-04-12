@@ -490,11 +490,11 @@ public class DataManager {
     public void registerFCMServerForce(Context context) {
         Set<String> ids = new HashSet<>();
 
-        Object object = readObject(context, Define.scheduleFilename);
+        Object scheduleOptObject = readObject(context, Define.scheduleFilename);
         Schedule schedule = new Schedule();
 
-        if (object != null) {
-            schedule = (Schedule) object;
+        if (scheduleOptObject != null) {
+            schedule = (Schedule) scheduleOptObject;
         }
 
         if (getMySchedule(context).getIds().size() > 0) {
