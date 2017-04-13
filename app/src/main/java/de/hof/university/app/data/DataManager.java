@@ -159,6 +159,11 @@ public class DataManager {
 
             ArrayList<LectureItem> lectures = (ArrayList<LectureItem>) parser.parse(params);
 
+            // Wenn der Server einen unvollständigen Stundenplan (nur halb so groß oder kleiner) liefert bringe die Fehlermedlung "Aktualisierung fehlgeschlagen"
+            if (lectures.size() < (schedule.getLectures().size() / 2)) {
+                return null;
+            }
+
             schedule.setLectures(lectures);
 
             schedule.setCourse(course);
@@ -213,6 +218,11 @@ public class DataManager {
             final String[] params = {jsonString, language};
 
             ArrayList<LectureItem> tmpMySchedule = (ArrayList<LectureItem>) parser.parse(params);
+
+            // Wenn der Server einen unvollständigen Stundenplan (nur halb so groß oder kleiner) liefert bringe die Fehlermedlung "Aktualisierung fehlgeschlagen"
+            if (tmpMySchedule.size() < (getMyScheduleSize(context) / 2)) {
+                return null;
+            }
 
             getMySchedule(context).setLectures(tmpMySchedule);
 
