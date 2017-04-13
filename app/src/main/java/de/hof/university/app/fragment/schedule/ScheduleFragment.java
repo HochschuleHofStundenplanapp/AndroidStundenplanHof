@@ -208,7 +208,9 @@ public class ScheduleFragment extends AbstractListFragment {
 
         tmpDataList.addAll(sortDataList);
 
-        tmpDataList.add(new LastUpdated(getString(R.string.lastUpdated) + ": " + getLastSaved()));
+        if (tmpDataList.size() != 0) {
+            tmpDataList.add(new LastUpdated(getString(R.string.lastUpdated) + ": " + getLastSaved()));
+        }
 
         return tmpDataList;
     }
