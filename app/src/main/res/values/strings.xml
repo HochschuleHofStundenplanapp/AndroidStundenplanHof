@@ -126,4 +126,5 @@
     <string name="yes">yes</string>
     <string name="no">no</string>
     <string name="notifications_question">Do you want to get notified for changes?</string>
+    <string name="lastUpdated">Last updated</string>
 </resources>

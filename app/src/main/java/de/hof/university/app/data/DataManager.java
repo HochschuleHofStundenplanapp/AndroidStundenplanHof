@@ -36,6 +36,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import de.hof.university.app.Communication.RegisterLectures;
+import de.hof.university.app.MainActivity;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.Util.Log;
 import de.hof.university.app.Util.MyString;
@@ -62,6 +63,7 @@ public class DataManager {
     // single instance of the Factories
     static final private DataConnector dataConnector = new DataConnector();
 
+    private Schedule schedule;
     private MySchedule mySchedule;
 
     private static final DataManager dataManager = new DataManager();
@@ -121,15 +123,9 @@ public class DataManager {
 
     public final ArrayList<LectureItem> getSchedule(Context context, String language, String course, String semester,
                                                     String termTime, boolean forceRefresh) {
-        Object object = readObject(context, Define.scheduleFilename);
-        Schedule schedule = new Schedule();
-
-        if (object != null) {
-            schedule = (Schedule) object;
-        }
+        Schedule schedule = this.getSchedule(context);
 
         if (forceRefresh
-                || (object == null)
                 || (schedule.getLectures().size() == 0)
                 || (schedule.getLastSaved() == null)
                 || !cacheStillValid(schedule, Define.SCHEDULE_CACHE_TIME)
@@ -146,7 +142,7 @@ public class DataManager {
             // falls der String leer ist war ein Problem mit dem Internet
             if (jsonString.isEmpty()) {
                 // prüfen ob es kein ForceRefreseh war, dann kann gecachtes zurück gegeben werden
-                if (!forceRefresh && object != null) {
+                if (!forceRefresh && schedule.getLectures().size() > 0) {
                     return schedule.getLectures();
                 } else {
                     // anderen falls null, damit dann die Fehlermeldung "Aktualisierung fehlgeschlagen" kommt
@@ -164,17 +160,17 @@ public class DataManager {
                 return null;
             }
 
-            schedule.setLectures(lectures);
+            this.getSchedule(context).setLectures(lectures);
 
-            schedule.setCourse(course);
-            schedule.setSemester(semester);
-            schedule.setTermtime(termTime);
+            this.getSchedule(context).setCourse(course);
+            this.getSchedule(context).setSemester(semester);
+            this.getSchedule(context).setTermtime(termTime);
+            this.getSchedule(context).setLastSaved(new Date());
 
-            schedule.setLastSaved(new Date());
-            saveObject(context, schedule, Define.scheduleFilename);
+            saveObject(context, this.getSchedule(context), Define.scheduleFilename);
         }
 
-        return schedule.getLectures();
+        return this.getSchedule(context).getLectures();
     }
 
     public final ArrayList<LectureItem> getMySchedule(Context context, String language,
@@ -224,19 +220,9 @@ public class DataManager {
                 return null;
             }
 
-            getMySchedule(context).setLectures(tmpMySchedule);
+            this.getMySchedule(context).setLectures(tmpMySchedule);
+            this.getMySchedule(context).setLastSaved(new Date());
 
-            // ID's vom Server überschreiben
-            // auskommentiert da sonst falls der Server keinen vollständigen oder sogar gar keinen
-            // Stundenplan liefert der eingestellte Mein Stundenplan überschrieben wird.
-            /*Set<String> ids = new HashSet<>();
-            for (LectureItem li : tmpMySchedule) {
-                ids.add(String.valueOf(li.getId()));
-            }
-
-            getMySchedule(context).setIds(ids);*/
-
-            getMySchedule(context).setLastSaved(new Date());
             this.saveObject(context, getMySchedule(context), Define.myScheduleFilename);
         }
 
@@ -407,6 +393,22 @@ public class DataManager {
         this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
     }
 
+    private Schedule getSchedule(final Context context) {
+        if (this.schedule == null) {
+            Object object = readObject(context, Define.scheduleFilename);
+            if (object != null) {
+                this.schedule = (Schedule) object;
+            } else {
+                this.schedule = new Schedule();
+            }
+        }
+        return this.schedule;
+    }
+
+    public Date getScheduleLastSaved() {
+        return getSchedule(MainActivity.contextOfApplication).getLastSaved();
+    }
+
     private MySchedule getMySchedule(final Context context) {
         if (this.mySchedule == null) {
             Object object = DataManager.readObject(context, Define.myScheduleFilename);
@@ -426,6 +428,11 @@ public class DataManager {
         return this.getMySchedule(context).getIds().size();
     }
 
+    public Date getMyScheduleLastSaved() {
+        return getMySchedule(MainActivity.contextOfApplication).getLastSaved();
+    }
+
+
     // this is the general method to serialize an object
     //
     private void saveObject(final Context context, Object object, final String filename) {
@@ -439,8 +446,6 @@ public class DataManager {
         } catch (IOException e) {
             Log.e(TAG, "Fehler beim Speichern des Objektes", e);
         }
-
-
 
         // Stundenplan registrieren
         if (object instanceof Schedule || object instanceof MySchedule) {
@@ -500,12 +505,7 @@ public class DataManager {
     public void registerFCMServerForce(Context context) {
         Set<String> ids = new HashSet<>();
 
-        Object scheduleOptObject = readObject(context, Define.scheduleFilename);
-        Schedule schedule = new Schedule();
-
-        if (scheduleOptObject != null) {
-            schedule = (Schedule) scheduleOptObject;
-        }
+        Schedule schedule = this.getSchedule(context);
 
         if (getMySchedule(context).getIds().size() > 0) {
             ids = getMySchedule(context).getIds();

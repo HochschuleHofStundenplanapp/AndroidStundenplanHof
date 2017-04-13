@@ -25,7 +25,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import de.hof.university.app.BuildConfig;
@@ -127,6 +129,16 @@ public class MyScheduleFragment extends ScheduleFragment {
         } else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    /**
+     * gibt das Datum zurück wann der Mein Stundenplan zuletzt geholt wurde
+     * @return lastSaved
+     */
+    @Override
+    public String getLastSaved() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        return simpleDateFormat.format(DataManager.getInstance().getMyScheduleLastSaved());
     }
 
 

@@ -47,6 +47,7 @@ import de.hof.university.app.adapter.ScheduleAdapter;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.fragment.AbstractListFragment;
 import de.hof.university.app.model.BigListItem;
+import de.hof.university.app.model.LastUpdated;
 import de.hof.university.app.model.schedule.LectureItem;
 
 
@@ -207,7 +208,18 @@ public class ScheduleFragment extends AbstractListFragment {
 
         tmpDataList.addAll(sortDataList);
 
+        tmpDataList.add(new LastUpdated(getString(R.string.lastUpdated) + ": " + getLastSaved()));
+
         return tmpDataList;
+    }
+
+    /**
+     * gibt das Datum zurück wann der Stundenplan zuletzt geholt wurde
+     * @return lastSaved
+     */
+    public String getLastSaved() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        return simpleDateFormat.format(DataManager.getInstance().getScheduleLastSaved());
     }
 
     @Override
