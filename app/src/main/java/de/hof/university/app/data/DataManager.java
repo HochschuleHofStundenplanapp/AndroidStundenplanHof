@@ -156,7 +156,7 @@ public class DataManager {
             ArrayList<LectureItem> lectures = (ArrayList<LectureItem>) parser.parse(params);
 
             // Wenn der Server einen unvollständigen Stundenplan (nur halb so groß oder kleiner) liefert bringe die Fehlermedlung "Aktualisierung fehlgeschlagen"
-            if (lectures.size() < (schedule.getLectures().size() / 2)) {
+            if (course.equals(schedule.getCourse()) && semester.equals(schedule.getSemester()) && termTime.equals(schedule.getTermtime()) && lectures.size() < (schedule.getLectures().size() / 2)) {
                 return null;
             }
 
