@@ -32,6 +32,7 @@ import de.hof.university.app.R;
 import de.hof.university.app.adapter.MealAdapter;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.model.BigListItem;
+import de.hof.university.app.model.LastUpdated;
 import de.hof.university.app.model.MediumListItem;
 import de.hof.university.app.model.meal.Meal;
 
@@ -130,7 +131,21 @@ public class MealFragment extends AbstractListFragment {
 			}
 			tmpDataList.add(meal);
 		}
+
+		if (tmpDataList.size() != 0) {
+			tmpDataList.add(new LastUpdated(getString(R.string.lastUpdated) + ": " + getLastSaved()));
+		}
+
 		return tmpDataList;
+	}
+
+	/**
+	 * gibt das Datum zurück wann der Stundenplan zuletzt geholt wurde
+	 * @return lastSaved
+	 */
+	public String getLastSaved() {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+		return simpleDateFormat.format(DataManager.getInstance().getMealsLastSaved());
 	}
 
 	@Override

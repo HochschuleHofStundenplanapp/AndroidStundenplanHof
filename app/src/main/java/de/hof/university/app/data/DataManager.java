@@ -65,6 +65,7 @@ public class DataManager {
 
     private Schedule schedule;
     private MySchedule mySchedule;
+    private Meals meals;
 
     private static final DataManager dataManager = new DataManager();
 
@@ -77,15 +78,9 @@ public class DataManager {
     }
 
     public final ArrayList<Meal> getMeals(Context context, boolean forceRefresh) {
-        Object object = readObject(context, Define.mealsFilename);
-        Meals meals = new Meals();
-
-        if (object != null) {
-            meals = (Meals) object;
-        }
+        Meals meals = this.getMeals(context);
 
         if (forceRefresh
-                || (object == null)
                 || (meals.getMeals().size() == 0)
                 || (meals.getLastSaved() == null)
                 || !cacheStillValid(meals, Define.MEAL_CACHE_TIME)) {
@@ -98,7 +93,7 @@ public class DataManager {
             // falls der String leer ist war ein Problem mit dem Internet
             if (xmlString.isEmpty()) {
                 // prüfen ob es kein ForceRefreseh war, dann kann gecachtes zurück gegeben werden
-                if (!forceRefresh && object != null) {
+                if (!forceRefresh && meals.getMeals().size() > 0) {
                     return meals.getMeals();
                 } else {
                     // anderen falls null, damit dann die Fehlermeldung "Aktualisierung fehlgeschlagen" kommt
@@ -112,13 +107,13 @@ public class DataManager {
 
             ArrayList<Meal> tmpMeals = (ArrayList<Meal>) parser.parse(params);
 
-            meals.setMeals(tmpMeals);
+            this.getMeals(context).setMeals(tmpMeals);
 
-            meals.setLastSaved(new Date());
-            saveObject(context, meals, Define.mealsFilename);
+            this.getMeals(context).setLastSaved(new Date());
+            saveObject(context, this.getMeals(context), Define.mealsFilename);
         }
 
-        return meals.getMeals();
+        return this.getMeals(context).getMeals();
     }
 
     public final ArrayList<LectureItem> getSchedule(Context context, String language, String course, String semester,
@@ -395,9 +390,9 @@ public class DataManager {
 
     private Schedule getSchedule(final Context context) {
         if (this.schedule == null) {
-            Object object = readObject(context, Define.scheduleFilename);
-            if (object != null) {
-                this.schedule = (Schedule) object;
+            Object optScheduleObj = readObject(context, Define.scheduleFilename);
+            if (optScheduleObj != null) {
+                this.schedule = (Schedule) optScheduleObj;
             } else {
                 this.schedule = new Schedule();
             }
@@ -411,12 +406,12 @@ public class DataManager {
 
     private MySchedule getMySchedule(final Context context) {
         if (this.mySchedule == null) {
-            Object object = DataManager.readObject(context, Define.myScheduleFilename);
-            if (object != null && object instanceof Set) {
+            Object obtMyScheduleOpj = DataManager.readObject(context, Define.myScheduleFilename);
+            if (obtMyScheduleOpj != null && obtMyScheduleOpj instanceof Set) {
                 this.mySchedule = new MySchedule();
-                this.mySchedule.setIds((Set<String>) object);
-            } else if (object != null && object instanceof MySchedule) {
-                this.mySchedule = (MySchedule) object;
+                this.mySchedule.setIds((Set<String>) obtMyScheduleOpj);
+            } else if (obtMyScheduleOpj != null && obtMyScheduleOpj instanceof MySchedule) {
+                this.mySchedule = (MySchedule) obtMyScheduleOpj;
             } else {
                 this.mySchedule = new MySchedule();
             }
@@ -430,6 +425,22 @@ public class DataManager {
 
     public Date getMyScheduleLastSaved() {
         return getMySchedule(MainActivity.contextOfApplication).getLastSaved();
+    }
+
+    private Meals getMeals(final Context context) {
+        if (this.meals == null) {
+            Object obtMealsObj = readObject(context, Define.mealsFilename);
+            if (obtMealsObj instanceof Meals) {
+                this.meals = (Meals) obtMealsObj;
+            } else {
+                this.meals = new Meals();
+            }
+        }
+        return this.meals;
+    }
+
+    public Date getMealsLastSaved() {
+        return getMeals(MainActivity.contextOfApplication).getLastSaved();
     }
 
 

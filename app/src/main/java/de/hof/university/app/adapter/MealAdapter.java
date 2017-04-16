@@ -28,6 +28,7 @@ import java.util.ArrayList;
 
 import de.hof.university.app.R;
 import de.hof.university.app.model.BigListItem;
+import de.hof.university.app.model.LastUpdated;
 import de.hof.university.app.model.MediumListItem;
 import de.hof.university.app.model.meal.Meal;
 
@@ -75,7 +76,14 @@ public final class MealAdapter extends ArrayAdapter<Object> {
 
                 final TextView sectionView = (TextView) v.findViewById(R.id.list_item_medium_text);
                 sectionView.setText(sk.getTitle());
-            } else {
+
+            } else if (obj instanceof LastUpdated) {
+                final LastUpdated lastUpdated = (LastUpdated) obj;
+                v = vi.inflate(R.layout.list_item_last_updated, null);
+                final TextView text = (TextView) v.findViewById(R.id.list_item_last_updated);
+                text.setText(lastUpdated.getTitle());
+
+            } else if (obj instanceof Meal) {
                 final Meal sp = (Meal) obj;
                 v = vi.inflate(R.layout.list_item_speiseplan, null);
                 final TextView title = (TextView) v.findViewById(R.id.list_item_level2_title);
