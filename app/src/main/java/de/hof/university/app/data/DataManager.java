@@ -67,6 +67,7 @@ public class DataManager {
     private MySchedule mySchedule;
     private Changes changes;
     private Meals meals;
+    private StudyCourses studyCourses;
 
     private static final DataManager dataManager = new DataManager();
 
@@ -286,11 +287,7 @@ public class DataManager {
     // wenn es aber
     public final ArrayList<StudyCourse> getCourses(final Context context, final String language,
                                                    final String termTime, boolean forceRefresh) {
-        StudyCourses studyCourses = (StudyCourses) readObject(context, Define.coursesFilename);
-        // wenn noch keine StudyCourses cohanden sind neu anlegen
-        if (studyCourses == null) {
-            studyCourses = new StudyCourses();
-        }
+        StudyCourses studyCourses = this.getStudyCourses(context);
 
         // Änderungen sollen neu geholt werden
         resetChangesLastSave(context);
@@ -323,13 +320,13 @@ public class DataManager {
 
             ArrayList<StudyCourse> tmpCourses = (ArrayList<StudyCourse>) parser.parse(params);
 
-            studyCourses.setCourses(tmpCourses);
+            this.getStudyCourses(context).setCourses(tmpCourses);
 
-            studyCourses.setLastSaved(new Date());
-            saveObject(context, studyCourses, Define.coursesFilename);
+            this.getStudyCourses(context).setLastSaved(new Date());
+            saveObject(context, this.getStudyCourses(context), Define.coursesFilename);
         }
 
-        return studyCourses.getCourses();
+        return this.getStudyCourses(context).getCourses();
     }
 
     // Änderungen sollen neu geholt werden
@@ -382,6 +379,9 @@ public class DataManager {
         this.getMySchedule(context).getLectures().clear();
         this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
     }
+
+    // Getters
+    // ---------------------------------------------------------------------------------------------
 
     private Schedule getSchedule(final Context context) {
         if (this.schedule == null) {
@@ -454,6 +454,20 @@ public class DataManager {
         return getMeals(MainActivity.contextOfApplication).getLastSaved();
     }
 
+    private StudyCourses getStudyCourses(final Context context) {
+        if (this.studyCourses == null) {
+            Object obtStudyCoursesObj = readObject(context, Define.mealsFilename);
+            if (obtStudyCoursesObj instanceof StudyCourses) {
+                this.studyCourses = (StudyCourses) obtStudyCoursesObj;
+            } else {
+                this.studyCourses = new StudyCourses();
+            }
+        }
+        return this.studyCourses;
+    }
+
+    // Saving and loading
+    // ---------------------------------------------------------------------------------------------
 
     // this is the general method to serialize an object
     //
@@ -493,6 +507,9 @@ public class DataManager {
         return result;
     }
 
+    // Caching
+    // ---------------------------------------------------------------------------------------------
+
     private boolean cacheStillValid(HofObject hofObject, final int cacheTime) {
         final Date today = new Date();
         Date lastCached = new Date();
@@ -512,6 +529,9 @@ public class DataManager {
     public final void cleanCache(final Context context) {
         dataConnector.cleanCache(context, Define.MAX_CACHE_TIME);
     }
+
+    // FCM
+    // ---------------------------------------------------------------------------------------------
 
     public void registerFCMServer(Context context) {
         if (Define.PUSH_NOTIFICATIONS_ENABLED) {
