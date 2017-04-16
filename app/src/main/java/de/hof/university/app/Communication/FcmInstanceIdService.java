@@ -53,7 +53,7 @@ public class FcmInstanceIdService extends FirebaseInstanceIdService {
         // Get updated InstanceID token.
         String recent_token = FirebaseInstanceId.getInstance().getToken();
         Log.d("Recent Token: ", recent_token);
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.contextOfApplication);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         //SharedPreferences sharedPreferences = getApplicationContext().getApplicationContext().getSharedPreferences(getString(R.string.FCM_PREF), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
