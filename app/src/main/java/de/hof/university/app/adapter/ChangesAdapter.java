@@ -28,6 +28,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import de.hof.university.app.R;
+import de.hof.university.app.model.LastUpdated;
 import de.hof.university.app.model.schedule.LectureChange;
 
 /**
@@ -50,7 +51,9 @@ public final class ChangesAdapter extends ArrayAdapter<Object> {
     @Override
     public final View getView(final int position, final View convertView, @NonNull final ViewGroup parent) {
         View v = convertView;
-        if (items.get(position) instanceof LectureChange ) {
+        final Object obj = items.get(position);
+
+        if (obj instanceof LectureChange ) {
 
             final LectureChange lectureChange = (LectureChange) items.get(position);
             v = vi.inflate(R.layout.list_item_aenderung, null);
@@ -67,6 +70,13 @@ public final class ChangesAdapter extends ArrayAdapter<Object> {
             tvOldDate.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             tvNewDate.setText(lectureChange.getNew());
             tvDetails.setText(lectureChange.getDetails());
+
+        } else if (obj instanceof LastUpdated) {
+            final LastUpdated lastUpdated = (LastUpdated) obj;
+            v = vi.inflate(R.layout.list_item_last_updated, null);
+            final TextView text = (TextView) v.findViewById(R.id.list_item_last_updated);
+            text.setText(lastUpdated.getTitle());
+
         }
         return v;
     }

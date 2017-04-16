@@ -54,6 +54,7 @@ public final class MealAdapter extends ArrayAdapter<Object> {
     public final View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View v = convertView;
         final Object obj = items.get(position);
+
         if (obj != null) {
             if (obj instanceof BigListItem) {
                 final BigListItem st = (BigListItem) obj;

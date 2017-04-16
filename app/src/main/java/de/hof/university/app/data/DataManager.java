@@ -65,6 +65,7 @@ public class DataManager {
 
     private Schedule schedule;
     private MySchedule mySchedule;
+    private Changes changes;
     private Meals meals;
 
     private static final DataManager dataManager = new DataManager();
@@ -226,15 +227,9 @@ public class DataManager {
 
     public final ArrayList<Object> getChanges(Context context, String course, String semester,
                                               String termTime, boolean forceRefresh) {
-        Object object = readObject(context, Define.changesFilename);
-        Changes changes = new Changes();
-
-        if (object != null) {
-            changes = (Changes) object;
-        }
+        Changes changes = this.getChanges(context);
 
         if (forceRefresh
-                || (object == null)
                 || (changes.getChanges().size() == 0)
                 || (changes.getLastSaved() == null)
                 || !cacheStillValid(changes, Define.CHANGES_CACHE_TIME)
@@ -265,7 +260,7 @@ public class DataManager {
             // falls der String leer ist war ein Problem mit dem Internet
             if (jsonString.isEmpty()) {
                 // prüfen ob es kein ForceRefreseh war, dann kann gecachtes zurück gegeben werden
-                if (!forceRefresh && object != null) {
+                if (!forceRefresh && changes.getChanges().size() > 0) {
                     return changes.getChanges();
                 } else {
                     // anderen falls null, damit dann die Fehlermeldung "Aktualisierung fehlgeschlagen" kommt
@@ -278,13 +273,13 @@ public class DataManager {
 
             ArrayList<Object> tmpChanges = (ArrayList<Object>) parser.parse(params);
 
-            changes.setChanges(tmpChanges);
+            this.getChanges(context).setChanges(tmpChanges);
 
-            changes.setLastSaved(new Date());
-            saveObject(context, changes, Define.changesFilename);
+            this.getChanges(context).setLastSaved(new Date());
+            saveObject(context, this.getChanges(context), Define.changesFilename);
         }
 
-        return changes.getChanges();
+        return this.getChanges(context).getChanges();
     }
 
     // es muss immer ein StudyCourse zurückgegeben werden.
@@ -425,6 +420,22 @@ public class DataManager {
 
     public Date getMyScheduleLastSaved() {
         return getMySchedule(MainActivity.contextOfApplication).getLastSaved();
+    }
+
+    private Changes getChanges(final Context context) {
+        if (this.changes == null) {
+            Object obtChangesObj = readObject(context, Define.changesFilename);
+            if (obtChangesObj instanceof Meals) {
+                this.changes = (Changes) obtChangesObj;
+            } else {
+                this.changes = new Changes();
+            }
+        }
+        return this.changes;
+    }
+
+    public Date getChangesLastSaved() {
+        return getChanges(MainActivity.contextOfApplication).getLastSaved();
     }
 
     private Meals getMeals(final Context context) {

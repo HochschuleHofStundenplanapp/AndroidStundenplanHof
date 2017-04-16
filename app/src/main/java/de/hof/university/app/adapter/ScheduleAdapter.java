@@ -52,8 +52,8 @@ public final class ScheduleAdapter extends ArrayAdapter<Object> {
     @Override
     public final View getView(final int position, final View convertView, @NonNull final ViewGroup parent) {
         View v = convertView;
-
         final Object obj = items.get(position);
+
         if (obj != null) {
             if (obj instanceof LectureItem ) {
                 final LectureItem st = (LectureItem) obj;
