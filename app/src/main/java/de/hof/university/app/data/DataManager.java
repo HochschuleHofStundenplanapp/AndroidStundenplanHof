@@ -28,6 +28,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -37,6 +38,7 @@ import java.util.Set;
 
 import de.hof.university.app.Communication.RegisterLectures;
 import de.hof.university.app.MainActivity;
+import de.hof.university.app.R;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.Util.Log;
 import de.hof.university.app.Util.MyString;
@@ -44,6 +46,7 @@ import de.hof.university.app.data.parser.Parser;
 import de.hof.university.app.data.parser.ParserFactory;
 import de.hof.university.app.data.parser.ParserFactory.EParser;
 import de.hof.university.app.model.HofObject;
+import de.hof.university.app.model.LastUpdated;
 import de.hof.university.app.model.meal.Meal;
 import de.hof.university.app.model.meal.Meals;
 import de.hof.university.app.model.schedule.Changes;
@@ -274,6 +277,8 @@ public class DataManager {
 
             ArrayList<Object> tmpChanges = (ArrayList<Object>) parser.parse(params);
 
+            tmpChanges.add(new LastUpdated(context.getString(R.string.lastUpdated) + ": " + formatDate(new Date())));
+
             this.getChanges(context).setChanges(tmpChanges);
 
             this.getChanges(context).setLastSaved(new Date());
@@ -464,6 +469,15 @@ public class DataManager {
             }
         }
         return this.studyCourses;
+    }
+
+    /**
+     * formatiert ein Datum
+     * @return dd.MM.yyyy HH:mm formatiertes Date
+     */
+    public String formatDate(Date date) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        return simpleDateFormat.format(date);
     }
 
     // Saving and loading

@@ -22,7 +22,6 @@ import android.support.design.widget.NavigationView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import de.hof.university.app.MainActivity;
@@ -30,7 +29,6 @@ import de.hof.university.app.R;
 import de.hof.university.app.adapter.ChangesAdapter;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.fragment.AbstractListFragment;
-import de.hof.university.app.model.LastUpdated;
 
 
 /**
@@ -100,19 +98,9 @@ public class ChangesFragment extends AbstractListFragment {
 		ArrayList<Object> changesList = DataManager.getInstance().getChanges(getActivity().getApplicationContext(), course, semester, termTime, Boolean.valueOf(params[ 3 ]));
 
 		if ( changesList != null ) {
-            changesList.add(new LastUpdated(getString(R.string.lastUpdated) + ": " + getLastSaved()));
 			return changesList;
 		} else {
 			return null;
 		}
 	}
-
-    /**
-     * gibt das Datum zurück wann der Stundenplan zuletzt geholt wurde
-     * @return lastSaved
-     */
-    public String getLastSaved() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-        return simpleDateFormat.format(DataManager.getInstance().getChangesLastSaved());
-    }
 }
