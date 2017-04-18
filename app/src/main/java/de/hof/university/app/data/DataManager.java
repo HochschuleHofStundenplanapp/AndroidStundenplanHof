@@ -277,7 +277,9 @@ public class DataManager {
 
             ArrayList<Object> tmpChanges = (ArrayList<Object>) parser.parse(params);
 
-            tmpChanges.add(new LastUpdated(context.getString(R.string.lastUpdated) + ": " + formatDate(new Date())));
+            if (tmpChanges.size() > 0) {
+                tmpChanges.add(new LastUpdated(context.getString(R.string.lastUpdated) + ": " + formatDate(new Date())));
+            }
 
             this.getChanges(context).setChanges(tmpChanges);
 
@@ -497,8 +499,10 @@ public class DataManager {
             Log.e(TAG, "Fehler beim Speichern des Objektes", e);
         }
 
-        // Stundenplan registrieren
         if (object instanceof Schedule || object instanceof MySchedule) {
+            // Änderungen neu holen
+            resetChangesLastSave(context);
+            // Stundenplan registrieren
             registerFCMServer(context);
         }
     }
