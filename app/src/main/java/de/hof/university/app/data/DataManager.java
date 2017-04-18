@@ -343,9 +343,11 @@ public class DataManager {
         if (changes == null) {
             changes = new Changes();
         }
-        // LastSaved zurücksetzten damit Änderungen neu geholt werden
-        changes.setLastSaved(null);
-        saveObject(context, changes, Define.changesFilename);
+        if (changes.getLastSaved() != null) {
+            // LastSaved zurücksetzten damit Änderungen neu geholt werden
+            changes.setLastSaved(null);
+            saveObject(context, changes, Define.changesFilename);
+        }
     }
 
 
