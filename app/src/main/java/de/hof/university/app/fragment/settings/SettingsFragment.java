@@ -118,7 +118,7 @@ public class SettingsFragment extends PreferenceFragment {
                         new AlertDialog.Builder(getView().getContext())
                                 .setTitle(R.string.notifications)
                                 .setMessage(R.string.notifications_infotext)
-                                .setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         //nothing to do here. Just close the message
@@ -158,7 +158,7 @@ public class SettingsFragment extends PreferenceFragment {
 					new AlertDialog.Builder(getView().getContext())
 							.setTitle(getString(R.string.enableExperimental))
 							.setMessage(getString(R.string.enableExperimentalSure))
-							.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+							.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
 									//nothing to do here. Just close the message
