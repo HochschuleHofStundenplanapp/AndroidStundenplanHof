@@ -28,6 +28,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -489,8 +490,9 @@ public class DataManager {
         } else {
             locale = Locale.GERMAN;
         }
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm", locale);
-        return simpleDateFormat.format(date);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", locale);
+        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, locale);
+        return dateFormat.format(date) + " " + simpleDateFormat.format(date);
     }
 
     // Saving and loading
