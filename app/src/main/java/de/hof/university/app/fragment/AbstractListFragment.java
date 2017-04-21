@@ -101,6 +101,8 @@ public abstract class AbstractListFragment extends Fragment {
         dataList.clear();
         adapter.notifyDataSetChanged();
         swipeContainer.setRefreshing(false);
+        swipeContainer.destroyDrawingCache();
+        swipeContainer.clearAnimation();
         super.onDestroyView();
     }
 
@@ -138,15 +140,14 @@ public abstract class AbstractListFragment extends Fragment {
 
         @Override
         protected final void onPostExecute(ArrayList<Object> result) {
-            Log.d(TAG, "isCancelled: " + this.isCancelled() + " \nadapter: " + adapter + " \nisVisible: " + isVisible());
-            if (!this.isCancelled()) {
-                swipeContainer.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        swipeContainer.setRefreshing(false);
-                    }
-                });
+            swipeContainer.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipeContainer.setRefreshing(false);
+                }
+            });
 
+            if (!this.isCancelled()) {
                 if (result != null) {
                     dataList.clear();
                     dataList.addAll(result);
@@ -193,6 +194,7 @@ public abstract class AbstractListFragment extends Fragment {
         @Override
         protected final void onCancelled(ArrayList<Object> result) {
             Log.d(TAG, "onCancelled");
+            onDestroyView();
         }
     }
 

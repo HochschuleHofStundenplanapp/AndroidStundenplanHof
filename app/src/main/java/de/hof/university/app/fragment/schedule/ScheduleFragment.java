@@ -276,11 +276,10 @@ public class ScheduleFragment extends AbstractListFragment {
 
         List<LectureItem> scheduleList = DataManager.getInstance().getSchedule(getActivity().getApplicationContext(), getString(R.string.language), course, semester, termTime, Boolean.valueOf(params[3]));
 
-        if (scheduleList != null) {
+        if (isVisible() && scheduleList != null) {
             return this.updateListView(scheduleList);
         }
 
-        Log.d(TAG, "result is null");
         return null;
     }
 }
