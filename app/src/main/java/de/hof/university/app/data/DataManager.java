@@ -34,6 +34,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Set;
 
 import de.hof.university.app.Communication.RegisterLectures;
@@ -480,7 +481,15 @@ public class DataManager {
      * @return dd.MM.yyyy HH:mm formatiertes Date
      */
     public String formatDate(Date date) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        Locale locale;
+        if (MainActivity.contextOfApplication.getString(R.string.language).equals("de")) {
+            locale = Locale.GERMAN;
+        } else if (MainActivity.contextOfApplication.getString(R.string.language).equals("en")) {
+            locale = Locale.ENGLISH;
+        } else {
+            locale = Locale.GERMAN;
+        }
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm", locale);
         return simpleDateFormat.format(date);
     }
 
