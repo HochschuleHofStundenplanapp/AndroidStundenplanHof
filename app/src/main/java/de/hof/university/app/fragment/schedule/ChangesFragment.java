@@ -121,7 +121,7 @@ public class ChangesFragment extends AbstractListFragment {
 		final String termTime = params[ 2 ];
 		ArrayList<Object> changesList = DataManager.getInstance().getChanges(getActivity().getApplicationContext(), course, semester, termTime, Boolean.valueOf(params[ 3 ]));
 
-		if (isVisible() && changesList != null ) {
+		if (changesList != null ) {
 			return this.updateListView(changesList);
 		} else {
 			return null;

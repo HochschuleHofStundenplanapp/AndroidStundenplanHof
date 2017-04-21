@@ -152,7 +152,7 @@ public class MealFragment extends AbstractListFragment {
 	protected final ArrayList<Object> background(String[] params) {
 		List<Meal> meals = DataManager.getInstance().getMeals(getActivity().getApplicationContext(), Boolean.valueOf(params[ 0 ]));
 
-		if (isVisible() && meals != null ) {
+		if (meals != null ) {
 			return updateListView(meals);
 		} else {
 			return null;

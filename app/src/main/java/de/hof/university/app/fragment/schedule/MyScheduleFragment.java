@@ -153,7 +153,7 @@ public class MyScheduleFragment extends ScheduleFragment {
 
             if (BuildConfig.DEBUG) assert (scheduleList != null); // ob etwas zurück kommt
 
-            if (isVisible() && scheduleList != null) {
+            if (scheduleList != null) {
                 return super.updateListView(scheduleList);
             }
         }
