@@ -208,6 +208,7 @@ public class ScheduleFragment extends AbstractListFragment {
 
         tmpDataList.addAll(sortDataList);
 
+        // Wenn Daten gekommen sind das ListItem LastUpdated hinzufügen
         if (tmpDataList.size() != 0) {
             tmpDataList.add(new LastUpdated(getString(R.string.lastUpdated) + ": " + getLastSaved()));
         }
@@ -220,8 +221,7 @@ public class ScheduleFragment extends AbstractListFragment {
      * @return lastSaved
      */
     public String getLastSaved() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-        return simpleDateFormat.format(DataManager.getInstance().getScheduleLastSaved());
+        return DataManager.getInstance().formatDate(DataManager.getInstance().getScheduleLastSaved());
     }
 
     @Override

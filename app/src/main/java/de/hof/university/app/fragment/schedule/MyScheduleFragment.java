@@ -137,8 +137,7 @@ public class MyScheduleFragment extends ScheduleFragment {
      */
     @Override
     public String getLastSaved() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-        return simpleDateFormat.format(DataManager.getInstance().getMyScheduleLastSaved());
+        return DataManager.getInstance().formatDate(DataManager.getInstance().getMyScheduleLastSaved());
     }
 
 

@@ -132,6 +132,7 @@ public class MealFragment extends AbstractListFragment {
 			tmpDataList.add(meal);
 		}
 
+		// Wenn Daten gekommen sind das ListItem LastUpdated hinzufügen
 		if (tmpDataList.size() != 0) {
 			tmpDataList.add(new LastUpdated(getString(R.string.lastUpdated) + ": " + getLastSaved()));
 		}
@@ -144,8 +145,7 @@ public class MealFragment extends AbstractListFragment {
 	 * @return lastSaved
 	 */
 	public String getLastSaved() {
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-		return simpleDateFormat.format(DataManager.getInstance().getMealsLastSaved());
+		return DataManager.getInstance().formatDate(DataManager.getInstance().getMealsLastSaved());
 	}
 
 	@Override

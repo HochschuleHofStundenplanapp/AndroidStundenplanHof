@@ -23,12 +23,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.adapter.ChangesAdapter;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.fragment.AbstractListFragment;
+import de.hof.university.app.model.LastUpdated;
 
 
 /**
@@ -90,6 +93,29 @@ public class ChangesFragment extends AbstractListFragment {
 		return params;
 	}
 
+	protected final ArrayList<Object> updateListView(ArrayList<Object> list) {
+		ArrayList<Object> tmpDataList = new ArrayList<>();
+
+		for (Object obt: list) {
+			tmpDataList.add(obt);
+		}
+
+		// Wenn Daten gekommen sind das ListItem LastUpdated hinzufügen
+		if (tmpDataList.size() != 0) {
+			tmpDataList.add(new LastUpdated(getString(R.string.lastUpdated) + ": " + getLastSaved()));
+		}
+
+		return tmpDataList;
+	}
+
+	/**
+	 * gibt das Datum zurück wann der Stundenplan zuletzt geholt wurde
+	 * @return lastSaved
+	 */
+	public String getLastSaved() {
+		return DataManager.getInstance().formatDate(DataManager.getInstance().getChangesLastSaved());
+	}
+
 	@Override
 	protected final ArrayList<Object> background(String[] params) {
 		final String course = params[ 0 ];
@@ -98,7 +124,7 @@ public class ChangesFragment extends AbstractListFragment {
 		ArrayList<Object> changesList = DataManager.getInstance().getChanges(getActivity().getApplicationContext(), course, semester, termTime, Boolean.valueOf(params[ 3 ]));
 
 		if ( changesList != null ) {
-			return changesList;
+			return this.updateListView(changesList);
 		} else {
 			return null;
 		}

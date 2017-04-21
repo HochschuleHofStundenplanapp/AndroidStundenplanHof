@@ -279,10 +279,6 @@ public class DataManager {
 
             ArrayList<Object> tmpChanges = (ArrayList<Object>) parser.parse(params);
 
-            if (tmpChanges.size() > 0) {
-                tmpChanges.add(new LastUpdated(context.getString(R.string.lastUpdated) + ": " + formatDate(new Date())));
-            }
-
             this.getChanges(context).setChanges(tmpChanges);
 
             this.getChanges(context).setLastSaved(new Date());
