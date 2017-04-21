@@ -48,7 +48,6 @@ import de.hof.university.app.data.parser.Parser;
 import de.hof.university.app.data.parser.ParserFactory;
 import de.hof.university.app.data.parser.ParserFactory.EParser;
 import de.hof.university.app.model.HofObject;
-import de.hof.university.app.model.LastUpdated;
 import de.hof.university.app.model.meal.Meal;
 import de.hof.university.app.model.meal.Meals;
 import de.hof.university.app.model.schedule.Changes;
@@ -294,14 +293,14 @@ public class DataManager {
                                                    final String termTime, boolean forceRefresh) {
         StudyCourses studyCourses = this.getStudyCourses(context);
 
-        // Änderungen sollen neu geholt werden
-        resetChangesLastSave(context);
-
         if (forceRefresh
                 || (studyCourses.getCourses().size() == 0)
                 || (studyCourses.getLastSaved() == null)
                 || !cacheStillValid(studyCourses, Define.COURSES_CACHE_TIME)
                 ) {
+            // Änderungen sollen neu geholt werden
+            resetChangesLastSave(context);
+
             final Parser parser = ParserFactory.create(EParser.COURSES);
 
             final String sTermType = MyString.URLReplaceWhitespace(termTime);
@@ -336,12 +335,7 @@ public class DataManager {
 
     // Änderungen sollen neu geholt werden
     private void resetChangesLastSave(Context context) {
-        Changes changes = (Changes) readObject(context, Define.changesFilename);
-        // Überprüfen ob Datei leer ist dann neu anlegen
-        if (changes == null) {
-            changes = new Changes();
-        }
-        if (changes.getLastSaved() != null) {
+        if (getChangesLastSaved() != null) {
             // LastSaved zurücksetzten damit Änderungen neu geholt werden
             changes.setLastSaved(null);
             saveObject(context, changes, Define.changesFilename);
@@ -463,7 +457,7 @@ public class DataManager {
 
     private StudyCourses getStudyCourses(final Context context) {
         if (this.studyCourses == null) {
-            Object obtStudyCoursesObj = readObject(context, Define.mealsFilename);
+            Object obtStudyCoursesObj = readObject(context, Define.coursesFilename);
             if (obtStudyCoursesObj instanceof StudyCourses) {
                 this.studyCourses = (StudyCourses) obtStudyCoursesObj;
             } else {

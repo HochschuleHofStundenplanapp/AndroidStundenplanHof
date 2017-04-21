@@ -240,7 +240,7 @@ public class RaumlisteFragment extends Fragment {
             if (
                 forceRefresh
                 || optRaumliste == null
-                // || (raumliste != null && raumliste.getLastSaved() == null) // raus zum testen ob es so auch in der Release Version funktioniert.
+                || raumliste.getLastSaved() == null
                 || !lastCached.after(new Date())
                 || !raumliste.getTimeStart().equals(params[5])
                 || !raumliste.getTimeEnd().equals(params[6])

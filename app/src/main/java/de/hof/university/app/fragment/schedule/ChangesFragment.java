@@ -23,8 +23,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;

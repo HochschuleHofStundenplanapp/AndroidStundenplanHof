@@ -138,7 +138,7 @@ public abstract class AbstractListFragment extends Fragment {
 
         @Override
         protected final void onPostExecute(ArrayList<Object> result) {
-            Log.d(TAG, "isCancelled: " + this.isCancelled());
+            Log.d(TAG, "isCancelled: " + this.isCancelled() + " \nadapter: " + adapter + " \nisVisible: " + isVisible());
             if (!this.isCancelled()) {
                 swipeContainer.post(new Runnable() {
                     @Override
