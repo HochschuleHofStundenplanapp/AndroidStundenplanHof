@@ -387,7 +387,7 @@ public class DataManager {
     private Schedule getSchedule(final Context context) {
         if (this.schedule == null) {
             Object optScheduleObj = readObject(context, Define.scheduleFilename);
-            if (optScheduleObj != null) {
+            if (optScheduleObj != null && optScheduleObj instanceof Schedule) {
                 this.schedule = (Schedule) optScheduleObj;
             } else {
                 this.schedule = new Schedule();
@@ -430,7 +430,7 @@ public class DataManager {
     private Changes getChanges(final Context context) {
         if (this.changes == null) {
             Object obtChangesObj = readObject(context, Define.changesFilename);
-            if (obtChangesObj instanceof Meals) {
+            if (obtChangesObj != null && obtChangesObj instanceof Changes) {
                 this.changes = (Changes) obtChangesObj;
             } else {
                 this.changes = new Changes();
@@ -446,7 +446,7 @@ public class DataManager {
     private Meals getMeals(final Context context) {
         if (this.meals == null) {
             Object obtMealsObj = readObject(context, Define.mealsFilename);
-            if (obtMealsObj instanceof Meals) {
+            if (obtMealsObj != null && obtMealsObj instanceof Meals) {
                 this.meals = (Meals) obtMealsObj;
             } else {
                 this.meals = new Meals();
@@ -462,7 +462,7 @@ public class DataManager {
     private StudyCourses getStudyCourses(final Context context) {
         if (this.studyCourses == null) {
             Object obtStudyCoursesObj = readObject(context, Define.coursesFilename);
-            if (obtStudyCoursesObj instanceof StudyCourses) {
+            if (obtStudyCoursesObj != null && obtStudyCoursesObj instanceof StudyCourses) {
                 this.studyCourses = (StudyCourses) obtStudyCoursesObj;
             } else {
                 this.studyCourses = new StudyCourses();
