@@ -16,6 +16,8 @@
 
 package de.hof.university.app.experimental.model;
 
+import android.support.annotation.Keep;
+
 import java.util.ArrayList;
 
 import de.hof.university.app.model.HofObject;
@@ -23,7 +25,7 @@ import de.hof.university.app.model.HofObject;
 /**
  * Created by danie on 01.12.2016.
  */
-
+@Keep
 public class Raumliste extends HofObject {
 	ArrayList<Level> raumlist;
 	String timeStart;

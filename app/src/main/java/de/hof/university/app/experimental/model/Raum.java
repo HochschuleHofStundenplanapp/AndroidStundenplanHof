@@ -16,11 +16,14 @@
 
 package de.hof.university.app.experimental.model;
 
+import android.support.annotation.Keep;
+
 import java.io.Serializable;
 
 /**
  * Created by Lukas on 05.07.2016.
  */
+@Keep
 public class Raum implements Level, Serializable {
 
     public final static String TAG = "Raum";

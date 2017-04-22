@@ -21,6 +21,7 @@ package de.hof.university.app.experimental.adapter;
  */
 
 import android.content.Context;
+import android.support.annotation.Keep;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,7 @@ import de.hof.university.app.experimental.model.Suchdetails;
 /**
  * Created by Lukas on 26.11.2015.
  */
+@Keep
 public class RaumlistAdapter extends ArrayAdapter<Level> {
 
     public final static String TAG = "RaumlistAdapter";

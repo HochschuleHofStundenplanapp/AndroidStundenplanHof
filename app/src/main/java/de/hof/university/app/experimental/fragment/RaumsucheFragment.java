@@ -21,6 +21,7 @@ import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.support.annotation.Keep;
 import android.support.design.widget.NavigationView;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -51,6 +52,7 @@ import de.hof.university.app.experimental.LoginController;
  * Use the {@link RaumsucheFragment#} factory method to
  * create an instance of this fragment.
  */
+@Keep
 public class RaumsucheFragment extends Fragment {
 
     public final static String TAG = "RaumsucheFragment";

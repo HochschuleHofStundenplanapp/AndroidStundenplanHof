@@ -24,6 +24,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Keep;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
@@ -65,6 +66,7 @@ import de.hof.university.app.experimental.model.Suchdetails;
 /**
  * A simple {@link Fragment} subclass.
  */
+@Keep
 public class RaumlisteFragment extends Fragment {
 
     public final static String TAG = "RaumlisteFragment";
@@ -194,6 +196,7 @@ public class RaumlisteFragment extends Fragment {
         super.onDestroyView();
     }
 
+    @Keep
     private class GetRaumTask extends AsyncTask<String, Void, ArrayList<Level>> {
 
         String errorText = "";
@@ -208,7 +211,7 @@ public class RaumlisteFragment extends Fragment {
             });
         }
 
-        @Override
+        @Override @Keep
         protected final ArrayList<Level> doInBackground(String... params) {
             Object optRaumliste = RaumlisteFragment.readObject(getActivity().getApplicationContext(), Define.raumlistFilename);
             Raumliste raumliste = new Raumliste();
@@ -280,7 +283,8 @@ public class RaumlisteFragment extends Fragment {
                                             .data("pid", "27")
                                             .data("redirect_url", Define.URL_RAUMSUCHE_LOGIN_SUCCESS)
                                             .data("tx_felogin_pi1[noredirect]", "0")
-                                            .method(Connection.Method.POST).execute();
+                                            .method(Connection.Method.POST)
+                                .execute();
                         loginRetry = 0;
                     } catch ( IOException e ) {
                         loginRetry--;
@@ -301,7 +305,8 @@ public class RaumlisteFragment extends Fragment {
                        .data("tx_raumsuche_pi1[year]", year)
                        .data("tx_raumsuche_pi1[timestart]",timeFrom)
                        .data("tx_raumsuche_pi1[timeend]", timeTo)
-                       .cookies(loginForm.cookies()).get();
+                       .cookies(loginForm.cookies())
+                            .get(); // TODO hier tritt eine AndroidRuntime Exception in der Release Version auf
 
                     final Elements tables = document.getElementsByTag("table");
                     String curCategory = "";
@@ -329,6 +334,9 @@ public class RaumlisteFragment extends Fragment {
                     } else {
                         errorText = getString(R.string.raumsuchefehler);
                     }
+                } catch (NullPointerException npe) {
+                    errorText = getString(R.string.raumsuchefehler);
+                    return null;
                 }
 
                 // Log.d(TAG, loginForm.cookie("fe_typo_user"));
