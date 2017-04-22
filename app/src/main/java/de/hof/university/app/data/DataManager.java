@@ -396,6 +396,10 @@ public class DataManager {
         return this.schedule;
     }
 
+    public final int getScheduleSize(final Context context) {
+        return this.getSchedule(context).getLectures().size();
+    }
+
     public Date getScheduleLastSaved() {
         return getSchedule(MainActivity.contextOfApplication).getLastSaved();
     }

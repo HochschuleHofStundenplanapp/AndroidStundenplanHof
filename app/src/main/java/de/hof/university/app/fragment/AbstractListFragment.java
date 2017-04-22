@@ -176,14 +176,19 @@ public abstract class AbstractListFragment extends Fragment {
                     final ChangesFragment changesFragment = (ChangesFragment) getFragmentManager().findFragmentByTag(Define.changesFragmentName);
                     final MyScheduleFragment myScheduleFragment = (MyScheduleFragment) getFragmentManager().findFragmentByTag(Define.myScheduleFragmentName);
 
-                    if (((changesFragment != null) && changesFragment.isVisible())
-                            || ((myScheduleFragment != null) && myScheduleFragment.isVisible())) {
-                        if (DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) > 0) {
-                            // Damit man ein Feedback bekommt wenn das aktualisieren fehlgeschlagen ist
-                            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.refreshFailed), Toast.LENGTH_SHORT).show();
+                    // Damit man ein Feedback bekommt wenn das aktualisieren fehlgeschlagen ist
+                    if ((changesFragment != null) && changesFragment.isVisible()
+                            || (myScheduleFragment != null) && myScheduleFragment.isVisible()) {
+                        if ((changesFragment != null) && changesFragment.isVisible()) {
+                            if (DataManager.getInstance().getScheduleSize(getActivity().getApplicationContext()) > 0) {
+                                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.refreshFailed), Toast.LENGTH_SHORT).show();
+                            }
+                        } else if ((myScheduleFragment != null) && myScheduleFragment.isVisible()) {
+                            if (DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) > 0) {
+                                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.refreshFailed), Toast.LENGTH_SHORT).show();
+                            }
                         }
                     } else {
-                        // Damit man ein Feedback bekommt wenn das aktualisieren fehlgeschlagen ist
                         Toast.makeText(getActivity().getApplicationContext(), getString(R.string.refreshFailed), Toast.LENGTH_SHORT).show();
                     }
                 }
