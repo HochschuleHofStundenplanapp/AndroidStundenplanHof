@@ -56,6 +56,7 @@ public final class Define {
 	public static final String changesFilename = "changes";
 	public static final String coursesFilename = "courses";
 	public static final String mealsFilename = "meals";
+	public static final String raumlistFilename = "raumliste";
 
 	// Namen für die Fragmente
 	public static final String myScheduleFragmentName = "MYSCHEDULE_FRAGMENT";

@@ -95,8 +95,6 @@ public class RaumlisteFragment extends Fragment {
     private SwipeRefreshLayout swipeContainer;
     private RaumlisteFragment.GetRaumTask task;
 
-    private static final String raumlistFilename = "raumliste";
-
 
     public RaumlisteFragment() {
         // Required empty public constructor
@@ -212,7 +210,7 @@ public class RaumlisteFragment extends Fragment {
 
         @Override
         protected final ArrayList<Level> doInBackground(String... params) {
-            Object optRaumliste = RaumlisteFragment.readObject(getActivity().getApplicationContext(), raumlistFilename);
+            Object optRaumliste = RaumlisteFragment.readObject(getActivity().getApplicationContext(), Define.raumlistFilename);
             Raumliste raumliste = new Raumliste();
             Date lastCached = new Date();
 
@@ -268,9 +266,9 @@ public class RaumlisteFragment extends Fragment {
                 Document document;
 
                 // TODO Temporäre Lösung durch gleich mehrere Versuche.
-                int networkRetry = 5;
+                int loginRetry = 2;
 
-                while ( networkRetry > 0 ) {
+                while ( loginRetry > 0 ) {
                     try {
                         // Thread beenden wenn gecancelt
                         if ( isCancelled() ) break;
@@ -283,10 +281,10 @@ public class RaumlisteFragment extends Fragment {
                                             .data("redirect_url", Define.URL_RAUMSUCHE_LOGIN_SUCCESS)
                                             .data("tx_felogin_pi1[noredirect]", "0")
                                             .method(Connection.Method.POST).execute();
-                        networkRetry = 0;
+                        loginRetry = 0;
                     } catch ( IOException e ) {
-                        networkRetry--;
-                        if ( networkRetry <= 0 ) {
+                        loginRetry--;
+                        if ( loginRetry <= 0 ) {
                             errorText = getString(R.string.loginFailed);
                             return null;
                         }
@@ -343,7 +341,7 @@ public class RaumlisteFragment extends Fragment {
                 raumliste.setDate(params[8]);
 
                 raumliste.setLastSaved(new Date());
-                RaumlisteFragment.saveObject(getActivity().getApplicationContext(), raumliste, raumlistFilename);
+                RaumlisteFragment.saveObject(getActivity().getApplicationContext(), raumliste, Define.raumlistFilename);
             }
 
             return raumliste.getRaumlist();
@@ -360,11 +358,11 @@ public class RaumlisteFragment extends Fragment {
                     raumList.addAll(result);
                     adapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(getView().getContext(), getString(R.string.keineraeume), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity().getApplicationContext(), getString(R.string.keineraeume), Toast.LENGTH_LONG).show();
                 }
             } else {
                 //Wenn es einen Fehler gab -> ausgeben
-                Toast.makeText(getView().getContext(), errorText, Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity().getApplicationContext(), errorText, Toast.LENGTH_LONG).show();
             }
 
             super.onPostExecute(result);
