@@ -43,3 +43,9 @@
 #-dontskipnonpubliclibraryclasses
 #-dontpreverify
 -verbose
+
+# zum debuggen der Release Version:
+# -keepattributes SourceFile,LineNumberTable
+# -renamesourcefileattribute SourceFile
+
+
