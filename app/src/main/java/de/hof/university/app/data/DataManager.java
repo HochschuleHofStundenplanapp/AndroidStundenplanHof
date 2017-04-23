@@ -486,7 +486,11 @@ public class DataManager {
         }
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", locale);
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, locale);
-        return dateFormat.format(date) + " " + simpleDateFormat.format(date);
+        if (date != null) {
+            return dateFormat.format(date) + " " + simpleDateFormat.format(date);
+        } else {
+            return "";
+        }
     }
 
     // Saving and loading
