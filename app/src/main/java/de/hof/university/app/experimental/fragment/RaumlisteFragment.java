@@ -191,6 +191,8 @@ public class RaumlisteFragment extends Fragment {
             task.cancel(true);
         }
         swipeContainer.setRefreshing(false);
+        swipeContainer.destroyDrawingCache();
+        swipeContainer.clearAnimation();
         super.onDestroyView();
     }
 

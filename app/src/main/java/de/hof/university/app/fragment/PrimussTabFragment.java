@@ -99,4 +99,12 @@ public class PrimussTabFragment extends Fragment {
 		return v;
 
 	}
+
+	@Override
+	public void onDestroyView() {
+		swipeContainer.setRefreshing(false);
+		swipeContainer.destroyDrawingCache();
+		swipeContainer.clearAnimation();
+		super.onDestroyView();
+	}
 }
