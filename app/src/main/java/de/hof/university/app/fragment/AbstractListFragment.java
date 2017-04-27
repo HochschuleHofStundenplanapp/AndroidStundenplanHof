@@ -199,7 +199,6 @@ public abstract class AbstractListFragment extends Fragment {
         @Override
         protected final void onCancelled(ArrayList<Object> result) {
             Log.d(TAG, "onCancelled");
-            onDestroyView();
         }
     }
 
