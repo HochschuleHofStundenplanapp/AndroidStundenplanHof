@@ -129,26 +129,32 @@ public class MainActivity extends AppCompatActivity
 		navigationView.setNavigationItemSelectedListener(this);
 
 		// Experimentelle Features anzeigen?
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		final boolean showExperimentalFeatures = sharedPreferences.getBoolean("experimental_features", false);
 		displayExperimentalFeaturesMenuEntries(showExperimentalFeatures);
 
 
         // wurde die App gerade neu gestartet?
         if(savedInstanceState == null) {
-            // Habe ich schon einen eigenen Stundenplan "Mein Stundeplan" erstellt, dann damit beeginnen
-            if (DataManager.getInstance().getMyScheduleSize(getApplicationContext()) > 0) {
-                onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_mySchedule));
-            } else {
-                // Ich habe keinen Stundenplan erstellt,
-                // habe ich denn wenigstens schon Einstellungen vorgenommen?
-                if (sharedPreferences.getString("term_time", "").isEmpty()) {
-                    // Noch nicht mal Einstellungen sind vorhanden, also gehen wir direkt in diesen Dialog
-                    onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_einstellungen));
-					return;
-                } else {
-                    onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_stundenplan));
-                }
+			// ja die App würde neu gestartet
+			// Sind Einstellungen vorhanden?
+			if (sharedPreferences.getString("term_time", "").isEmpty()
+					|| sharedPreferences.getString("studiengang", "").isEmpty()
+					|| sharedPreferences.getString("semester", "").isEmpty()) {
+				// Es sind keine Einstellungen vorhanden, also gehen wir direkt zu den Einstellungen
+				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_einstellungen));
+
+				// returnen damit keine Intents gehandelt werden und keine Dialoge kommen.
+				return;
+			}
+
+			// Ist ein "Mein Stundenplan" vorhanden?
+			if (DataManager.getInstance().getMyScheduleSize(getApplicationContext()) > 0) {
+				// Es gibt einen "Mein Studnenplan". Also gehen wir zu ihm.
+				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_mySchedule));
+			} else {
+				// Wir gehen zum normalen Stundenplan
+                onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_stundenplan));
             }
         }
 
