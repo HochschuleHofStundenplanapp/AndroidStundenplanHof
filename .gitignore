@@ -38,22 +38,13 @@ captures/
 .idea/workspace.xml
 .idea/libraries/
 .idea/modules.xml
-.idea/misc.xml
+.idea/codeStyleSettings.xml
+.idea/compiler.xml
+.idea/gradle.xml
+.idea/vcs.xml
 
 # Keystore files
 *.jks
-
-.idea/codeStyleSettings.xml
-
-.idea/codeStyleSettings.xml
-
-.idea/compiler.xml
-
-.idea/gradle.xml
-
-.idea/misc.xml
-
-.idea/vcs.xml
 
 gradlew
 
