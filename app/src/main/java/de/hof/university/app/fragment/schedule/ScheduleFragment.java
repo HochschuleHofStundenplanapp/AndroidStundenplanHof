@@ -143,18 +143,21 @@ public class ScheduleFragment extends AbstractListFragment {
         final String semester = sharedPref.getString("semester", "");
         final String termTime = sharedPref.getString("term_time", "");
 
-        if (termTime.isEmpty()) {
-            Toast.makeText(getView().getContext(), getString(R.string.noTermTimeSelected), Toast.LENGTH_LONG).show();
-            return null;
-        }
+        // Meldungen nur bringen wenn im Stundenplan Fragment
+        if (this.getClass().getSimpleName().equals(ScheduleFragment.class.getSimpleName())) {
+            if (termTime.isEmpty()) {
+                Toast.makeText(getView().getContext(), getString(R.string.noTermTimeSelected), Toast.LENGTH_LONG).show();
+                return null;
+            }
 
-        if (course.isEmpty()) {
-            Toast.makeText(getView().getContext(), getString(R.string.noCourseSelected), Toast.LENGTH_LONG).show();
-            return null;
-        }
-        if (semester.isEmpty()) {
-            Toast.makeText(getView().getContext(), getString(R.string.noSemesterSelected), Toast.LENGTH_LONG).show();
-            return null;
+            if (course.isEmpty()) {
+                Toast.makeText(getView().getContext(), getString(R.string.noCourseSelected), Toast.LENGTH_LONG).show();
+                return null;
+            }
+            if (semester.isEmpty()) {
+                Toast.makeText(getView().getContext(), getString(R.string.noSemesterSelected), Toast.LENGTH_LONG).show();
+                return null;
+            }
         }
 
         // TODO Warum geben wir eine Parametersammlung zurück? Wir können hier ein StudyCourse Objekt erstellen

@@ -136,26 +136,26 @@ public class MainActivity extends AppCompatActivity
 
         // wurde die App gerade neu gestartet?
         if(savedInstanceState == null) {
-			// ja die App würde neu gestartet
-			// Sind Einstellungen vorhanden?
-			if (sharedPreferences.getString("term_time", "").isEmpty()
-					|| sharedPreferences.getString("studiengang", "").isEmpty()
-					|| sharedPreferences.getString("semester", "").isEmpty()) {
-				// Es sind keine Einstellungen vorhanden, also gehen wir direkt zu den Einstellungen
-				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_einstellungen));
-
-				// returnen damit keine Intents gehandelt werden und keine Dialoge kommen.
-				return;
-			}
+			// ja die App wurde neu gestartet
 
 			// Ist ein "Mein Stundenplan" vorhanden?
 			if (DataManager.getInstance().getMyScheduleSize(getApplicationContext()) > 0) {
 				// Es gibt einen "Mein Studnenplan". Also gehen wir zu ihm.
 				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_mySchedule));
+			}
+			// Sind die Einstellungen vorhanden?
+			else if (!sharedPreferences.getString("term_time", "").isEmpty()
+					&& !sharedPreferences.getString("studiengang", "").isEmpty()
+					&& !sharedPreferences.getString("semester", "").isEmpty()) {
+				// ja, also gehen wir zum Stundenplan
+				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_stundenplan));
 			} else {
-				// Wir gehen zum normalen Stundenplan
-                onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_stundenplan));
-            }
+				// In allen anderen Fällen gehen wir zu den Einstellungen
+				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_einstellungen));
+
+				// returnen damit keine Intents gehandelt werden und keine Dialoge kommen.
+				return;
+			}
         }
 
         // wurde die Activity durch ein Intent gestartet, vermutlich durch klicken auf eine Benachrichtigung?
