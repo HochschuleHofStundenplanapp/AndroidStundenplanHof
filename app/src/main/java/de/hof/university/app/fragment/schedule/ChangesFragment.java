@@ -70,18 +70,21 @@ public class ChangesFragment extends AbstractListFragment {
 		String semester = sharedPref.getString("semester", "");
 		String termTime = sharedPref.getString("term_time", "");
 
-		if ( termTime.isEmpty() ) {
-			Toast.makeText(getView().getContext(), getString(R.string.noTermTimeSelected), Toast.LENGTH_LONG).show();
-			return null;
-		}
+		// Meldungen nur bringen wenn kein "Mein Stundenplan" angelegt ist
+		if (DataManager.getInstance().getMyScheduleSize(getContext()) == 0) {
+			if (termTime.isEmpty()) {
+				Toast.makeText(getView().getContext(), getString(R.string.noTermTimeSelected), Toast.LENGTH_LONG).show();
+				return null;
+			}
 
-		if ( course.isEmpty() ) {
-			Toast.makeText(getView().getContext(), getString(R.string.noCourseSelected), Toast.LENGTH_LONG).show();
-			return null;
-		}
-		if ( semester.isEmpty() ) {
-			Toast.makeText(getView().getContext(), getString(R.string.noSemesterSelected), Toast.LENGTH_LONG).show();
-			return null;
+			if (course.isEmpty()) {
+				Toast.makeText(getView().getContext(), getString(R.string.noCourseSelected), Toast.LENGTH_LONG).show();
+				return null;
+			}
+			if (semester.isEmpty()) {
+				Toast.makeText(getView().getContext(), getString(R.string.noSemesterSelected), Toast.LENGTH_LONG).show();
+				return null;
+			}
 		}
 
 		params[ 0 ] = course;
