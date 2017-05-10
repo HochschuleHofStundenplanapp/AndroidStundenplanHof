@@ -55,6 +55,9 @@ public class FcmInstanceIdService extends FirebaseInstanceIdService {
         Log.d("Recent Token: ", recent_token);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
+        // Für alten Token deregistrieren
+        new RegisterLectures().deRegisterLectures();
+
         //SharedPreferences sharedPreferences = getApplicationContext().getApplicationContext().getSharedPreferences(getString(R.string.FCM_PREF), Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         Log.d(TAG, "RECENT TOKEN: " + recent_token);
