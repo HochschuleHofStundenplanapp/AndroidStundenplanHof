@@ -136,8 +136,8 @@ public final class Define {
 	public static final int COURSES_CACHE_TIME = 60 * 24 * 7;		// eine Woche
 
 	//timeouts
-	public static final int shortTimeout = 1000;		// eine Sekunde
-	public static final int longTimeout = 3000;			// drei Sekunden
+	public static final int connectTimeout = 1000;		// eine Sekunde
+	public static final int readTimeout = 10000;		// zehn Sekunden
 
 	// Raumsuche
 	public final static String URL_RAUMSUCHE_LOGIN = "https://www.hof-university.de/anmelden.html";

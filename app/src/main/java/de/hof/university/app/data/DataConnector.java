@@ -127,8 +127,8 @@ public class DataConnector {
             final String encoding = Base64.encodeToString(userPassword.getBytes(), Base64.DEFAULT);
             urlConnection.setRequestProperty("Authorization", "Basic " + encoding);
 
-            urlConnection.setConnectTimeout(Define.shortTimeout);
-            urlConnection.setReadTimeout(Define.longTimeout);
+            urlConnection.setConnectTimeout(Define.connectTimeout);
+            urlConnection.setReadTimeout(Define.readTimeout);
             inputStream = new BufferedInputStream(urlConnection.getInputStream());
 
             final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
