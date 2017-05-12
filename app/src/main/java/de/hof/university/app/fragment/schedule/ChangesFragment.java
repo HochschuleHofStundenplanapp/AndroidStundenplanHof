@@ -71,9 +71,7 @@ public class ChangesFragment extends AbstractListFragment {
 		String termTime = sharedPref.getString("term_time", "");
 
 		// Meldungen nur bringen wenn kein "Mein Stundenplan" angelegt ist
-//TODO DAniel: Bitte mal prüfen, angeblich soll getContext() hier in diesem Zusammenhang erst ab SDK23 möglich sein.
-//		??
-		if (DataManager.getInstance().getMyScheduleSize(getContext()) == 0) {
+		if (DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) == 0) {
 			if (termTime.isEmpty()) {
 				Toast.makeText(getView().getContext(), getString(R.string.noTermTimeSelected), Toast.LENGTH_LONG).show();
 				return null;
