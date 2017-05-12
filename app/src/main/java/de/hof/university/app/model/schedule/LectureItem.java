@@ -175,8 +175,7 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
             }
         }
         else
-            if ( BuildConfig.DEBUG) //noinspection ConstantConditions
-                assert (false);
+            if ( BuildConfig.DEBUG) assert (false);
 
         return -1;
     }
