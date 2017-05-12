@@ -67,8 +67,6 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_row="1"
-                android:layout_toEndOf="@+id/btnImpressum"
-                android:layout_toRightOf="@+id/btnImpressum"
                 android:text="@string/rateThisAppBtn" />
 
         </GridLayout>
