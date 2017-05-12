@@ -91,7 +91,6 @@
                                - Christian Pfeiffer\n
                                - Jonas Beetz\n
                                - Angelina Scheler</string>
-    <string name="toImpressum">Zum Impressum</string>
     <!--URLs -->
     <string name="doubleBackOnClose">Zum Beenden erneut Zurück tippen</string>
     <string name="noChanges">Es gibt keine Änderungen</string>
@@ -101,7 +100,6 @@
     <string name="added">Hinzugefügt</string>
     <string name="changesMyScheduleText">Stundenplanänderungen basieren jetzt auf \"Mein Stundenplan\".</string>
     <string name="deleted">Gelöscht</string>
-    <string name="hof_university_app_by_lars_gaidzik_amp_lukas_mahr"><![CDATA[Hof University-APP by Lars Gaidzik & Lukas Mahr]]></string>
     <string name="details">Details</string>
     <string name="changesScheduleText">\"Mein Stundenplan\" ist leer. Alle Stundenplanänderungen werden angezeigt.</string>
     <string name="noMeal">Es gibt keinen neuen Speiseplan!</string>

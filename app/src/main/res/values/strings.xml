@@ -88,7 +88,6 @@
                                - Christian Pfeiffer\n
                                - Jonas Beetz\n
                                - Angelina Scheler</string>
-    <string name="toImpressum">To the imprint</string>
     <string name="noCourseSelected">No course of studies selected!</string>
     <string name="to">To:</string>
     <string name="doubleBackOnClose">To close press back again</string>
@@ -98,7 +97,6 @@
     <string name="action_delete_all">Delete all</string>
     <string name="added">Added</string>
     <string name="deleted">Deleted</string>
-    <string name="hof_university_app_by_lars_gaidzik_amp_lukas_mahr"><![CDATA[Hof University-APP by Lars Gaidzik & Lukas Mahr]]></string>
     <string name="details">Details</string>
     <string name="changesMyScheduleText">Schedule changes are based on \"My Schedule\"</string>
     <string name="changesScheduleText">\"My Schedule\" is empty. All schedule changes are shown.</string>
