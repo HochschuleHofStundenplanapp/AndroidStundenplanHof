@@ -27,20 +27,17 @@
             android:title="@string/term_time"
             android:entries="@array/term_time"
             android:entryValues="@array/term_time_values"
-            android:defaultValue=""
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
         <ListPreference
             android:key="studiengang"
             android:title="@string/studiengang"
-            android:defaultValue=""
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
         <ListPreference
             android:key="semester"
             android:title="@string/semester"
-            android:defaultValue=""
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </PreferenceCategory>
