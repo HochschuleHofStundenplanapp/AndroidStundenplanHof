@@ -1,2 +1,0 @@
-# AndroidStundenplanHof
-Android App
