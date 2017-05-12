@@ -78,7 +78,7 @@ public class DataConnector {
             Log.e(TAG, "readStringFromUrl: IOExcepton: ", exception);
         }
 
-        return null;
+        return "";
 
     }
 }
