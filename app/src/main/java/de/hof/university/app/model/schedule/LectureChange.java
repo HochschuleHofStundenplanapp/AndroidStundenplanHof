@@ -45,41 +45,6 @@ public class LectureChange implements Serializable {
         this.lecturer = lecturer;
     }
 
-    public final String getLabel() {
-        return label;
-    }
-
-    public final String getComment() {
-        return comment;
-    }
-
-    public final String getGroup() {
-        return group;
-    }
-
-    public final String getReason() {
-        return reason;
-    }
-
-    public final String getBegin_old() {
-        return begin_old;
-    }
-
-    public final String getBegin_new() {
-        return begin_new;
-    }
-
-    public final String getRoom_old() {
-        return room_old;
-    }
-
-    public final String getRoom_new() {
-        return room_new;
-    }
-
-    public final String getLecturer() {
-        return lecturer;
-    }
 
     @Override
     public String toString() {
@@ -99,18 +64,14 @@ public class LectureChange implements Serializable {
     public final String getOld() {
         String result = begin_old;
         // Raum soll immer angezeigt werden
-        //if (!room_old.equalsIgnoreCase(room_new)) {
         result += " - " + room_old;
-        //}
         return result;
     }
 
     public final String getNew() {
         String result = begin_new;
         // Raum soll immer angezeigt werden
-        //if (!room_old.equalsIgnoreCase(room_new)) {
         result += " - " + room_new;
-        //}
         return result;
     }
 
