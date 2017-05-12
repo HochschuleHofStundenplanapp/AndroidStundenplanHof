@@ -58,7 +58,7 @@ public class DataConnector {
             inputStream = new BufferedInputStream(urlConnection.getInputStream());
 
             final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
-            StringBuilder sb = new StringBuilder();
+            final StringBuilder sb = new StringBuilder();
 
             String line;
             while ((line = reader.readLine()) != null) {
