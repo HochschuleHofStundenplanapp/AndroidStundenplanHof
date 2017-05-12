@@ -96,7 +96,7 @@ public class RegisterLectures {
             try {
                 url = new URL(Define.URL_REGISTER_PUSH_NOTIFICATIONS_HOF); // Debug: ( + "?debug=1")
             } catch (MalformedURLException e) {
-                Log.d(TAG, "URL ist nicht URL-konform: " + url);
+                Log.d(TAG, "URL ist nicht URL-konform: " + Define.URL_REGISTER_PUSH_NOTIFICATIONS_HOF);
                 e.printStackTrace();
             }
             HttpURLConnection client = null;
