@@ -37,7 +37,7 @@ import android.widget.EditText;
 import de.hof.university.app.R;
 
 
-public class LoginController {
+final public class LoginController {
 
 	public final static String TAG = "LoginController";
 
