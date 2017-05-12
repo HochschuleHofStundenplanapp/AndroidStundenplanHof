@@ -44,80 +44,12 @@ public class DataConnector {
 
     public static final String TAG = "DataConnector";
 
-    public static final String TIME_APPEND = "_url_cache_time";
-
-    public final String getStringFromUrl(final String strUrl) {
-        //if (cacheStillValid(strUrl + TIME_APPEND, cacheTime)) {
-        //    return loadFromSharedPreferences(strUrl);
-        //} else {
-            final String result = readStringFromUrl(strUrl);
-            if (result == null) {
-                Log.d(TAG, "result is null");
-                //if (cacheTime != -1) {
-                //    return loadFromSharedPreferences(context, strUrl);
-                //} else {
-                    return "";
-                //}
-            }
-            //else if (!result.isEmpty()) {
-                //saveToSharedPreferences(context, strUrl, result);
-            //}
-            return result;
-        //}
-    }
-
-    /*
-    private void saveToSharedPreferences(Context context, String strUrl, String result) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        sharedPreferences.edit()
-                .putLong(strUrl + TIME_APPEND, new Date().getTime())
-                .putString(strUrl, result)
-                .apply();
-    }
-
-    private String loadFromSharedPreferences(Context context, String strUrl) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return sharedPreferences.getString(strUrl, "");
-    }
-    */
-
-    // Shared Preferences leeren weil wir sie nicht mehr für's Cachen nutzen
-    public final void cleanCache(final Context context, final int maxAge) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        Map<String, ?> allEntries = sharedPreferences.getAll();
-
-        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-            final String key = entry.getKey();
-            if (key.endsWith(TIME_APPEND)) {
-                if (!cacheStillValid(context, key, maxAge)) {
-                    //Delete the old Keys
-                    sharedPreferences.edit().remove(key).remove(key.substring(0, key.length() - TIME_APPEND.length())).apply();
-                }
-            }
-        }
-    }
-
-    private boolean cacheStillValid(Context context, final String urlKey, final int cacheTime) {
-        final Date today = new Date();
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-
-        Date lastCached = new Date(sharedPreferences.getLong(urlKey, 0L));
-
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(lastCached);
-        cal.add(Calendar.MINUTE, cacheTime);
-        lastCached = cal.getTime();
-
-        return lastCached.after(today);
-    }
-
-    private static String readStringFromUrl(final String strUrl) {
+    public static final String readStringFromUrl(final String strUrl) {
         InputStream inputStream;
 
         HttpURLConnection urlConnection;
 
-        URL url;
+        final URL url;
         try {
             url = new URL(strUrl);
             urlConnection = (HttpURLConnection) url.openConnection();

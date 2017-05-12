@@ -93,7 +93,7 @@ public class DataManager {
             final Parser parser = ParserFactory.create(EParser.MENU);
             final Calendar calendar = Calendar.getInstance();
             final String url = Define.URL_MEAL + calendar.get(Calendar.YEAR) + '-' + (calendar.get(Calendar.MONTH) + 1) + '-' + calendar.get(Calendar.DAY_OF_MONTH);
-            final String xmlString = this.getData(url);
+            final String xmlString = dataConnector.readStringFromUrl(url);
 
 
             // falls der String leer ist war ein Problem mit dem Internet
@@ -138,7 +138,7 @@ public class DataManager {
 
             final Parser parser = ParserFactory.create(EParser.SCHEDULE);
             final String aString = String.format(Define.URL_SCHEDULE, MyString.URLReplaceWhitespace(course), MyString.URLReplaceWhitespace(semester), MyString.URLReplaceWhitespace(termTime));
-            final String jsonString = this.getData(aString);
+            final String jsonString = dataConnector.readStringFromUrl(aString);
 
             // falls der String leer ist war ein Problem mit dem Internet
             if (jsonString.isEmpty()) {
@@ -199,7 +199,7 @@ public class DataManager {
 
             final Parser parser = ParserFactory.create(EParser.MYSCHEDULE);
 
-            final String jsonString = this.getData(url);
+            final String jsonString = dataConnector.readStringFromUrl(url);
 
             // falls der String leer ist war ein Problem mit dem Internet
             if (jsonString.isEmpty()) {
@@ -260,7 +260,7 @@ public class DataManager {
             }
 
             final Parser parser = ParserFactory.create(EParser.CHANGES);
-            final String jsonString = this.getData(url);
+            final String jsonString = dataConnector.readStringFromUrl(url);
 
             // falls der String leer ist war ein Problem mit dem Internet
             if (jsonString.isEmpty()) {
@@ -305,7 +305,7 @@ public class DataManager {
 
             final String sTermType = MyString.URLReplaceWhitespace(termTime);
             final String sURL = String.format(Define.URL_STUDYCOURSE, sTermType);
-            final String jsonString = this.getData(sURL);
+            final String jsonString = dataConnector.readStringFromUrl(sURL);
 
 
             // falls der String leer ist war ein Problem mit dem Internet
@@ -342,10 +342,6 @@ public class DataManager {
         }
     }
 
-
-    private String getData(String url) {
-        return dataConnector.getStringFromUrl(url);
-    }
 
     public final void addToMySchedule(final Context context, final LectureItem s) {
         this.getMySchedule(context).getIds().add(String.valueOf(s.getId()));
@@ -555,10 +551,6 @@ public class DataManager {
         return lastCached.after(today);
     }
 
-    public final void cleanCache(final Context context) {
-        dataConnector.cleanCache(context, Define.MAX_CACHE_TIME);
-    }
-
     // FCM
     // ---------------------------------------------------------------------------------------------
 
@@ -576,7 +568,7 @@ public class DataManager {
     public void registerFCMServerForce(Context context) {
         Set<String> ids = new HashSet<>();
 
-        Schedule schedule = this.getSchedule(context);
+        final Schedule schedule = this.getSchedule(context);
 
         if (getMySchedule(context).getIds().size() > 0) {
             ids = getMySchedule(context).getIds();

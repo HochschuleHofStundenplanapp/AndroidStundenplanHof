@@ -88,11 +88,6 @@ public class MainActivity extends AppCompatActivity
 		setContentView(R.layout.activity_main);
 		contextOfApplication = getApplicationContext();
 
-		//Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-		//setSupportActionBar(toolbar);
-
-		DataManager.getInstance().cleanCache(getApplicationContext());
-
 		// getActionBar geht nicht wahrscheinlich weil doch noch irgendwo dafür die Support Libary eingebunden wird
 		// zum Nachlesen: http://codetheory.in/difference-between-setdisplayhomeasupenabled-sethomebuttonenabled-and-setdisplayshowhomeenabled/
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
