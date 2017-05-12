@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Zeit"
+            android:text="@string/zeit"
             android:id="@+id/stundenplan_time"
             android:textColor="@android:color/black"/>
 
@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Raum"
+            android:text="@string/raum"
             android:id="@+id/stundenplan_raum"
             android:textStyle="bold"
             android:textColor="@android:color/black"
@@ -54,7 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Fach Dozent"
+        android:text="@string/fach_dozent"
         android:id="@+id/stundenplan_details"
         android:textColor="@android:color/black"
         android:layout_alignTop="@+id/stundenplan_linealLayout"

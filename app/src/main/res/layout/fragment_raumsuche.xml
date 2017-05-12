@@ -52,14 +52,12 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/date"
                     android:id="@+id/textViewDate"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
                     android:layout_marginEnd="20dp"
                     android:width="100dp"
                     android:textAlignment="textEnd"
                     android:gravity="center"
-                    android:layout_marginRight="20dp"/>
+                    android:layout_marginRight="20dp"
+                    />
 
                 <EditText
                     android:layout_width="wrap_content"
@@ -67,8 +65,6 @@
                     android:inputType="date"
                     android:ems="10"
                     android:id="@+id/edt_date"
-                    android:layout_alignTop="@+id/textViewDate"
-                    android:layout_toRightOf="@+id/textViewDate"
                     android:focusable="false" />
             </TableRow>
 
@@ -84,13 +80,11 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/from"
                     android:id="@+id/textViewFrom"
-                    android:layout_below="@+id/textViewDate"
-                    android:layout_alignRight="@+id/textViewDate"
-                    android:layout_alignEnd="@+id/textViewDate"
                     android:layout_marginEnd="20dp"
                     android:textAlignment="textEnd"
                     android:gravity="center"
-                    android:layout_marginRight="20dp"/>
+                    android:layout_marginRight="20dp"
+                    />
 
                 <EditText
                     android:layout_width="wrap_content"
@@ -98,10 +92,8 @@
                     android:inputType="time"
                     android:ems="10"
                     android:id="@+id/edt_from"
-                    android:layout_alignTop="@+id/textViewFrom"
-                    android:layout_alignLeft="@+id/edt_date"
-                    android:layout_alignStart="@+id/edt_date"
-                    android:focusable="false" />
+                    android:focusable="false"
+                    />
             </TableRow>
 
             <TableRow
@@ -116,13 +108,11 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/to"
                     android:id="@+id/textViewTo"
-                    android:layout_below="@+id/textViewFrom"
-                    android:layout_alignRight="@+id/textViewFrom"
-                    android:layout_alignEnd="@+id/textViewFrom"
                     android:layout_marginEnd="20dp"
                     android:textAlignment="textEnd"
                     android:gravity="center"
-                    android:layout_marginRight="20dp"/>
+                    android:layout_marginRight="20dp"
+                    />
 
                 <EditText
                     android:layout_width="wrap_content"
@@ -130,10 +120,8 @@
                     android:inputType="time"
                     android:ems="10"
                     android:id="@+id/edt_to"
-                    android:layout_alignTop="@+id/textViewTo"
-                    android:layout_alignLeft="@+id/edt_from"
-                    android:layout_alignStart="@+id/edt_from"
-                    android:focusable="false" />
+                    android:focusable="false"
+                    />
             </TableRow>
 
             <TableRow
@@ -151,10 +139,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/edvraum"
                     android:id="@+id/cb_edv"
-                    android:layout_below="@+id/edt_to"
-                    android:layout_alignLeft="@+id/edt_to"
-                    android:layout_alignStart="@+id/edt_to"
-                    android:gravity="left|center" />
+                    android:gravity="left|center"
+                    />
 
             </TableRow>
 
@@ -173,9 +159,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/search"
                     android:id="@+id/btn_search"
-                    android:layout_below="@+id/cb_edv"
-                    android:layout_alignLeft="@+id/cb_edv"
-                    android:layout_alignStart="@+id/cb_edv" />
+                    />
             </TableRow>
         </TableLayout>
     </LinearLayout>

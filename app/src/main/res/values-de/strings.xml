@@ -130,4 +130,7 @@
     <string name="no">Nein</string>
     <string name="notifications_question">Möchten Sie über Änderungen benachrichtigt werden?</string>
     <string name="lastUpdated">Zuletzt aktualisiert</string>
+    <string name="raum">Raum</string>
+    <string name="zeit">Zeit</string>
+    <string name="fach_dozent">Fach Dozent</string>
 </resources>
