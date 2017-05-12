@@ -49,11 +49,11 @@ public class Meal implements Serializable {
 		return day;
 	}
 
-	public final void setName(String name) {
+	public final void setName(final String name) {
 		this.name = name;
 	}
 
-	public final void setPrice(String price) {
+	public final void setPrice(final String price) {
 		this.price = price;
 	}
 
@@ -65,7 +65,7 @@ public class Meal implements Serializable {
 		return category;
 	}
 
-	public final void setTariff(String tariff) {
+	public final void setTariff(final String tariff) {
 		this.tariff = tariff;
 	}
 

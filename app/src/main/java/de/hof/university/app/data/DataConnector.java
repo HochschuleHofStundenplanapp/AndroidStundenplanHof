@@ -16,9 +16,6 @@
 
 package de.hof.university.app.data;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.util.Base64;
 
 import java.io.BufferedInputStream;
@@ -30,9 +27,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
 
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.Util.Log;

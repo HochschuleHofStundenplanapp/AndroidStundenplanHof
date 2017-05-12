@@ -45,32 +45,16 @@ public class StudyCourse implements Serializable {
         return id;
     }
 
-    public final void setId(long id) {
-        this.id = id;
-    }
-
     public final String getName() {
         return name;
-    }
-
-    public final void setName(String name) {
-        this.name = name;
     }
 
     public final String getTag() {
         return tag;
     }
 
-    public final void setTag(String tag) {
-        this.tag = tag;
-    }
-
     public final List<String> getTerms() {
         return terms;
-    }
-
-    public final void setTerms(final List<String> terms) {
-        this.terms = terms;
     }
 
     @Override

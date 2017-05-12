@@ -23,8 +23,8 @@ android {
         applicationId 'de.hof.university.app'
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 18
-        versionName '2.2'
+        versionCode 19
+        versionName '2.3'
     }
 
 	signingConfigs {
@@ -51,8 +51,8 @@ android {
 			debuggable true
 		}
 	}
-	productFlavors {
-	}
+    productFlavors {
+    }
 
     // Lint found fatal errors while assembling a release target
     lintOptions {
@@ -68,29 +68,29 @@ android {
 
 //NOTICE: Die Versionsnummer sollte pro Block gleich sein
 dependencies {
-	compile fileTree(include: ['*.jar'], dir: 'libs')
-	// jsoup HTML parser library @ http://jsoup.org/
-	// Die Versionsnummer sollte die gleiche sein
-	//compile 'com.android.support:appcompat-v7:25.2.0'
-	compile 'com.android.support:appcompat-v7:+'
-	//compile 'com.android.support:design:25.2.0'
-	compile 'com.android.support:design:+'
-	//compile 'com.android.support:support-v4:25.2.0'
-	compile 'com.android.support:support-v4:+'
-	//compile 'com.android.support:recyclerview-v7:25.2.0'
-	compile 'com.android.support:recyclerview-v7:+'
-	compile 'org.jsoup:jsoup:1.9.2'
-	//compile 'org.jsoup:jsoup:1.9.+'
-	// Die Versionsnummer sollte die gleiche sein
-	//compile 'com.google.android.gms:play-services-gcm:10.2.0'
-	compile 'com.google.android.gms:play-services-gcm:10.+'
-	//compile 'com.google.firebase:firebase-messaging:10.2.0'
-	compile 'com.google.firebase:firebase-messaging:10.+'
-	//compile 'org.osmdroid:osmdroid-android:5.6.3'
-	compile 'org.osmdroid:osmdroid-android:+'
-	testCompile 'junit:junit:4.12'
-	//compile 'com.android.support.constraint:constraint-layout:1.0.2'
-	compile 'com.android.support.constraint:constraint-layout:+'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    // jsoup HTML parser library @ http://jsoup.org/
+    // Die Versionsnummer sollte die gleiche sein
+    //compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.android.support:appcompat-v7:+'
+    //compile 'com.android.support:design:25.2.0'
+    compile 'com.android.support:design:+'
+    //compile 'com.android.support:support-v4:25.2.0'
+    compile 'com.android.support:support-v4:+'
+    //compile 'com.android.support:recyclerview-v7:25.2.0'
+    compile 'com.android.support:recyclerview-v7:+'
+    compile 'org.jsoup:jsoup:1.9.2'
+    //compile 'org.jsoup:jsoup:1.9.+'
+    // Die Versionsnummer sollte die gleiche sein
+    //compile 'com.google.android.gms:play-services-gcm:10.2.0'
+    compile 'com.google.android.gms:play-services-gcm:10.+'
+    //compile 'com.google.firebase:firebase-messaging:10.2.0'
+    compile 'com.google.firebase:firebase-messaging:10.+'
+    //compile 'org.osmdroid:osmdroid-android:5.6.3'
+    compile 'org.osmdroid:osmdroid-android:+'
+    testCompile 'junit:junit:4.12'
+    //compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support.constraint:constraint-layout:+'
 }
 
 apply plugin: 'com.google.gms.google-services'

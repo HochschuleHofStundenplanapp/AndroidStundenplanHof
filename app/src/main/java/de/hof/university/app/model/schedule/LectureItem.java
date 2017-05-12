@@ -83,24 +83,8 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
         return weekday;
     }
 
-    public final String getLabel() {
-        return label;
-    }
-
-    public final String getType() {
-        return type;
-    }
-
-    public final String getGroup() {
-        return group;
-    }
-
     public final String getBegin() {
         return begin;
-    }
-
-    public final String getEnd() {
-        return end;
     }
 
     public final String getStartdate() {
@@ -113,10 +97,6 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
 
     public final String getRoom() {
         return room;
-    }
-
-    public final String getLecturer() {
-        return lecturer;
     }
 
     public final String getTime() {
@@ -143,10 +123,6 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
         result += '\n' + lecturer;
 
         return result;
-    }
-
-    public final String getShortDescription() {
-        return label + " (" + begin.split(" ")[1] + " - " + end.split(" ")[1] + ')';
     }
 
     @Override
