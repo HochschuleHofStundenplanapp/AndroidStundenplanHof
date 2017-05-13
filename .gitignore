@@ -50,3 +50,6 @@ gradlew
 
 gradlew.bat
 .idea/misc.xml
+app/build.gradle_withKey
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/inspectionProfiles/Project_Default.xml
