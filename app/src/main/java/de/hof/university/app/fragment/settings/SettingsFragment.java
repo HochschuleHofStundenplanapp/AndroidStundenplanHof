@@ -17,11 +17,14 @@
 package de.hof.university.app.fragment.settings;
 
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -30,7 +33,9 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -42,6 +47,7 @@ import de.hof.university.app.Communication.RegisterLectures;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.Util.Define;
+import de.hof.university.app.calendar.CalendarInterface;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.LoginController;
 import de.hof.university.app.model.settings.StudyCourse;
@@ -56,6 +62,8 @@ public class SettingsFragment extends PreferenceFragment {
 	private ProgressDialog progressDialog;
 	private List<StudyCourse> studyCourseList;
 	private LoginController loginController = null;
+
+    private final int REQUEST_CODE_ASK_CALENDAR_PERMISSIONS =  2;
 
 	/**
 	 * @param savedInstanceState
@@ -87,20 +95,6 @@ public class SettingsFragment extends PreferenceFragment {
 			lpCourse.setEnabled(false);
 		}
 
-		//Login für die experimentellen Funktionen
-		Preference edtLogin = findPreference("login");
-		edtLogin.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				if (isVisible()) { //nur wenn die Activity sichtbar ist den Dialog anzeigen
-					loginController.showLoginDialog();
-					return true;
-				} else {
-					return false;
-				}
-			}
-		});
-
 		// Benachrichtigungen
 		final PreferenceCategory category_notification = (PreferenceCategory) findPreference("category_notification");
 		final CheckBoxPreference changes_notifications = (CheckBoxPreference) findPreference("changes_notifications");
@@ -114,7 +108,7 @@ public class SettingsFragment extends PreferenceFragment {
 					if ( (Boolean) newValue ) {
 						// für Push-Notifications registrieren,
 						// falls schon ein Stundenplan angelegt wurde
-						DataManager.getInstance().registerFCMServerForce(MainActivity.contextOfApplication);
+						DataManager.getInstance().registerFCMServerForce(getActivity().getApplicationContext());
                         new AlertDialog.Builder(getView().getContext())
                                 .setTitle(R.string.notifications)
                                 .setMessage(R.string.notifications_infotext)
@@ -138,13 +132,61 @@ public class SettingsFragment extends PreferenceFragment {
 			preferenceScreen.removePreference(changes_notifications);
 		}
 
+		// Calendar syncronization
+		final CheckBoxPreference calendar_syncronization = (CheckBoxPreference) findPreference("calendar_synchronization");
+
+		calendar_syncronization.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+			@Override
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				if ( (Boolean) newValue ) {
+					if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED
+							|| ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+						requestCalendarPermission();
+					} else {
+						CalendarInterface.getInstance(getActivity().getApplicationContext());
+
+						new AlertDialog.Builder(getView().getContext())
+								.setTitle("Kalender Sync an")
+								.setMessage("Sync an")
+								.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										//nothing to do here. Just close the message
+									}
+								})
+								.setIcon(android.R.drawable.ic_dialog_alert)
+								.show();
+					}
+				} else {
+					CalendarInterface.getInstance(getActivity().getApplicationContext()).removeCalendar();
+				}
+				return true;
+			}
+		});
+
+		//Login für die experimentellen Funktionen
+		Preference edtLogin = findPreference("login");
+		edtLogin.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				if (isVisible()) { //nur wenn die Activity sichtbar ist den Dialog anzeigen
+					loginController.showLoginDialog();
+					return true;
+				} else {
+					return false;
+				}
+			}
+		});
+
 		final CheckBoxPreference experimentalFeatures = (CheckBoxPreference) findPreference("experimental_features");
 
 		if ( experimentalFeatures.isChecked() ) {
 			edtLogin.setEnabled(true);
+			calendar_syncronization.setEnabled(true);
 			//changes_notifications.setEnabled(true);
 		} else {
 			edtLogin.setEnabled(false);
+			calendar_syncronization.setEnabled(false);
 			//changes_notifications.setEnabled(false);
 		}
 
@@ -167,6 +209,7 @@ public class SettingsFragment extends PreferenceFragment {
 							.setIcon(android.R.drawable.ic_dialog_alert)
 							.show();
 					edtLogin.setEnabled(true);
+					calendar_syncronization.setEnabled(true);
 					/*if (changes_notifications != null) {
 						changes_notifications.setEnabled(true);
 						// falls ausgewählt war
@@ -180,6 +223,7 @@ public class SettingsFragment extends PreferenceFragment {
 
 				} else {
 					edtLogin.setEnabled(false);
+					calendar_syncronization.setEnabled(false);
 					/*if (changes_notifications != null) {
 						changes_notifications.setEnabled(false);
 						// von Push-Notifications abmelden
@@ -450,6 +494,31 @@ public class SettingsFragment extends PreferenceFragment {
 			}
 
 			progressDialog.dismiss();
+		}
+	}
+
+	public void requestCalendarPermission() {
+		if (Build.VERSION.SDK_INT > 23) {
+			this.requestPermissions(
+					new String[]{Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR},
+					REQUEST_CODE_ASK_CALENDAR_PERMISSIONS);
+		}
+    }
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		switch (requestCode) {
+			case REQUEST_CODE_ASK_CALENDAR_PERMISSIONS:
+				if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					// Permission granted
+					CalendarInterface.getInstance(getActivity().getApplicationContext());
+				} else {
+					// Permission Denied
+					Toast.makeText(getActivity(), "Berechtigung für den Kalender verweigert", Toast.LENGTH_SHORT)
+							.show();
+				}
+			default:
+				super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 		}
 	}
 }
