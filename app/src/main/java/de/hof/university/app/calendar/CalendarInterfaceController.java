@@ -1,13 +1,18 @@
 package de.hof.university.app.calendar;
 
+import android.content.Context;
+
 /**
  * Created by Daniel on 13.05.2017.
  */
 
 public class CalendarInterfaceController {
 
-    public CalendarInterfaceController() {
+    private CalendarInterface calendarInterface;
+
+    public CalendarInterfaceController(Context context) {
         // TODO
+        calendarInterface = CalendarInterface.getInstance(context);
     }
 
     public void createAllEvents() {
@@ -20,5 +25,9 @@ public class CalendarInterfaceController {
 
     public void removeAllEvents() {
         // TODO
+    }
+
+    public void removeCalendar() {
+        calendarInterface.removeCalendar();
     }
 }

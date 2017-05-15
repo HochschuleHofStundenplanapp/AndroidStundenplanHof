@@ -47,7 +47,7 @@ import de.hof.university.app.Communication.RegisterLectures;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.Util.Define;
-import de.hof.university.app.calendar.CalendarInterface;
+import de.hof.university.app.calendar.CalendarInterfaceController;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.LoginController;
 import de.hof.university.app.model.settings.StudyCourse;
@@ -143,7 +143,7 @@ public class SettingsFragment extends PreferenceFragment {
 							|| ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
 						requestCalendarPermission();
 					} else {
-						CalendarInterface.getInstance(getActivity().getApplicationContext());
+						new CalendarInterfaceController(getActivity().getApplicationContext());
 
 						new AlertDialog.Builder(getView().getContext())
 								.setTitle("Kalender Sync an")
@@ -158,7 +158,7 @@ public class SettingsFragment extends PreferenceFragment {
 								.show();
 					}
 				} else {
-					CalendarInterface.getInstance(getActivity().getApplicationContext()).removeCalendar();
+					new CalendarInterfaceController(getActivity().getApplicationContext()).removeCalendar();
 				}
 				return true;
 			}
@@ -511,7 +511,7 @@ public class SettingsFragment extends PreferenceFragment {
 			case REQUEST_CODE_ASK_CALENDAR_PERMISSIONS:
 				if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 					// Permission granted
-					CalendarInterface.getInstance(getActivity().getApplicationContext());
+					new CalendarInterfaceController(getActivity().getApplicationContext());
 				} else {
 					// Permission Denied
 					Toast.makeText(getActivity(), "Berechtigung für den Kalender verweigert", Toast.LENGTH_SHORT)
