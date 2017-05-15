@@ -128,4 +128,5 @@
     <string name="raum">Raum</string>
     <string name="zeit">Zeit</string>
     <string name="fach_dozent">Fach Dozent</string>
+    <string name="calendar_synchronization">Calendar synchronization</string>
 </resources>
