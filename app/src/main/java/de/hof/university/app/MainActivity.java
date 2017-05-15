@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatActivity
                                 sharedPreferences.edit()
                                         .putBoolean("changes_notifications", true)
                                         .apply();
-                                DataManager.getInstance().registerFCMServerForce(contextOfApplication);
+                                DataManager.getInstance().registerFCMServerForce(getApplicationContext());
                             }
                         })
                         .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
