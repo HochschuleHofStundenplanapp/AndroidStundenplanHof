@@ -68,7 +68,7 @@ public class CalendarInterface {
         }
     }
 
-    public boolean getCalendar() {
+    private boolean getCalendar() {
         // Run query
         Cursor cur = null;
         ContentResolver cr = context.getContentResolver();
@@ -103,7 +103,7 @@ public class CalendarInterface {
         return false;
     }
 
-    public Uri createLocalCalendar() {
+    private Uri createLocalCalendar() {
         // TODO
 
         Uri uri = Uri.parse(CalendarContract.Calendars.CONTENT_URI.toString());
