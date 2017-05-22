@@ -1,8 +1,8 @@
 package de.hof.university.app.calendar;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -12,13 +12,9 @@ import android.provider.CalendarContract;
 import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
 import android.support.v4.app.ActivityCompat;
-import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.TimeZone;
-
-import de.hof.university.app.MainActivity;
-import de.hof.university.app.fragment.settings.SettingsFragment;
 
 /**
  * Created by Daniel on 13.05.2017.
@@ -57,18 +53,42 @@ public class CalendarInterface {
         return CalendarInterface.calendarInterface;
     }
 
+    /**
+     * Constructor for the default local calendar
+     * @param context
+     */
     private CalendarInterface(Context context) {
-        // TODO
+        this(context, -1);
+    }
+
+    /**
+     * Constructor for a existing calendar
+     * @param context
+     * @param calendarID of a existing calendar in witch the user want to write the Schedule
+     */
+    private CalendarInterface(Context context, long calendarID) {
         this.context = context;
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
-            if (!getCalendar()) {
-                createLocalCalendar();
+        if (calendarID == -1) {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+                if (!getLocalCalendar()) {
+                    createLocalCalendar();
+                }
+            }
+        } else {
+            // use existing calendar
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED
+                    && ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+                calID = calendarID;
             }
         }
     }
 
-    private boolean getCalendar() {
+    /**
+     * Set the calID and return if the calendar was found
+     * @return return if the calendar was found
+     */
+    private boolean getLocalCalendar() {
         // Run query
         Cursor cur = null;
         ContentResolver cr = context.getContentResolver();
@@ -81,25 +101,21 @@ public class CalendarInterface {
         String[] selectionArgs = new String[]{calendarName, "androidapps@hof-university.de", CalendarContract.ACCOUNT_TYPE_LOCAL};
         // Submit the query and get a Cursor object back.
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return false;
         }
         cur = cr.query(uri, EVENT_PROJECTION, selection, selectionArgs, null);
+        // wenn er alle Calendar liefern soll:
         //cur = cr.query(uri, EVENT_PROJECTION, null, null, null);
 
         // Use the cursor to step through the returned records
         while (cur.moveToNext()) {
+            // found
             calID = cur.getLong(PROJECTION_ID_INDEX);
             cur.close();
             return true;
         }
 
+        cur.close();
         return false;
     }
 
@@ -121,7 +137,7 @@ public class CalendarInterface {
         TimeZone tz = TimeZone.getDefault();
         values.put(Calendars.CALENDAR_TIME_ZONE, tz.getID());
         values.put(Calendars.VISIBLE, 1);
-        values.put(Calendars.ACCOUNT_NAME, "androidapps@hof-university.de");
+        values.put(Calendars.ACCOUNT_NAME, "Hochschule Hof");
         values.put(Calendars.OWNER_ACCOUNT, "androidapps@hof-university.de");
         //values.put(Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_ROOT);
         //values.put(Calendars.SYNC_EVENTS, 1);
@@ -136,36 +152,29 @@ public class CalendarInterface {
         // TODO
     }
 
-    public void createEvent() {
+    public void createEvent(String title, String description, String startTime, String endTime, String location) {
         // TODO
-
         long startMillis = 0;
         long endMillis = 0;
         Calendar beginTime = Calendar.getInstance();
         beginTime.set(2017, 4, 15, 14, 00);
         startMillis = beginTime.getTimeInMillis();
-        Calendar endTime = Calendar.getInstance();
-        endTime.set(2017, 4, 15, 15, 30);
-        endMillis = endTime.getTimeInMillis();
-
+        Calendar tmpEndTime = Calendar.getInstance();
+        tmpEndTime.set(2017, 4, 15, 15, 30);
+        endMillis = tmpEndTime.getTimeInMillis();
 
         ContentResolver cr = context.getContentResolver();
         ContentValues values = new ContentValues();
         values.put(Events.DTSTART, startMillis);
         values.put(Events.DTEND, endMillis);
-        values.put(Events.TITLE, "Test Event");
-        values.put(Events.DESCRIPTION, "Dies ist ein Test Event");
+        values.put(Events.TITLE, title);
+        values.put(Events.DESCRIPTION, description);
+        values.put(Events.EVENT_LOCATION, location);
         values.put(Events.CALENDAR_ID, calID);
         TimeZone tz = TimeZone.getDefault();
         values.put(Events.EVENT_TIMEZONE, tz.getID());
+
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         Uri uri = cr.insert(Events.CONTENT_URI, values);
@@ -178,11 +187,35 @@ public class CalendarInterface {
         //
     }
 
-    public void updateEvent() {
+    public void updateEvent(long eventID, String title, String description, String startTime, String endTime, String location) {
         // TODO
+        long startMillis = 0;
+        long endMillis = 0;
+        Calendar beginTime = Calendar.getInstance();
+        beginTime.set(2017, 4, 15, 14, 00);
+        startMillis = beginTime.getTimeInMillis();
+        Calendar tmpEndTime = Calendar.getInstance();
+        tmpEndTime.set(2017, 4, 15, 15, 30);
+        endMillis = tmpEndTime.getTimeInMillis();
+
+        ContentResolver cr = context.getContentResolver();
+
+        ContentValues values = new ContentValues();
+        values.put(Events.TITLE, title);
+        values.put(Events.DESCRIPTION, description);
+        values.put(Events.DTSTART, startMillis);
+        values.put(Events.DTEND, endMillis);
+        values.put(Events.EVENT_LOCATION, location);
+
+        Uri updateUri = ContentUris.withAppendedId(Events.CONTENT_URI, eventID);
+        int rows = cr.update(updateUri, values, null, null);
     }
 
-    public void deleteEvent() {
+    public void deleteEvent(long eventID) {
         // TODO
+        ContentResolver cr = context.getContentResolver();
+
+        Uri deleteUri = ContentUris.withAppendedId(Events.CONTENT_URI, eventID);
+        int rows = cr.delete(deleteUri, null, null);
     }
 }
