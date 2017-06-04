@@ -13,7 +13,8 @@ import java.util.HashMap;
  */
 
 public class CalendarEventIds extends HofObject implements Serializable {
-    private static final long serialVersionUID = Define.serialVersionUID;
+    private static final long serialVersionUID = Define.serialVersionUIDv1;
+
     private HashMap<String, String> lectureEventIDs;
     private HashMap<String, String> changesEventIDs;
 
