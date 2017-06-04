@@ -21,10 +21,14 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import de.hof.university.app.Util.Define;
+
 /**
  * Created by Lukas on 25.11.2015.
  */
 public class Meal implements Serializable {
+	private static final long serialVersionUID = Define.serialVersionUIDv1;
+
 	private String name;
 	private String price;
 	private final String weekDay;
