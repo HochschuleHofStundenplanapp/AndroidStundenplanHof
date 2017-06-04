@@ -110,15 +110,15 @@ public class ScheduleParser implements Parser<LectureItem> {
         final String type = jsonObject.optString(Define.PARSER_TYPE);
         final String style = jsonObject.optString(Define.PARSER_STYLE);
         final String group = jsonObject.optString(Define.SCHEDULE_PARSER_GROUP);
-        final String begin = jsonObject.optString(Define.PARSER_STARTTIME);
-        final String end = jsonObject.optString(Define.PARSER_ENDTIME);
-        final String startdate = jsonObject.optString(Define.PARSER_STARTDATE);
-        final String enddate = jsonObject.optString(Define.PARSER_ENDDATE);
+        final String beginTime = jsonObject.optString(Define.PARSER_STARTTIME);
+        final String endTime = jsonObject.optString(Define.PARSER_ENDTIME);
+        final String startDate = jsonObject.optString(Define.PARSER_STARTDATE);
+        final String endDate = jsonObject.optString(Define.PARSER_ENDDATE);
         final String room = jsonObject.optString(Define.PARSER_ROOM);
             //Entferne alle Sonderzeichen bei den Dozenten, eingetragen durch SPLUS
         final String lecturer = jsonObject.optString(Define.PARSER_DOCENT).replace("§§", ",");
         final String comment = jsonObject.optString(Define.SCHEDULE_PARSER_COMMENT);
 
-        return new LectureItem(id, weekday, label, type, style, sp, group, begin, end, startdate, enddate, room, lecturer, comment);
+        return new LectureItem(id, weekday, label, type, style, sp, group, beginTime, endTime, startDate, endDate, room, lecturer, comment);
     }
 }

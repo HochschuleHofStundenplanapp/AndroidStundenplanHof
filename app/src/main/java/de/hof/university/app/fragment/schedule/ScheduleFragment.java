@@ -183,7 +183,7 @@ public class ScheduleFragment extends AbstractListFragment {
         ArrayList<LectureItem> fixDataList = new ArrayList<>();
         for ( LectureItem lectureItem : list ) {
             // Wenn eine Vorlesung nur an einem Tag stattfindet sind Start- und Enddate gleich
-            if ( lectureItem.getStartdate().equals(lectureItem.getEnddate()) ) {
+            if ( lectureItem.getStartDate().equals(lectureItem.getEndDate()) ) {
                 fixDataList.add(lectureItem);
             } else {
                 if ( !weekday.equals(lectureItem.getWeekday()) ) {
@@ -201,9 +201,9 @@ public class ScheduleFragment extends AbstractListFragment {
         ArrayList<Object> sortDataList = new ArrayList<>();
         String date = "";
         for (LectureItem lectureItem : fixDataList) {
-            if (!date.equals(lectureItem.getStartdate())) {
-                sortDataList.add(new BigListItem(lectureItem.getStartdate()));
-                date = lectureItem.getStartdate();
+            if (!date.equals(lectureItem.getStartDate())) {
+                sortDataList.add(new BigListItem(lectureItem.getStartDate()));
+                date = lectureItem.getStartDate();
             }
             sortDataList.add(lectureItem);
         }
