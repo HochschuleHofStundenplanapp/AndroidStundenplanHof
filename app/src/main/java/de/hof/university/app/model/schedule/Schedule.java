@@ -26,7 +26,8 @@ import de.hof.university.app.model.HofObject;
  */
 
 public class Schedule extends HofObject {
-	private static final long serialVersionUID = Define.serialVersionUID;
+	private static final long serialVersionUID = Define.serialVersionUIDv1;
+
 	ArrayList<LectureItem> lectures;
 	String course;
 	String semester;

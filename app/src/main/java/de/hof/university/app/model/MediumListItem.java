@@ -18,10 +18,14 @@ package de.hof.university.app.model;
 
 import java.io.Serializable;
 
+import de.hof.university.app.Util.Define;
+
 /**
  * Created by Lukas on 25.11.2015.
  */
 public class MediumListItem implements Serializable{
+    private static final long serialVersionUID = Define.serialVersionUIDv1;
+
     private final String title;
 
     public MediumListItem(final String title) {

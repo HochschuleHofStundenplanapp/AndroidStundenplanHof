@@ -19,10 +19,14 @@ package de.hof.university.app.model.settings;
 import java.io.Serializable;
 import java.util.List;
 
+import de.hof.university.app.Util.Define;
+
 /**
  * Studiengang
  */
 public class StudyCourse implements Serializable {
+    private static final long serialVersionUID = Define.serialVersionUIDv1;
+
     private long id = 0L;
     private String name;
     private String tag;

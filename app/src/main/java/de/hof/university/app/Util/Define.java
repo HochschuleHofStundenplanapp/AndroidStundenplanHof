@@ -66,7 +66,9 @@ public final class Define {
 	public static final String mealsFragmentName = "MEALS_FRAGMENT";
 
 
-	public static final long serialVersionUID = 1L;
+	public static final long serialVersionUIDv1 = 1L;
+	// SerialVersionUID falls etwas geändert wird, das dazu führt das das alte nicht mehr geladen werden kann:
+	public static final long serialVersionUIDv2 = 2L;
 
 	// Essensplan
 	public final static String URL_STUDENTENWERK = "https://www.studentenwerk-oberfranken.de/?eID=bwrkSpeiseplanRss&tx_bwrkspeiseplan_pi2%5Bbar%5D=340&tx_bwrkspeiseplan_pi2%5Bdate%5D=";

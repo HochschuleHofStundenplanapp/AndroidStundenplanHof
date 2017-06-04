@@ -18,10 +18,14 @@ package de.hof.university.app.model;
 
 import java.io.Serializable;
 
+import de.hof.university.app.Util.Define;
+
 /**
  * Created by Lars on 29.11.2015.
  */
 public class BigListItem implements Serializable{
+    private static final long serialVersionUID = Define.serialVersionUIDv1;
+
     final String title;
 
     public BigListItem(final String title) {

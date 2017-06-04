@@ -26,7 +26,8 @@ import de.hof.university.app.Util.Define;
  */
 
 public class MySchedule extends Schedule {
-	private static final long serialVersionUID = Define.serialVersionUID;
+	private static final long serialVersionUID = Define.serialVersionUIDv1;
+
 	Set<String> ids;
 
 	public MySchedule() {

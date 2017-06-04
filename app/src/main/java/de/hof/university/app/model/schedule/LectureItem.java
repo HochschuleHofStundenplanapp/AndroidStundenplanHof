@@ -21,11 +21,14 @@ import android.support.annotation.NonNull;
 import java.io.Serializable;
 
 import de.hof.university.app.BuildConfig;
+import de.hof.university.app.Util.Define;
 
 /**
  * Created by larsg on 09.05.2016.
  */
 public class LectureItem implements Comparable<LectureItem>, Serializable {
+    private static final long serialVersionUID = Define.serialVersionUIDv1;
+
     //not used: private static final String date_regex = "dd-MM-yyyy HH:mm:ss";
 
     private final String id;
