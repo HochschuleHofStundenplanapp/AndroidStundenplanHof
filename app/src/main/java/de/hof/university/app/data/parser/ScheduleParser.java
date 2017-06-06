@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import de.hof.university.app.BuildConfig;
@@ -110,15 +111,36 @@ public class ScheduleParser implements Parser<LectureItem> {
         final String type = jsonObject.optString(Define.PARSER_TYPE);
         final String style = jsonObject.optString(Define.PARSER_STYLE);
         final String group = jsonObject.optString(Define.SCHEDULE_PARSER_GROUP);
-        final String beginTime = jsonObject.optString(Define.PARSER_STARTTIME);
-        final String endTime = jsonObject.optString(Define.PARSER_ENDTIME);
-        final String startDate = jsonObject.optString(Define.PARSER_STARTDATE);
-        final String endDate = jsonObject.optString(Define.PARSER_ENDDATE);
+        final String beginTimeString = jsonObject.optString(Define.PARSER_STARTTIME);
+        final String endTimeString = jsonObject.optString(Define.PARSER_ENDTIME);
+        final String startDateString = jsonObject.optString(Define.PARSER_STARTDATE);
+        final String endDateString = jsonObject.optString(Define.PARSER_ENDDATE);
         final String room = jsonObject.optString(Define.PARSER_ROOM);
             //Entferne alle Sonderzeichen bei den Dozenten, eingetragen durch SPLUS
         final String lecturer = jsonObject.optString(Define.PARSER_DOCENT).replace("§§", ",");
         final String comment = jsonObject.optString(Define.SCHEDULE_PARSER_COMMENT);
 
-        return new LectureItem(id, weekday, label, type, style, sp, group, beginTime, endTime, startDate, endDate, room, lecturer, comment);
+        int startHours      = Integer.parseInt(beginTimeString.substring(0, 2));
+        int startMinutes    = Integer.parseInt(beginTimeString.substring(3, 5));
+        int startDay        = Integer.parseInt(startDateString.substring(0, 2));
+        int startMonth      = Integer.parseInt(startDateString.substring(3, 5));
+        int startYear       = Integer.parseInt(startDateString.substring(6, 10));
+
+        int endHours        = Integer.parseInt(endTimeString.substring(0, 2));
+        int endMinutes      = Integer.parseInt(endTimeString.substring(3, 5));
+        int endDay          = Integer.parseInt(endDateString.substring(0, 2));
+        int endMonth        = Integer.parseInt(endDateString.substring(3, 5));
+        int endYear         = Integer.parseInt(endDateString.substring(6, 10));
+
+        Calendar calendar = GregorianCalendar.getInstance();
+        //Startzeit
+        calendar.set(startYear, startMonth - 1, startDay, startHours, startMinutes, 0);
+
+        Date startDate = calendar.getTime();
+
+        calendar.set(endYear, endMonth - 1, endDay, endHours, endMinutes, 0);
+        Date endDate = calendar.getTime();
+
+        return new LectureItem(id, weekday, label, type, style, sp, group, startDate, endDate, room, lecturer, comment);
     }
 }

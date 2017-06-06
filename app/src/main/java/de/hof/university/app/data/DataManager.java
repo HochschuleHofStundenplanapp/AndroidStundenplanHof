@@ -472,20 +472,23 @@ public class DataManager {
      * @return dd.MM.yyyy HH:mm formatiertes Date
      */
     public String formatDate(Date date) {
-        Locale locale;
-        if (MainActivity.contextOfApplication.getString(R.string.language).equals("de")) {
-            locale = Locale.GERMAN;
-        } else if (MainActivity.contextOfApplication.getString(R.string.language).equals("en")) {
-            locale = Locale.ENGLISH;
-        } else {
-            locale = Locale.GERMAN;
-        }
+        Locale locale = getLocale();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", locale);
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, locale);
         if (date != null) {
             return dateFormat.format(date) + " " + simpleDateFormat.format(date);
         } else {
             return "";
+        }
+    }
+
+    public Locale getLocale() {
+        if (MainActivity.contextOfApplication.getString(R.string.language).equals("de")) {
+            return Locale.GERMANY;
+        } else if (MainActivity.contextOfApplication.getString(R.string.language).equals("en")) {
+            return Locale.ENGLISH;
+        } else {
+            return Locale.GERMANY;
         }
     }
 

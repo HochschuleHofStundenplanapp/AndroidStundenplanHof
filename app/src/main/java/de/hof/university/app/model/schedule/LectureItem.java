@@ -19,15 +19,17 @@ package de.hof.university.app.model.schedule;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import de.hof.university.app.BuildConfig;
 import de.hof.university.app.Util.Define;
+import de.hof.university.app.data.DataManager;
 
 /**
  * Created by larsg on 09.05.2016.
  */
 public class LectureItem implements Comparable<LectureItem>, Serializable {
-    private static final long serialVersionUID = Define.serialVersionUIDv1;
+    private static final long serialVersionUID = Define.serialVersionUIDv2;
 
     //not used: private static final String date_regex = "dd-MM-yyyy HH:mm:ss";
 
@@ -38,16 +40,14 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
     private final String style;
     private final String sp;
     private final String group;
-    private final String beginTime;
-    private final String endTime;
-    private final String startDate;
-    private final String endDate;
+    private final Date startDate;
+    private final Date endDate;
     private final String room;
     private final String lecturer;
     private final String comment;
 
     public LectureItem(final String id, final String weekday, final String label, final String type, final String style, final String sp, final String group,
-                       final String beginTime, final String endTime, final String startDate, final String endDate, final String room, final String lecturer, final String comment) {
+                       final Date startDate, final Date endDate, final String room, final String lecturer, final String comment) {
         this.id = id;
         this.weekday = weekday;
         this.label = label;
@@ -55,8 +55,6 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
         this.style = style;
         this.sp = sp;
         this.group = group;
-        this.beginTime = beginTime;
-        this.endTime = endTime;
         this.startDate = startDate;
         this.endDate = endDate;
         this.room = room;
@@ -70,8 +68,6 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
                 "id='" + id + '\'' +
                 ", weekday='" + weekday + '\'' +
                 ", group='" + group + '\'' +
-                ", beginTime='" + beginTime + '\'' +
-                ", endTime='" + endTime + '\'' +
                 ", startDate='" + startDate + '\'' +
                 ", endDate='" + endDate + '\'' +
                 ", room='" + room + '\'' +
@@ -88,15 +84,11 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
         return weekday;
     }
 
-    public final String getBeginTime() {
-        return beginTime;
-    }
-
-    public final String getStartDate() {
+    public final Date getStartDate() {
         return startDate;
     }
 
-    public final String getEndDate() {
+    public final Date getEndDate() {
         return endDate;
     }
 
@@ -105,7 +97,19 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
     }
 
     public final String getTime() {
-        return beginTime + " - " + endTime;
+        String resultString = "";
+
+        SimpleDateFormat simpleDateFormatter = new SimpleDateFormat("HH:mm", DataManager.getInstance().getLocale());
+
+        // Startzeit
+        resultString = simpleDateFormatter.format(startDate);
+
+        resultString += " - ";
+
+        // Endzeit
+        resultString += simpleDateFormatter.format(endDate);
+
+        return resultString;
     }
 
     public final String getDetails() {
@@ -139,29 +143,30 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
     ** Sortiert nach Sartzeit
      */
     public int compareTo(@NonNull LectureItem lectureItem) {
-        // Jahr
-        if (Integer.parseInt(getStartDate().substring(6)) > Integer.parseInt(lectureItem.getStartDate().substring(6))) {
-            return +1;
-        } else if (Integer.parseInt(getStartDate().substring(6)) == Integer.parseInt(lectureItem.getStartDate().substring(6))) {
-            // Monat
-            if (Integer.parseInt(getStartDate().substring(3, 5)) > Integer.parseInt(lectureItem.getStartDate().substring(3, 5))) {
-                return +1;
-            } else if (Integer.parseInt(getStartDate().substring(3, 5)) == Integer.parseInt(lectureItem.getStartDate().substring(3, 5))) {
-                // Tag
-                if (Integer.parseInt(getStartDate().substring(0, 2)) > Integer.parseInt(lectureItem.getStartDate().substring(0, 2))) {
-                    return +1;
-                } else if (Integer.parseInt(getStartDate().substring(0, 2)) == Integer.parseInt(lectureItem.getStartDate().substring(0, 2))) {
-                    if (Integer.parseInt(getBeginTime().substring(0, 2)) > Integer.parseInt(lectureItem.getBeginTime().substring(0, 2))) {
-                        return +1;
-                    } else if (Integer.parseInt(getBeginTime().substring(0, 2)) == Integer.parseInt(lectureItem.getBeginTime().substring(0, 2))) {
-                        return 0;
-                    }
-                }
-            }
-        }
-        else
-            if ( BuildConfig.DEBUG) assert (false);
-
-        return -1;
+        return startDate.compareTo(lectureItem.startDate);
+//        // Jahr
+//        if (Integer.parseInt(getStartDate().substring(6)) > Integer.parseInt(lectureItem.getStartDate().substring(6))) {
+//            return +1;
+//        } else if (Integer.parseInt(getStartDate().substring(6)) == Integer.parseInt(lectureItem.getStartDate().substring(6))) {
+//            // Monat
+//            if (Integer.parseInt(getStartDate().substring(3, 5)) > Integer.parseInt(lectureItem.getStartDate().substring(3, 5))) {
+//                return +1;
+//            } else if (Integer.parseInt(getStartDate().substring(3, 5)) == Integer.parseInt(lectureItem.getStartDate().substring(3, 5))) {
+//                // Tag
+//                if (Integer.parseInt(getStartDate().substring(0, 2)) > Integer.parseInt(lectureItem.getStartDate().substring(0, 2))) {
+//                    return +1;
+//                } else if (Integer.parseInt(getStartDate().substring(0, 2)) == Integer.parseInt(lectureItem.getStartDate().substring(0, 2))) {
+//                    if (Integer.parseInt(getBeginTime().substring(0, 2)) > Integer.parseInt(lectureItem.getBeginTime().substring(0, 2))) {
+//                        return +1;
+//                    } else if (Integer.parseInt(getBeginTime().substring(0, 2)) == Integer.parseInt(lectureItem.getBeginTime().substring(0, 2))) {
+//                        return 0;
+//                    }
+//                }
+//            }
+//        }
+//        else
+//            if ( BuildConfig.DEBUG) assert (false);
+//
+//        return -1;
     }
 }

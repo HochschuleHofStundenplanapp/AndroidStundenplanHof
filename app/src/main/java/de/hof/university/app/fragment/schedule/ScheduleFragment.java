@@ -31,13 +31,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 import de.hof.university.app.MainActivity;
@@ -168,13 +168,8 @@ public class ScheduleFragment extends AbstractListFragment {
     }
 
     protected final ArrayList<Object> updateListView(List<LectureItem> list) {
-        String curWeekDay = "";
-        if ( getString(R.string.language).equals("de") ) {
-            curWeekDay = new SimpleDateFormat("EEEE", Locale.GERMANY).format(new Date());
-        } else {
-            curWeekDay = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(new Date());
-        }
         String weekday = "";
+        String curWeekDay = new SimpleDateFormat("EEEE", DataManager.getInstance().getLocale()).format(new Date());
 
         // Temporäre Liste für die neuen Vorlesungen damit sie erst später in ListView hinzugefügt werden können
         ArrayList<Object> tmpDataList = new ArrayList<>();
@@ -199,16 +194,19 @@ public class ScheduleFragment extends AbstractListFragment {
         // sortieren
         Collections.sort(fixDataList);
         ArrayList<Object> sortDataList = new ArrayList<>();
-        String date = "";
-        for (LectureItem lectureItem : fixDataList) {
-            if (!date.equals(lectureItem.getStartDate())) {
-                sortDataList.add(new BigListItem(lectureItem.getStartDate()));
-                date = lectureItem.getStartDate();
-            }
-            sortDataList.add(lectureItem);
-        }
+        if (fixDataList.size() > 0) {
+            Date date = fixDataList.get(0).getStartDate();
+            for (LectureItem lectureItem : fixDataList) {
+                if (!date.equals(lectureItem.getStartDate())) {
+                    String dateString = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(lectureItem.getStartDate());
 
-        tmpDataList.addAll(sortDataList);
+                    sortDataList.add(new BigListItem(dateString));
+                    date = lectureItem.getStartDate();
+                }
+                sortDataList.add(lectureItem);
+            }
+            tmpDataList.addAll(sortDataList);
+        }
 
         // Wenn Daten gekommen sind das ListItem LastUpdated hinzufügen
         if (tmpDataList.size() != 0) {
