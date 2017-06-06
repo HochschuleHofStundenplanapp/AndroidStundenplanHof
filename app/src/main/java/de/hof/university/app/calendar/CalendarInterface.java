@@ -13,8 +13,12 @@ import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
 import android.support.v4.app.ActivityCompat;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.TimeZone;
+
+import de.hof.university.app.model.schedule.LectureItem;
 
 /**
  * Created by Daniel on 13.05.2017.
@@ -45,6 +49,8 @@ public class CalendarInterface {
     private Context context;
     private long calID = 2;
     private String calendarName = "Hochschule Hof Stundenplan App";
+    private CalendarEventIds calendarEventIds = new CalendarEventIds();
+
 
     public static CalendarInterface getInstance(Context context) {
         if (CalendarInterface.calendarInterface == null) {
@@ -152,21 +158,12 @@ public class CalendarInterface {
         // TODO
     }
 
-    public void createEvent(String title, String description, String startTime, String endTime, String location) {
+    public void createEvent(String lectureID, String title, String description, Date startTime, Date endTime, String location) {
         // TODO
-        long startMillis = 0;
-        long endMillis = 0;
-        Calendar beginTime = Calendar.getInstance();
-        beginTime.set(2017, 4, 15, 14, 00);
-        startMillis = beginTime.getTimeInMillis();
-        Calendar tmpEndTime = Calendar.getInstance();
-        tmpEndTime.set(2017, 4, 15, 15, 30);
-        endMillis = tmpEndTime.getTimeInMillis();
-
         ContentResolver cr = context.getContentResolver();
         ContentValues values = new ContentValues();
-        values.put(Events.DTSTART, startMillis);
-        values.put(Events.DTEND, endMillis);
+        values.put(Events.DTSTART, startTime.getTime());
+        values.put(Events.DTEND, endTime.getTime());
         values.put(Events.TITLE, title);
         values.put(Events.DESCRIPTION, description);
         values.put(Events.EVENT_LOCATION, location);
@@ -181,10 +178,8 @@ public class CalendarInterface {
 
         // get the event ID that is the last element in the Uri
         long eventID = Long.parseLong(uri.getLastPathSegment());
-        //
-        // ... do something with event ID
-        //
-        //
+
+        addLecturesEventID(lectureID, eventID);
     }
 
     public void updateEvent(long eventID, String title, String description, String startTime, String endTime, String location) {
@@ -217,5 +212,58 @@ public class CalendarInterface {
 
         Uri deleteUri = ContentUris.withAppendedId(Events.CONTENT_URI, eventID);
         int rows = cr.delete(deleteUri, null, null);
+    }
+
+    public void deleteAllEvents(String lectureID) {
+        ArrayList<Long> eventIDs = calendarEventIds.getLecturesEventIDs().get(lectureID);
+        for (Long eventID:
+             eventIDs) {
+            deleteEvent(eventID);
+        }
+    }
+
+    public void deleteAllEvents() {
+        for (String lectureID :
+                calendarEventIds.getLecturesEventIDs().keySet()) {
+            deleteAllEvents(lectureID);
+        }
+    }
+
+    private void addLecturesEventID(String lectureID, Long eventID) {
+        ArrayList<Long> eventIDs = calendarEventIds.getLecturesEventIDs().get(lectureID);
+        if (eventIDs == null) {
+            eventIDs = new ArrayList<>();
+            eventIDs.add(eventID);
+        } else {
+            eventIDs.add(eventID);
+        }
+        calendarEventIds.getLecturesEventIDs().put(lectureID, eventIDs);
+    }
+
+    private void addChangesEventID(String lectureID, Long eventID) {
+        ArrayList<Long> eventIDs = calendarEventIds.getChangesEventIDs().get(lectureID);
+        if (eventIDs == null) {
+            eventIDs = new ArrayList<>();
+            eventIDs.add(eventID);
+        } else {
+            eventIDs.add(eventID);
+        }
+        calendarEventIds.getChangesEventIDs().put(lectureID, eventIDs);
+    }
+
+    private void removeLectureEventID(String lectureID, Long eventID) {
+        ArrayList<Long> eventIDs = calendarEventIds.getLecturesEventIDs().get(lectureID);
+        if (eventIDs != null) {
+            eventIDs.remove(eventID);
+            calendarEventIds.getLecturesEventIDs().put(lectureID, eventIDs);
+        }
+    }
+
+    private void removeChangesEventID(String lectureID, Long eventID) {
+        ArrayList<Long> eventIDs = calendarEventIds.getChangesEventIDs().get(lectureID);
+        if (eventIDs != null) {
+            eventIDs.remove(eventID);
+            calendarEventIds.getChangesEventIDs().put(lectureID, eventIDs);
+        }
     }
 }

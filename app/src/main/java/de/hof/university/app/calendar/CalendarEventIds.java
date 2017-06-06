@@ -3,9 +3,8 @@ package de.hof.university.app.calendar;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.model.HofObject;
 
-import java.io.InterruptedIOException;
 import java.io.Serializable;
-import java.util.Dictionary;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -15,27 +14,27 @@ import java.util.HashMap;
 public class CalendarEventIds extends HofObject implements Serializable {
     private static final long serialVersionUID = Define.serialVersionUIDv1;
 
-    private HashMap<String, String> lectureEventIDs;
-    private HashMap<String, String> changesEventIDs;
+    private HashMap<String, ArrayList<Long>> lecturesEventIDs;
+    private HashMap<String, ArrayList<Long>> changesEventIDs;
 
     public CalendarEventIds() {
-        lectureEventIDs = new HashMap<>();
+        lecturesEventIDs = new HashMap<>();
         changesEventIDs = new HashMap<>();
     }
 
-    public HashMap<String, String> getLectureEventIDs() {
-        return lectureEventIDs;
+    public HashMap<String, ArrayList<Long>> getLecturesEventIDs() {
+        return lecturesEventIDs;
     }
 
-    public HashMap<String, String> getChangesEventIDs() {
+    public HashMap<String, ArrayList<Long>> getChangesEventIDs() {
         return changesEventIDs;
     }
 
-    public void setLectureEventIDs(HashMap<String, String> lectureEventIDs) {
-        this.lectureEventIDs = lectureEventIDs;
+    public void setLecturesEventIDs(HashMap<String, ArrayList<Long>> lecturesEventIDs) {
+        this.lecturesEventIDs = lecturesEventIDs;
     }
 
-    public void setChangesEventIDs(HashMap<String, String> changesEventIDs) {
+    public void setChangesEventIDs(HashMap<String, ArrayList<Long>> changesEventIDs) {
         this.changesEventIDs = changesEventIDs;
     }
 }

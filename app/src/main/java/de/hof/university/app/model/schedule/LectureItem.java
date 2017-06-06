@@ -112,6 +112,10 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
         return resultString;
     }
 
+    public final String getLabel() {
+        return label;
+    }
+
     public final String getDetails() {
         String result = label;
 
