@@ -569,20 +569,32 @@ public class DataManager {
     }
 
     public void registerFCMServerForce(Context context) {
+        Set<String> ids = getSelectedLecturesIDs(context);
+        if (ids == null) return;
+
+        new RegisterLectures().registerLectures(ids);
+    }
+
+    private Set<String> getSelectedLecturesIDs(Context context) {
         Set<String> ids = new HashSet<>();
 
+        ArrayList<LectureItem> lectureItems = getSelectedLectures(context);
+        if (lectureItems == null) return null;
+
+        for (LectureItem li : lectureItems) {
+            ids.add(String.valueOf(li.getId()));
+        }
+        return ids;
+    }
+
+    public ArrayList<LectureItem> getSelectedLectures(Context context) {
         final Schedule schedule = this.getSchedule(context);
 
         if (getMySchedule(context).getIds().size() > 0) {
-            ids = getMySchedule(context).getIds();
+            return getMySchedule(context).getLectures();
         } else if (schedule.getLectures().size() > 0) {
-            for (LectureItem li : schedule.getLectures()) {
-                ids.add(String.valueOf(li.getId()));
-            }
-        } else {
-            return;
+            return schedule.getLectures();
         }
-
-        new RegisterLectures().registerLectures(ids);
+        return null;
     }
 }
