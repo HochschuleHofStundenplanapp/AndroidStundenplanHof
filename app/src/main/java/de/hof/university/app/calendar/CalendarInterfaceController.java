@@ -33,20 +33,22 @@ public class CalendarInterfaceController {
             Date tmpStartDate = li.getStartDate();
             do {
                 // TODO für jeden Termin das Datum ermitteln
-                Calendar startDateCalendar = GregorianCalendar.getInstance();
+                Calendar newEndDateCalendar = GregorianCalendar.getInstance();
                 Calendar endDateCalendar = GregorianCalendar.getInstance();
-                startDateCalendar.setTime(tmpStartDate);
+                newEndDateCalendar.setTime(tmpStartDate);
                 endDateCalendar.setTime(li.getEndDate());
 
-                startDateCalendar.set(Calendar.HOUR_OF_DAY, endDateCalendar.get(Calendar.HOUR_OF_DAY));
-                startDateCalendar.set(Calendar.MINUTE, endDateCalendar.get(Calendar.MINUTE));
+                newEndDateCalendar.set(Calendar.HOUR_OF_DAY, endDateCalendar.get(Calendar.HOUR_OF_DAY));
+                newEndDateCalendar.set(Calendar.MINUTE, endDateCalendar.get(Calendar.MINUTE));
 
-                calendarInterface.createEvent(li.getId(), li.getLabel(), "", tmpStartDate, endDateCalendar.getTime(), "");
+                calendarInterface.createEvent(li.getId(), li.getLabel(), "", tmpStartDate, newEndDateCalendar.getTime(), "");
 
+                Calendar startDateCalendar = GregorianCalendar.getInstance();
                 startDateCalendar.setTime(tmpStartDate);
 
                 // Eine Woche dazu
                 startDateCalendar.add(Calendar.WEEK_OF_YEAR, 1);
+                tmpStartDate = startDateCalendar.getTime();
             } while (tmpStartDate.before(li.getEndDate()));
         }
     }
