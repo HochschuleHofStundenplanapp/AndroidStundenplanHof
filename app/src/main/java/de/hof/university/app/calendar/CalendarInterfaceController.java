@@ -3,6 +3,9 @@ package de.hof.university.app.calendar;
 import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.model.schedule.LectureItem;
@@ -27,8 +30,24 @@ public class CalendarInterfaceController {
 
         for (LectureItem li :
                 lectureItems) {
-            // TODO für jeden Termin das Datum ermitteln
-            calendarInterface.createEvent(li.getId(), li.getLabel(), "", li.getStartDate(), li.getEndDate(), "");
+            Date tmpStartDate = li.getStartDate();
+            do {
+                // TODO für jeden Termin das Datum ermitteln
+                Calendar startDateCalendar = GregorianCalendar.getInstance();
+                Calendar endDateCalendar = GregorianCalendar.getInstance();
+                startDateCalendar.setTime(tmpStartDate);
+                endDateCalendar.setTime(li.getEndDate());
+
+                startDateCalendar.set(Calendar.HOUR_OF_DAY, endDateCalendar.get(Calendar.HOUR_OF_DAY));
+                startDateCalendar.set(Calendar.MINUTE, endDateCalendar.get(Calendar.MINUTE));
+
+                calendarInterface.createEvent(li.getId(), li.getLabel(), "", tmpStartDate, endDateCalendar.getTime(), "");
+
+                startDateCalendar.setTime(tmpStartDate);
+
+                // Eine Woche dazu
+                startDateCalendar.add(Calendar.WEEK_OF_YEAR, 1);
+            } while (tmpStartDate.before(li.getEndDate()));
         }
     }
 
