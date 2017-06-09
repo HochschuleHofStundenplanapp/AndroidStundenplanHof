@@ -178,9 +178,8 @@ public class ScheduleFragment extends AbstractListFragment {
         ArrayList<LectureItem> fixDataList = new ArrayList<>();
         for ( LectureItem lectureItem : list ) {
             // Wenn eine Vorlesung nur an einem Tag stattfindet sind Start- und Enddate gleich
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-            String startDate = simpleDateFormat.format(lectureItem.getStartDate());
-            String endDate   = simpleDateFormat.format(lectureItem.getEndDate());
+            String startDate = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(lectureItem.getStartDate());
+            String endDate   = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(lectureItem.getEndDate());
             if ( startDate.equals(endDate) ) {
                 fixDataList.add(lectureItem);
             } else {
@@ -198,13 +197,13 @@ public class ScheduleFragment extends AbstractListFragment {
         Collections.sort(fixDataList);
         ArrayList<Object> sortDataList = new ArrayList<>();
         if (fixDataList.size() > 0) {
-            Date date = fixDataList.get(0).getStartDate();
+            String tmpStartDate = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(fixDataList.get(0).getStartDate());
+            sortDataList.add(new BigListItem(tmpStartDate));
             for (LectureItem lectureItem : fixDataList) {
-                if (!date.equals(lectureItem.getStartDate())) {
-                    String dateString = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(lectureItem.getStartDate());
-
-                    sortDataList.add(new BigListItem(dateString));
-                    date = lectureItem.getStartDate();
+                String startDate = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(lectureItem.getStartDate());
+                if (!tmpStartDate.equals(startDate)) {
+                    sortDataList.add(new BigListItem(startDate));
+                    tmpStartDate = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(lectureItem.getStartDate());
                 }
                 sortDataList.add(lectureItem);
             }
