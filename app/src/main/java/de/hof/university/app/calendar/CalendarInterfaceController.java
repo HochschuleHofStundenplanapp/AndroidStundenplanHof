@@ -31,12 +31,14 @@ public class CalendarInterfaceController {
         for (LectureItem li :
                 lectureItems) {
             Date tmpStartDate = li.getStartDate();
+
+            Calendar endDateCalendar = GregorianCalendar.getInstance();
+            endDateCalendar.setTime(li.getEndDate());
+
             do {
                 // TODO für jeden Termin das Datum ermitteln
                 Calendar newEndDateCalendar = GregorianCalendar.getInstance();
-                Calendar endDateCalendar = GregorianCalendar.getInstance();
                 newEndDateCalendar.setTime(tmpStartDate);
-                endDateCalendar.setTime(li.getEndDate());
 
                 newEndDateCalendar.set(Calendar.HOUR_OF_DAY, endDateCalendar.get(Calendar.HOUR_OF_DAY));
                 newEndDateCalendar.set(Calendar.MINUTE, endDateCalendar.get(Calendar.MINUTE));
