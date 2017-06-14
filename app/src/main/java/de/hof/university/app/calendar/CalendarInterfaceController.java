@@ -28,6 +28,8 @@ public class CalendarInterfaceController {
         // TODO
         ArrayList<LectureItem> lectureItems = DataManager.getInstance().getSelectedLectures(context);
 
+        if (lectureItems == null) return;
+
         for (LectureItem li :
                 lectureItems) {
             Date tmpStartDate = li.getStartDate();
