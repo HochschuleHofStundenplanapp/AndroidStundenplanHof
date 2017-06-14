@@ -53,6 +53,7 @@ public class CalendarInterfaceController {
                 tmpStartDate = startDateCalendar.getTime();
             } while (tmpStartDate.before(li.getEndDate()));
         }
+        calendarInterface.saveIDs();
     }
 
     public void updateAllEvents() {
@@ -62,6 +63,7 @@ public class CalendarInterfaceController {
     public void deleteAllEvents() {
         // TODO
         calendarInterface.deleteAllEvents();
+        calendarInterface.saveIDs();
     }
 
     public void removeCalendar() {

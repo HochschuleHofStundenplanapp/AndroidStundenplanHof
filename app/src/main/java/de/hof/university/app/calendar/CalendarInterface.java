@@ -18,7 +18,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import de.hof.university.app.model.schedule.LectureItem;
+import de.hof.university.app.Util.Define;
+import de.hof.university.app.data.DataManager;
 
 /**
  * Created by Daniel on 13.05.2017.
@@ -74,17 +75,19 @@ public class CalendarInterface {
      */
     private CalendarInterface(Context context, long calendarID) {
         this.context = context;
-        if (calendarID == -1) {
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+
+        // bereits vohandene IDs einlesen
+        readIDs();
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+            // Wenn -1 dann lokalen Calendar, sonst die übergebene ID nutzen
+            if (calendarID == -1) {
                 if (!getLocalCalendar()) {
                     createLocalCalendar();
                 }
-            }
-        } else {
-            // use existing calendar
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED
-                    && ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+            } else {
+                // use existing calendar
                 calID = calendarID;
             }
         }
@@ -102,9 +105,10 @@ public class CalendarInterface {
         String selection = "(("
                 + Calendars.NAME + " = ?) AND ("
                 + Calendars.ACCOUNT_NAME + " = ?) AND ("
+                + Calendars.OWNER_ACCOUNT + " = ?) AND ("
                 + Calendars.ACCOUNT_TYPE + " = ?)"
                 + ")";
-        String[] selectionArgs = new String[]{calendarName, "androidapps@hof-university.de", CalendarContract.ACCOUNT_TYPE_LOCAL};
+        String[] selectionArgs = new String[]{calendarName, "Hochschule Hof", "androidapps@hof-university.de", CalendarContract.ACCOUNT_TYPE_LOCAL};
         // Submit the query and get a Cursor object back.
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
             return false;
@@ -206,19 +210,20 @@ public class CalendarInterface {
         int rows = cr.update(updateUri, values, null, null);
     }
 
-    public void deleteEvent(long eventID) {
+    public void deleteEvent(String lectureID, long eventID) {
         // TODO
         ContentResolver cr = context.getContentResolver();
 
         Uri deleteUri = ContentUris.withAppendedId(Events.CONTENT_URI, eventID);
         int rows = cr.delete(deleteUri, null, null);
+        removeLectureEventID(lectureID, eventID);
     }
 
     public void deleteAllEvents(String lectureID) {
         ArrayList<Long> eventIDs = calendarEventIds.getLecturesEventIDs().get(lectureID);
         for (Long eventID:
              eventIDs) {
-            deleteEvent(eventID);
+            deleteEvent(lectureID, eventID);
         }
     }
 
@@ -264,6 +269,17 @@ public class CalendarInterface {
         if (eventIDs != null) {
             eventIDs.remove(eventID);
             calendarEventIds.getChangesEventIDs().put(lectureID, eventIDs);
+        }
+    }
+
+    public void saveIDs() {
+        DataManager.getInstance().saveObject(context, calendarEventIds, Define.calendarIDsFilename);
+    }
+
+    public void readIDs() {
+        Object tmpCalendarEventIds = DataManager.getInstance().readObject(context, Define.calendarIDsFilename);
+        if (tmpCalendarEventIds != null && tmpCalendarEventIds instanceof CalendarEventIds) {
+            calendarEventIds = (CalendarEventIds) tmpCalendarEventIds;
         }
     }
 }

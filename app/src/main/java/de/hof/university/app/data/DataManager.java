@@ -497,7 +497,7 @@ public class DataManager {
 
     // this is the general method to serialize an object
     //
-    private void saveObject(final Context context, Object object, final String filename) {
+    public void saveObject(final Context context, Object object, final String filename) {
         try {
             final File file = new File(context.getFilesDir(), filename);
             final FileOutputStream fos = new FileOutputStream(file);
@@ -518,7 +518,7 @@ public class DataManager {
     }
 
     // this is the general method to serialize an object
-    private static Object readObject(final Context context, String filename) {
+    public static Object readObject(final Context context, String filename) {
         Object result = null;
         try {
             final File file = new File(context.getFilesDir(), filename);
@@ -530,7 +530,7 @@ public class DataManager {
                 fis.close();
             }
         } catch (Exception e) {
-            Log.e(TAG, "Fehler beim Einlesen", e);
+            Log.e(TAG, "Fehler beim lesen des Objektes", e);
         }
         return result;
     }
