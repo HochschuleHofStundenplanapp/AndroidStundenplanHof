@@ -85,6 +85,7 @@ public class CalendarInterface {
             if (calendarID == -1) {
                 if (!getLocalCalendar()) {
                     createLocalCalendar();
+                    getLocalCalendar();
                 }
             } else {
                 // use existing calendar
