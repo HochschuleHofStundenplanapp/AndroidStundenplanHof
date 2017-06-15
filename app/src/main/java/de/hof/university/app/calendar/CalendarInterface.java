@@ -211,7 +211,7 @@ public class CalendarInterface {
         int rows = cr.update(updateUri, values, null, null);
     }
 
-    private void deleteEvent(String lectureID, long eventID) {
+    private void deleteEvent(long eventID) {
         // TODO
         ContentResolver cr = context.getContentResolver();
 
@@ -223,7 +223,7 @@ public class CalendarInterface {
         ArrayList<Long> eventIDs = calendarEventIds.getLecturesEventIDs().get(lectureID);
         for (Long eventID:
              eventIDs) {
-            deleteEvent(lectureID, eventID);
+            deleteEvent(eventID);
         }
         removeAllLectureEventIDs(lectureID);
     }

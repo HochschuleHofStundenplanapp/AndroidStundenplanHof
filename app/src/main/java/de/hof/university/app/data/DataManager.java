@@ -44,6 +44,7 @@ import de.hof.university.app.R;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.Util.Log;
 import de.hof.university.app.Util.MyString;
+import de.hof.university.app.calendar.CalendarInterfaceController;
 import de.hof.university.app.data.parser.Parser;
 import de.hof.university.app.data.parser.ParserFactory;
 import de.hof.university.app.data.parser.ParserFactory.EParser;
@@ -61,11 +62,12 @@ import de.hof.university.app.model.settings.StudyCourses;
  *
  */
 public class DataManager {
+    private static final DataManager dataManager = new DataManager();
 
     public static final String TAG = "DataManager";
 
     // single instance of the Factories
-    static final private DataConnector dataConnector = new DataConnector();
+    private static final DataConnector dataConnector = new DataConnector();
 
     private Schedule schedule;
     private MySchedule mySchedule;
@@ -73,14 +75,16 @@ public class DataManager {
     private Meals meals;
     private StudyCourses studyCourses;
 
-    private static final DataManager dataManager = new DataManager();
-
+    private Context context;
+    private SharedPreferences sharedPreferences;
 
     public static DataManager getInstance() {
         return DataManager.dataManager;
     }
 
     private DataManager() {
+        this.context = MainActivity.contextOfApplication;
+        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public final ArrayList<Meal> getMeals(Context context, boolean forceRefresh) {
@@ -342,21 +346,21 @@ public class DataManager {
         }
     }
 
-
-    public final void addToMySchedule(final Context context, final LectureItem s) {
-        this.getMySchedule(context).getIds().add(String.valueOf(s.getId()));
-        this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
-    }
-
     public final boolean myScheduleContains(final Context context, final LectureItem s) {
         return this.getMySchedule(context).getIds().contains(String.valueOf(s.getId()));
     }
 
-    public final void deleteFromMySchedule(final Context context, final LectureItem s) {
-        this.getMySchedule(context).getIds().remove(String.valueOf(s.getId()));
+    public final void addToMySchedule(final Context context, final LectureItem lectureItem) {
+        this.getMySchedule(context).getIds().add(String.valueOf(lectureItem.getId()));
+        this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
+        this.addLectureToCalendar(context, lectureItem);
+    }
+
+    public final void deleteFromMySchedule(final Context context, final LectureItem lectureItem) {
+        this.getMySchedule(context).getIds().remove(String.valueOf(lectureItem.getId()));
         LectureItem lectureToRemove = null;
         for (LectureItem li : this.getMySchedule(context).getLectures()) {
-            if (li.getId().equals(s.getId())) {
+            if (li.getId().equals(lectureItem.getId())) {
                 lectureToRemove = li;
             }
         }
@@ -364,17 +368,20 @@ public class DataManager {
             this.getMySchedule(context).getLectures().remove(lectureToRemove);
         }
         this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
+        this.deleteLectureFromCalendar(context, lectureItem.getId());
     }
 
     public final void addAllToMySchedule(final Context context, final Set<String> schedulesIds) {
         this.getMySchedule(context).getIds().addAll(schedulesIds);
         this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
+        this.addAllToCalendar(context, this.getSchedule(context).getLectures());
     }
 
     public final void deleteAllFromMySchedule(final Context context) {
         this.getMySchedule(context).getIds().clear();
         this.getMySchedule(context).getLectures().clear();
         this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
+        this.updateCalendar(context);
     }
 
     // Getters
@@ -483,7 +490,7 @@ public class DataManager {
     }
 
     public Locale getLocale() {
-        if (MainActivity.contextOfApplication.getString(R.string.language).equals("de")) {
+        if (context.getString(R.string.language).equals("de")) {
             return Locale.GERMANY;
         } else if (MainActivity.contextOfApplication.getString(R.string.language).equals("en")) {
             return Locale.ENGLISH;
@@ -514,6 +521,8 @@ public class DataManager {
             resetChangesLastSave(context);
             // Stundenplan registrieren
             registerFCMServer(context);
+            // Calendar aktualisieren
+            updateCalendar(context);
         }
     }
 
@@ -574,6 +583,47 @@ public class DataManager {
 
         new RegisterLectures().registerLectures(ids);
     }
+
+    // Calendar
+    // ---------------------------------------------------------------------------------------------
+
+    private void addLectureToCalendar(Context context, LectureItem lectureItem) {
+        final boolean calendarSynchronization = sharedPreferences.getBoolean("calendar_synchronization", false);
+
+        if (calendarSynchronization) {
+            CalendarInterfaceController.getInstance(context).createAllEvents(lectureItem);
+        }
+    }
+
+    private void addAllToCalendar(Context context, ArrayList<LectureItem> lecturesItems) {
+        final boolean calendarSynchronization = sharedPreferences.getBoolean("calendar_synchronization", false);
+
+        if (calendarSynchronization) {
+            for (LectureItem lectureItem :
+                    lecturesItems) {
+                CalendarInterfaceController.getInstance(context).createAllEvents(lectureItem);
+            }
+        }
+    }
+
+    private void deleteLectureFromCalendar(Context context, String lectureID) {
+        final boolean calendarSynchronization = sharedPreferences.getBoolean("calendar_synchronization", false);
+
+        if (calendarSynchronization) {
+            CalendarInterfaceController.getInstance(context).deleteAllEvents(lectureID);
+        }
+    }
+
+    private void updateCalendar(Context context) {
+        final boolean calendarSynchronization = sharedPreferences.getBoolean("calendar_synchronization", false);
+
+        if (calendarSynchronization) {
+            CalendarInterfaceController.getInstance(context).updateCalendar();
+        }
+    }
+
+    // getSelectedIDs
+    // ---------------------------------------------------------------------------------------------
 
     private Set<String> getSelectedLecturesIDs(Context context) {
         Set<String> ids = new HashSet<>();

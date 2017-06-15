@@ -143,9 +143,7 @@ public class SettingsFragment extends PreferenceFragment {
 							|| ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
 						requestCalendarPermission();
 					} else {
-						CalendarInterfaceController calendarInterfaceController = new CalendarInterfaceController(getActivity().getApplicationContext());
-
-						calendarInterfaceController.createAllEvents();
+						CalendarInterfaceController.getInstance(getActivity().getApplicationContext()).createAllEvents();
 
 						new AlertDialog.Builder(getView().getContext())
 								.setTitle("Kalender Sync an")
@@ -160,8 +158,8 @@ public class SettingsFragment extends PreferenceFragment {
 								.show();
 					}
 				} else {
-                    new CalendarInterfaceController(getActivity().getApplicationContext()).deleteAllEvents();
-					new CalendarInterfaceController(getActivity().getApplicationContext()).removeCalendar();
+					CalendarInterfaceController.getInstance(getActivity().getApplicationContext()).deleteAllEvents();
+					CalendarInterfaceController.getInstance(getActivity().getApplicationContext()).removeCalendar();
 				}
 				return true;
 			}
@@ -514,9 +512,7 @@ public class SettingsFragment extends PreferenceFragment {
 			case REQUEST_CODE_ASK_CALENDAR_PERMISSIONS:
 				if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 					// Permission granted
-					CalendarInterfaceController calendarInterfaceController = new CalendarInterfaceController(getActivity().getApplicationContext());
-
-					calendarInterfaceController.createAllEvents();
+					CalendarInterfaceController.getInstance(getActivity().getApplicationContext()).createAllEvents();
 				} else {
 					// Permission Denied
 					Toast.makeText(getActivity(), "Berechtigung für den Kalender verweigert", Toast.LENGTH_SHORT)
