@@ -37,13 +37,26 @@ public class CalendarInterfaceController {
     }
 
     public void createAllEvents() {
+        ArrayList<LectureItem> lectureItems = DataManager.getInstance().getSelectedLectures(context);
+
+        if (lectureItems == null) return;
+
         CreateAllEventsTask task = new CreateAllEventsTask();
-        task.execute();
+        task.execute(lectureItems);
     }
 
-    public void createAllEvents(LectureItem lecture) {
+    public void createAllEvents(final ArrayList<LectureItem> lectureItems) {
+        if (lectureItems == null) return;
+
         CreateAllEventsTask task = new CreateAllEventsTask();
-        task.execute(lecture);
+        task.execute(lectureItems);
+    }
+
+    public void createAllEvents(final LectureItem lecture) {
+        CreateAllEventsTask task = new CreateAllEventsTask();
+        ArrayList<LectureItem> list = new ArrayList<>();
+        list.add(lecture);
+        task.execute(list);
     }
 
     private void createEventsForLecture(LectureItem lectureItem) {
@@ -95,9 +108,11 @@ public class CalendarInterfaceController {
     }
 
     public void updateCalendar() {
+        // TODO Update Methode nutzen
         new Thread() {
             @Override
             public void run() {
+                super.run();
                 if (deleteAllEvents()) {
                     createAllEvents();
                 }
@@ -110,19 +125,11 @@ public class CalendarInterfaceController {
         calendarInterface.saveIDs();
     }
 
-    private class CreateAllEventsTask extends AsyncTask<LectureItem, Void, Boolean> {
-        protected Boolean doInBackground(LectureItem... p_lectureItems) {
-            if (p_lectureItems == null || p_lectureItems.length == 0) {
-                ArrayList<LectureItem> lectureItems = DataManager.getInstance().getSelectedLectures(context);
-
-                if (lectureItems == null) return false;
-
-                for (LectureItem lectureItem :
-                        lectureItems) {
-                    createEventsForLecture(lectureItem);
-                }
-            } else {
-                createEventsForLecture(p_lectureItems[0]);
+    private class CreateAllEventsTask extends AsyncTask<ArrayList<LectureItem>, Void, Boolean> {
+        protected Boolean doInBackground(ArrayList<LectureItem>... lectureItems) {
+            for (LectureItem lectureItem :
+                    lectureItems[0]) {
+                createEventsForLecture(lectureItem);
             }
             return true;
         }

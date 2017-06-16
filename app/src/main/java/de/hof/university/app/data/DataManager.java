@@ -519,7 +519,7 @@ public class DataManager {
             os.writeObject(object);
             os.close();
             fos.close();
-        } catch (IOException e) {
+        } catch (Exception e) { //TODO Eigentlich nur IOException, aber kann im Moment auch ConcurrentModificationException kommen
             Log.e(TAG, "Fehler beim Speichern des Objektes", e);
         }
 
@@ -606,10 +606,7 @@ public class DataManager {
         if (calendarSynchronization) {
             // falls es nicht die ersten Vorlesungen sind die hinzugefügt werden, denn dann stehen sie schon drin.
             if (getMySchedule(context).getLectures().size() != 0) {
-                for (LectureItem lectureItem :
-                        lecturesItems) {
-                    CalendarInterfaceController.getInstance(context).createAllEvents(lectureItem);
-                }
+                CalendarInterfaceController.getInstance(context).createAllEvents(lecturesItems);
             }
         }
     }
