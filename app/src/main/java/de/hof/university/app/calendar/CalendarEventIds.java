@@ -3,7 +3,6 @@ package de.hof.university.app.calendar;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.model.HofObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,7 +10,7 @@ import java.util.HashMap;
  * Created by Daniel on 13.05.2017.
  */
 
-public class CalendarEventIds extends HofObject implements Serializable {
+public class CalendarEventIds extends HofObject {
     private static final long serialVersionUID = Define.serialVersionUIDv1;
 
     private HashMap<String, ArrayList<Long>> lecturesEventIDs;

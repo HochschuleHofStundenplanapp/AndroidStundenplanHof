@@ -14,7 +14,6 @@ import android.provider.CalendarContract.Events;
 import android.support.v4.app.ActivityCompat;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 

@@ -604,9 +604,12 @@ public class DataManager {
         final boolean calendarSynchronization = sharedPreferences.getBoolean("calendar_synchronization", false);
 
         if (calendarSynchronization) {
-            for (LectureItem lectureItem :
-                    lecturesItems) {
-                CalendarInterfaceController.getInstance(context).createAllEvents(lectureItem);
+            // falls es nicht die ersten Vorlesungen sind die hinzugefügt werden, denn dann stehen sie schon drin.
+            if (getMySchedule(context).getLectures().size() != 0) {
+                for (LectureItem lectureItem :
+                        lecturesItems) {
+                    CalendarInterfaceController.getInstance(context).createAllEvents(lectureItem);
+                }
             }
         }
     }
