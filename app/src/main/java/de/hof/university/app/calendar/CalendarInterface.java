@@ -135,10 +135,9 @@ public class CalendarInterface {
 
         Uri uri = Uri.parse(CalendarContract.Calendars.CONTENT_URI.toString());
         Uri calendarUri = uri.buildUpon()
-                .appendQueryParameter(android.provider.CalendarContract.CALLER_IS_SYNCADAPTER,"true")
+                .appendQueryParameter(android.provider.CalendarContract.CALLER_IS_SYNCADAPTER, "true")
                 .appendQueryParameter(Calendars.ACCOUNT_NAME, calendarName)
                 .appendQueryParameter(Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL).build();
-
 
         ContentValues values = new ContentValues();
         values.put(Calendars.NAME, calendarName);
@@ -154,7 +153,7 @@ public class CalendarInterface {
         //values.put(Calendars.SYNC_EVENTS, 1);
         //values.put(Calendars.CAN_PARTIALLY_UPDATE, 1);
 
-        Uri newCalendar = context.getContentResolver().insert(calendarUri,values);
+        Uri newCalendar = context.getContentResolver().insert(calendarUri, values);
 
         return newCalendar;
     }
@@ -164,8 +163,6 @@ public class CalendarInterface {
     }
 
     public void createEvent(String lectureID, String title, String description, Date startTime, Date endTime, String location) {
-        // TODO
-        ContentResolver cr = context.getContentResolver();
         ContentValues values = new ContentValues();
         values.put(Events.DTSTART, startTime.getTime());
         values.put(Events.DTEND, endTime.getTime());
@@ -176,46 +173,43 @@ public class CalendarInterface {
         TimeZone tz = TimeZone.getDefault();
         values.put(Events.EVENT_TIMEZONE, tz.getID());
 
+        Long eventID = insertEvent(values);
+        // Wenn null dann keine Berechtigung und returnen
+        if (eventID == null) return;
+        // zu den IDs hinzufügen
+        addLecturesEventID(lectureID, eventID);
+    }
+
+    private Long insertEvent(ContentValues values) {
+        ContentResolver cr = context.getContentResolver();
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-            return;
+            return null;
         }
         Uri uri = cr.insert(Events.CONTENT_URI, values);
 
         // get the event ID that is the last element in the Uri
-        long eventID = Long.parseLong(uri.getLastPathSegment());
-
-        addLecturesEventID(lectureID, eventID);
+        return Long.parseLong(uri.getLastPathSegment());
     }
 
-    public void updateEvent(long eventID, String title, String description, String startTime, String endTime, String location) {
+    public void updateEvent(long eventID, String title, String description, Date startTime, Date endTime, String location) {
         // TODO
-        long startMillis = 0;
-        long endMillis = 0;
-        Calendar beginTime = Calendar.getInstance();
-        beginTime.set(2017, 4, 15, 14, 00);
-        startMillis = beginTime.getTimeInMillis();
-        Calendar tmpEndTime = Calendar.getInstance();
-        tmpEndTime.set(2017, 4, 15, 15, 30);
-        endMillis = tmpEndTime.getTimeInMillis();
-
-        ContentResolver cr = context.getContentResolver();
-
         ContentValues values = new ContentValues();
         values.put(Events.TITLE, title);
         values.put(Events.DESCRIPTION, description);
-        values.put(Events.DTSTART, startMillis);
-        values.put(Events.DTEND, endMillis);
+        values.put(Events.DTSTART, startTime.getTime());
+        values.put(Events.DTEND, endTime.getTime());
         values.put(Events.EVENT_LOCATION, location);
 
         Uri updateUri = ContentUris.withAppendedId(Events.CONTENT_URI, eventID);
+
+        ContentResolver cr = context.getContentResolver();
         int rows = cr.update(updateUri, values, null, null);
     }
 
     private void deleteEvent(long eventID) {
-        // TODO
-        ContentResolver cr = context.getContentResolver();
-
         Uri deleteUri = ContentUris.withAppendedId(Events.CONTENT_URI, eventID);
+
+        ContentResolver cr = context.getContentResolver();
         int rows = cr.delete(deleteUri, null, null);
     }
 
