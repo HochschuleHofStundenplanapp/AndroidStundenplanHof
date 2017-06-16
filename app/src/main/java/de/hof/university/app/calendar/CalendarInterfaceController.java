@@ -1,11 +1,14 @@
 package de.hof.university.app.calendar;
 
 import android.content.Context;
+import android.os.AsyncTask;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.concurrent.ExecutionException;
 
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.model.schedule.LectureItem;
@@ -34,21 +37,13 @@ public class CalendarInterfaceController {
     }
 
     public void createAllEvents() {
-        // TODO
-        ArrayList<LectureItem> lectureItems = DataManager.getInstance().getSelectedLectures(context);
-
-        if (lectureItems == null) return;
-
-        for (LectureItem lectureItem :
-                lectureItems) {
-            createEventsForLecture(lectureItem);
-        }
-        calendarInterface.saveIDs();
+        CreateAllEventsTask task = new CreateAllEventsTask();
+        task.execute();
     }
 
     public void createAllEvents(LectureItem lecture) {
-        createEventsForLecture(lecture);
-        calendarInterface.saveIDs();
+        CreateAllEventsTask task = new CreateAllEventsTask();
+        task.execute(lecture);
     }
 
     private void createEventsForLecture(LectureItem lectureItem) {
@@ -80,24 +75,83 @@ public class CalendarInterfaceController {
         // TODO
     }
 
-    public void deleteAllEvents() {
-        // TODO
-        calendarInterface.deleteAllEvents();
-        calendarInterface.saveIDs();
+    public Boolean deleteAllEvents() {
+        DeleteAllEventsTask task = new DeleteAllEventsTask();
+        task.execute();
+        try {
+            return task.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return false;
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public void deleteAllEvents(String lectureID) {
-        calendarInterface.deleteAllEvents(lectureID);
-        calendarInterface.saveIDs();
+        DeleteAllEventsTask task = new DeleteAllEventsTask();
+        task.execute(lectureID);
     }
 
     public void updateCalendar() {
-        deleteAllEvents();
-        createAllEvents();
+        new Thread() {
+            @Override
+            public void run() {
+                if (deleteAllEvents()) {
+                    createAllEvents();
+                }
+            }
+        }.start();
     }
 
     public void removeCalendar() {
         calendarInterface.removeCalendar();
         calendarInterface.saveIDs();
+    }
+
+    private class CreateAllEventsTask extends AsyncTask<LectureItem, Void, Boolean> {
+        protected Boolean doInBackground(LectureItem... p_lectureItems) {
+            if (p_lectureItems == null || p_lectureItems.length == 0) {
+                ArrayList<LectureItem> lectureItems = DataManager.getInstance().getSelectedLectures(context);
+
+                if (lectureItems == null) return false;
+
+                for (LectureItem lectureItem :
+                        lectureItems) {
+                    createEventsForLecture(lectureItem);
+                }
+            } else {
+                createEventsForLecture(p_lectureItems[0]);
+            }
+            return true;
+        }
+
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+            Toast.makeText(context, "CreateAllEventsTask fertig. Result: " + result, Toast.LENGTH_SHORT).show();
+            if (result) {
+                calendarInterface.saveIDs();
+            }
+        }
+    }
+
+    private class DeleteAllEventsTask extends AsyncTask<String, Void, Boolean> {
+        protected Boolean doInBackground(String... p_lectureItems) {
+            if (p_lectureItems == null || p_lectureItems.length == 0) {
+                calendarInterface.deleteAllEvents();
+            } else {
+                calendarInterface.deleteAllEvents(p_lectureItems[0]);
+            }
+            return true;
+        }
+
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+            Toast.makeText(context, "DeleteAllEventsTask fertig. Result: " + result, Toast.LENGTH_SHORT).show();
+            if (result) {
+                calendarInterface.saveIDs();
+            }
+        }
     }
 }

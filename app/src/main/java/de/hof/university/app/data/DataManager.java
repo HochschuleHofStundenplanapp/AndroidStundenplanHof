@@ -173,6 +173,11 @@ public class DataManager {
             this.getSchedule(context).setLastSaved(new Date());
 
             saveObject(context, this.getSchedule(context), Define.scheduleFilename);
+            // Wenn kein "Mein Stundenplan" vorhanden ist
+            if (getMyScheduleSize(context) == 0) {
+                // Calendar aktualisieren
+                this.updateCalendar(context);
+            }
         }
 
         return this.getSchedule(context).getLectures();
@@ -229,6 +234,8 @@ public class DataManager {
             this.getMySchedule(context).setLastSaved(new Date());
 
             this.saveObject(context, getMySchedule(context), Define.myScheduleFilename);
+            // Calendar aktualisieren
+            this.updateCalendar(context);
         }
 
         return this.getMySchedule(context).getLectures();
@@ -521,8 +528,6 @@ public class DataManager {
             resetChangesLastSave(context);
             // Stundenplan registrieren
             registerFCMServer(context);
-            // Calendar aktualisieren
-            updateCalendar(context);
         }
     }
 
