@@ -67,9 +67,13 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
         return "LectureItem{" +
                 "id='" + id + '\'' +
                 ", weekday='" + weekday + '\'' +
+                ", label='" + label + '\'' +
+                ", type='" + type + '\'' +
+                ", style='" + style + '\'' +
+                ", sp='" + sp + '\'' +
                 ", group='" + group + '\'' +
-                ", startDate='" + startDate + '\'' +
-                ", endDate='" + endDate + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
                 ", room='" + room + '\'' +
                 ", lecturer='" + lecturer + '\'' +
                 ", comment='" + comment + '\'' +
@@ -172,5 +176,12 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
 //            if ( BuildConfig.DEBUG) assert (false);
 //
 //        return -1;
+    }
+
+    public boolean equals(LectureItem other) {
+        if (!this.toString().equals(other.toString())) {
+            return false;
+        }
+        return true;
     }
 }

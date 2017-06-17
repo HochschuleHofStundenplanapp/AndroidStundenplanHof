@@ -23,7 +23,6 @@ import android.preference.PreferenceManager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
@@ -158,25 +157,28 @@ public class DataManager {
             final String[] params = {jsonString, language};
             assert parser != null;
 
-            ArrayList<LectureItem> lectures = (ArrayList<LectureItem>) parser.parse(params);
+            ArrayList<LectureItem> tmpScheduleLectureItems = (ArrayList<LectureItem>) parser.parse(params);
 
             // Wenn der Server einen unvollständigen Stundenplan (nur halb so groß oder kleiner) liefert bringe die Fehlermedlung "Aktualisierung fehlgeschlagen"
-            if (course.equals(schedule.getCourse()) && semester.equals(schedule.getSemester()) && termTime.equals(schedule.getTermtime()) && lectures.size() < (schedule.getLectures().size() / 2)) {
+            if (course.equals(schedule.getCourse()) && semester.equals(schedule.getSemester()) && termTime.equals(schedule.getTermtime()) && tmpScheduleLectureItems.size() < (schedule.getLectures().size() / 2)) {
                 return null;
             }
 
-            this.getSchedule(context).setLectures(lectures);
+            // Falls die neuen LectureItems nicht gleich der bereits vorhandenen sind
+            if (!isTwoArrayListsWithSameValues(this.getSchedule(context).getLectures(), tmpScheduleLectureItems)) {
+                this.getSchedule(context).setLectures(tmpScheduleLectureItems);
 
-            this.getSchedule(context).setCourse(course);
-            this.getSchedule(context).setSemester(semester);
-            this.getSchedule(context).setTermtime(termTime);
-            this.getSchedule(context).setLastSaved(new Date());
+                this.getSchedule(context).setCourse(course);
+                this.getSchedule(context).setSemester(semester);
+                this.getSchedule(context).setTermtime(termTime);
+                this.getSchedule(context).setLastSaved(new Date());
 
-            saveObject(context, this.getSchedule(context), Define.scheduleFilename);
-            // Wenn kein "Mein Stundenplan" vorhanden ist
-            if (getMyScheduleSize(context) == 0) {
-                // Calendar aktualisieren
-                this.updateCalendar(context);
+                saveObject(context, this.getSchedule(context), Define.scheduleFilename);
+                // Wenn kein "Mein Stundenplan" vorhanden ist
+                if (getMyScheduleSize(context) == 0) {
+                    // Calendar aktualisieren
+                    this.updateCalendar(context);
+                }
             }
         }
 
@@ -223,19 +225,22 @@ public class DataManager {
 
             final String[] params = {jsonString, language};
 
-            ArrayList<LectureItem> tmpMySchedule = (ArrayList<LectureItem>) parser.parse(params);
+            ArrayList<LectureItem> tmpMyScheduleLectureItems = (ArrayList<LectureItem>) parser.parse(params);
 
             // Wenn der Server einen unvollständigen Stundenplan (nur halb so groß oder kleiner) liefert bringe die Fehlermedlung "Aktualisierung fehlgeschlagen"
-            if (tmpMySchedule.size() < (getMyScheduleSize(context) / 2)) {
+            if (tmpMyScheduleLectureItems.size() < (getMyScheduleSize(context) / 2)) {
                 return null;
             }
 
-            this.getMySchedule(context).setLectures(tmpMySchedule);
-            this.getMySchedule(context).setLastSaved(new Date());
+            // Falls die neuen LectureItems nicht gleich der bereits vorhandenen sind
+            if (!isTwoArrayListsWithSameValues(this.getMySchedule(context).getLectures(), tmpMyScheduleLectureItems)) {
+                this.getMySchedule(context).setLectures(tmpMyScheduleLectureItems);
+                this.getMySchedule(context).setLastSaved(new Date());
 
-            this.saveObject(context, getMySchedule(context), Define.myScheduleFilename);
-            // Calendar aktualisieren
-            this.updateCalendar(context);
+                this.saveObject(context, getMySchedule(context), Define.myScheduleFilename);
+                // Calendar aktualisieren
+                this.updateCalendar(context);
+            }
         }
 
         return this.getMySchedule(context).getLectures();
@@ -596,6 +601,9 @@ public class DataManager {
         final boolean calendarSynchronization = sharedPreferences.getBoolean("calendar_synchronization", false);
 
         if (calendarSynchronization) {
+            if (getMySchedule(context).getIds().size() == 1) {
+                CalendarInterfaceController.getInstance(context).deleteAllEvents();
+            }
             CalendarInterfaceController.getInstance(context).createAllEvents(lectureItem);
         }
     }
@@ -651,5 +659,26 @@ public class DataManager {
             return schedule.getLectures();
         }
         return null;
+    }
+
+
+    public boolean isTwoArrayListsWithSameValues(ArrayList<LectureItem> list1, ArrayList<LectureItem> list2)
+    {
+        //null checking
+        if(list1 == null && list2 == null)
+            return true;
+        if((list1 == null && list2 != null) || (list1 != null && list2 == null))
+            return false;
+
+        if(list1.size() != list2.size())
+            return false;
+
+        for (int i = 0; i < list1.size(); i++) {
+            if (!list1.get(i).equals(list2.get(i))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
