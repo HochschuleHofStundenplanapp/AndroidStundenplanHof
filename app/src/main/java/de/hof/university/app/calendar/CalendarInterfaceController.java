@@ -85,7 +85,7 @@ public class CalendarInterfaceController {
         } while (tmpStartDate.before(lectureItem.getEndDate()));
     }
 
-    public void updateAllEvents() {
+    public void updateChanges() {
         // TODO
         ArrayList<Object> changes = DataManager.getInstance().getChanges(context).getChanges();
         for (Object changeObject :
@@ -93,6 +93,9 @@ public class CalendarInterfaceController {
             if (changeObject instanceof LectureChange) {
                 LectureChange change = (LectureChange) changeObject;
 
+                //TODO
+                //calendarInterface.doEventExits();
+                //calendarInterface.updateEvent();
             }
         }
     }

@@ -176,8 +176,8 @@ public class DataManager {
                 saveObject(context, this.getSchedule(context), Define.scheduleFilename);
                 // Wenn kein "Mein Stundenplan" vorhanden ist
                 if (getMyScheduleSize(context) == 0) {
-                    // Calendar aktualisieren
-                    this.updateCalendar(context);
+                    // Kalender aktualisieren
+                    this.updateCalendar();
                 }
             }
         }
@@ -238,8 +238,8 @@ public class DataManager {
                 this.getMySchedule(context).setLastSaved(new Date());
 
                 this.saveObject(context, getMySchedule(context), Define.myScheduleFilename);
-                // Calendar aktualisieren
-                this.updateCalendar(context);
+                // Kalender aktualisieren
+                this.updateCalendar();
             }
         }
 
@@ -298,6 +298,8 @@ public class DataManager {
 
             this.getChanges(context).setLastSaved(new Date());
             saveObject(context, this.getChanges(context), Define.changesFilename);
+            // Kalender aktualisieren
+            this.updateChangesInCalendar();
         }
 
         return this.getChanges(context).getChanges();
@@ -393,7 +395,7 @@ public class DataManager {
         this.getMySchedule(context).getIds().clear();
         this.getMySchedule(context).getLectures().clear();
         this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
-        this.updateCalendar(context);
+        this.updateCalendar();
     }
 
     // Getters
@@ -627,11 +629,19 @@ public class DataManager {
         }
     }
 
-    private void updateCalendar(Context context) {
+    private void updateCalendar() {
         final boolean calendarSynchronization = sharedPreferences.getBoolean("calendar_synchronization", false);
 
         if (calendarSynchronization) {
             CalendarInterfaceController.getInstance(context).updateCalendar();
+        }
+    }
+
+    private void updateChangesInCalendar() {
+        final boolean calendarSynchronization = sharedPreferences.getBoolean("calendar_synchronization", false);
+
+        if (calendarSynchronization) {
+            CalendarInterfaceController.getInstance(context).updateChanges();
         }
     }
 
