@@ -13,11 +13,15 @@ import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
 import android.support.v4.app.ActivityCompat;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
 import de.hof.university.app.Util.Define;
+import de.hof.university.app.Util.Log;
 import de.hof.university.app.data.DataManager;
 
 /**
@@ -25,6 +29,7 @@ import de.hof.university.app.data.DataManager;
  */
 
 public class CalendarInterface {
+    public static final String TAG = "CalendarInterface";
 
     private static CalendarInterface calendarInterface = null;
 
@@ -39,12 +44,22 @@ public class CalendarInterface {
             Calendars.NAME                          // 5
     };
 
+    public static final String[] INSTANCE_PROJECTION = new String[]{
+            CalendarContract.Instances.EVENT_ID,      // 0
+            CalendarContract.Instances.BEGIN,         // 1
+            CalendarContract.Instances.TITLE          // 2
+    };
+
     // The indices for the projection array above.
     private static final int PROJECTION_ID_INDEX = 0;
     private static final int PROJECTION_ACCOUNT_NAME_INDEX = 1;
     private static final int PROJECTION_DISPLAY_NAME_INDEX = 2;
     private static final int PROJECTION_OWNER_ACCOUNT_INDEX = 3;
     private static final int PROJECTION_ACCOUNT_TYPE_INDEX = 4;
+
+    // The indices for the projection array above.
+    private static final int PROJECTION_BEGIN_INDEX = 1;
+    private static final int PROJECTION_TITLE_INDEX = 2;
 
     private Context context;
     private long calID = 2;
@@ -61,6 +76,7 @@ public class CalendarInterface {
 
     /**
      * Constructor for the default local calendar
+     *
      * @param context
      */
     private CalendarInterface(Context context) {
@@ -69,6 +85,7 @@ public class CalendarInterface {
 
     /**
      * Constructor for a existing calendar
+     *
      * @param context
      * @param calendarID of a existing calendar in witch the user want to write the Schedule
      */
@@ -95,6 +112,7 @@ public class CalendarInterface {
 
     /**
      * Set the calID and return if the calendar was found
+     *
      * @return return if the calendar was found
      */
     private boolean getLocalCalendar() {
@@ -205,6 +223,53 @@ public class CalendarInterface {
         int rows = cr.update(updateUri, values, null, null);
     }
 
+    public Boolean doEventExits(Long eventID, String title, Date startDate, Date endDate) {
+        Cursor cur = null;
+        ContentResolver cr = context.getContentResolver();
+
+        // The ID of the recurring event whose instances you are searching
+        // for in the Instances table
+        String selection = CalendarContract.Instances.EVENT_ID + " = ?";
+        String[] selectionArgs = new String[]{eventID.toString()};
+
+        // Construct the query with the desired date range.
+        Uri.Builder builder = CalendarContract.Instances.CONTENT_URI.buildUpon();
+        ContentUris.appendId(builder, startDate.getTime());
+        ContentUris.appendId(builder, endDate.getTime());
+
+        // Submit the query
+        cur = cr.query(builder.build(),
+                INSTANCE_PROJECTION,
+                selection,
+                selectionArgs,
+                null);
+
+        while (cur.moveToNext()) {
+            String eventTitle = null;
+            long eventEventID = 0;
+            long beginVal = 0;
+
+            // Get the field values
+            eventEventID = cur.getLong(PROJECTION_ID_INDEX);
+            beginVal = cur.getLong(PROJECTION_BEGIN_INDEX);
+            eventTitle = cur.getString(PROJECTION_TITLE_INDEX);
+
+            // Do something with the values.
+            Log.d(TAG, "Event:  " + eventTitle);
+            Log.d(TAG, "EventID: " + eventEventID);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(beginVal);
+            DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+            Log.i(TAG, "Date: " + formatter.format(calendar.getTime()));
+
+            if (eventTitle.equals(title)) {
+                return true;
+            }
+        }
+        cur.close();
+        return false;
+    }
+
     private void deleteEvent(long eventID) {
         Uri deleteUri = ContentUris.withAppendedId(Events.CONTENT_URI, eventID);
 
@@ -214,8 +279,8 @@ public class CalendarInterface {
 
     public void deleteAllEvents(String lectureID) {
         ArrayList<Long> eventIDs = calendarEventIds.getLecturesEventIDs().get(lectureID);
-        for (Long eventID:
-             eventIDs) {
+        for (Long eventID :
+                eventIDs) {
             deleteEvent(eventID);
         }
         removeAllLectureEventIDs(lectureID);

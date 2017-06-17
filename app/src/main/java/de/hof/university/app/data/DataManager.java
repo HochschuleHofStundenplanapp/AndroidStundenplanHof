@@ -61,9 +61,9 @@ import de.hof.university.app.model.settings.StudyCourses;
  *
  */
 public class DataManager {
-    private static final DataManager dataManager = new DataManager();
-
     public static final String TAG = "DataManager";
+
+    private static final DataManager dataManager = new DataManager();
 
     // single instance of the Factories
     private static final DataConnector dataConnector = new DataConnector();
@@ -442,7 +442,7 @@ public class DataManager {
         return getMySchedule(MainActivity.contextOfApplication).getLastSaved();
     }
 
-    private Changes getChanges(final Context context) {
+    public Changes getChanges(final Context context) {
         if (this.changes == null) {
             Object obtChangesObj = readObject(context, Define.changesFilename);
             if (obtChangesObj != null && obtChangesObj instanceof Changes) {

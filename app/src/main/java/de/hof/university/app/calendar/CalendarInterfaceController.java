@@ -11,6 +11,7 @@ import java.util.GregorianCalendar;
 import java.util.concurrent.ExecutionException;
 
 import de.hof.university.app.data.DataManager;
+import de.hof.university.app.model.schedule.LectureChange;
 import de.hof.university.app.model.schedule.LectureItem;
 
 /**
@@ -86,6 +87,14 @@ public class CalendarInterfaceController {
 
     public void updateAllEvents() {
         // TODO
+        ArrayList<Object> changes = DataManager.getInstance().getChanges(context).getChanges();
+        for (Object changeObject :
+                changes) {
+            if (changeObject instanceof LectureChange) {
+                LectureChange change = (LectureChange) changeObject;
+
+            }
+        }
     }
 
     public Boolean deleteAllEvents() {
