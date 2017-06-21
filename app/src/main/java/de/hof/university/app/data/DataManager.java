@@ -166,20 +166,24 @@ public class DataManager {
 
             // Falls die neuen LectureItems nicht gleich der bereits vorhandenen sind
             if (!isTwoArrayListsWithSameValues(this.getSchedule(context).getLectures(), tmpScheduleLectureItems)) {
+                // Neue Vorlesungen setzen
                 this.getSchedule(context).setLectures(tmpScheduleLectureItems);
 
                 this.getSchedule(context).setCourse(course);
                 this.getSchedule(context).setSemester(semester);
                 this.getSchedule(context).setTermtime(termTime);
-                this.getSchedule(context).setLastSaved(new Date());
 
-                saveObject(context, this.getSchedule(context), Define.scheduleFilename);
                 // Wenn kein "Mein Stundenplan" vorhanden ist
                 if (getMyScheduleSize(context) == 0) {
                     // Kalender aktualisieren
                     this.updateCalendar();
                 }
             }
+            // Zuletzt aktualisert setzen
+            this.getSchedule(context).setLastSaved(new Date());
+
+            // Speichern
+            saveObject(context, this.getSchedule(context), Define.scheduleFilename);
         }
 
         return this.getSchedule(context).getLectures();
@@ -234,13 +238,17 @@ public class DataManager {
 
             // Falls die neuen LectureItems nicht gleich der bereits vorhandenen sind
             if (!isTwoArrayListsWithSameValues(this.getMySchedule(context).getLectures(), tmpMyScheduleLectureItems)) {
+                // Neue Vorlesungen setzen
                 this.getMySchedule(context).setLectures(tmpMyScheduleLectureItems);
-                this.getMySchedule(context).setLastSaved(new Date());
 
-                this.saveObject(context, getMySchedule(context), Define.myScheduleFilename);
                 // Kalender aktualisieren
                 this.updateCalendar();
             }
+            // Zuletzt aktualisiert setzen
+            this.getMySchedule(context).setLastSaved(new Date());
+
+            // Speichern
+            this.saveObject(context, getMySchedule(context), Define.myScheduleFilename);
         }
 
         return this.getMySchedule(context).getLectures();
@@ -294,9 +302,12 @@ public class DataManager {
 
             ArrayList<Object> tmpChanges = (ArrayList<Object>) parser.parse(params);
 
+            // Neue Änderungen setzen
             this.getChanges(context).setChanges(tmpChanges);
 
+            // Zuletzt aktualisiert setzen
             this.getChanges(context).setLastSaved(new Date());
+            // Speichern
             saveObject(context, this.getChanges(context), Define.changesFilename);
             // Kalender aktualisieren
             this.updateChangesInCalendar();
