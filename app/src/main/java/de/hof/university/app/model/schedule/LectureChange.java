@@ -30,6 +30,7 @@ import de.hof.university.app.data.DataManager;
 public class LectureChange implements Serializable {
     private static final long serialVersionUID = Define.serialVersionUIDv2;
 
+    private final String id;
     private final String label;
     private final String comment;
     private final String group;
@@ -40,8 +41,9 @@ public class LectureChange implements Serializable {
     private final String room_new;
     private final String lecturer;
 
-    public LectureChange(final String label, final String comment, final String group, final String reason,
+    public LectureChange(final String id, final String label, final String comment, final String group, final String reason,
                          final Date begin_old, final Date begin_new, final String room_old, final String room_new, final String lecturer) {
+        this.id = id;
         this.label = label;
         this.comment = comment;
         this.group = group;
@@ -52,7 +54,6 @@ public class LectureChange implements Serializable {
         this.room_new = room_new;
         this.lecturer = lecturer;
     }
-
 
     @Override
     public String toString() {
@@ -120,5 +121,25 @@ public class LectureChange implements Serializable {
         */
 
         return result;
+    }
+
+    public final String getId() {
+        return this.id;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public Date getBegin_old() {
+        return begin_old;
+    }
+
+    public Date getBegin_new() {
+        return begin_new;
+    }
+
+    public String getRoom_new() {
+        return room_new;
     }
 }

@@ -81,6 +81,8 @@ public final class ChangesParser implements Parser<LectureChange> {
 
         // Die Antwort vom Server enthält die folgenden Objekte und werden weparat in Teil.Strings zerleigt
         // optSting: wirft keine Exception, wenn das JSON Element NICHT vorhanden ist.
+        // Der splusname ist die neue ID
+        final String id = jsonObject.optString(Define.PARSER_SPLUSNAME);
         final String label = jsonObject.optString(Define.SCHEDULE_PARSER_LABEL);
         final String comment = jsonObject.optString(Define.SCHEDULE_PARSER_COMMENT);
         final String group = jsonObject.optString(Define.SCHEDULE_PARSER_GROUP);
@@ -124,6 +126,6 @@ public final class ChangesParser implements Parser<LectureChange> {
             alternativeDate = calendar.getTime();
         }
 
-        return new LectureChange(label, comment, group, reason, orginalDate, alternativeDate, room_old, room_new, lecturer);
+        return new LectureChange(id, label, comment, group, reason, orginalDate, alternativeDate, room_old, room_new, lecturer);
     }
 }

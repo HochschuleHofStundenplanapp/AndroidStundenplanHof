@@ -93,9 +93,7 @@ public class CalendarInterfaceController {
             if (changeObject instanceof LectureChange) {
                 LectureChange change = (LectureChange) changeObject;
 
-                //TODO
-                //calendarInterface.doEventExits();
-                //calendarInterface.updateEvent();
+                calendarInterface.updateChange(change);
             }
         }
     }

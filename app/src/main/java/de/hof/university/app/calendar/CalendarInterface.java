@@ -23,6 +23,7 @@ import java.util.TimeZone;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.Util.Log;
 import de.hof.university.app.data.DataManager;
+import de.hof.university.app.model.schedule.LectureChange;
 
 /**
  * Created by Daniel on 13.05.2017.
@@ -208,13 +209,48 @@ public class CalendarInterface {
         return Long.parseLong(uri.getLastPathSegment());
     }
 
+    public void updateChange(LectureChange change) {
+        // TODO
+        String lectureID = "";
+
+        lectureID = change.getId().substring(0, change.getId().indexOf(" Vertretung"));
+
+        ArrayList<Long> eventIDs = calendarEventIds.getLecturesEventIDs().get(lectureID);
+
+        // wenn leer dann zurück
+        if (eventIDs == null) return;
+
+        for (Long eventID :
+                eventIDs) {
+            // TODO vielleicht endDatum ändern
+            if (doEventExits(eventID, change.getLabel(), change.getBegin_old(), change.getBegin_old())) {
+
+                if (change.getBegin_new() == null) {
+                    // Entfällt
+                    calendarInterface.updateEvent(eventID, "[Entfällt]" + change.getLabel(), null, null, null, "");
+                } else {
+                    //Verschoben oder Raumänderung TODO
+                    calendarInterface.updateEvent(eventID, "[Verschoben]" + change.getLabel(), null, null, null, "");
+                }
+
+                break;
+            }
+        }
+    }
+
     public void updateEvent(long eventID, String title, String description, Date startTime, Date endTime, String location) {
         // TODO
         ContentValues values = new ContentValues();
         values.put(Events.TITLE, title);
-        values.put(Events.DESCRIPTION, description);
-        values.put(Events.DTSTART, startTime.getTime());
-        values.put(Events.DTEND, endTime.getTime());
+        if (description != null) {
+            values.put(Events.DESCRIPTION, description);
+        }
+        if (startTime != null) {
+            values.put(Events.DTSTART, startTime.getTime());
+        }
+        if (endTime != null) {
+            values.put(Events.DTEND, endTime.getTime());
+        }
         values.put(Events.EVENT_LOCATION, location);
 
         Uri updateUri = ContentUris.withAppendedId(Events.CONTENT_URI, eventID);
@@ -229,6 +265,7 @@ public class CalendarInterface {
 
         // The ID of the recurring event whose instances you are searching
         // for in the Instances table
+        // TODO vielleicht ohne Event_ID als selection und dafür das ganze Array, und damit später vergleichen ob enthalten
         String selection = CalendarContract.Instances.EVENT_ID + " = ?";
         String[] selectionArgs = new String[]{eventID.toString()};
 
@@ -262,6 +299,7 @@ public class CalendarInterface {
             DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
             Log.i(TAG, "Date: " + formatter.format(calendar.getTime()));
 
+            // TODO vielleicht ohne title da dieser bearbeitet werden kann
             if (eventTitle.equals(title)) {
                 return true;
             }
