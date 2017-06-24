@@ -21,6 +21,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import de.hof.university.app.BuildConfig;
 import de.hof.university.app.Util.Define;
@@ -82,16 +85,45 @@ public final class ChangesParser implements Parser<LectureChange> {
         final String comment = jsonObject.optString(Define.SCHEDULE_PARSER_COMMENT);
         final String group = jsonObject.optString(Define.SCHEDULE_PARSER_GROUP);
         final String reason = jsonObject.optString(Define.SCHEDULE_PARSER_REASON);
-        final String begin_old = jsonObject.optJSONObject(Define.PARSER_ORIGNAL).optString(Define.PARSER_DATE)+ ' ' +jsonObject.optJSONObject(Define.PARSER_ORIGNAL).optString(Define.PARSER_TIME);
-        String begin_new = "";
+        final String orginalDateString = jsonObject.optJSONObject(Define.PARSER_ORIGNAL).optString(Define.PARSER_DATE);
+        final String orginalTimeString = jsonObject.optJSONObject(Define.PARSER_ORIGNAL).optString(Define.PARSER_TIME);
+
+        String alternativeDateString = "";
+        String alternativeTimeString = "";
         String room_new = "";
         if(!jsonObject.isNull( Define.PARSER_ALTERNATIVE )){
-            begin_new = jsonObject.optJSONObject(Define.PARSER_ALTERNATIVE).optString(Define.PARSER_DATE) + ' ' + jsonObject.optJSONObject(Define.PARSER_ALTERNATIVE).optString(Define.PARSER_TIME);
+            alternativeDateString = jsonObject.optJSONObject(Define.PARSER_ALTERNATIVE).optString(Define.PARSER_DATE);
+            alternativeTimeString = jsonObject.optJSONObject(Define.PARSER_ALTERNATIVE).optString(Define.PARSER_TIME);
             room_new = jsonObject.optJSONObject(Define.PARSER_ALTERNATIVE).optString(Define.PARSER_ROOM);
         }
         final String room_old = jsonObject.optJSONObject(Define.PARSER_ORIGNAL).optString(Define.PARSER_ROOM);
         final String lecturer = jsonObject.optString(Define.PARSER_DOCENT);
 
-        return new LectureChange(label, comment, group, reason, begin_old, begin_new, room_old, room_new, lecturer);
+        int orginalHours      = Integer.parseInt(orginalTimeString.substring(0, 2));
+        int orginalMinutes    = Integer.parseInt(orginalTimeString.substring(3, 5));
+        int orginalDay        = Integer.parseInt(orginalDateString.substring(0, 2));
+        int orginalMonth      = Integer.parseInt(orginalDateString.substring(3, 5));
+        int orginalYear       = Integer.parseInt(orginalDateString.substring(6, 10));
+
+        Calendar calendar = GregorianCalendar.getInstance();
+        //Startzeit
+        calendar.set(orginalYear, orginalMonth - 1, orginalDay, orginalHours, orginalMinutes, 0);
+
+        Date orginalDate = calendar.getTime();
+
+        Date alternativeDate = null;
+
+        if (!alternativeTimeString.equals("") && !alternativeDateString.equals("")) {
+            int alternativeHours        = Integer.parseInt(alternativeTimeString.substring(0, 2));
+            int alternativeMinutes      = Integer.parseInt(alternativeTimeString.substring(3, 5));
+            int alternativeDay          = Integer.parseInt(alternativeDateString.substring(0, 2));
+            int alternativeMonth        = Integer.parseInt(alternativeDateString.substring(3, 5));
+            int alternativeYear         = Integer.parseInt(alternativeDateString.substring(6, 10));
+
+            calendar.set(alternativeYear, alternativeMonth - 1, alternativeDay, alternativeHours, alternativeMinutes, 0);
+            alternativeDate = calendar.getTime();
+        }
+
+        return new LectureChange(label, comment, group, reason, orginalDate, alternativeDate, room_old, room_new, lecturer);
     }
 }

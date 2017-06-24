@@ -98,7 +98,7 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
     }
 
     public final String getTime() {
-        String resultString = "";
+        String resultString;
 
         SimpleDateFormat simpleDateFormatter = new SimpleDateFormat("HH:mm", DataManager.getInstance().getLocale());
 

@@ -136,8 +136,6 @@ public class DataManager {
                 || !schedule.getCourse().equals(course)
                 || !schedule.getSemester().equals(semester)
                 || !schedule.getTermtime().equals(termTime)) {
-            // Änderungen sollen neu geholt werden
-            resetChangesLastSave(context);
 
             final Parser parser = ParserFactory.create(EParser.SCHEDULE);
             final String aString = String.format(Define.URL_SCHEDULE, MyString.URLReplaceWhitespace(course), MyString.URLReplaceWhitespace(semester), MyString.URLReplaceWhitespace(termTime));
@@ -199,8 +197,6 @@ public class DataManager {
                 || !cacheStillValid(mySchedule, Define.MYSCHEDULE_CACHE_TIME)
                 || (mySchedule.getIds().size() != mySchedule.getLectures().size())
                 ) {
-            // Änderungen sollen neu geholt werden
-            resetChangesLastSave(context);
 
             final Iterator<String> iterator = this.getMySchedule(context).getIds().iterator();
             String url = Define.URL_MYSCHEDULE;

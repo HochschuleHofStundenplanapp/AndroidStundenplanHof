@@ -17,27 +17,31 @@
 package de.hof.university.app.model.schedule;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import de.hof.university.app.Util.Define;
+import de.hof.university.app.data.DataManager;
 
 /**
  * Created by larsg on 10.05.2016.
  */
 public class LectureChange implements Serializable {
-    private static final long serialVersionUID = Define.serialVersionUIDv1;
+    private static final long serialVersionUID = Define.serialVersionUIDv2;
 
     private final String label;
     private final String comment;
     private final String group;
     private final String reason;
-    private final String begin_old;
-    private final String begin_new;
+    private final Date begin_old;
+    private final Date begin_new;
     private final String room_old;
     private final String room_new;
     private final String lecturer;
 
     public LectureChange(final String label, final String comment, final String group, final String reason,
-                         final String begin_old, final String begin_new, final String room_old, final String room_new, final String lecturer) {
+                         final Date begin_old, final Date begin_new, final String room_old, final String room_new, final String lecturer) {
         this.label = label;
         this.comment = comment;
         this.group = group;
@@ -66,14 +70,30 @@ public class LectureChange implements Serializable {
     }
 
     public final String getOld() {
-        String result = begin_old;
+        String result;
+
+        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale());
+        SimpleDateFormat simpleDateFormatter = new SimpleDateFormat("HH:mm", DataManager.getInstance().getLocale());
+
+        result = dateFormat.format(begin_old);
+        result += " " + simpleDateFormatter.format(begin_old);
+
         // Raum soll immer angezeigt werden
         result += " - " + room_old;
         return result;
     }
 
     public final String getNew() {
-        String result = begin_new;
+        String result = "";
+
+        if (begin_new != null) {
+            DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale());
+            SimpleDateFormat simpleDateFormatter = new SimpleDateFormat("HH:mm", DataManager.getInstance().getLocale());
+
+            result = dateFormat.format(begin_new);
+            result += " " + simpleDateFormatter.format(begin_new);
+        }
+
         // Raum soll immer angezeigt werden
         result += " - " + room_new;
         return result;
@@ -92,6 +112,12 @@ public class LectureChange implements Serializable {
         if ((null != reason) && !reason.isEmpty()) {
             result += reason;         // Grund
         }
+
+        /*// Kommentar für welchen Studiengang z.B. "(Inf6 + MI6 + MC 6)"
+        if (comment != null && !comment.isEmpty()) {
+            result += "\n" + comment;
+        }
+        */
 
         return result;
     }
