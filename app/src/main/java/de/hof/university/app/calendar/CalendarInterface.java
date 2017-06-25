@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
+import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 
 import java.text.DateFormat;
@@ -20,6 +21,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import de.hof.university.app.R;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.Util.Log;
 import de.hof.university.app.data.DataManager;
@@ -180,7 +182,17 @@ public class CalendarInterface {
         // TODO
     }
 
-    public void createEvent(String lectureID, String title, String description, Date startTime, Date endTime, String location) {
+    /**
+     * erzeugt ein Event
+     * @param lectureID
+     * @param title
+     * @param description
+     * @param startTime
+     * @param endTime
+     * @param location
+     * @return eventID oder null wenn keine Berechtigung
+     */
+    private Long createEvent(String lectureID, String title, String description, Date startTime, Date endTime, String location) {
         ContentValues values = new ContentValues();
         values.put(Events.DTSTART, startTime.getTime());
         values.put(Events.DTEND, endTime.getTime());
@@ -192,10 +204,28 @@ public class CalendarInterface {
         values.put(Events.EVENT_TIMEZONE, tz.getID());
 
         Long eventID = insertEvent(values);
+
+        return eventID;
+    }
+
+    public void createLectureEvent(String lectureID, String title, String description, Date startTime, Date endTime, String location) {
+        Long eventID = createEvent(lectureID, title, description, startTime, endTime, location);
+
         // Wenn null dann keine Berechtigung und returnen
         if (eventID == null) return;
+
         // zu den IDs hinzufügen
         addLecturesEventID(lectureID, eventID);
+    }
+
+    public void createChangeEvent(String lectureID, String title, String description, Date startTime, Date endTime, String location) {
+        Long eventID = createEvent(lectureID, title, description, startTime, endTime, location);
+
+        // Wenn null dann keine Berechtigung und returnen
+        if (eventID == null) return;
+
+        // zu den IDs hinzufügen
+        addChangesEventID(lectureID, eventID);
     }
 
     private Long insertEvent(ContentValues values) {
@@ -227,14 +257,36 @@ public class CalendarInterface {
 
                 if (change.getBegin_new() == null) {
                     // Entfällt
-                    calendarInterface.updateEvent(eventID, "[Entfällt]" + change.getLabel(), null, null, null, "");
+                    calendarInterface.updateEvent(eventID, context.getString(R.string.changeCancelled) + " " + change.getLabel(), null, null, null, "");
                 } else {
-                    //Verschoben oder Raumänderung TODO
-                    calendarInterface.updateEvent(eventID, "[Verschoben]" + change.getLabel(), null, null, null, "");
+                    // Verschoben oder Raumänderung
+                    if (change.getBegin_new().equals(change.getBegin_old())) {
+                        // Raumänderung
+                        calendarInterface.updateEvent(eventID, context.getString(R.string.changeRoomchange) + " " + change.getLabel(), null, null, null, "");
+                    } else {
+                        // Verschoben
+                        calendarInterface.updateEvent(eventID, context.getString(R.string.changeMoved) + " " + change.getLabel(), context.getString(R.string.changeNewDate) + ": " + DataManager.getInstance().formatDate(change.getBegin_new()), null, null, "");
+                        // TODO richtiges EndDate bekommen, weil 90 Minuten Länge nehmen
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(change.getBegin_new());
+                        calendar.add(Calendar.MINUTE, 90);
+                        Date newEndDate = calendar.getTime();
+                        // Alternativ Vorlesung erzeugen
+                        createChangeEvent(lectureID, context.getString(R.string.changeNew) + " " + change.getLabel(), "", change.getBegin_new(), newEndDate, getLocation(change.getRoom_new()));
+                    }
                 }
-
                 break;
             }
+        }
+    }
+
+    public String getLocation(String room) {
+        if (room.indexOf(Define.ROOM_MUEB) != -1) {
+            // Münchberg
+            return Define.LOCATION_MUEB + ", " + room;
+        } else {
+            // Hof
+            return Define.LOCATION_HOF + ", " + room;
         }
     }
 
@@ -272,7 +324,8 @@ public class CalendarInterface {
         // Construct the query with the desired date range.
         Uri.Builder builder = CalendarContract.Instances.CONTENT_URI.buildUpon();
         ContentUris.appendId(builder, startDate.getTime());
-        ContentUris.appendId(builder, endDate.getTime());
+        // 5 Millisekunden dazu damit falls es gleich dem Startdatum ist er das Event nimmt
+        ContentUris.appendId(builder, endDate.getTime() + 5);
 
         // Submit the query
         cur = cr.query(builder.build(),

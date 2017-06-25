@@ -129,4 +129,9 @@
     <string name="zeit">Zeit</string>
     <string name="fach_dozent">Fach Dozent</string>
     <string name="calendar_synchronization">Calendar synchronization</string>
+    <string name="changeCancelled">[Cancelled]</string>
+    <string name="changeMoved">[Moved]</string>
+    <string name="changeRoomchange">[Roomchange]</string>
+    <string name="changeNew">[New]</string>
+    <string name="changeNewDate">New date</string>
 </resources>

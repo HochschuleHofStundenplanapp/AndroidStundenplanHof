@@ -74,7 +74,7 @@ public class CalendarInterfaceController {
             newEndDateCalendar.set(Calendar.HOUR_OF_DAY, endDateCalendar.get(Calendar.HOUR_OF_DAY));
             newEndDateCalendar.set(Calendar.MINUTE, endDateCalendar.get(Calendar.MINUTE));
 
-            calendarInterface.createEvent(lectureItem.getId(), lectureItem.getLabel(), "", tmpStartDate, newEndDateCalendar.getTime(), "");
+            calendarInterface.createLectureEvent(lectureItem.getId(), lectureItem.getLabel(), "", tmpStartDate, newEndDateCalendar.getTime(), calendarInterface.getLocation(lectureItem.getRoom()));
 
             Calendar startDateCalendar = GregorianCalendar.getInstance();
             startDateCalendar.setTime(tmpStartDate);
