@@ -134,4 +134,5 @@
     <string name="changeRoomchange">[Roomchange]</string>
     <string name="changeNew">[New]</string>
     <string name="changeNewDate">New date</string>
+    <string name="noLocation">No Location</string>
 </resources>

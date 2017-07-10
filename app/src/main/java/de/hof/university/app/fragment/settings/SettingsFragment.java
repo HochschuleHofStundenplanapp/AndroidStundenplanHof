@@ -158,7 +158,6 @@ public class SettingsFragment extends PreferenceFragment {
 								.show();
 					}
 				} else {
-					CalendarInterfaceController.getInstance(getActivity().getApplicationContext()).deleteAllEvents();
 					CalendarInterfaceController.getInstance(getActivity().getApplicationContext()).removeCalendar();
 				}
 				return true;

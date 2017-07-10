@@ -137,4 +137,5 @@
     <string name="changeRoomchange">[Raumänderung]</string>
     <string name="changeNew">[Neu]</string>
     <string name="changeNewDate">Neuer Termin</string>
+    <string name="noLocation">Kein Ort</string>
 </resources>

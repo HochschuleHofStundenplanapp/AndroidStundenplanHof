@@ -86,16 +86,20 @@ public class CalendarInterfaceController {
     }
 
     public void updateChanges() {
-        // TODO
-        ArrayList<Object> changes = DataManager.getInstance().getChanges(context).getChanges();
-        for (Object changeObject :
-                changes) {
-            if (changeObject instanceof LectureChange) {
-                LectureChange change = (LectureChange) changeObject;
+        new Thread() {
+            @Override
+            public void run() {
+                ArrayList<Object> changes = DataManager.getInstance().getChanges(context).getChanges();
+                for (Object changeObject :
+                        changes) {
+                    if (changeObject instanceof LectureChange) {
+                        LectureChange change = (LectureChange) changeObject;
 
-                calendarInterface.updateChange(change);
+                        calendarInterface.updateChange(change);
+                    }
+                }
             }
-        }
+        }.start();
     }
 
     public Boolean deleteAllEvents() {
@@ -131,8 +135,14 @@ public class CalendarInterfaceController {
     }
 
     public void removeCalendar() {
-        calendarInterface.removeCalendar();
-        calendarInterface.saveIDs();
+        new Thread() {
+            @Override
+            public void run() {
+                deleteAllEvents();
+                calendarInterface.removeCalendar();
+                calendarInterface.saveIDs();
+            }
+        }.start();
     }
 
     private class CreateAllEventsTask extends AsyncTask<ArrayList<LectureItem>, Void, Boolean> {

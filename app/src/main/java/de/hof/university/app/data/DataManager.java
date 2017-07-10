@@ -606,14 +606,20 @@ public class DataManager {
     // Calendar
     // ---------------------------------------------------------------------------------------------
 
-    private void addLectureToCalendar(Context context, LectureItem lectureItem) {
+    private void addLectureToCalendar(final Context context, final LectureItem lectureItem) {
         final boolean calendarSynchronization = sharedPreferences.getBoolean("calendar_synchronization", false);
 
         if (calendarSynchronization) {
-            if (getMySchedule(context).getIds().size() == 1) {
-                CalendarInterfaceController.getInstance(context).deleteAllEvents();
-            }
-            CalendarInterfaceController.getInstance(context).createAllEvents(lectureItem);
+            new Thread() {
+                @Override
+                public void run() {
+                    if (getMySchedule(context).getIds().size() == 1) {
+                        // Falls es die erste hinzugefügte Vorlesung ist, alle alten raus löschen
+                        CalendarInterfaceController.getInstance(context).deleteAllEvents();
+                    }
+                    CalendarInterfaceController.getInstance(context).createAllEvents(lectureItem);
+                }
+            }.start();
         }
     }
 
@@ -679,7 +685,7 @@ public class DataManager {
     }
 
 
-    public boolean isTwoArrayListsWithSameValues(ArrayList<LectureItem> list1, ArrayList<LectureItem> list2)
+    private boolean isTwoArrayListsWithSameValues(ArrayList<LectureItem> list1, ArrayList<LectureItem> list2)
     {
         //null checking
         if(list1 == null && list2 == null)

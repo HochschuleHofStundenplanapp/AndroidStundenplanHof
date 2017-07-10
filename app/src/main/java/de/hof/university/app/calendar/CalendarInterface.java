@@ -218,7 +218,7 @@ public class CalendarInterface {
         addLecturesEventID(lectureID, eventID);
     }
 
-    public void createChangeEvent(String lectureID, String title, String description, Date startTime, Date endTime, String location) {
+    private void createChangeEvent(String lectureID, String title, String description, Date startTime, Date endTime, String location) {
         Long eventID = createEvent(lectureID, title, description, startTime, endTime, location);
 
         // Wenn null dann keine Berechtigung und returnen
@@ -281,6 +281,10 @@ public class CalendarInterface {
     }
 
     public String getLocation(String room) {
+        if (room.length() < 4) {
+            return context.getString(R.string.noLocation);
+        }
+
         if (room.indexOf(Define.ROOM_MUEB) != -1) {
             // Münchberg
             return Define.LOCATION_MUEB + ", " + room;
@@ -290,7 +294,7 @@ public class CalendarInterface {
         }
     }
 
-    public void updateEvent(long eventID, String title, String description, Date startTime, Date endTime, String location) {
+    private void updateEvent(long eventID, String title, String description, Date startTime, Date endTime, String location) {
         // TODO
         ContentValues values = new ContentValues();
         values.put(Events.TITLE, title);
@@ -311,7 +315,7 @@ public class CalendarInterface {
         int rows = cr.update(updateUri, values, null, null);
     }
 
-    public Boolean doEventExits(Long eventID, String title, Date startDate, Date endDate) {
+    private Boolean doEventExits(Long eventID, String title, Date startDate, Date endDate) {
         Cursor cur = null;
         ContentResolver cr = context.getContentResolver();
 
@@ -430,7 +434,7 @@ public class CalendarInterface {
         DataManager.getInstance().saveObject(context, calendarEventIds, Define.calendarIDsFilename);
     }
 
-    public void readIDs() {
+    private void readIDs() {
         Object tmpCalendarEventIds = DataManager.getInstance().readObject(context, Define.calendarIDsFilename);
         if (tmpCalendarEventIds != null && tmpCalendarEventIds instanceof CalendarEventIds) {
             calendarEventIds = (CalendarEventIds) tmpCalendarEventIds;
