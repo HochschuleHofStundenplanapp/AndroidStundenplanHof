@@ -10,15 +10,25 @@ import java.util.HashMap;
  * Created by Daniel on 13.05.2017.
  */
 
-public class CalendarEventIds extends HofObject {
+public class CalendarData extends HofObject {
     private static final long serialVersionUID = Define.serialVersionUIDv1;
 
+    private Long calendarID;
     private HashMap<String, ArrayList<Long>> lecturesEventIDs;
     private HashMap<String, ArrayList<Long>> changesEventIDs;
 
-    public CalendarEventIds() {
+    public CalendarData() {
+        calendarID = null;
         lecturesEventIDs = new HashMap<>();
         changesEventIDs = new HashMap<>();
+    }
+
+    public Long getCalendarID() {
+        return calendarID;
+    }
+
+    public void setCalendarID(Long calendarID) {
+        this.calendarID = calendarID;
     }
 
     public HashMap<String, ArrayList<Long>> getLecturesEventIDs() {

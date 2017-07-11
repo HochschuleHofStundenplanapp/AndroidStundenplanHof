@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
-import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 
 import java.text.DateFormat;
@@ -19,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.TimeZone;
 
 import de.hof.university.app.R;
@@ -65,10 +65,8 @@ public class CalendarInterface {
     private static final int PROJECTION_TITLE_INDEX = 2;
 
     private Context context;
-    private long calID = 2;
-    private String calendarName = "Hochschule Hof Stundenplan App";
-    private CalendarEventIds calendarEventIds = new CalendarEventIds();
-
+    private String localCalendarName = "Hochschule Hof Stundenplan App";
+    private CalendarData calendarData = new CalendarData();
 
     public static CalendarInterface getInstance(Context context) {
         if (CalendarInterface.calendarInterface == null) {
@@ -83,34 +81,55 @@ public class CalendarInterface {
      * @param context
      */
     private CalendarInterface(Context context) {
-        this(context, -1);
-    }
-
-    /**
-     * Constructor for a existing calendar
-     *
-     * @param context
-     * @param calendarID of a existing calendar in witch the user want to write the Schedule
-     */
-    private CalendarInterface(Context context, long calendarID) {
         this.context = context;
 
         // bereits vohandene IDs einlesen
-        readIDs();
+        readCalendarData();
 
+        if (calendarData.getCalendarID() == null) {
+            // TODO CalendarID leer
+        }
+    }
+
+    public void setCalendar(Long calendarID) {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
             // Wenn -1 dann lokalen Calendar, sonst die übergebene ID nutzen
-            if (calendarID == -1) {
+            if (calendarID == null) {
                 if (!getLocalCalendar()) {
                     createLocalCalendar();
                     getLocalCalendar();
                 }
             } else {
                 // use existing calendar
-                calID = calendarID;
+                calendarData.setCalendarID(calendarID);
             }
         }
+    }
+
+    public HashMap<String, Long> getCalendars() {
+        HashMap<String, Long> result = new HashMap<>();
+        // Run query
+        Cursor cur = null;
+        ContentResolver cr = context.getContentResolver();
+        Uri uri = Calendars.CONTENT_URI;
+
+        // Submit the query and get a Cursor object back.
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            return result;
+        }
+
+        // wenn er alle Calendar liefern soll:
+        cur = cr.query(uri, EVENT_PROJECTION, null, null, null);
+
+        // Use the cursor to step through the returned records
+        while (cur.moveToNext()) {
+            // found
+            result.put(cur.getString(PROJECTION_DISPLAY_NAME_INDEX), cur.getLong(PROJECTION_ID_INDEX));
+        }
+
+        cur.close();
+        return result;
     }
 
     /**
@@ -129,7 +148,7 @@ public class CalendarInterface {
                 + Calendars.OWNER_ACCOUNT + " = ?) AND ("
                 + Calendars.ACCOUNT_TYPE + " = ?)"
                 + ")";
-        String[] selectionArgs = new String[]{calendarName, "Hochschule Hof", "androidapps@hof-university.de", CalendarContract.ACCOUNT_TYPE_LOCAL};
+        String[] selectionArgs = new String[]{localCalendarName, "Hochschule Hof", "androidapps@hof-university.de", CalendarContract.ACCOUNT_TYPE_LOCAL};
         // Submit the query and get a Cursor object back.
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
             return false;
@@ -141,7 +160,7 @@ public class CalendarInterface {
         // Use the cursor to step through the returned records
         while (cur.moveToNext()) {
             // found
-            calID = cur.getLong(PROJECTION_ID_INDEX);
+            calendarData.setCalendarID(cur.getLong(PROJECTION_ID_INDEX));
             cur.close();
             return true;
         }
@@ -156,13 +175,13 @@ public class CalendarInterface {
         Uri uri = Uri.parse(CalendarContract.Calendars.CONTENT_URI.toString());
         Uri calendarUri = uri.buildUpon()
                 .appendQueryParameter(android.provider.CalendarContract.CALLER_IS_SYNCADAPTER, "true")
-                .appendQueryParameter(Calendars.ACCOUNT_NAME, calendarName)
+                .appendQueryParameter(Calendars.ACCOUNT_NAME, localCalendarName)
                 .appendQueryParameter(Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL).build();
 
         ContentValues values = new ContentValues();
-        values.put(Calendars.NAME, calendarName);
+        values.put(Calendars.NAME, localCalendarName);
         values.put(Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL);
-        values.put(Calendars.CALENDAR_DISPLAY_NAME, calendarName);
+        values.put(Calendars.CALENDAR_DISPLAY_NAME, localCalendarName);
         values.put(Calendars.CALENDAR_COLOR, 0xFF0000);
         TimeZone tz = TimeZone.getDefault();
         values.put(Calendars.CALENDAR_TIME_ZONE, tz.getID());
@@ -199,16 +218,15 @@ public class CalendarInterface {
         values.put(Events.TITLE, title);
         values.put(Events.DESCRIPTION, description);
         values.put(Events.EVENT_LOCATION, location);
-        values.put(Events.CALENDAR_ID, calID);
+        values.put(Events.CALENDAR_ID, calendarData.getCalendarID());
         TimeZone tz = TimeZone.getDefault();
         values.put(Events.EVENT_TIMEZONE, tz.getID());
 
-        Long eventID = insertEvent(values);
-
-        return eventID;
+        // die EventID kommt zurück
+        return insertEvent(values);
     }
 
-    public void createLectureEvent(String lectureID, String title, String description, Date startTime, Date endTime, String location) {
+    void createLectureEvent(String lectureID, String title, String description, Date startTime, Date endTime, String location) {
         Long eventID = createEvent(lectureID, title, description, startTime, endTime, location);
 
         // Wenn null dann keine Berechtigung und returnen
@@ -245,7 +263,7 @@ public class CalendarInterface {
 
         lectureID = change.getId().substring(0, change.getId().indexOf(" Vertretung"));
 
-        ArrayList<Long> eventIDs = calendarEventIds.getLecturesEventIDs().get(lectureID);
+        ArrayList<Long> eventIDs = calendarData.getLecturesEventIDs().get(lectureID);
 
         // wenn leer dann zurück
         if (eventIDs == null) return;
@@ -373,7 +391,7 @@ public class CalendarInterface {
     }
 
     public void deleteAllEvents(String lectureID) {
-        ArrayList<Long> eventIDs = calendarEventIds.getLecturesEventIDs().get(lectureID);
+        ArrayList<Long> eventIDs = calendarData.getLecturesEventIDs().get(lectureID);
         for (Long eventID :
                 eventIDs) {
             deleteEvent(eventID);
@@ -383,61 +401,61 @@ public class CalendarInterface {
 
     public void deleteAllEvents() {
         for (String lectureID :
-                calendarEventIds.getLecturesEventIDs().keySet()) {
+                calendarData.getLecturesEventIDs().keySet()) {
             deleteAllEvents(lectureID);
         }
     }
 
     private void addLecturesEventID(String lectureID, Long eventID) {
-        ArrayList<Long> eventIDs = calendarEventIds.getLecturesEventIDs().get(lectureID);
+        ArrayList<Long> eventIDs = calendarData.getLecturesEventIDs().get(lectureID);
         if (eventIDs == null) {
             eventIDs = new ArrayList<>();
             eventIDs.add(eventID);
         } else {
             eventIDs.add(eventID);
         }
-        calendarEventIds.getLecturesEventIDs().put(lectureID, eventIDs);
+        calendarData.getLecturesEventIDs().put(lectureID, eventIDs);
     }
 
     private void removeLectureEventID(String lectureID, Long eventID) {
-        ArrayList<Long> eventIDs = calendarEventIds.getLecturesEventIDs().get(lectureID);
+        ArrayList<Long> eventIDs = calendarData.getLecturesEventIDs().get(lectureID);
         if (eventIDs != null) {
             eventIDs.remove(eventID);
-            calendarEventIds.getLecturesEventIDs().put(lectureID, eventIDs);
+            calendarData.getLecturesEventIDs().put(lectureID, eventIDs);
         }
     }
 
     private void removeAllLectureEventIDs(String lectureID) {
-        calendarEventIds.getLecturesEventIDs().put(lectureID, new ArrayList<Long>());
+        calendarData.getLecturesEventIDs().put(lectureID, new ArrayList<Long>());
     }
 
     private void addChangesEventID(String lectureID, Long eventID) {
-        ArrayList<Long> eventIDs = calendarEventIds.getChangesEventIDs().get(lectureID);
+        ArrayList<Long> eventIDs = calendarData.getChangesEventIDs().get(lectureID);
         if (eventIDs == null) {
             eventIDs = new ArrayList<>();
             eventIDs.add(eventID);
         } else {
             eventIDs.add(eventID);
         }
-        calendarEventIds.getChangesEventIDs().put(lectureID, eventIDs);
+        calendarData.getChangesEventIDs().put(lectureID, eventIDs);
     }
 
     private void removeChangesEventID(String lectureID, Long eventID) {
-        ArrayList<Long> eventIDs = calendarEventIds.getChangesEventIDs().get(lectureID);
+        ArrayList<Long> eventIDs = calendarData.getChangesEventIDs().get(lectureID);
         if (eventIDs != null) {
             eventIDs.remove(eventID);
-            calendarEventIds.getChangesEventIDs().put(lectureID, eventIDs);
+            calendarData.getChangesEventIDs().put(lectureID, eventIDs);
         }
     }
 
-    public void saveIDs() {
-        DataManager.getInstance().saveObject(context, calendarEventIds, Define.calendarIDsFilename);
+    public void saveCalendarData() {
+        DataManager.getInstance().saveObject(context, calendarData, Define.calendarIDsFilename);
     }
 
-    private void readIDs() {
+    private void readCalendarData() {
         Object tmpCalendarEventIds = DataManager.getInstance().readObject(context, Define.calendarIDsFilename);
-        if (tmpCalendarEventIds != null && tmpCalendarEventIds instanceof CalendarEventIds) {
-            calendarEventIds = (CalendarEventIds) tmpCalendarEventIds;
+        if (tmpCalendarEventIds != null && tmpCalendarEventIds instanceof CalendarData) {
+            calendarData = (CalendarData) tmpCalendarEventIds;
         }
     }
 }

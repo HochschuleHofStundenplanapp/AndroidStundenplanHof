@@ -135,4 +135,5 @@
     <string name="changeNew">[New]</string>
     <string name="changeNewDate">New date</string>
     <string name="noLocation">No Location</string>
+    <string name="newLocalCalendar">New loacl Calendar</string>
 </resources>

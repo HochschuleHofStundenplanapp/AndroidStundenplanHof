@@ -39,8 +39,11 @@ import android.support.v4.app.ActivityCompat;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hof.university.app.Communication.RegisterLectures;
@@ -62,6 +65,7 @@ public class SettingsFragment extends PreferenceFragment {
 	private ProgressDialog progressDialog;
 	private List<StudyCourse> studyCourseList;
 	private LoginController loginController = null;
+	private CalendarInterfaceController calendarInterfaceController = null;
 
     private final int REQUEST_CODE_ASK_CALENDAR_PERMISSIONS =  2;
 
@@ -73,6 +77,7 @@ public class SettingsFragment extends PreferenceFragment {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 		loginController = LoginController.getInstance(getActivity());
+		calendarInterfaceController = CalendarInterfaceController.getInstance(getActivity().getApplicationContext());
 
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.preferences);
@@ -143,19 +148,7 @@ public class SettingsFragment extends PreferenceFragment {
 							|| ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
 						requestCalendarPermission();
 					} else {
-						CalendarInterfaceController.getInstance(getActivity().getApplicationContext()).createAllEvents();
-
-						new AlertDialog.Builder(getView().getContext())
-								.setTitle("Kalender Sync an")
-								.setMessage("Sync an")
-								.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface dialog, int which) {
-										//nothing to do here. Just close the message
-									}
-								})
-								.setIcon(android.R.drawable.ic_dialog_alert)
-								.show();
+						turnCalendarSyncOn();
 					}
 				} else {
 					CalendarInterfaceController.getInstance(getActivity().getApplicationContext()).removeCalendar();
@@ -511,14 +504,61 @@ public class SettingsFragment extends PreferenceFragment {
 			case REQUEST_CODE_ASK_CALENDAR_PERMISSIONS:
 				if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 					// Permission granted
-					CalendarInterfaceController.getInstance(getActivity().getApplicationContext()).createAllEvents();
+					turnCalendarSyncOn();
 				} else {
 					// Permission Denied
 					Toast.makeText(getActivity(), "Berechtigung für den Kalender verweigert", Toast.LENGTH_SHORT)
 							.show();
+					// Calendar Sync aus schalten
+					findPreference("calendar_synchronization").setEnabled(false);
 				}
 			default:
 				super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 		}
+	}
+
+	private void turnCalendarSyncOn() {
+
+
+		final ArrayList<String> calendars = calendarInterfaceController.getCalendars();
+
+		calendars.add(getString(R.string.newLocalCalendar));
+
+		//final ArrayAdapter<String> calendarsAdapter = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, calendars);
+
+		new AlertDialog.Builder(getView().getContext())
+				.setTitle("Kalender Sync an")
+				.setMessage("Sync an")
+				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+						new AlertDialog.Builder(getView().getContext())
+								.setTitle("Kalender Sync an 2")
+								//.setMessage("Sync an 2")
+								.setSingleChoiceItems(calendars.toArray(new String[calendars.size()]), 0, new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										String calendarName = calendars.get(which);
+										if (calendarName.equals(getString(R.string.newLocalCalendar))) {
+											calendarInterfaceController.setCalendar(null);
+										} else {
+											calendarInterfaceController.setCalendar(calendarName);
+										}
+										calendarInterfaceController.createAllEvents();
+									}
+								})
+								.setPositiveButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										//nothing to do here. Just close the message
+									}
+								})
+								.setIcon(android.R.drawable.ic_dialog_alert)
+								.show();
+					}
+				})
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.show();
 	}
 }
