@@ -39,8 +39,6 @@ import android.support.v4.app.ActivityCompat;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -138,7 +136,7 @@ public class SettingsFragment extends PreferenceFragment {
 		}
 
 		// Calendar syncronization
-		final CheckBoxPreference calendar_syncronization = (CheckBoxPreference) findPreference("calendar_synchronization");
+		final CheckBoxPreference calendar_syncronization = (CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION));
 
 		calendar_syncronization.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
@@ -151,7 +149,7 @@ public class SettingsFragment extends PreferenceFragment {
 						turnCalendarSyncOn();
 					}
 				} else {
-					CalendarInterfaceController.getInstance(getActivity().getApplicationContext()).removeCalendar();
+					calendarInterfaceController.removeCalendar();
 				}
 				return true;
 			}
@@ -507,10 +505,10 @@ public class SettingsFragment extends PreferenceFragment {
 					turnCalendarSyncOn();
 				} else {
 					// Permission Denied
-					Toast.makeText(getActivity(), "Berechtigung für den Kalender verweigert", Toast.LENGTH_SHORT)
+					Toast.makeText(getActivity(), R.string.calendar_synchronization_permissionNotGranted, Toast.LENGTH_SHORT)
 							.show();
 					// Calendar Sync aus schalten
-					findPreference("calendar_synchronization").setEnabled(false);
+					((CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
 				}
 			default:
 				super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -518,29 +516,29 @@ public class SettingsFragment extends PreferenceFragment {
 	}
 
 	private void turnCalendarSyncOn() {
+		final ArrayList<String> calendars = new ArrayList<>();
 
+		// Den localen Kalender als erstes
+		calendars.add(getString(R.string.calendar_synchronitation_ownLocalCalendar));
 
-		final ArrayList<String> calendars = calendarInterfaceController.getCalendars();
-
-		calendars.add(getString(R.string.newLocalCalendar));
-
-		//final ArrayAdapter<String> calendarsAdapter = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, calendars);
+		// Die weiteren Kalender danach
+		calendars.addAll(calendarInterfaceController.getCalendars());
 
 		new AlertDialog.Builder(getView().getContext())
-				.setTitle("Kalender Sync an")
-				.setMessage("Sync an")
+				.setTitle(R.string.calendar_synchronization)
+				.setMessage(R.string.calendar_synchronization_infoText)
 				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
 						new AlertDialog.Builder(getView().getContext())
-								.setTitle("Kalender Sync an 2")
-								//.setMessage("Sync an 2")
-								.setSingleChoiceItems(calendars.toArray(new String[calendars.size()]), 0, new DialogInterface.OnClickListener() {
+								.setTitle(R.string.calendar_synchronization_chooseCalendar)
+								.setItems(calendars.toArray(new String[calendars.size()]), new DialogInterface.OnClickListener() {
 									@Override
 									public void onClick(DialogInterface dialog, int which) {
 										String calendarName = calendars.get(which);
-										if (calendarName.equals(getString(R.string.newLocalCalendar))) {
+										if (calendarName.equals(getString(R.string.calendar_synchronitation_ownLocalCalendar))) {
+											// lokaler Kalender
 											calendarInterfaceController.setCalendar(null);
 										} else {
 											calendarInterfaceController.setCalendar(calendarName);
@@ -548,14 +546,29 @@ public class SettingsFragment extends PreferenceFragment {
 										calendarInterfaceController.createAllEvents();
 									}
 								})
-								.setPositiveButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+								.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 									@Override
 									public void onClick(DialogInterface dialog, int which) {
-										//nothing to do here. Just close the message
+										// Kalender Synchronisation ausschalten
+										((CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
+									}
+								})
+								.setOnCancelListener(new DialogInterface.OnCancelListener() {
+									@Override
+									public void onCancel(DialogInterface dialog) {
+										// Kalender Synchronisation ausschalten
+										((CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
 									}
 								})
 								.setIcon(android.R.drawable.ic_dialog_alert)
 								.show();
+					}
+				})
+				.setOnCancelListener(new DialogInterface.OnCancelListener() {
+					@Override
+					public void onCancel(DialogInterface dialog) {
+						// Kalender Synchronisation ausschalten
+						((CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
 					}
 				})
 				.setIcon(android.R.drawable.ic_dialog_alert)

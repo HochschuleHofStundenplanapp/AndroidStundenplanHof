@@ -212,6 +212,9 @@ public class CalendarInterface {
      * @return eventID oder null wenn keine Berechtigung
      */
     private Long createEvent(String lectureID, String title, String description, Date startTime, Date endTime, String location) {
+        if (calendarData.getCalendarID() == null) {
+            return null;
+        }
         ContentValues values = new ContentValues();
         values.put(Events.DTSTART, startTime.getTime());
         values.put(Events.DTEND, endTime.getTime());
@@ -229,7 +232,7 @@ public class CalendarInterface {
     void createLectureEvent(String lectureID, String title, String description, Date startTime, Date endTime, String location) {
         Long eventID = createEvent(lectureID, title, description, startTime, endTime, location);
 
-        // Wenn null dann keine Berechtigung und returnen
+        // Wenn null dann keine Berechtigung oder keine CalendarID und returnen
         if (eventID == null) return;
 
         // zu den IDs hinzufügen
@@ -239,7 +242,7 @@ public class CalendarInterface {
     private void createChangeEvent(String lectureID, String title, String description, Date startTime, Date endTime, String location) {
         Long eventID = createEvent(lectureID, title, description, startTime, endTime, location);
 
-        // Wenn null dann keine Berechtigung und returnen
+        // Wenn null dann keine Berechtigung oder keine CalendarID und returnen
         if (eventID == null) return;
 
         // zu den IDs hinzufügen

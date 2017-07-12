@@ -40,7 +40,7 @@ public class CalendarInterfaceController {
     }
 
     public void createAllEvents() {
-        ArrayList<LectureItem> lectureItems = DataManager.getInstance().getSelectedLectures(context);
+        final ArrayList<LectureItem> lectureItems = DataManager.getInstance().getSelectedLectures(context);
 
         if (lectureItems == null) return;
 
@@ -150,6 +150,8 @@ public class CalendarInterfaceController {
     public ArrayList<String> getCalendars() {
         ArrayList<String> result = new ArrayList<>();
         calendars = calendarInterface.getCalendars();
+        // Kalender für Kontakte entfernen.
+        calendars.remove("Contacts");
         result.addAll(calendars.keySet());
         return result;
     }
@@ -165,7 +167,7 @@ public class CalendarInterfaceController {
     }
 
     private class CreateAllEventsTask extends AsyncTask<ArrayList<LectureItem>, Void, Boolean> {
-        protected Boolean doInBackground(ArrayList<LectureItem>... lectureItems) {
+        protected Boolean doInBackground(final ArrayList<LectureItem>... lectureItems) {
             for (LectureItem lectureItem :
                     lectureItems[0]) {
                 createEventsForLecture(lectureItem);
