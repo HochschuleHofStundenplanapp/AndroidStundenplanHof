@@ -136,7 +136,7 @@
     <string name="changeNewDate">New date</string>
     <string name="noLocation">No Location</string>
     <string name="calendar_synchronitation_ownLocalCalendar">Own local Calendar</string>
-    <string name="calendar_synchronization_infoText">You have turned on the calendar synchronization.\nThe lectures and changes were synced with the calendar from now on. In the next dialog you can choose the calendar to with it shoud sync or use a own local calendar.\n\nPlease note that the holidays were still not considered.</string>
+    <string name="calendar_synchronization_infoText">You have turned on the calendar synchronization.\n\nIn the next dialog you can choose the calendar to with the lectures and changes were synced or use a own local calendar.\n\nPlease note that the holidays were still not considered!</string>
     <string name="calendar_synchronization_chooseCalendar">Please choose a calendar</string>
     <string name="PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION" translatable="false">calendar_synchronization</string>
     <string name="calendar_synchronization_permissionNotGranted">Permission for the calendar not granted</string>
