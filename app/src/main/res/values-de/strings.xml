@@ -139,7 +139,7 @@
     <string name="changeNewDate">Neuer Termin</string>
     <string name="noLocation">Kein Ort</string>
     <string name="calendar_synchronitation_ownLocalCalendar">Eigenen lokalen Kalender</string>
-    <string name="calendar_synchronization_infoText">Sie haben die Kalender Synchronisation eingeschaltet.\n\nIm nächsten Dialog können Sie den Kalender auswählen mit dem die Vorlesungen und Änderungen synchronisiert werden oder einen eigenen lokalen Kalender dafür nutzen.\n\nBitte beachten Sie das Ferien und Feiertage noch nicht berücksichtigt werden!</string>
+    <string name="calendar_synchronization_infoText">Sie haben die Kalender Synchronisation eingeschaltet.\n\nIm nächsten Dialog können Sie den Kalender auswählen, mit dem die Vorlesungen und Änderungen synchronisiert werden oder einen eigenen lokalen Kalender dafür nutzen.\n\nBitte beachten Sie das Ferien und Feiertage noch nicht berücksichtigt werden!</string>
     <string name="calendar_synchronization_chooseCalendar">Bitte wählen Sie einen Kalender</string>
     <string name="calendar_synchronization_permissionNotGranted">Berechtigung für den Kalender verweigert</string>
 </resources>

@@ -157,6 +157,7 @@ public final class Define {
 	//EMail
 	public final static String FEEDBACKEMAILADDRESS = "androidapps@hof-university.de";
 
+	public final static String CHANGES_SUBSTRING = " Vertretung";
 	public final static String ROOM_MUEB = "Mueb";
 	public final static String LOCATION_HOF = "Alfons-Goppel-Platz-1 95028 Hof";
 	public final static String LOCATION_MUEB = "Kulmbacher Str. 76 95213 Münchberg";

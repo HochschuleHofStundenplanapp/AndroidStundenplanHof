@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.TimeZone;
 
+import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.Util.Log;
@@ -65,23 +66,23 @@ public class CalendarInterface {
     private static final int PROJECTION_TITLE_INDEX = 2;
 
     private Context context;
-    private String localCalendarName = "Hochschule Hof Stundenplan App";
+    private String localCalendarName = "";
     private CalendarData calendarData = new CalendarData();
 
-    public static CalendarInterface getInstance(Context context) {
+    public static CalendarInterface getInstance() {
         if (CalendarInterface.calendarInterface == null) {
-            CalendarInterface.calendarInterface = new CalendarInterface(context);
+            CalendarInterface.calendarInterface = new CalendarInterface();
         }
         return CalendarInterface.calendarInterface;
     }
 
     /**
      * Constructor for the default local calendar
-     *
-     * @param context
      */
-    private CalendarInterface(Context context) {
-        this.context = context;
+    private CalendarInterface() {
+        this.context = MainActivity.contextOfApplication;
+
+        localCalendarName = context.getString(R.string.stundenplan) + " " + context.getString(R.string.app_name);
 
         // bereits vohandene IDs einlesen
         readCalendarData();
@@ -96,9 +97,9 @@ public class CalendarInterface {
                 && ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
             // Wenn -1 dann lokalen Calendar, sonst die übergebene ID nutzen
             if (calendarID == null) {
-                if (!getLocalCalendar()) {
+                if (getLocalCalendar() == null) {
                     createLocalCalendar();
-                    getLocalCalendar();
+                    calendarData.setCalendarID(getLocalCalendar());
                 }
             } else {
                 // use existing calendar
@@ -133,11 +134,13 @@ public class CalendarInterface {
     }
 
     /**
-     * Set the calID and return if the calendar was found
+     * Search after the local calendar an return the calID if the calendar was found or null if not
      *
-     * @return return if the calendar was found
+     * @return return if the calendar ID if it was found, else null
      */
-    private boolean getLocalCalendar() {
+    private Long getLocalCalendar() {
+        Long result = null;
+
         // Run query
         Cursor cur = null;
         ContentResolver cr = context.getContentResolver();
@@ -148,10 +151,10 @@ public class CalendarInterface {
                 + Calendars.OWNER_ACCOUNT + " = ?) AND ("
                 + Calendars.ACCOUNT_TYPE + " = ?)"
                 + ")";
-        String[] selectionArgs = new String[]{localCalendarName, "Hochschule Hof", "androidapps@hof-university.de", CalendarContract.ACCOUNT_TYPE_LOCAL};
+        String[] selectionArgs = new String[]{localCalendarName, context.getString(R.string.app_name), Define.FEEDBACKEMAILADDRESS, CalendarContract.ACCOUNT_TYPE_LOCAL};
         // Submit the query and get a Cursor object back.
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-            return false;
+            return null;
         }
         cur = cr.query(uri, EVENT_PROJECTION, selection, selectionArgs, null);
         // wenn er alle Calendar liefern soll:
@@ -160,56 +163,84 @@ public class CalendarInterface {
         // Use the cursor to step through the returned records
         while (cur.moveToNext()) {
             // found
-            calendarData.setCalendarID(cur.getLong(PROJECTION_ID_INDEX));
+            result = cur.getLong(PROJECTION_ID_INDEX);
             cur.close();
-            return true;
+            return result;
         }
 
         cur.close();
-        return false;
+        return null;
     }
 
+    /**
+     * creates the local calendar
+     *
+     * @return returns the Uri to the created calendar
+     */
     private Uri createLocalCalendar() {
         // TODO
 
         Uri uri = Uri.parse(CalendarContract.Calendars.CONTENT_URI.toString());
         Uri calendarUri = uri.buildUpon()
                 .appendQueryParameter(android.provider.CalendarContract.CALLER_IS_SYNCADAPTER, "true")
-                .appendQueryParameter(Calendars.ACCOUNT_NAME, localCalendarName)
+                .appendQueryParameter(Calendars.ACCOUNT_NAME, context.getString(R.string.app_name))
                 .appendQueryParameter(Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL).build();
 
         ContentValues values = new ContentValues();
         values.put(Calendars.NAME, localCalendarName);
-        values.put(Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL);
         values.put(Calendars.CALENDAR_DISPLAY_NAME, localCalendarName);
         values.put(Calendars.CALENDAR_COLOR, 0xFF0000);
         TimeZone tz = TimeZone.getDefault();
         values.put(Calendars.CALENDAR_TIME_ZONE, tz.getID());
         values.put(Calendars.VISIBLE, 1);
-        values.put(Calendars.ACCOUNT_NAME, "Hochschule Hof");
-        values.put(Calendars.OWNER_ACCOUNT, "androidapps@hof-university.de");
+        values.put(Calendars.OWNER_ACCOUNT, Define.FEEDBACKEMAILADDRESS);
+        values.put(Calendars.SYNC_EVENTS, 1);
+        values.put(Calendars.ACCOUNT_NAME, context.getString(R.string.app_name));
+        values.put(Calendars.ACCOUNT_TYPE,CalendarContract.ACCOUNT_TYPE_LOCAL);
         //values.put(Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_ROOT);
-        //values.put(Calendars.SYNC_EVENTS, 1);
         //values.put(Calendars.CAN_PARTIALLY_UPDATE, 1);
 
-        Uri newCalendar = context.getContentResolver().insert(calendarUri, values);
+        Uri newCalendarUri = context.getContentResolver().insert(calendarUri, values);
 
-        return newCalendar;
-    }
-
-    public void removeCalendar() {
-        // TODO
+        return newCalendarUri;
     }
 
     /**
-     * erzeugt ein Event
+     * removes the local calendar
+     *
+     * @return returns if the removing was successful
+     */
+    public boolean removeLocalCalendar() {
+        // TODO
+        Long localCalendarID = getLocalCalendar();
+
+        if (localCalendarID == null) {
+            return false;
+        }
+
+        Uri.Builder builder = Calendars.CONTENT_URI.buildUpon();
+        Uri calendarToRemoveUri = builder.appendPath(localCalendarID.toString())
+                .appendQueryParameter(android.provider.CalendarContract.CALLER_IS_SYNCADAPTER, "true")
+                .appendQueryParameter(Calendars.ACCOUNT_NAME, context.getString(R.string.app_name))
+                .appendQueryParameter(Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL).build();
+
+        context.getContentResolver().delete(calendarToRemoveUri, null, null);
+
+        //Alle IDs löschen
+        removeAllLectruesEventIDs();
+        return true;
+    }
+
+    /**
+     * creates a event
+     *
      * @param lectureID
      * @param title
      * @param description
      * @param startTime
      * @param endTime
      * @param location
-     * @return eventID oder null wenn keine Berechtigung
+     * @return eventID or null if no permission
      */
     private Long createEvent(String lectureID, String title, String description, Date startTime, Date endTime, String location) {
         if (calendarData.getCalendarID() == null) {
@@ -264,7 +295,7 @@ public class CalendarInterface {
         // TODO
         String lectureID = "";
 
-        lectureID = change.getId().substring(0, change.getId().indexOf(" Vertretung"));
+        lectureID = change.getId().substring(0, change.getId().indexOf(Define.CHANGES_SUBSTRING));
 
         ArrayList<Long> eventIDs = calendarData.getLecturesEventIDs().get(lectureID);
 
@@ -407,6 +438,7 @@ public class CalendarInterface {
                 calendarData.getLecturesEventIDs().keySet()) {
             deleteAllEvents(lectureID);
         }
+        removeAllLectruesEventIDs();
     }
 
     private void addLecturesEventID(String lectureID, Long eventID) {
@@ -430,6 +462,10 @@ public class CalendarInterface {
 
     private void removeAllLectureEventIDs(String lectureID) {
         calendarData.getLecturesEventIDs().put(lectureID, new ArrayList<Long>());
+    }
+
+    private void removeAllLectruesEventIDs() {
+        calendarData.getLecturesEventIDs().clear();
     }
 
     private void addChangesEventID(String lectureID, Long eventID) {

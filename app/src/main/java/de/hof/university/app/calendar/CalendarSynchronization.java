@@ -11,6 +11,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
+import de.hof.university.app.MainActivity;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.model.schedule.LectureChange;
 import de.hof.university.app.model.schedule.LectureItem;
@@ -19,24 +20,24 @@ import de.hof.university.app.model.schedule.LectureItem;
  * Created by Daniel on 13.05.2017.
  */
 
-public class CalendarInterfaceController {
-    private static CalendarInterfaceController calendarInterfaceController = null;
+public class CalendarSynchronization {
+    private static CalendarSynchronization calendarSynchronization = null;
 
     private Context context;
     private CalendarInterface calendarInterface;
     private HashMap<String, Long> calendars = new HashMap<>();
 
-    public static CalendarInterfaceController getInstance(Context context) {
-        if (CalendarInterfaceController.calendarInterfaceController == null) {
-            CalendarInterfaceController.calendarInterfaceController = new CalendarInterfaceController(context);
+    public static CalendarSynchronization getInstance() {
+        if (CalendarSynchronization.calendarSynchronization == null) {
+            CalendarSynchronization.calendarSynchronization = new CalendarSynchronization();
         }
-        return CalendarInterfaceController.calendarInterfaceController;
+        return CalendarSynchronization.calendarSynchronization;
     }
 
-    private CalendarInterfaceController(Context context) {
+    private CalendarSynchronization() {
         // TODO
-        this.context = context;
-        calendarInterface = CalendarInterface.getInstance(context);
+        this.context = MainActivity.contextOfApplication;
+        calendarInterface = CalendarInterface.getInstance();
     }
 
     public void createAllEvents() {
@@ -136,12 +137,19 @@ public class CalendarInterfaceController {
         }.start();
     }
 
-    public void removeCalendar() {
+    /**
+     * removes the local calendar or removes the events from a selected calendar
+     */
+    public void stopCalendarSynchronization() {
         new Thread() {
             @Override
             public void run() {
-                deleteAllEvents();
-                calendarInterface.removeCalendar();
+                //lösche den lokalen Kalender
+                if (!calendarInterface.removeLocalCalendar()) {
+                    // falls es nicht geklappt hat dann lösche die Events
+                    // Bedeutet: Nutzer hat einen eigenen Kaledner ausgweählt.
+                    deleteAllEvents();
+                }
                 calendarInterface.saveCalendarData();
             }
         }.start();

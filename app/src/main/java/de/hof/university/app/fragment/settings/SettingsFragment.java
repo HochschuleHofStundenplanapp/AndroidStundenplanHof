@@ -48,7 +48,7 @@ import de.hof.university.app.Communication.RegisterLectures;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.Util.Define;
-import de.hof.university.app.calendar.CalendarInterfaceController;
+import de.hof.university.app.calendar.CalendarSynchronization;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.LoginController;
 import de.hof.university.app.model.settings.StudyCourse;
@@ -63,7 +63,7 @@ public class SettingsFragment extends PreferenceFragment {
 	private ProgressDialog progressDialog;
 	private List<StudyCourse> studyCourseList;
 	private LoginController loginController = null;
-	private CalendarInterfaceController calendarInterfaceController = null;
+	private CalendarSynchronization calendarSynchronization = null;
 
     private final int REQUEST_CODE_ASK_CALENDAR_PERMISSIONS =  2;
 
@@ -75,7 +75,7 @@ public class SettingsFragment extends PreferenceFragment {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
 		loginController = LoginController.getInstance(getActivity());
-		calendarInterfaceController = CalendarInterfaceController.getInstance(getActivity().getApplicationContext());
+		calendarSynchronization = CalendarSynchronization.getInstance();
 
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.preferences);
@@ -149,7 +149,7 @@ public class SettingsFragment extends PreferenceFragment {
 						turnCalendarSyncOn();
 					}
 				} else {
-					calendarInterfaceController.removeCalendar();
+					calendarSynchronization.stopCalendarSynchronization();
 				}
 				return true;
 			}
@@ -522,7 +522,7 @@ public class SettingsFragment extends PreferenceFragment {
 		calendars.add(getString(R.string.calendar_synchronitation_ownLocalCalendar));
 
 		// Die weiteren Kalender danach
-		calendars.addAll(calendarInterfaceController.getCalendars());
+		calendars.addAll(calendarSynchronization.getCalendars());
 
 		new AlertDialog.Builder(getView().getContext())
 				.setTitle(R.string.calendar_synchronization)
@@ -539,11 +539,11 @@ public class SettingsFragment extends PreferenceFragment {
 										String calendarName = calendars.get(which);
 										if (calendarName.equals(getString(R.string.calendar_synchronitation_ownLocalCalendar))) {
 											// lokaler Kalender
-											calendarInterfaceController.setCalendar(null);
+											calendarSynchronization.setCalendar(null);
 										} else {
-											calendarInterfaceController.setCalendar(calendarName);
+											calendarSynchronization.setCalendar(calendarName);
 										}
-										calendarInterfaceController.createAllEvents();
+										calendarSynchronization.createAllEvents();
 									}
 								})
 								.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {

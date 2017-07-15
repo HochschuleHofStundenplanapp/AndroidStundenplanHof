@@ -43,7 +43,7 @@ import de.hof.university.app.R;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.Util.Log;
 import de.hof.university.app.Util.MyString;
-import de.hof.university.app.calendar.CalendarInterfaceController;
+import de.hof.university.app.calendar.CalendarSynchronization;
 import de.hof.university.app.data.parser.Parser;
 import de.hof.university.app.data.parser.ParserFactory;
 import de.hof.university.app.data.parser.ParserFactory.EParser;
@@ -615,9 +615,9 @@ public class DataManager {
                 public void run() {
                     if (getMySchedule(context).getIds().size() == 1) {
                         // Falls es die erste hinzugefügte Vorlesung ist, alle alten raus löschen
-                        CalendarInterfaceController.getInstance(context).deleteAllEvents();
+                        CalendarSynchronization.getInstance().deleteAllEvents();
                     }
-                    CalendarInterfaceController.getInstance(context).createAllEvents(lectureItem);
+                    CalendarSynchronization.getInstance().createAllEvents(lectureItem);
                 }
             }.start();
         }
@@ -629,7 +629,7 @@ public class DataManager {
         if (calendarSynchronization) {
             // falls es nicht die ersten Vorlesungen sind die hinzugefügt werden, denn dann stehen sie schon drin.
             if (getMySchedule(context).getLectures().size() != 0) {
-                CalendarInterfaceController.getInstance(context).createAllEvents(lecturesItems);
+                CalendarSynchronization.getInstance().createAllEvents(lecturesItems);
             }
         }
     }
@@ -638,7 +638,7 @@ public class DataManager {
         final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION), false);
 
         if (calendarSynchronization) {
-            CalendarInterfaceController.getInstance(context).deleteAllEvents(lectureID);
+            CalendarSynchronization.getInstance().deleteAllEvents(lectureID);
         }
     }
 
@@ -646,7 +646,7 @@ public class DataManager {
         final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION), false);
 
         if (calendarSynchronization) {
-            CalendarInterfaceController.getInstance(context).updateCalendar();
+            CalendarSynchronization.getInstance().updateCalendar();
         }
     }
 
@@ -654,7 +654,7 @@ public class DataManager {
         final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION), false);
 
         if (calendarSynchronization) {
-            CalendarInterfaceController.getInstance(context).updateChanges();
+            CalendarSynchronization.getInstance().updateChanges();
         }
     }
 
