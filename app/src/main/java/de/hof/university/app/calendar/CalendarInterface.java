@@ -426,6 +426,11 @@ public class CalendarInterface {
 
     public void deleteAllEvents(String lectureID) {
         ArrayList<Long> eventIDs = calendarData.getLecturesEventIDs().get(lectureID);
+
+        if (eventIDs == null) {
+            return;
+        }
+
         for (Long eventID :
                 eventIDs) {
             deleteEvent(eventID);

@@ -193,7 +193,7 @@ public class CalendarSynchronization {
     }
 
     private class DeleteAllEventsTask extends AsyncTask<String, Void, Boolean> {
-        protected Boolean doInBackground(String... p_lectureItems) {
+        protected Boolean doInBackground(final String... p_lectureItems) {
             if (p_lectureItems == null || p_lectureItems.length == 0) {
                 calendarInterface.deleteAllEvents();
             } else {
