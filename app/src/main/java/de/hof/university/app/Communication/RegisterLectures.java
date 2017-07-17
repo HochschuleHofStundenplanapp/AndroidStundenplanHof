@@ -123,7 +123,6 @@ public class RegisterLectures {
                 wr.close();
 
                 if (client.getResponseCode() == 200) {
-                    String text = "";
                     BufferedReader reader = null;
 
                     reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -136,7 +135,7 @@ public class RegisterLectures {
                         sb.append(line).append("\n");
                     }
 
-                    text = sb.toString();
+                    final String text = sb.toString();
 
                     Log.d(TAG, "SERVER RESPONSE: " + text);
                 } else {
