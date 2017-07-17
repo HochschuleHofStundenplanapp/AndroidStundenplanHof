@@ -1,8 +1,8 @@
 package de.hof.university.app.calendar;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,6 +21,7 @@ import de.hof.university.app.model.schedule.LectureItem;
  */
 
 public class CalendarSynchronization {
+    @SuppressLint("StaticFieldLeak")
     private static CalendarSynchronization calendarSynchronization = null;
 
     private Context context;
@@ -150,7 +151,6 @@ public class CalendarSynchronization {
                     // Bedeutet: Nutzer hat einen eigenen Kaledner ausgweählt.
                     deleteAllEvents();
                 }
-                calendarInterface.saveCalendarData();
             }
         }.start();
     }
@@ -185,7 +185,7 @@ public class CalendarSynchronization {
 
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
-            Toast.makeText(context, "CreateAllEventsTask fertig. Result: " + result, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "CreateAllEventsTask fertig. Result: " + result, Toast.LENGTH_SHORT).show();
             if (result) {
                 calendarInterface.saveCalendarData();
             }
@@ -204,7 +204,7 @@ public class CalendarSynchronization {
 
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
-            Toast.makeText(context, "DeleteAllEventsTask fertig. Result: " + result, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(context, "DeleteAllEventsTask fertig. Result: " + result, Toast.LENGTH_SHORT).show();
             if (result) {
                 calendarInterface.saveCalendarData();
             }

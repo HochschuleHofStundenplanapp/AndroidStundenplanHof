@@ -1,6 +1,7 @@
 package de.hof.university.app.calendar;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -13,8 +14,6 @@ import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
 import android.support.v4.app.ActivityCompat;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -32,14 +31,15 @@ import de.hof.university.app.model.schedule.LectureChange;
  * Created by Daniel on 13.05.2017.
  */
 
-public class CalendarInterface {
+class CalendarInterface {
     public static final String TAG = "CalendarInterface";
 
+    @SuppressLint("StaticFieldLeak")
     private static CalendarInterface calendarInterface = null;
 
     // Projection array. Creating indices for this array instead of doing
     // dynamic lookups improves performance.
-    public static final String[] EVENT_PROJECTION = new String[]{
+    private static final String[] EVENT_PROJECTION = new String[]{
             Calendars._ID,                          // 0
             Calendars.ACCOUNT_NAME,                 // 1
             Calendars.CALENDAR_DISPLAY_NAME,        // 2
@@ -48,7 +48,7 @@ public class CalendarInterface {
             Calendars.NAME                          // 5
     };
 
-    public static final String[] INSTANCE_PROJECTION = new String[]{
+    private static final String[] INSTANCE_PROJECTION = new String[]{
             CalendarContract.Instances.EVENT_ID,      // 0
             CalendarContract.Instances.BEGIN,         // 1
             CalendarContract.Instances.TITLE          // 2
@@ -89,6 +89,7 @@ public class CalendarInterface {
 
         if (calendarData.getCalendarID() == null) {
             // TODO CalendarID leer
+            Log.d(TAG, "CalendarID is empty in constructor");
         }
     }
 
@@ -108,10 +109,10 @@ public class CalendarInterface {
         }
     }
 
-    public HashMap<String, Long> getCalendars() {
+    HashMap<String, Long> getCalendars() {
         HashMap<String, Long> result = new HashMap<>();
         // Run query
-        Cursor cur = null;
+        Cursor cur;
         ContentResolver cr = context.getContentResolver();
         Uri uri = Calendars.CONTENT_URI;
 
@@ -122,6 +123,10 @@ public class CalendarInterface {
 
         // wenn er alle Calendar liefern soll:
         cur = cr.query(uri, EVENT_PROJECTION, null, null, null);
+
+        if (cur == null) {
+            return result;
+        }
 
         // Use the cursor to step through the returned records
         while (cur.moveToNext()) {
@@ -139,10 +144,10 @@ public class CalendarInterface {
      * @return return if the calendar ID if it was found, else null
      */
     private Long getLocalCalendar() {
-        Long result = null;
+        Long result;
 
         // Run query
-        Cursor cur = null;
+        Cursor cur;
         ContentResolver cr = context.getContentResolver();
         Uri uri = Calendars.CONTENT_URI;
         String selection = "(("
@@ -160,8 +165,12 @@ public class CalendarInterface {
         // wenn er alle Calendar liefern soll:
         //cur = cr.query(uri, EVENT_PROJECTION, null, null, null);
 
+        if (cur == null) {
+            return null;
+        }
+
         // Use the cursor to step through the returned records
-        while (cur.moveToNext()) {
+        if (cur.moveToNext()) {
             // found
             result = cur.getLong(PROJECTION_ID_INDEX);
             cur.close();
@@ -196,13 +205,12 @@ public class CalendarInterface {
         values.put(Calendars.OWNER_ACCOUNT, Define.FEEDBACKEMAILADDRESS);
         values.put(Calendars.SYNC_EVENTS, 1);
         values.put(Calendars.ACCOUNT_NAME, context.getString(R.string.app_name));
-        values.put(Calendars.ACCOUNT_TYPE,CalendarContract.ACCOUNT_TYPE_LOCAL);
+        values.put(Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL);
         //values.put(Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_ROOT);
         //values.put(Calendars.CAN_PARTIALLY_UPDATE, 1);
 
-        Uri newCalendarUri = context.getContentResolver().insert(calendarUri, values);
-
-        return newCalendarUri;
+        // return Uri of the new created calendar
+        return context.getContentResolver().insert(calendarUri, values);
     }
 
     /**
@@ -210,7 +218,7 @@ public class CalendarInterface {
      *
      * @return returns if the removing was successful
      */
-    public boolean removeLocalCalendar() {
+    boolean removeLocalCalendar() {
         // TODO
         Long localCalendarID = getLocalCalendar();
 
@@ -228,27 +236,27 @@ public class CalendarInterface {
 
         //Alle IDs löschen
         removeAllLectruesEventIDs();
+        saveCalendarData();
         return true;
     }
 
     /**
      * creates a event
      *
-     * @param lectureID
-     * @param title
-     * @param description
-     * @param startTime
-     * @param endTime
-     * @param location
+     * @param title the title of the event
+     * @param description the description of the event
+     * @param startDate the start Date of the event
+     * @param endDate the end Date of the event
+     * @param location the location of the event
      * @return eventID or null if no permission
      */
-    private Long createEvent(String lectureID, String title, String description, Date startTime, Date endTime, String location) {
+    private Long createEvent(String title, String description, Date startDate, Date endDate, String location) {
         if (calendarData.getCalendarID() == null) {
             return null;
         }
         ContentValues values = new ContentValues();
-        values.put(Events.DTSTART, startTime.getTime());
-        values.put(Events.DTEND, endTime.getTime());
+        values.put(Events.DTSTART, startDate.getTime());
+        values.put(Events.DTEND, endDate.getTime());
         values.put(Events.TITLE, title);
         values.put(Events.DESCRIPTION, description);
         values.put(Events.EVENT_LOCATION, location);
@@ -261,7 +269,7 @@ public class CalendarInterface {
     }
 
     void createLectureEvent(String lectureID, String title, String description, Date startTime, Date endTime, String location) {
-        Long eventID = createEvent(lectureID, title, description, startTime, endTime, location);
+        Long eventID = createEvent(title, description, startTime, endTime, location);
 
         // Wenn null dann keine Berechtigung oder keine CalendarID und returnen
         if (eventID == null) return;
@@ -271,7 +279,7 @@ public class CalendarInterface {
     }
 
     private void createChangeEvent(String lectureID, String title, String description, Date startTime, Date endTime, String location) {
-        Long eventID = createEvent(lectureID, title, description, startTime, endTime, location);
+        Long eventID = createEvent(title, description, startTime, endTime, location);
 
         // Wenn null dann keine Berechtigung oder keine CalendarID und returnen
         if (eventID == null) return;
@@ -287,13 +295,17 @@ public class CalendarInterface {
         }
         Uri uri = cr.insert(Events.CONTENT_URI, values);
 
+        if (uri == null) {
+            return null;
+        }
+
         // get the event ID that is the last element in the Uri
         return Long.parseLong(uri.getLastPathSegment());
     }
 
-    public void updateChange(LectureChange change) {
+    void updateChange(LectureChange change) {
         // TODO
-        String lectureID = "";
+        String lectureID;
 
         lectureID = change.getId().substring(0, change.getId().indexOf(Define.CHANGES_SUBSTRING));
 
@@ -332,12 +344,12 @@ public class CalendarInterface {
         }
     }
 
-    public String getLocation(String room) {
+    String getLocation(String room) {
         if (room.length() < 4) {
             return context.getString(R.string.noLocation);
         }
 
-        if (room.indexOf(Define.ROOM_MUEB) != -1) {
+        if (room.contains(Define.ROOM_MUEB)) {
             // Münchberg
             return Define.LOCATION_MUEB + ", " + room;
         } else {
@@ -364,11 +376,11 @@ public class CalendarInterface {
         Uri updateUri = ContentUris.withAppendedId(Events.CONTENT_URI, eventID);
 
         ContentResolver cr = context.getContentResolver();
-        int rows = cr.update(updateUri, values, null, null);
+        cr.update(updateUri, values, null, null);
     }
 
     private Boolean doEventExits(Long eventID, String title, Date startDate, Date endDate) {
-        Cursor cur = null;
+        Cursor cur;
         ContentResolver cr = context.getContentResolver();
 
         // The ID of the recurring event whose instances you are searching
@@ -390,23 +402,29 @@ public class CalendarInterface {
                 selectionArgs,
                 null);
 
+        if (cur == null) {
+            return false;
+        }
+
         while (cur.moveToNext()) {
-            String eventTitle = null;
-            long eventEventID = 0;
-            long beginVal = 0;
+            String eventTitle;
+            //long eventEventID;
+            //long beginVal;
 
             // Get the field values
-            eventEventID = cur.getLong(PROJECTION_ID_INDEX);
-            beginVal = cur.getLong(PROJECTION_BEGIN_INDEX);
+            //eventEventID = cur.getLong(PROJECTION_ID_INDEX);
+            //beginVal = cur.getLong(PROJECTION_BEGIN_INDEX);
             eventTitle = cur.getString(PROJECTION_TITLE_INDEX);
 
             // Do something with the values.
-            Log.d(TAG, "Event:  " + eventTitle);
-            Log.d(TAG, "EventID: " + eventEventID);
+            //Log.d(TAG, "Event:  " + eventTitle);
+            //Log.d(TAG, "EventID: " + eventEventID);
+            /*
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(beginVal);
             DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
             Log.i(TAG, "Date: " + formatter.format(calendar.getTime()));
+            */
 
             // TODO vielleicht ohne title da dieser bearbeitet werden kann
             if (eventTitle.equals(title)) {
@@ -421,10 +439,10 @@ public class CalendarInterface {
         Uri deleteUri = ContentUris.withAppendedId(Events.CONTENT_URI, eventID);
 
         ContentResolver cr = context.getContentResolver();
-        int rows = cr.delete(deleteUri, null, null);
+        cr.delete(deleteUri, null, null);
     }
 
-    public void deleteAllEvents(String lectureID) {
+    void deleteAllEvents(String lectureID) {
         ArrayList<Long> eventIDs = calendarData.getLecturesEventIDs().get(lectureID);
 
         if (eventIDs == null) {
@@ -438,7 +456,7 @@ public class CalendarInterface {
         removeAllLectureEventIDs(lectureID);
     }
 
-    public void deleteAllEvents() {
+    void deleteAllEvents() {
         for (String lectureID :
                 calendarData.getLecturesEventIDs().keySet()) {
             deleteAllEvents(lectureID);
@@ -492,7 +510,7 @@ public class CalendarInterface {
         }
     }
 
-    public void saveCalendarData() {
+    void saveCalendarData() {
         DataManager.getInstance().saveObject(context, calendarData, Define.calendarIDsFilename);
     }
 

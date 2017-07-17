@@ -430,7 +430,7 @@ public class DataManager {
 
     private MySchedule getMySchedule(final Context context) {
         if (this.mySchedule == null) {
-            Object obtMyScheduleOpj = DataManager.readObject(context, Define.myScheduleFilename);
+            Object obtMyScheduleOpj = readObject(context, Define.myScheduleFilename);
             if (obtMyScheduleOpj != null && obtMyScheduleOpj instanceof Set) {
                 this.mySchedule = new MySchedule();
                 this.mySchedule.setIds((Set<String>) obtMyScheduleOpj);
@@ -546,7 +546,7 @@ public class DataManager {
     }
 
     // this is the general method to serialize an object
-    public static Object readObject(final Context context, String filename) {
+    public Object readObject(final Context context, String filename) {
         Object result = null;
         try {
             final File file = new File(context.getFilesDir(), filename);

@@ -38,7 +38,7 @@ public class DataConnector {
 
     public static final String TAG = "DataConnector";
 
-    public static final String readStringFromUrl(final String strUrl) {
+    final String readStringFromUrl(final String strUrl) {
         InputStream inputStream;
 
         HttpURLConnection urlConnection;
