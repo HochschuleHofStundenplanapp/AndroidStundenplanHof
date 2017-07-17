@@ -18,10 +18,14 @@ package de.hof.university.app.model.schedule;
 
 import java.io.Serializable;
 
+import de.hof.university.app.Util.Define;
+
 /**
  * Created by larsg on 10.05.2016.
  */
 public class LectureChange implements Serializable {
+    private static final long serialVersionUID = Define.serialVersionUIDv1;
+
     private final String label;
     private final String comment;
     private final String group;

@@ -26,7 +26,8 @@ import de.hof.university.app.model.HofObject;
  */
 
 public class Meals extends HofObject {
-	private static final long serialVersionUID = Define.serialVersionUID;
+	private static final long serialVersionUID = Define.serialVersionUIDv1;
+
 	private ArrayList<Meal> meals;
 
 	public Meals() {

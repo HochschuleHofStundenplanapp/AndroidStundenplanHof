@@ -35,6 +35,7 @@ public final class Define {
 	public static final String PARSER_DAY = "day"; //NON-NLS
 	public static final String PARSER_TYPE = "type"; //NON-NLS
 	public static final String PARSER_STYLE = "style"; //NON-NLS
+	public static final String PARSER_SP = "sp"; //NON-NLS
 	public static final String PARSER_STARTTIME = "starttime"; //NON-NLS
 	public static final String PARSER_ENDTIME = "endtime"; //NON-NLS
 	public static final String PARSER_STARTDATE = "startdate"; //NON-NLS
@@ -65,7 +66,9 @@ public final class Define {
 	public static final String mealsFragmentName = "MEALS_FRAGMENT";
 
 
-	public static final long serialVersionUID = 1L;
+	public static final long serialVersionUIDv1 = 1L;
+	// SerialVersionUID falls etwas geändert wird, das dazu führt das das alte nicht mehr geladen werden kann:
+	public static final long serialVersionUIDv2 = 2L;
 
 	// Essensplan
 	public final static String URL_STUDENTENWERK = "https://www.studentenwerk-oberfranken.de/?eID=bwrkSpeiseplanRss&tx_bwrkspeiseplan_pi2%5Bbar%5D=340&tx_bwrkspeiseplan_pi2%5Bdate%5D=";
