@@ -68,6 +68,9 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
                 "id='" + id + '\'' +
                 ", weekday='" + weekday + '\'' +
                 ", label='" + label + '\'' +
+                ", type='" + type + '\'' +
+                ", style='" + style + '\'' +
+                ", sp='" + sp + '\'' +
                 ", group='" + group + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
@@ -149,34 +152,18 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
      */
     public int compareTo(@NonNull LectureItem lectureItem) {
         return startDate.compareTo(lectureItem.startDate);
-//        // Jahr
-//        if (Integer.parseInt(getStartDate().substring(6)) > Integer.parseInt(lectureItem.getStartDate().substring(6))) {
-//            return +1;
-//        } else if (Integer.parseInt(getStartDate().substring(6)) == Integer.parseInt(lectureItem.getStartDate().substring(6))) {
-//            // Monat
-//            if (Integer.parseInt(getStartDate().substring(3, 5)) > Integer.parseInt(lectureItem.getStartDate().substring(3, 5))) {
-//                return +1;
-//            } else if (Integer.parseInt(getStartDate().substring(3, 5)) == Integer.parseInt(lectureItem.getStartDate().substring(3, 5))) {
-//                // Tag
-//                if (Integer.parseInt(getStartDate().substring(0, 2)) > Integer.parseInt(lectureItem.getStartDate().substring(0, 2))) {
-//                    return +1;
-//                } else if (Integer.parseInt(getStartDate().substring(0, 2)) == Integer.parseInt(lectureItem.getStartDate().substring(0, 2))) {
-//                    if (Integer.parseInt(getBeginTime().substring(0, 2)) > Integer.parseInt(lectureItem.getBeginTime().substring(0, 2))) {
-//                        return +1;
-//                    } else if (Integer.parseInt(getBeginTime().substring(0, 2)) == Integer.parseInt(lectureItem.getBeginTime().substring(0, 2))) {
-//                        return 0;
-//                    }
-//                }
-//            }
-//        }
-//        else
-//            if ( BuildConfig.DEBUG) assert (false);
-//
-//        return -1;
     }
 
     public boolean equals(LectureItem other) {
-        if (!this.toString().equals(other.toString())) {
+        if (!this.id.equals(other.id)
+                || !this.weekday.equals(other.weekday)
+                || !this.label.equals(other.label)
+                || !this.group.equals(other.group)
+                || !this.startDate.toString().equals(other.startDate.toString())
+                || !this.endDate.toString().equals(other.endDate.toString())
+                || !this.room.equals(other.room)
+                || !this.lecturer.equals(other.lecturer)
+                || !this.comment.equals(other.comment)) {
             return false;
         }
         return true;

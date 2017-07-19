@@ -65,7 +65,7 @@ public class MyScheduleParser extends ScheduleParser {
                 // schauen ob diese Vorlesung bereits enthalten ist
                 boolean contains = false;
                 for (LectureItem resultLectureItem : result) {
-                    if (resultLectureItem.equals(lectureItem)) {
+                    if (lectureItem.equals(resultLectureItem)) {
                         contains = true;
                     }
                 }
