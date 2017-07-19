@@ -17,6 +17,7 @@
 package de.hof.university.app.Util;
 
 /**
+ * For defined variables to use globally
  * Created by stepping on 17.07.2016.
  */
 public final class Define {

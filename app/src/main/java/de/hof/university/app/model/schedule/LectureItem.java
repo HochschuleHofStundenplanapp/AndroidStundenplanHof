@@ -22,11 +22,11 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import de.hof.university.app.BuildConfig;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.data.DataManager;
 
 /**
+ * For one lecture
  * Created by larsg on 09.05.2016.
  */
 public class LectureItem implements Comparable<LectureItem>, Serializable {
@@ -156,17 +156,14 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
     }
 
     public boolean equals(LectureItem other) {
-        if (!this.id.equals(other.id)
-                || !this.weekday.equals(other.weekday)
-                || !this.label.equals(other.label)
-                || !this.group.equals(other.group)
-                || !this.startDate.toString().equals(other.startDate.toString())
-                || !this.endDate.toString().equals(other.endDate.toString())
-                || !this.room.equals(other.room)
-                || !this.lecturer.equals(other.lecturer)
-                || !this.comment.equals(other.comment)) {
-            return false;
-        }
-        return true;
+        return (this.id.equals(other.id)
+                && this.weekday.equals(other.weekday)
+                && this.label.equals(other.label)
+                && this.group.equals(other.group)
+                && this.startDate.toString().equals(other.startDate.toString())
+                && this.endDate.toString().equals(other.endDate.toString())
+                && this.room.equals(other.room)
+                && this.lecturer.equals(other.lecturer)
+                && this.comment.equals(other.comment));
     }
 }
