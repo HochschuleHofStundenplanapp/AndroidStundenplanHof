@@ -31,6 +31,7 @@ import java.util.Locale;
 
 import de.hof.university.app.BuildConfig;
 import de.hof.university.app.Util.Define;
+import de.hof.university.app.calendar.DateCorrection;
 import de.hof.university.app.model.schedule.LectureItem;
 
 /**
@@ -140,6 +141,15 @@ public class ScheduleParser implements Parser<LectureItem> {
 
         calendar.set(endYear, endMonth - 1, endDay, endHours, endMinutes, 0);
         Date endDate = calendar.getTime();
+
+        // Falls es kein Einzeltermin ist
+        if (startDay != endDay || startMonth != endMonth || startYear != endYear) {
+            // Date Correction
+            DateCorrection dateCorrection = new DateCorrection();
+            startDate = dateCorrection.getCorrectStartDate(startDate);
+            endDate = dateCorrection.getCorrectEndDate(endDate);
+        }
+
 
         return new LectureItem(id, weekday, label, type, style, sp, group, startDate, endDate, room, lecturer, comment);
     }

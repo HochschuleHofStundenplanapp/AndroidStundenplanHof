@@ -525,7 +525,7 @@ public class DataManager {
 
     // this is the general method to serialize an object
     //
-    public void saveObject(final Context context, Object object, final String filename) {
+    public synchronized void saveObject(final Context context, Object object, final String filename) {
         try {
             final File file = new File(context.getFilesDir(), filename);
             final FileOutputStream fos = new FileOutputStream(file);
@@ -546,7 +546,7 @@ public class DataManager {
     }
 
     // this is the general method to serialize an object
-    public Object readObject(final Context context, String filename) {
+    public synchronized Object readObject(final Context context, String filename) {
         Object result = null;
         try {
             final File file = new File(context.getFilesDir(), filename);
