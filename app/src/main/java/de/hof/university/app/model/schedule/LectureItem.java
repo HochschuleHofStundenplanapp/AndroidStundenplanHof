@@ -22,6 +22,7 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import de.hof.university.app.BuildConfig;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.data.DataManager;
 
@@ -31,13 +32,13 @@ import de.hof.university.app.data.DataManager;
 public class LectureItem implements Comparable<LectureItem>, Serializable {
     private static final long serialVersionUID = Define.serialVersionUIDv2;
 
-    //not used: private static final String date_regex = "dd-MM-yyyy HH:mm:ss";
+	//not used: private static final String date_regex = "dd-MM-yyyy HH:mm:ss";
 
     private final String id;
     private final String weekday;
     private final String label;
     private final String type;
-    private final String style;
+    //private final String style;
     private final String sp;
     private final String group;
     private final Date startDate;
@@ -52,7 +53,7 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
         this.weekday = weekday;
         this.label = label;
         this.type = type;
-        this.style = style;
+        //this.style = style;
         this.sp = sp;
         this.group = group;
         this.startDate = startDate;
@@ -80,13 +81,13 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
                 '}';
     }
 
-    public String getId() {
-        return id;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public final String getWeekday() {
-        return weekday;
-    }
+	public final String getWeekday() {
+		return weekday;
+	}
 
     public final Date getStartDate() {
         return startDate;
@@ -96,9 +97,9 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
         return endDate;
     }
 
-    public final String getRoom() {
-        return room;
-    }
+	public final String getRoom() {
+		return room;
+	}
 
     public final String getTime() {
         String resultString;
@@ -120,34 +121,34 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
         return label;
     }
 
-    public final String getDetails() {
-        String result = label;
+	public final String getDetails() {
+		String result = label;
 
-        if (sp != null && !sp.equals("")) {
-            result += " " + sp;
-        }
+		if (sp != null && !sp.equals("")) {
+			result += " " + sp;
+		}
 
-        // Bisher nur FWPM oder AWPM anzeigen
-        if (type.equals("FWPM") || type.equals("AWPM")) {
-            result += " (" + type + ")";
-        }
+		// Bisher nur FWPM oder AWPM anzeigen
+		if (type.equals("FWPM") || type.equals("AWPM")) {
+			result += " (" + type + ")";
+		}
 
-        // Hier steht unter anderem "Beginn ab KW XY"
-        if ((comment != null) && !comment.isEmpty()) {
-            result += '\n' + comment;
-        }
+		// Hier steht unter anderem "Beginn ab KW XY"
+		if ((comment != null) && !comment.isEmpty()) {
+			result += '\n' + comment;
+		}
 
-        if ((group != null) && !group.isEmpty()) {
-            result += '\n' + group;
-        }
+		if ((group != null) && !group.isEmpty()) {
+			result += '\n' + group;
+		}
 
-        result += '\n' + lecturer;
+		result += '\n' + lecturer;
 
-        return result;
-    }
+		return result;
+	}
 
-    @Override
-    /*
+	@Override
+	/*
     ** Sortiert nach Sartzeit
      */
     public int compareTo(@NonNull LectureItem lectureItem) {

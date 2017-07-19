@@ -45,10 +45,6 @@ public class StudyCourse implements Serializable {
     }
 
 
-    public final long getId() {
-        return id;
-    }
-
     public final String getName() {
         return name;
     }

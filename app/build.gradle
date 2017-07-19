@@ -17,12 +17,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.3'
+    compileSdkVersion 26
+    buildToolsVersion '26.0.0'
     defaultConfig {
         applicationId 'de.hof.university.app'
         minSdkVersion 16
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 19
         versionName '2.3.5 beta'
     }
@@ -32,7 +32,9 @@ android {
 			//Folgender Pfad führt zum Absturz des Gradle Wrappers auf manchen Systemen (wie meinen Mac)!
 			//storeFile file('D:\\Projekt\\Mobile.AndroidStudio\\Hof.Stundenplaner\\fhhkey.jks')
 			keyAlias "fhhkey"
+			keyPassword 'IUwbayNG54S5C4udGkjs'
 			storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
+			storePassword 'IUwbayNG54S5C4udGkjs'
 			}
 	}
 

@@ -112,7 +112,7 @@ public final class Define {
 
 
 	// show the fragments dealing with the location of the user
-	public static final boolean SHOW_LOCATION_FRAGMENT = true;
+	//not used: public static final boolean SHOW_LOCATION_FRAGMENT = true;
 	// show Notenblatt and Notenfreigabe
 	// TODO Weil ausblenden solange die neue Authentifizierungsmethode noch nicht funktioniert
 	public static final boolean SHOW_NOTEN = false;
@@ -130,7 +130,7 @@ public final class Define {
 
 
 	// how long to store content from
-	public static final int MAX_CACHE_TIME = 60 * 24 * 2;			// zwei Tage
+	//not used: public static final int MAX_CACHE_TIME = 60 * 24 * 2;			// zwei Tage
 
 	//how long to not auto refresh
 	public static final int SCHEDULE_CACHE_TIME = 60 * 24 * 7;		// eine Woche
@@ -151,7 +151,7 @@ public final class Define {
 
 	// Pushnotifications
 	public final static String FCM_TOKEN="de.hof-university.app.fcm_token";
-	public final static String FCM_PREF="de.hof-university.app.fcm_pref";
+	//not used: public final static String FCM_PREF="de.hof-university.app.fcm_pref";
 
 
 	//EMail

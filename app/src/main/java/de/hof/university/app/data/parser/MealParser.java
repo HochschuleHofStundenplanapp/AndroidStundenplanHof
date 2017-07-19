@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import de.hof.university.app.BuildConfig;
 import de.hof.university.app.model.meal.Meal;
@@ -49,7 +50,9 @@ final public class MealParser implements Parser<Meal> {
     @Override
     public final ArrayList<Meal> parse(String[] params) {
         ArrayList<Meal> result = new ArrayList<>();
+
         if (params.length == 2) {
+
             String xmlString = params[0];
             try {
                 tariff = Integer.valueOf(params[1]);
@@ -75,7 +78,8 @@ final public class MealParser implements Parser<Meal> {
 
                 int eventType = xmlParser.getEventType();
                 while (eventType != XmlPullParser.END_DOCUMENT) {
-                    String xmlTag = xmlParser.getName();
+
+                    final String xmlTag = xmlParser.getName();
                     switch (eventType) {
                         case XmlPullParser.START_TAG:
                             if (xmlTag.equalsIgnoreCase("gericht")) {
@@ -115,7 +119,7 @@ final public class MealParser implements Parser<Meal> {
 
                         case XmlPullParser.END_TAG:
                             if (xmlTag.equalsIgnoreCase("preis")) {
-                                if (tariff == xmlTariff) {
+                                if (tariff.equals(xmlTariff)) {
                                     assert meal != null;
                                     meal.setPrice(xmlText);
                                     meal.setTariff(xmlGroup);

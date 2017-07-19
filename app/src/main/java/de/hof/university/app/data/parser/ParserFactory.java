@@ -37,7 +37,7 @@ public final class ParserFactory {
         } else if (parserEnum == ParserFactory.EParser.MYSCHEDULE) {
             return new MyScheduleParser();
         } else
-        if ( BuildConfig.DEBUG) assert (false);
+        if ( BuildConfig.DEBUG) { assert(false); }
         return null;
     }
 
