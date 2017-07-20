@@ -9,7 +9,58 @@ import java.util.Date;
 
 public class DateCorrection {
 
+    private static DateCorrection dateCorrection = null;
+
+    private Date lastYearSummerStartDate = new Date();
+    private Date lastYearSummerEndDate = new Date();
+    private Date lastYearWinterStartDate = new Date();
+    private Date thisYearWinterEndDate = new Date();
+    private Date thisYearSummerStartDate = new Date();
+    private Date thisYearSummerEndDate = new Date();
+    private Date thisYearWinterStartDate = new Date();
+    private Date nextYearWinterEndDate = new Date();
+
+    private Date beginOfThisYearDate = new Date();
+    private Date endOfThisYearDate = new Date();
+
+    public static DateCorrection getInstance() {
+        if (DateCorrection.dateCorrection == null) {
+            DateCorrection.dateCorrection = new DateCorrection();
+        }
+        return DateCorrection.dateCorrection;
+    }
+
+    private DateCorrection() {
+        Calendar currentDateCal = Calendar.getInstance();
+        currentDateCal.setTime(new Date());
+
+        lastYearSummerStartDate = getSemesterStartDate(currentDateCal.get(Calendar.YEAR) - 1, "SS");
+        lastYearSummerEndDate = getSemesterEndDate(currentDateCal.get(Calendar.YEAR) - 1, "SS");
+        lastYearWinterStartDate = getSemesterStartDate(currentDateCal.get(Calendar.YEAR) - 1, "WS");
+
+        thisYearWinterEndDate = getSemesterEndDate(currentDateCal.get(Calendar.YEAR), "WS");
+        thisYearSummerStartDate = getSemesterStartDate(currentDateCal.get(Calendar.YEAR), "SS");
+        thisYearSummerEndDate = getSemesterEndDate(currentDateCal.get(Calendar.YEAR), "SS");
+        thisYearWinterStartDate = getSemesterStartDate(currentDateCal.get(Calendar.YEAR), "WS");
+
+        nextYearWinterEndDate = getSemesterEndDate(currentDateCal.get(Calendar.YEAR) + 1, "WS");
+
+        Calendar beginOfYearCalendar = Calendar.getInstance();
+        beginOfYearCalendar.setTime(new Date());
+        beginOfYearCalendar.set(Calendar.MONTH, 1 - 1);
+        beginOfYearCalendar.set(Calendar.DATE, 1);
+        beginOfThisYearDate = beginOfYearCalendar.getTime();
+
+        Calendar endOfYearCalendar = Calendar.getInstance();
+        endOfYearCalendar.setTime(new Date());
+        endOfYearCalendar.set(Calendar.MONTH, 12 - 1);
+        endOfYearCalendar.set(Calendar.DATE, 31);
+        endOfThisYearDate = endOfYearCalendar.getTime();
+    }
+
     private String getSemesterFromStartDate(Calendar startDateCal) {
+
+
         if (startDateCal.getTime().after(getSemesterEndDate(startDateCal.get(Calendar.YEAR), "WS")) && startDateCal.getTime().before(getSemesterEndDate(startDateCal.get(Calendar.YEAR), "SS"))) {
             return "SS";
         } else {
@@ -18,13 +69,7 @@ public class DateCorrection {
     }
 
     private String getSemesterFromEndDate(Calendar endDateCal) {
-        Calendar endOfYearCalendar = Calendar.getInstance();
-        endOfYearCalendar.setTime(new Date());
-        endOfYearCalendar.set(Calendar.MONTH, 12 - 1);
-        endOfYearCalendar.set(Calendar.DATE, 31);
-        Date endOfYear = endOfYearCalendar.getTime();
-
-        if (endDateCal.getTime().after(getSemesterEndDate(endDateCal.get(Calendar.YEAR), "SS")) && endDateCal.getTime().before(endOfYear)) {
+        if (endDateCal.getTime().after(getSemesterEndDate(endDateCal.get(Calendar.YEAR), "SS")) && endDateCal.getTime().before(endOfThisYearDate)) {
             return "SS";
         } else {
             return "WS";
@@ -141,13 +186,23 @@ public class DateCorrection {
         return correctEndDate;
     }
 
-    public Date getCorrectStartDate(Date startDate) {
+    public Date getCorrectStartDate(Date startDate, Date endDate) {
         Calendar correctStartDateCal = Calendar.getInstance();
 
         Calendar startDateCal = Calendar.getInstance();
         startDateCal.setTime(startDate);
 
-        Date semesterStartDate = getSemesterStartDate(startDateCal.get(Calendar.YEAR), getSemesterFromStartDate(startDateCal));
+        Date semesterStartDate = thisYearSummerStartDate;
+
+        if (endDate.after(endOfThisYearDate)) {
+            semesterStartDate = thisYearWinterStartDate;
+        } else if (startDate.before(beginOfThisYearDate) && endDate.after(beginOfThisYearDate)) {
+            semesterStartDate = lastYearWinterStartDate;
+        } else if (startDate.before(beginOfThisYearDate) && endDate.before(beginOfThisYearDate)) {
+            semesterStartDate = lastYearSummerStartDate;
+        }
+
+        //Date semesterStartDate = getSemesterStartDate(startDateCal.get(Calendar.YEAR), getSemesterFromStartDate(startDateCal));
 
         correctStartDateCal.setTime(semesterStartDate);
 
@@ -165,13 +220,23 @@ public class DateCorrection {
         return correctStartDateCal.getTime();
     }
 
-    public Date getCorrectEndDate(Date endDate) {
+    public Date getCorrectEndDate(Date startDate, Date endDate) {
         Calendar correctEndDateCal = Calendar.getInstance();
 
         Calendar endDateCal = Calendar.getInstance();
         endDateCal.setTime(endDate);
 
-        Date semesterEndDate = getSemesterEndDate(endDateCal.get(Calendar.YEAR), getSemesterFromEndDate(endDateCal));
+        Date semesterEndDate = thisYearSummerEndDate;
+
+        if (endDate.after(endOfThisYearDate)) {
+            semesterEndDate = nextYearWinterEndDate;
+        } else if (startDate.before(beginOfThisYearDate) && endDate.after(beginOfThisYearDate)) {
+            semesterEndDate = thisYearWinterEndDate;
+        } else if (startDate.before(beginOfThisYearDate) && endDate.before(beginOfThisYearDate)) {
+            semesterEndDate = lastYearSummerEndDate;
+        }
+
+        //Date semesterEndDate = getSemesterEndDate(endDateCal.get(Calendar.YEAR), getSemesterFromEndDate(endDateCal));
 
         correctEndDateCal.setTime(semesterEndDate);
 
