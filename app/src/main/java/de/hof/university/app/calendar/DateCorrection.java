@@ -11,6 +11,16 @@ public class DateCorrection {
 
     private static DateCorrection dateCorrection = null;
 
+    int summerStartDay = 15;
+    int summerStartMonth = Calendar.MARCH;
+    int winterStartDay = 1;
+    int winterStartMonth = Calendar.OCTOBER;
+
+    int summerEndDay = 10;
+    int summerEndMonth = Calendar.JULY;
+    int winterEndDay = 25;
+    int winterEndMonth = Calendar.JANUARY;
+
     private Date lastYearSummerStartDate = new Date();
     private Date lastYearSummerEndDate = new Date();
     private Date lastYearWinterStartDate = new Date();
@@ -47,42 +57,19 @@ public class DateCorrection {
 
         Calendar beginOfYearCalendar = Calendar.getInstance();
         beginOfYearCalendar.setTime(new Date());
-        beginOfYearCalendar.set(Calendar.MONTH, 1 - 1);
+        beginOfYearCalendar.set(Calendar.MONTH, Calendar.JANUARY);
         beginOfYearCalendar.set(Calendar.DATE, 1);
         beginOfThisYearDate = beginOfYearCalendar.getTime();
 
         Calendar endOfYearCalendar = Calendar.getInstance();
         endOfYearCalendar.setTime(new Date());
-        endOfYearCalendar.set(Calendar.MONTH, 12 - 1);
+        endOfYearCalendar.set(Calendar.MONTH, Calendar.DECEMBER);
         endOfYearCalendar.set(Calendar.DATE, 31);
         endOfThisYearDate = endOfYearCalendar.getTime();
     }
 
-    private String getSemesterFromStartDate(Calendar startDateCal) {
-
-
-        if (startDateCal.getTime().after(getSemesterEndDate(startDateCal.get(Calendar.YEAR), "WS")) && startDateCal.getTime().before(getSemesterEndDate(startDateCal.get(Calendar.YEAR), "SS"))) {
-            return "SS";
-        } else {
-            return "WS";
-        }
-    }
-
-    private String getSemesterFromEndDate(Calendar endDateCal) {
-        if (endDateCal.getTime().after(getSemesterEndDate(endDateCal.get(Calendar.YEAR), "SS")) && endDateCal.getTime().before(endOfThisYearDate)) {
-            return "SS";
-        } else {
-            return "WS";
-        }
-    }
-
     private Date getSemesterStartDate(int year, String semester) {
         Date correctStartDate = new Date();
-
-        int summerStartDay = 15;
-        int summerStartMonth = 3 - 1;
-        int winterStartDay = 1;
-        int winterStartMonth = 10 - 1;
 
         if (semester.equals("SS")) {
             Calendar summerStartDateCalendar = Calendar.getInstance();
@@ -133,11 +120,6 @@ public class DateCorrection {
 
     private Date getSemesterEndDate(int year, String semester) {
         Date correctEndDate = new Date();
-
-        int summerEndDay = 10;
-        int summerEndMonth = 7 - 1;
-        int winterEndDay = 25;
-        int winterEndMonth = 1 - 1;
 
         if (semester.equals("SS")) {
             Calendar summerEndDateCalendar = Calendar.getInstance();
