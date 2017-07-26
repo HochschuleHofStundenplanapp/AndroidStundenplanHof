@@ -27,28 +27,33 @@ android {
         versionName '2.3.5 beta'
     }
 
-	signingConfigs {
-		release {
-			//Folgender Pfad führt zum Absturz des Gradle Wrappers auf manchen Systemen (wie meinen Mac)!
-			//storeFile file('D:\\Projekt\\Mobile.AndroidStudio\\Hof.Stundenplaner\\fhhkey.jks')
-			keyAlias "fhhkey"
-			storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
-			}
-	}
+    signingConfigs {
+        release {
+            //Folgender Pfad führt zum Absturz des Gradle Wrappers auf manchen Systemen (wie meinen Mac)!
+            //storeFile file('D:\\Projekt\\Mobile.AndroidStudio\\Hof.Stundenplaner\\fhhkey.jks')
+            keyAlias "fhhkey"
+            storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
+        }
+        debug {
+            storeFile file('debug.keystore')
+            storePassword 'android'
+        }
+    }
 
-	buildTypes {
-		release {
-			minifyEnabled true
-			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-			signingConfig signingConfigs.release
-			pseudoLocalesEnabled true
-			/* proguardFile 'D:/Projekt/Mobile.AndroidStudio/VideoChat/app/proguard-project.txt' */
-			proguardFile 'proguard-rules.pro'
-		}
-		debug {
-			debuggable true
-		}
-	}
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            pseudoLocalesEnabled true
+            /* proguardFile 'D:/Projekt/Mobile.AndroidStudio/VideoChat/app/proguard-project.txt' */
+            proguardFile 'proguard-rules.pro'
+        }
+        debug {
+            debuggable true
+            signingConfig signingConfigs.debug
+        }
+    }
     productFlavors {
     }
 
