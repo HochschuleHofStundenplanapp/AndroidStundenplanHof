@@ -156,7 +156,8 @@ class CalendarInterface {
                 + Calendars.OWNER_ACCOUNT + " = ?) AND ("
                 + Calendars.ACCOUNT_TYPE + " = ?)"
                 + ")";
-        String[] selectionArgs = new String[]{localCalendarName, context.getString(R.string.app_name), Define.FEEDBACKEMAILADDRESS, CalendarContract.ACCOUNT_TYPE_LOCAL};
+        String[] selectionArgs = new String[]{localCalendarName, context.getString(R.string.app_name), Define.NOREPLYEMAILADDRESS, CalendarContract.ACCOUNT_TYPE_LOCAL};
+
         // Submit the query and get a Cursor object back.
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
             return null;
@@ -202,7 +203,7 @@ class CalendarInterface {
         TimeZone tz = TimeZone.getDefault();
         values.put(Calendars.CALENDAR_TIME_ZONE, tz.getID());
         values.put(Calendars.VISIBLE, 1);
-        values.put(Calendars.OWNER_ACCOUNT, Define.FEEDBACKEMAILADDRESS);
+        values.put(Calendars.OWNER_ACCOUNT, Define.NOREPLYEMAILADDRESS);
         values.put(Calendars.SYNC_EVENTS, 1);
         values.put(Calendars.ACCOUNT_NAME, context.getString(R.string.app_name));
         values.put(Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL);
