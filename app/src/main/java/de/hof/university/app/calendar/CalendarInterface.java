@@ -33,7 +33,7 @@ import de.hof.university.app.model.schedule.LectureChange;
 class CalendarInterface {
     public static final String TAG = "CalendarInterface";
 
-    private static CalendarInterface calendarInterface = new CalendarInterface();
+    private static final CalendarInterface instance = new CalendarInterface();
 
     // Projection array. Creating indices for this array instead of doing
     // dynamic lookups improves performance.
@@ -67,7 +67,7 @@ class CalendarInterface {
     private CalendarData calendarData = new CalendarData();
 
     public static CalendarInterface getInstance() {
-        return CalendarInterface.calendarInterface;
+        return instance;
     }
 
     /**
@@ -327,15 +327,15 @@ class CalendarInterface {
 
                 if (change.getBegin_new() == null) {
                     // Entfällt
-                    calendarInterface.updateEvent(eventID, context.getString(R.string.changeCancelled) + " " + change.getLabel(), null, null, null, "");
+                    instance.updateEvent(eventID, context.getString(R.string.changeCancelled) + " " + change.getLabel(), null, null, null, "");
                 } else {
                     // Verschoben oder Raumänderung
                     if (change.getBegin_new().equals(change.getBegin_old())) {
                         // Raumänderung
-                        calendarInterface.updateEvent(eventID, context.getString(R.string.changeRoomchange) + " " + change.getLabel(), null, null, null, "");
+                        instance.updateEvent(eventID, context.getString(R.string.changeRoomchange) + " " + change.getLabel(), null, null, null, "");
                     } else {
                         // Verschoben
-                        calendarInterface.updateEvent(eventID, context.getString(R.string.changeMoved) + " " + change.getLabel(), context.getString(R.string.changeNewDate) + ": " + DataManager.getInstance().formatDate(change.getBegin_new()), null, null, "");
+                        instance.updateEvent(eventID, context.getString(R.string.changeMoved) + " " + change.getLabel(), context.getString(R.string.changeNewDate) + ": " + DataManager.getInstance().formatDate(change.getBegin_new()), null, null, "");
                         // TODO richtiges EndDate bekommen, weil 90 Minuten Länge nehmen
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTime(change.getBegin_new());

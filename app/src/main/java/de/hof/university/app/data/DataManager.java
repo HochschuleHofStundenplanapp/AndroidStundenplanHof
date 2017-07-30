@@ -63,7 +63,7 @@ import de.hof.university.app.model.settings.StudyCourses;
 public class DataManager {
     public static final String TAG = "DataManager";
 
-    private static final DataManager dataManager = new DataManager();
+    private static final DataManager instance = new DataManager();
 
     // single instance of the Factories
     private static final DataConnector dataConnector = new DataConnector();
@@ -77,7 +77,7 @@ public class DataManager {
     private SharedPreferences sharedPreferences;
 
     public static DataManager getInstance() {
-        return DataManager.dataManager;
+        return instance;
     }
 
     private DataManager() {

@@ -20,13 +20,13 @@ import de.hof.university.app.model.schedule.LectureItem;
  */
 
 public class CalendarSynchronization {
-    private static CalendarSynchronization calendarSynchronization = new CalendarSynchronization();
+    private static final CalendarSynchronization instance = new CalendarSynchronization();
 
     private CalendarInterface calendarInterface;
     private HashMap<String, Long> calendars = new HashMap<>();
 
     public static CalendarSynchronization getInstance() {
-        return CalendarSynchronization.calendarSynchronization;
+        return instance;
     }
 
     private CalendarSynchronization() {
