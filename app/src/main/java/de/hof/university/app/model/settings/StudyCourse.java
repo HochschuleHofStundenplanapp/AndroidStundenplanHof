@@ -25,7 +25,7 @@ import de.hof.university.app.Util.Define;
 /**
  * Studiengang
  */
-public class StudyCourse implements Serializable {
+public class StudyCourse implements Serializable, Comparable<StudyCourse> {
     private static final long serialVersionUID = Define.serialVersionUIDv1;
 
     private long id = 0L;
@@ -66,5 +66,10 @@ public class StudyCourse implements Serializable {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(StudyCourse other) {
+        return name.compareTo(other.name);
     }
 }
