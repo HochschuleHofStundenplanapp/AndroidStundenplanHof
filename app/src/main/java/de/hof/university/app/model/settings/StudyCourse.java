@@ -17,6 +17,7 @@
 package de.hof.university.app.model.settings;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 import de.hof.university.app.Util.Define;
@@ -41,6 +42,8 @@ public class StudyCourse implements Serializable {
     public StudyCourse(final String course, final String courseTag, final List<String> termsParams) {
         name = course;
         tag = courseTag;
+        // sortieren
+        Collections.sort(termsParams);
         this.terms = termsParams;
     }
 

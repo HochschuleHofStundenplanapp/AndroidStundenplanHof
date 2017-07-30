@@ -411,6 +411,7 @@ public class SettingsFragment extends PreferenceFragment {
 			if ( studyCourse.getTag().equals(courseStr) ) {
 				CharSequence[] entries = new CharSequence[ studyCourse.getTerms().size() ];
 				CharSequence[] entryValues = new CharSequence[ studyCourse.getTerms().size() ];
+
 				for ( int j = 0; j < studyCourse.getTerms().size(); ++j ) {
 					entries[ j ] = studyCourse.getTerms().get(j);
 					entryValues[ j ] = studyCourse.getTerms().get(j);
