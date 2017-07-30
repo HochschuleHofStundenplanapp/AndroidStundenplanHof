@@ -1,6 +1,5 @@
 package de.hof.university.app.calendar;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 
@@ -21,27 +20,23 @@ import de.hof.university.app.model.schedule.LectureItem;
  */
 
 public class CalendarSynchronization {
-    @SuppressLint("StaticFieldLeak")
-    private static CalendarSynchronization calendarSynchronization = null;
+    private static CalendarSynchronization calendarSynchronization = new CalendarSynchronization();
 
-    private Context context;
     private CalendarInterface calendarInterface;
     private HashMap<String, Long> calendars = new HashMap<>();
 
     public static CalendarSynchronization getInstance() {
-        if (CalendarSynchronization.calendarSynchronization == null) {
-            CalendarSynchronization.calendarSynchronization = new CalendarSynchronization();
-        }
         return CalendarSynchronization.calendarSynchronization;
     }
 
     private CalendarSynchronization() {
         // TODO
-        this.context = MainActivity.contextOfApplication;
         calendarInterface = CalendarInterface.getInstance();
     }
 
     public void createAllEvents() {
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
         final ArrayList<LectureItem> lectureItems = DataManager.getInstance().getSelectedLectures(context);
 
         if (lectureItems == null) return;
@@ -90,6 +85,7 @@ public class CalendarSynchronization {
     }
 
     public void updateChanges() {
+        final Context context = MainActivity.getAppContext().getApplicationContext();
         new Thread() {
             @Override
             public void run() {

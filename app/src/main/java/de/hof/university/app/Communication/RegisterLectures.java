@@ -84,7 +84,7 @@ public class RegisterLectures {
         @Override
         protected final String doInBackground(Set<String>... params) {
             Log.d("FCMService", "Beginn doInBackground");
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.contextOfApplication);
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.getAppContext().getApplicationContext());
             final String token = sharedPref.getString(Define.FCM_TOKEN, "Token ist leer");
 
             // Vorlesungen setzen

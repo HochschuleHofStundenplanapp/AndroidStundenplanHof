@@ -74,7 +74,6 @@ public class DataManager {
     private Meals meals;
     private StudyCourses studyCourses;
 
-    private Context context;
     private SharedPreferences sharedPreferences;
 
     public static DataManager getInstance() {
@@ -82,7 +81,8 @@ public class DataManager {
     }
 
     private DataManager() {
-        this.context = MainActivity.contextOfApplication;
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
@@ -425,7 +425,9 @@ public class DataManager {
     }
 
     public Date getScheduleLastSaved() {
-        return getSchedule(MainActivity.contextOfApplication).getLastSaved();
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
+        return getSchedule(context).getLastSaved();
     }
 
     private MySchedule getMySchedule(final Context context) {
@@ -448,7 +450,9 @@ public class DataManager {
     }
 
     public Date getMyScheduleLastSaved() {
-        return getMySchedule(MainActivity.contextOfApplication).getLastSaved();
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
+        return getMySchedule(context).getLastSaved();
     }
 
     public Changes getChanges(final Context context) {
@@ -464,7 +468,9 @@ public class DataManager {
     }
 
     public Date getChangesLastSaved() {
-        return getChanges(MainActivity.contextOfApplication).getLastSaved();
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
+        return getChanges(context).getLastSaved();
     }
 
     private Meals getMeals(final Context context) {
@@ -480,7 +486,9 @@ public class DataManager {
     }
 
     public Date getMealsLastSaved() {
-        return getMeals(MainActivity.contextOfApplication).getLastSaved();
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
+        return getMeals(context).getLastSaved();
     }
 
     private StudyCourses getStudyCourses(final Context context) {
@@ -511,9 +519,11 @@ public class DataManager {
     }
 
     public Locale getLocale() {
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
         if (context.getString(R.string.language).equals("de")) {
             return Locale.GERMANY;
-        } else if (MainActivity.contextOfApplication.getString(R.string.language).equals("en")) {
+        } else if (context.getString(R.string.language).equals("en")) {
             return Locale.ENGLISH;
         } else {
             return Locale.GERMANY;
@@ -643,6 +653,8 @@ public class DataManager {
     }
 
     private void updateCalendar() {
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
         final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION), false);
 
         if (calendarSynchronization) {
@@ -651,6 +663,8 @@ public class DataManager {
     }
 
     private void updateChangesInCalendar() {
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
         final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION), false);
 
         if (calendarSynchronization) {
@@ -688,13 +702,16 @@ public class DataManager {
     private boolean isTwoArrayListsWithSameValues(ArrayList<LectureItem> list1, ArrayList<LectureItem> list2)
     {
         //null checking
-        if(list1 == null && list2 == null)
+        if(list1 == null && list2 == null) {
             return true;
-        if((list1 == null && list2 != null) || (list1 != null && list2 == null))
+        }
+        if(list1 == null || list2 == null) {
             return false;
+        }
 
-        if(list1.size() != list2.size())
+        if(list1.size() != list2.size()) {
             return false;
+        }
 
         for (int i = 0; i < list1.size(); i++) {
             if (!list1.get(i).equals(list2.get(i))) {

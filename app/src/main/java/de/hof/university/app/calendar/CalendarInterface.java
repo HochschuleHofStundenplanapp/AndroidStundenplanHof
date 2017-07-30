@@ -1,7 +1,6 @@
 package de.hof.university.app.calendar;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -34,8 +33,7 @@ import de.hof.university.app.model.schedule.LectureChange;
 class CalendarInterface {
     public static final String TAG = "CalendarInterface";
 
-    @SuppressLint("StaticFieldLeak")
-    private static CalendarInterface calendarInterface = null;
+    private static CalendarInterface calendarInterface = new CalendarInterface();
 
     // Projection array. Creating indices for this array instead of doing
     // dynamic lookups improves performance.
@@ -65,14 +63,10 @@ class CalendarInterface {
     private static final int PROJECTION_BEGIN_INDEX = 1;
     private static final int PROJECTION_TITLE_INDEX = 2;
 
-    private Context context;
     private String localCalendarName = "";
     private CalendarData calendarData = new CalendarData();
 
     public static CalendarInterface getInstance() {
-        if (CalendarInterface.calendarInterface == null) {
-            CalendarInterface.calendarInterface = new CalendarInterface();
-        }
         return CalendarInterface.calendarInterface;
     }
 
@@ -80,8 +74,7 @@ class CalendarInterface {
      * Constructor for the default local calendar
      */
     private CalendarInterface() {
-        this.context = MainActivity.contextOfApplication;
-
+        Context context = MainActivity.getAppContext().getApplicationContext();
         localCalendarName = context.getString(R.string.stundenplan) + " " + context.getString(R.string.app_name);
 
         // bereits vohandene IDs einlesen
@@ -94,6 +87,7 @@ class CalendarInterface {
     }
 
     public void setCalendar(Long calendarID) {
+        Context context = MainActivity.getAppContext().getApplicationContext();
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
             // Wenn -1 dann lokalen Calendar, sonst die übergebene ID nutzen
@@ -110,6 +104,8 @@ class CalendarInterface {
     }
 
     HashMap<String, Long> getCalendars() {
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
         HashMap<String, Long> result = new HashMap<>();
         // Run query
         Cursor cur;
@@ -144,6 +140,8 @@ class CalendarInterface {
      * @return return if the calendar ID if it was found, else null
      */
     private Long getLocalCalendar() {
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
         Long result;
 
         // Run query
@@ -188,6 +186,7 @@ class CalendarInterface {
      * @return returns the Uri to the created calendar
      */
     private Uri createLocalCalendar() {
+        Context context = MainActivity.getAppContext().getApplicationContext();
         // TODO
 
         Uri uri = Uri.parse(CalendarContract.Calendars.CONTENT_URI.toString());
@@ -220,6 +219,8 @@ class CalendarInterface {
      * @return returns if the removing was successful
      */
     boolean removeLocalCalendar() {
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
         // TODO
         Long localCalendarID = getLocalCalendar();
 
@@ -290,6 +291,8 @@ class CalendarInterface {
     }
 
     private Long insertEvent(ContentValues values) {
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
         ContentResolver cr = context.getContentResolver();
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
             return null;
@@ -305,6 +308,8 @@ class CalendarInterface {
     }
 
     void updateChange(LectureChange change) {
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
         // TODO
         String lectureID;
 
@@ -346,6 +351,8 @@ class CalendarInterface {
     }
 
     String getLocation(String room) {
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
         if (room.length() < 4) {
             return context.getString(R.string.noLocation);
         }
@@ -360,6 +367,8 @@ class CalendarInterface {
     }
 
     private void updateEvent(long eventID, String title, String description, Date startTime, Date endTime, String location) {
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
         // TODO
         ContentValues values = new ContentValues();
         values.put(Events.TITLE, title);
@@ -381,6 +390,8 @@ class CalendarInterface {
     }
 
     private Boolean doEventExits(Long eventID, String title, Date startDate, Date endDate) {
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
         Cursor cur;
         ContentResolver cr = context.getContentResolver();
 
@@ -437,6 +448,8 @@ class CalendarInterface {
     }
 
     private void deleteEvent(long eventID) {
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
         Uri deleteUri = ContentUris.withAppendedId(Events.CONTENT_URI, eventID);
 
         ContentResolver cr = context.getContentResolver();
@@ -512,10 +525,14 @@ class CalendarInterface {
     }
 
     void saveCalendarData() {
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
         DataManager.getInstance().saveObject(context, calendarData, Define.calendarIDsFilename);
     }
 
     private void readCalendarData() {
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
         Object tmpCalendarEventIds = DataManager.getInstance().readObject(context, Define.calendarIDsFilename);
         if (tmpCalendarEventIds != null && tmpCalendarEventIds instanceof CalendarData) {
             calendarData = (CalendarData) tmpCalendarEventIds;
