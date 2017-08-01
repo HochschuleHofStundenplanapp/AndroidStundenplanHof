@@ -19,66 +19,67 @@ package de.hof.university.app.model.schedule;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import de.hof.university.app.BuildConfig;
 import de.hof.university.app.Util.Define;
+import de.hof.university.app.data.DataManager;
 
 /**
+ * For one lecture
  * Created by larsg on 09.05.2016.
  */
 public class LectureItem implements Comparable<LectureItem>, Serializable {
-	private static final long serialVersionUID = Define.serialVersionUIDv1;
+    private static final long serialVersionUID = Define.serialVersionUIDv2;
 
 	//not used: private static final String date_regex = "dd-MM-yyyy HH:mm:ss";
 
-	private final String id;
-	private final String weekday;
-	private final String label;
-	private final String type;
-	//private final String style;
-	private final String sp;
-	private final String group;
-	private final String begin;
-	private final String end;
-	private final String startdate;
-	private final String enddate;
-	private final String room;
-	private final String lecturer;
-	private final String comment;
+    private final String id;
+    private final String weekday;
+    private final String label;
+    private final String type;
+    //private final String style;
+    private final String sp;
+    private final String group;
+    private final Date startDate;
+    private final Date endDate;
+    private final String room;
+    private final String lecturer;
+    private final String comment;
 
-	public LectureItem(final String id, final String weekday, final String label, final String type, final String style, final String sp, final String group,
-	                   final String begin, final String end, final String startdate, final String enddate, final String room, final String lecturer, final String comment) {
-		this.id = id;
-		this.weekday = weekday;
-		this.label = label;
-		this.type = type;
-		//this.style = style;
-		this.sp = sp;
-		this.group = group;
-		this.begin = begin;
-		this.end = end;
-		this.startdate = startdate;
-		this.enddate = enddate;
-		this.room = room;
-		this.lecturer = lecturer;
-		this.comment = comment.replaceFirst("^- ", "");
-	}
+    public LectureItem(final String id, final String weekday, final String label, final String type, final String style, final String sp, final String group,
+                       final Date startDate, final Date endDate, final String room, final String lecturer, final String comment) {
+        this.id = id;
+        this.weekday = weekday;
+        this.label = label;
+        this.type = type;
+        //this.style = style;
+        this.sp = sp;
+        this.group = group;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.room = room;
+        this.lecturer = lecturer;
+        this.comment = comment.replaceFirst("^- ", "");
+    }
 
-	@Override
-	public String toString() {
-		return "LectureItem{" +
-				"id='" + id + '\'' +
-				", weekday='" + weekday + '\'' +
-				", group='" + group + '\'' +
-				", begin='" + begin + '\'' +
-				", end='" + end + '\'' +
-				", startdate='" + startdate + '\'' +
-				", enddate='" + enddate + '\'' +
-				", room='" + room + '\'' +
-				", lecturer='" + lecturer + '\'' +
-				", comment='" + comment + '\'' +
-				'}';
-	}
+    @Override
+    public String toString() {
+        return "LectureItem{" +
+                "id='" + id + '\'' +
+                ", weekday='" + weekday + '\'' +
+                ", label='" + label + '\'' +
+                ", type='" + type + '\'' +
+                //", style='" + style + '\'' +
+                ", sp='" + sp + '\'' +
+                ", group='" + group + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", room='" + room + '\'' +
+                ", lecturer='" + lecturer + '\'' +
+                ", comment='" + comment + '\'' +
+                '}';
+    }
 
 	public String getId() {
 		return id;
@@ -88,25 +89,37 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
 		return weekday;
 	}
 
-	public final String getBegin() {
-		return begin;
-	}
+    public final Date getStartDate() {
+        return startDate;
+    }
 
-	public final String getStartdate() {
-		return startdate;
-	}
-
-	public final String getEnddate() {
-		return enddate;
-	}
+    public final Date getEndDate() {
+        return endDate;
+    }
 
 	public final String getRoom() {
 		return room;
 	}
 
-	public final String getTime() {
-		return begin + " - " + end;
-	}
+    public final String getTime() {
+        String resultString;
+
+        SimpleDateFormat simpleDateFormatter = new SimpleDateFormat("HH:mm", DataManager.getInstance().getLocale());
+
+        // Startzeit
+        resultString = simpleDateFormatter.format(startDate);
+
+        resultString += " - ";
+
+        // Endzeit
+        resultString += simpleDateFormatter.format(endDate);
+
+        return resultString;
+    }
+
+    public final String getLabel() {
+        return label;
+    }
 
 	public final String getDetails() {
 		String result = label;
@@ -138,38 +151,19 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
 	/*
     ** Sortiert nach Sartzeit
      */
-	public int compareTo(@NonNull LectureItem lectureItem) {
-		// Jahr
-		if (Integer.parseInt(getStartdate().substring(6)) > Integer.parseInt(lectureItem.getStartdate().substring(6))) {
-			return +1;
-		}
-		//else
-		if (Integer.parseInt(getStartdate().substring(6)) == Integer.parseInt(lectureItem.getStartdate().substring(6))) {
-			// Monat
-			if (Integer.parseInt(getStartdate().substring(3, 5)) > Integer.parseInt(lectureItem.getStartdate().substring(3, 5))) {
-				return +1;
-			}
-			//else
+    public int compareTo(@NonNull LectureItem lectureItem) {
+        return startDate.compareTo(lectureItem.startDate);
+    }
 
-			if (Integer.parseInt(getStartdate().substring(3, 5)) == Integer.parseInt(lectureItem.getStartdate().substring(3, 5))) {
-				// Tag
-				if (Integer.parseInt(getStartdate().substring(0, 2)) > Integer.parseInt(lectureItem.getStartdate().substring(0, 2))) {
-					return +1;
-				}
-				// else
-
-				if (Integer.parseInt(getStartdate().substring(0, 2)) == Integer.parseInt(lectureItem.getStartdate().substring(0, 2))) {
-					if (Integer.parseInt(getBegin().substring(0, 2)) > Integer.parseInt(lectureItem.getBegin().substring(0, 2))) {
-						return +1;
-					}
-					// else
-					if (Integer.parseInt(getBegin().substring(0, 2)) == Integer.parseInt(lectureItem.getBegin().substring(0, 2))) {
-						return 0;
-					}
-				}
-			}
-		} else if (BuildConfig.DEBUG) assert (false);
-
-		return -1;
-	}
+    public boolean equals(LectureItem other) {
+        return (this.id.equals(other.id)
+                && this.weekday.equals(other.weekday)
+                && this.label.equals(other.label)
+                && this.group.equals(other.group)
+                && this.startDate.toString().equals(other.startDate.toString())
+                && this.endDate.toString().equals(other.endDate.toString())
+                && this.room.equals(other.room)
+                && this.lecturer.equals(other.lecturer)
+                && this.comment.equals(other.comment));
+    }
 }

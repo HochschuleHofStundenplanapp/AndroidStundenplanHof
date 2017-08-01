@@ -23,7 +23,6 @@ import android.preference.PreferenceManager;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
@@ -44,6 +43,7 @@ import de.hof.university.app.R;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.Util.Log;
 import de.hof.university.app.Util.MyString;
+import de.hof.university.app.calendar.CalendarSynchronization;
 import de.hof.university.app.data.parser.Parser;
 import de.hof.university.app.data.parser.ParserFactory;
 import de.hof.university.app.data.parser.ParserFactory.EParser;
@@ -61,11 +61,12 @@ import de.hof.university.app.model.settings.StudyCourses;
  *
  */
 public class DataManager {
-
     public static final String TAG = "DataManager";
 
+    private static final DataManager instance = new DataManager();
+
     // single instance of the Factories
-    static final private DataConnector dataConnector = new DataConnector();
+    private static final DataConnector dataConnector = new DataConnector();
 
     private Schedule schedule;
     private MySchedule mySchedule;
@@ -73,14 +74,16 @@ public class DataManager {
     private Meals meals;
     private StudyCourses studyCourses;
 
-    private static final DataManager dataManager = new DataManager();
-
+    private SharedPreferences sharedPreferences;
 
     public static DataManager getInstance() {
-        return DataManager.dataManager;
+        return instance;
     }
 
     private DataManager() {
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
+        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
     public final ArrayList<Meal> getMeals(Context context, boolean forceRefresh) {
@@ -133,8 +136,6 @@ public class DataManager {
                 || !schedule.getCourse().equals(course)
                 || !schedule.getSemester().equals(semester)
                 || !schedule.getTermtime().equals(termTime)) {
-            // Änderungen sollen neu geholt werden
-            resetChangesLastSave(context);
 
             final Parser parser = ParserFactory.create(EParser.SCHEDULE);
             final String aString = String.format(Define.URL_SCHEDULE, MyString.URLReplaceWhitespace(course), MyString.URLReplaceWhitespace(semester), MyString.URLReplaceWhitespace(termTime));
@@ -154,20 +155,32 @@ public class DataManager {
             final String[] params = {jsonString, language};
             assert parser != null;
 
-            ArrayList<LectureItem> lectures = (ArrayList<LectureItem>) parser.parse(params);
+            ArrayList<LectureItem> tmpScheduleLectureItems = (ArrayList<LectureItem>) parser.parse(params);
 
             // Wenn der Server einen unvollständigen Stundenplan (nur halb so groß oder kleiner) liefert bringe die Fehlermedlung "Aktualisierung fehlgeschlagen"
-            if (course.equals(schedule.getCourse()) && semester.equals(schedule.getSemester()) && termTime.equals(schedule.getTermtime()) && lectures.size() < (schedule.getLectures().size() / 2)) {
+            if (course.equals(schedule.getCourse()) && semester.equals(schedule.getSemester()) && termTime.equals(schedule.getTermtime()) && tmpScheduleLectureItems.size() < (schedule.getLectures().size() / 2)) {
                 return null;
             }
 
-            this.getSchedule(context).setLectures(lectures);
+            // Falls die neuen LectureItems nicht gleich der bereits vorhandenen sind
+            if (!isTwoArrayListsWithSameValues(this.getSchedule(context).getLectures(), tmpScheduleLectureItems)) {
+                // Neue Vorlesungen setzen
+                this.getSchedule(context).setLectures(tmpScheduleLectureItems);
 
-            this.getSchedule(context).setCourse(course);
-            this.getSchedule(context).setSemester(semester);
-            this.getSchedule(context).setTermtime(termTime);
+                this.getSchedule(context).setCourse(course);
+                this.getSchedule(context).setSemester(semester);
+                this.getSchedule(context).setTermtime(termTime);
+
+                // Wenn kein "Mein Stundenplan" vorhanden ist
+                if (getMyScheduleSize(context) == 0) {
+                    // Kalender aktualisieren
+                    this.updateCalendar();
+                }
+            }
+            // Zuletzt aktualisert setzen
             this.getSchedule(context).setLastSaved(new Date());
 
+            // Speichern
             saveObject(context, this.getSchedule(context), Define.scheduleFilename);
         }
 
@@ -184,8 +197,6 @@ public class DataManager {
                 || !cacheStillValid(mySchedule, Define.MYSCHEDULE_CACHE_TIME)
                 || (mySchedule.getIds().size() != mySchedule.getLectures().size())
                 ) {
-            // Änderungen sollen neu geholt werden
-            resetChangesLastSave(context);
 
             final Iterator<String> iterator = this.getMySchedule(context).getIds().iterator();
             String url = Define.URL_MYSCHEDULE;
@@ -214,16 +225,25 @@ public class DataManager {
 
             final String[] params = {jsonString, language};
 
-            ArrayList<LectureItem> tmpMySchedule = (ArrayList<LectureItem>) parser.parse(params);
+            ArrayList<LectureItem> tmpMyScheduleLectureItems = (ArrayList<LectureItem>) parser.parse(params);
 
             // Wenn der Server einen unvollständigen Stundenplan (nur halb so groß oder kleiner) liefert bringe die Fehlermedlung "Aktualisierung fehlgeschlagen"
-            if (tmpMySchedule.size() < (getMyScheduleSize(context) / 2)) {
+            if (tmpMyScheduleLectureItems.size() < (getMyScheduleSize(context) / 2)) {
                 return null;
             }
 
-            this.getMySchedule(context).setLectures(tmpMySchedule);
+            // Falls die neuen LectureItems nicht gleich der bereits vorhandenen sind
+            if (!isTwoArrayListsWithSameValues(this.getMySchedule(context).getLectures(), tmpMyScheduleLectureItems)) {
+                // Neue Vorlesungen setzen
+                this.getMySchedule(context).setLectures(tmpMyScheduleLectureItems);
+
+                // Kalender aktualisieren
+                this.updateCalendar();
+            }
+            // Zuletzt aktualisiert setzen
             this.getMySchedule(context).setLastSaved(new Date());
 
+            // Speichern
             this.saveObject(context, getMySchedule(context), Define.myScheduleFilename);
         }
 
@@ -278,10 +298,15 @@ public class DataManager {
 
             ArrayList<Object> tmpChanges = (ArrayList<Object>) parser.parse(params);
 
+            // Neue Änderungen setzen
             this.getChanges(context).setChanges(tmpChanges);
 
+            // Zuletzt aktualisiert setzen
             this.getChanges(context).setLastSaved(new Date());
+            // Speichern
             saveObject(context, this.getChanges(context), Define.changesFilename);
+            // Kalender aktualisieren
+            this.updateChangesInCalendar();
         }
 
         return this.getChanges(context).getChanges();
@@ -342,21 +367,21 @@ public class DataManager {
         }
     }
 
-
-    public final void addToMySchedule(final Context context, final LectureItem s) {
-        this.getMySchedule(context).getIds().add(String.valueOf(s.getId()));
-        this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
-    }
-
     public final boolean myScheduleContains(final Context context, final LectureItem s) {
         return this.getMySchedule(context).getIds().contains(String.valueOf(s.getId()));
     }
 
-    public final void deleteFromMySchedule(final Context context, final LectureItem s) {
-        this.getMySchedule(context).getIds().remove(String.valueOf(s.getId()));
+    public final void addToMySchedule(final Context context, final LectureItem lectureItem) {
+        this.getMySchedule(context).getIds().add(String.valueOf(lectureItem.getId()));
+        this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
+        this.addLectureToCalendar(context, lectureItem);
+    }
+
+    public final void deleteFromMySchedule(final Context context, final LectureItem lectureItem) {
+        this.getMySchedule(context).getIds().remove(String.valueOf(lectureItem.getId()));
         LectureItem lectureToRemove = null;
         for (LectureItem li : this.getMySchedule(context).getLectures()) {
-            if (li.getId().equals(s.getId())) {
+            if (li.getId().equals(lectureItem.getId())) {
                 lectureToRemove = li;
             }
         }
@@ -364,17 +389,20 @@ public class DataManager {
             this.getMySchedule(context).getLectures().remove(lectureToRemove);
         }
         this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
+        this.deleteLectureFromCalendar(context, lectureItem.getId());
     }
 
     public final void addAllToMySchedule(final Context context, final Set<String> schedulesIds) {
         this.getMySchedule(context).getIds().addAll(schedulesIds);
         this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
+        this.addAllToCalendar(context, this.getSchedule(context).getLectures());
     }
 
     public final void deleteAllFromMySchedule(final Context context) {
         this.getMySchedule(context).getIds().clear();
         this.getMySchedule(context).getLectures().clear();
         this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
+        this.updateCalendar();
     }
 
     // Getters
@@ -397,12 +425,14 @@ public class DataManager {
     }
 
     public Date getScheduleLastSaved() {
-        return getSchedule(MainActivity.contextOfApplication).getLastSaved();
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
+        return getSchedule(context).getLastSaved();
     }
 
     private MySchedule getMySchedule(final Context context) {
         if (this.mySchedule == null) {
-            Object obtMyScheduleOpj = DataManager.readObject(context, Define.myScheduleFilename);
+            Object obtMyScheduleOpj = readObject(context, Define.myScheduleFilename);
             if (obtMyScheduleOpj != null && obtMyScheduleOpj instanceof Set) {
                 this.mySchedule = new MySchedule();
                 this.mySchedule.setIds((Set<String>) obtMyScheduleOpj);
@@ -420,10 +450,12 @@ public class DataManager {
     }
 
     public Date getMyScheduleLastSaved() {
-        return getMySchedule(MainActivity.contextOfApplication).getLastSaved();
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
+        return getMySchedule(context).getLastSaved();
     }
 
-    private Changes getChanges(final Context context) {
+    public Changes getChanges(final Context context) {
         if (this.changes == null) {
             Object obtChangesObj = readObject(context, Define.changesFilename);
             if (obtChangesObj != null && obtChangesObj instanceof Changes) {
@@ -436,7 +468,9 @@ public class DataManager {
     }
 
     public Date getChangesLastSaved() {
-        return getChanges(MainActivity.contextOfApplication).getLastSaved();
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
+        return getChanges(context).getLastSaved();
     }
 
     private Meals getMeals(final Context context) {
@@ -452,7 +486,9 @@ public class DataManager {
     }
 
     public Date getMealsLastSaved() {
-        return getMeals(MainActivity.contextOfApplication).getLastSaved();
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
+        return getMeals(context).getLastSaved();
     }
 
     private StudyCourses getStudyCourses(final Context context) {
@@ -472,14 +508,7 @@ public class DataManager {
      * @return dd.MM.yyyy HH:mm formatiertes Date
      */
     public String formatDate(Date date) {
-        Locale locale;
-        if (MainActivity.contextOfApplication.getString(R.string.language).equals("de")) {
-            locale = Locale.GERMAN;
-        } else if (MainActivity.contextOfApplication.getString(R.string.language).equals("en")) {
-            locale = Locale.ENGLISH;
-        } else {
-            locale = Locale.GERMAN;
-        }
+        Locale locale = getLocale();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm", locale);
         DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.DEFAULT, locale);
         if (date != null) {
@@ -489,12 +518,24 @@ public class DataManager {
         }
     }
 
+    public Locale getLocale() {
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
+        if (context.getString(R.string.language).equals("de")) {
+            return Locale.GERMANY;
+        } else if (context.getString(R.string.language).equals("en")) {
+            return Locale.ENGLISH;
+        } else {
+            return Locale.GERMANY;
+        }
+    }
+
     // Saving and loading
     // ---------------------------------------------------------------------------------------------
 
     // this is the general method to serialize an object
     //
-    private void saveObject(final Context context, Object object, final String filename) {
+    public synchronized void saveObject(final Context context, Object object, final String filename) {
         try {
             final File file = new File(context.getFilesDir(), filename);
             final FileOutputStream fos = new FileOutputStream(file);
@@ -502,7 +543,7 @@ public class DataManager {
             os.writeObject(object);
             os.close();
             fos.close();
-        } catch (IOException e) {
+        } catch (Exception e) { //TODO Eigentlich nur IOException, aber kann im Moment auch ConcurrentModificationException kommen
             Log.e(TAG, "Fehler beim Speichern des Objektes", e);
         }
 
@@ -515,7 +556,7 @@ public class DataManager {
     }
 
     // this is the general method to serialize an object
-    private static Object readObject(final Context context, String filename) {
+    public synchronized Object readObject(final Context context, String filename) {
         Object result = null;
         try {
             final File file = new File(context.getFilesDir(), filename);
@@ -527,7 +568,7 @@ public class DataManager {
                 fis.close();
             }
         } catch (Exception e) {
-            Log.e(TAG, "Fehler beim Einlesen", e);
+            Log.e(TAG, "Fehler beim lesen des Objektes", e);
         }
         return result;
     }
@@ -566,20 +607,118 @@ public class DataManager {
     }
 
     public void registerFCMServerForce(Context context) {
+        Set<String> ids = getSelectedLecturesIDs(context);
+        if (ids == null) return;
+
+        new RegisterLectures().registerLectures(ids);
+    }
+
+    // Calendar
+    // ---------------------------------------------------------------------------------------------
+
+    private void addLectureToCalendar(final Context context, final LectureItem lectureItem) {
+        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION), false);
+
+        if (calendarSynchronization) {
+            new Thread() {
+                @Override
+                public void run() {
+                    if (getMySchedule(context).getIds().size() == 1) {
+                        // Falls es die erste hinzugefügte Vorlesung ist, alle alten raus löschen
+                        CalendarSynchronization.getInstance().deleteAllEvents();
+                    }
+                    CalendarSynchronization.getInstance().createAllEvents(lectureItem);
+                }
+            }.start();
+        }
+    }
+
+    private void addAllToCalendar(Context context, ArrayList<LectureItem> lecturesItems) {
+        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION), false);
+
+        if (calendarSynchronization) {
+            // falls es nicht die ersten Vorlesungen sind die hinzugefügt werden, denn dann stehen sie schon drin.
+            if (getMySchedule(context).getLectures().size() != 0) {
+                CalendarSynchronization.getInstance().createAllEvents(lecturesItems);
+            }
+        }
+    }
+
+    private void deleteLectureFromCalendar(Context context, String lectureID) {
+        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION), false);
+
+        if (calendarSynchronization) {
+            CalendarSynchronization.getInstance().deleteAllEvents(lectureID);
+        }
+    }
+
+    private void updateCalendar() {
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
+        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION), false);
+
+        if (calendarSynchronization) {
+            CalendarSynchronization.getInstance().updateCalendar();
+        }
+    }
+
+    private void updateChangesInCalendar() {
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
+        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION), false);
+
+        if (calendarSynchronization) {
+            CalendarSynchronization.getInstance().updateChanges();
+        }
+    }
+
+    // getSelectedIDs
+    // ---------------------------------------------------------------------------------------------
+
+    private Set<String> getSelectedLecturesIDs(Context context) {
         Set<String> ids = new HashSet<>();
 
+        ArrayList<LectureItem> lectureItems = getSelectedLectures(context);
+        if (lectureItems == null) return null;
+
+        for (LectureItem li : lectureItems) {
+            ids.add(String.valueOf(li.getId()));
+        }
+        return ids;
+    }
+
+    public ArrayList<LectureItem> getSelectedLectures(Context context) {
         final Schedule schedule = this.getSchedule(context);
 
         if (getMySchedule(context).getIds().size() > 0) {
-            ids = getMySchedule(context).getIds();
+            return getMySchedule(context).getLectures();
         } else if (schedule.getLectures().size() > 0) {
-            for (LectureItem li : schedule.getLectures()) {
-                ids.add(String.valueOf(li.getId()));
-            }
-        } else {
-            return;
+            return schedule.getLectures();
+        }
+        return null;
+    }
+
+
+    private boolean isTwoArrayListsWithSameValues(ArrayList<LectureItem> list1, ArrayList<LectureItem> list2)
+    {
+        //null checking
+        if(list1 == null && list2 == null) {
+            return true;
+        }
+        if(list1 == null || list2 == null) {
+            return false;
         }
 
-        new RegisterLectures().registerLectures(ids);
+        if(list1.size() != list2.size()) {
+            return false;
+        }
+
+        for (int i = 0; i < list1.size(); i++) {
+            if (!list1.get(i).equals(list2.get(i))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

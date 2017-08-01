@@ -42,6 +42,7 @@ import de.hof.university.app.Util.Define;
 import de.hof.university.app.Util.Log;
 
 /**
+ * for register Lectures to our server for push-notifications
  * Created by jonasbeetz on 22.12.16.
  */
 
@@ -83,7 +84,7 @@ public class RegisterLectures {
         @Override
         protected final String doInBackground(Set<String>... params) {
             Log.d("FCMService", "Beginn doInBackground");
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.contextOfApplication);
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MainActivity.getAppContext().getApplicationContext());
             final String token = sharedPref.getString(Define.FCM_TOKEN, "Token ist leer");
 
             // Vorlesungen setzen
@@ -123,11 +124,11 @@ public class RegisterLectures {
                 wr.close();
 
                 if (client.getResponseCode() == 200) {
-                    BufferedReader reader = null;
+                    BufferedReader reader;
 
                     reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
                     StringBuilder sb = new StringBuilder();
-                    String line = null;
+                    String line;
 
                     // Read Server Response
                     while ((line = reader.readLine()) != null) {
@@ -143,7 +144,7 @@ public class RegisterLectures {
 
                     BufferedReader reader = new BufferedReader(new InputStreamReader(client.getErrorStream()));
                     StringBuilder sb = new StringBuilder();
-                    String line = null;
+                    String line;
 
                     // Read Server Response
                     while ((line = reader.readLine()) != null) {
@@ -154,15 +155,18 @@ public class RegisterLectures {
                     Log.d(TAG, "SERVER ERROR RESPONSE: " + sb.toString());
                 }
             } catch (MalformedURLException error) {
-                Log.d(TAG, "MalformedURLException error");
+                Log.d(TAG, "MalformedURLException error: " + error.toString());
                 //Handles an incorrectly entered URL
             } catch (SocketTimeoutException error) {
-                Log.d(TAG, "SocketTimeoutException");
+                Log.d(TAG, "SocketTimeoutException: " + error.toString());
                 //Handles URL access timeout.
             } catch (IOException error) {
                 Log.d(TAG, "IOException: " + error.toString());
                 //Handles input and output errors
-            } finally {
+            } catch (NullPointerException error) {
+                Log.d(TAG, "NullPointerException: " + error.toString());
+            }
+            finally {
                 if (client != null) // Make sure the connection is not null.
                     client.disconnect();
                 Log.d(TAG, "Disconnected");

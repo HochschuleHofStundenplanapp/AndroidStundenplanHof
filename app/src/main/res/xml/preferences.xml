@@ -119,6 +119,11 @@
             android:title="@string/LOGIN_DIALOG"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+        <CheckBoxPreference
+            android:key="calendar_synchronization"
+            android:title="@string/calendar_synchronization"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
     </PreferenceCategory>
 

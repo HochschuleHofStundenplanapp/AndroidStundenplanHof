@@ -31,13 +31,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 import de.hof.university.app.MainActivity;
@@ -168,13 +168,8 @@ public class ScheduleFragment extends AbstractListFragment {
     }
 
     protected final ArrayList<Object> updateListView(List<LectureItem> list) {
-        String curWeekDay = "";
-        if ( getString(R.string.language).equals("de") ) {
-            curWeekDay = new SimpleDateFormat("EEEE", Locale.GERMANY).format(new Date());
-        } else {
-            curWeekDay = new SimpleDateFormat("EEEE", Locale.ENGLISH).format(new Date());
-        }
         String weekday = "";
+        String curWeekDay = new SimpleDateFormat("EEEE", DataManager.getInstance().getLocale()).format(new Date());
 
         // Temporäre Liste für die neuen Vorlesungen damit sie erst später in ListView hinzugefügt werden können
         ArrayList<Object> tmpDataList = new ArrayList<>();
@@ -183,7 +178,9 @@ public class ScheduleFragment extends AbstractListFragment {
         ArrayList<LectureItem> fixDataList = new ArrayList<>();
         for ( LectureItem lectureItem : list ) {
             // Wenn eine Vorlesung nur an einem Tag stattfindet sind Start- und Enddate gleich
-            if ( lectureItem.getStartdate().equals(lectureItem.getEnddate()) ) {
+            String startDate = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(lectureItem.getStartDate());
+            String endDate   = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(lectureItem.getEndDate());
+            if ( startDate.equals(endDate) ) {
                 fixDataList.add(lectureItem);
             } else {
                 if ( !weekday.equals(lectureItem.getWeekday()) ) {
@@ -199,16 +196,19 @@ public class ScheduleFragment extends AbstractListFragment {
         // sortieren
         Collections.sort(fixDataList);
         ArrayList<Object> sortDataList = new ArrayList<>();
-        String date = "";
-        for (LectureItem lectureItem : fixDataList) {
-            if (!date.equals(lectureItem.getStartdate())) {
-                sortDataList.add(new BigListItem(lectureItem.getStartdate()));
-                date = lectureItem.getStartdate();
+        if (fixDataList.size() > 0) {
+            String tmpStartDate = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(fixDataList.get(0).getStartDate());
+            sortDataList.add(new BigListItem(tmpStartDate));
+            for (LectureItem lectureItem : fixDataList) {
+                String startDate = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(lectureItem.getStartDate());
+                if (!tmpStartDate.equals(startDate)) {
+                    sortDataList.add(new BigListItem(startDate));
+                    tmpStartDate = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(lectureItem.getStartDate());
+                }
+                sortDataList.add(lectureItem);
             }
-            sortDataList.add(lectureItem);
+            tmpDataList.addAll(sortDataList);
         }
-
-        tmpDataList.addAll(sortDataList);
 
         // Wenn Daten gekommen sind das ListItem LastUpdated hinzufügen
         if (tmpDataList.size() != 0) {

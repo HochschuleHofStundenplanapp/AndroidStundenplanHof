@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener {
 
 	public final String TAG = "MainActivity";
-	public static Context contextOfApplication;
+	private static Context appContext;
 
 	private MealFragment mealFragment;
 	private ScheduleFragment scheduleFragment;
@@ -81,12 +81,16 @@ public class MainActivity extends AppCompatActivity
 	private boolean backButtonPressedOnce = false;
 	private boolean firstStart = true;
 
+	public static Context getAppContext() {
+		return appContext;
+	}
+
 	@Override
 	protected final void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
-		contextOfApplication = getApplicationContext();
+		appContext = this;
 
 		// getActionBar geht nicht wahrscheinlich weil doch noch irgendwo dafür die Support Libary eingebunden wird
 		// zum Nachlesen: http://codetheory.in/difference-between-setdisplayhomeasupenabled-sethomebuttonenabled-and-setdisplayshowhomeenabled/
@@ -256,7 +260,7 @@ public class MainActivity extends AppCompatActivity
                                 sharedPreferences.edit()
                                         .putBoolean("changes_notifications", true)
                                         .apply();
-                                DataManager.getInstance().registerFCMServerForce(contextOfApplication);
+                                DataManager.getInstance().registerFCMServerForce(getApplicationContext());
                             }
                         })
                         .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {

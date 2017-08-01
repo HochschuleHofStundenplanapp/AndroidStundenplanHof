@@ -65,7 +65,7 @@ public class FcmInstanceIdService extends FirebaseInstanceIdService {
         editor.apply();
 
         //erneut Registrieren falls es einen neuen Token gibt
-        DataManager.getInstance().registerFCMServer(MainActivity.contextOfApplication);
+        DataManager.getInstance().registerFCMServer(getApplicationContext());
     }
 
     // After you have obtained the token, you can send it to your app server.

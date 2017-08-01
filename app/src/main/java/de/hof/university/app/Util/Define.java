@@ -17,6 +17,7 @@
 package de.hof.university.app.Util;
 
 /**
+ * For defined variables to use globally
  * Created by stepping on 17.07.2016.
  */
 public final class Define {
@@ -58,6 +59,7 @@ public final class Define {
 	public static final String coursesFilename = "courses";
 	public static final String mealsFilename = "meals";
 	public static final String raumlistFilename = "raumliste";
+	public static final String calendarIDsFilename = "calendarIDs";
 
 	// Namen für die Fragmente
 	public static final String myScheduleFragmentName = "MYSCHEDULE_FRAGMENT";
@@ -154,6 +156,11 @@ public final class Define {
 
 
 	//EMail
-	public final static String FEEDBACKEMAILADDRESS = "androidapps@hof-university.de";
+	public final static String FEEDBACKEMAILADDRESS = "Feedback Stundenplan App <androidapps@hof-university.de>";
+	public final static String NOREPLYEMAILADDRESS = "Hof University <noreply@hof-university.de>";
 
+	public final static String CHANGES_SUBSTRING = " Vertretung";
+	public final static String ROOM_MUEB = "Mueb";
+	public final static String LOCATION_HOF = "Alfons-Goppel-Platz-1 95028 Hof";
+	public final static String LOCATION_MUEB = "Kulmbacher Str. 76 95213 Münchberg";
 }

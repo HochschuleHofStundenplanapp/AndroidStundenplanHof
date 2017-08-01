@@ -128,4 +128,16 @@
     <string name="raum">Raum</string>
     <string name="zeit">Zeit</string>
     <string name="fach_dozent">Fach Dozent</string>
+    <string name="calendar_synchronization">Calendar synchronization</string>
+    <string name="changeCancelled">[Cancelled]</string>
+    <string name="changeMoved">[Moved]</string>
+    <string name="changeRoomchange">[Roomchange]</string>
+    <string name="changeNew">[New]</string>
+    <string name="changeNewDate">New date</string>
+    <string name="noLocation">No Location</string>
+    <string name="calendar_synchronitation_ownLocalCalendar">Own local Calendar</string>
+    <string name="calendar_synchronization_infoText">You have switched on the calendar synchronization.\n\nIn the next dialog, you can select the calendar to synchronize the lectures and changes, or use your own local calendar.\n\nPlease note that the holidays have not yet been considered!</string>
+    <string name="calendar_synchronization_chooseCalendar">Please choose a calendar</string>
+    <string name="PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION" translatable="false">calendar_synchronization</string>
+    <string name="calendar_synchronization_permissionNotGranted">Permission for the calendar not granted</string>
 </resources>

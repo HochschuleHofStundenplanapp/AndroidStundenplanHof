@@ -17,6 +17,7 @@
 package de.hof.university.app.model.settings;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 import de.hof.university.app.Util.Define;
@@ -24,7 +25,7 @@ import de.hof.university.app.Util.Define;
 /**
  * Studiengang
  */
-public class StudyCourse implements Serializable {
+public class StudyCourse implements Serializable, Comparable<StudyCourse> {
     private static final long serialVersionUID = Define.serialVersionUIDv1;
 
     private long id = 0L;
@@ -41,6 +42,8 @@ public class StudyCourse implements Serializable {
     public StudyCourse(final String course, final String courseTag, final List<String> termsParams) {
         name = course;
         tag = courseTag;
+        // sortieren
+        Collections.sort(termsParams);
         this.terms = termsParams;
     }
 
@@ -63,5 +66,10 @@ public class StudyCourse implements Serializable {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(StudyCourse other) {
+        return name.compareTo(other.name);
     }
 }

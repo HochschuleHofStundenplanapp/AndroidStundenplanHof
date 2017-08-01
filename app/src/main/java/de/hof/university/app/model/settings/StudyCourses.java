@@ -17,6 +17,7 @@
 package de.hof.university.app.model.settings;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.model.HofObject;
@@ -39,6 +40,7 @@ public class StudyCourses extends HofObject {
 	}
 
 	public void setCourses(ArrayList<StudyCourse> courses) {
+		Collections.sort(courses);
 		this.courses = courses;
 	}
 
