@@ -31,6 +31,7 @@ import android.webkit.WebViewClient;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
+import de.hof.university.app.Util.Define;
 
 /**
  * Created by Christian Pfeiffer on 14.12.16.
@@ -73,7 +74,7 @@ public class PrimussTabFragment extends Fragment {
 			@Override
 			public void onRefresh() {
 				// Insert your code here
-				myWebView.loadUrl("https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhh");
+				myWebView.loadUrl(Define.PRIMUSSURL);
 			}
 		});
 
@@ -93,7 +94,7 @@ public class PrimussTabFragment extends Fragment {
 		myWebView.getSettings().setSupportZoom(true);
 		myWebView.getSettings().setBuiltInZoomControls(true);
 		myWebView.getSettings().setDisplayZoomControls(false);
-		myWebView.loadUrl("https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhh");
+		myWebView.loadUrl(Define.PRIMUSSURL);
 
 
 		return v;
