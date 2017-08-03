@@ -41,6 +41,7 @@ import android.widget.Toast;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.fragment.MapFragment;
+import de.hof.university.app.experimental.fragment.NavigationFragment;
 import de.hof.university.app.experimental.fragment.NotenbekanntgabeFragment;
 import de.hof.university.app.experimental.fragment.NotenblattFragment;
 import de.hof.university.app.experimental.fragment.RaumsucheFragment;
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity
 	private NotenbekanntgabeFragment notenbekanntgabeFragment;
 	private RaumsucheFragment raumsucheFragment;
 	private MapFragment mapFragment;
+	private NavigationFragment navigationFragment;
 
 	private NavigationView navigationView;
 
@@ -217,9 +219,10 @@ public class MainActivity extends AppCompatActivity
 	public final void displayExperimentalFeaturesMenuEntries(final boolean enabled) {
 		if ( enabled ) {
 			navigationView.getMenu().findItem(R.id.nav_experimental).setVisible(true);
-			navigationView.getMenu().findItem(R.id.nav_raumsuche).setVisible(true); //Raumsuche anzeigen
-//			navigationView.getMenu().findItem(R.id.nav_primuss).setVisible(true); //Primuss anzeigen
-			navigationView.getMenu().findItem(R.id.nav_map).setVisible(true); //Map anzeigen
+			navigationView.getMenu().findItem(R.id.nav_raumsuche).setVisible(true); 	// Raumsuche anzeigen
+//			navigationView.getMenu().findItem(R.id.nav_primuss).setVisible(true); 		// Primuss anzeigen
+			navigationView.getMenu().findItem(R.id.nav_map).setVisible(true); 			// Map anzeigen
+			navigationView.getMenu().findItem(R.id.nav_navigation).setVisible(true); 	// Navigation anzeigen
 
 			// TODO Weil ausblenden solange die neue Authentifizierungsmethode noch nicht funktioniert
 			if ( Define.SHOW_NOTEN == false ) {
@@ -398,6 +401,17 @@ public class MainActivity extends AppCompatActivity
 				FragmentTransaction trans = manager.beginTransaction();
 				trans.addToBackStack(MapFragment.class.getName());
 				trans.replace(R.id.content_main, mapFragment);
+				trans.commit();
+			}
+		} else if(R.id.nav_navigation == id){
+			FragmentManager manager = getFragmentManager();
+			if( !manager.popBackStackImmediate(NavigationFragment.class.getName(), 0)){
+				if(navigationFragment == null){
+					navigationFragment = new NavigationFragment();
+				}
+				FragmentTransaction trans = manager.beginTransaction();
+				trans.addToBackStack(NavigationFragment.class.getName());
+				trans.replace(R.id.content_main, navigationFragment);
 				trans.commit();
 			}
 		} else if ( R.id.nav_stundenplan == id ) {

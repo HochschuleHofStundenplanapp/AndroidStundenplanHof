@@ -124,10 +124,12 @@ public final class Define {
 
 
 	// Additional URLS
-	public final static String ABOUTUSURL="http://www.hof-university.de/ueber-uns.html";
-	public final static String IMPRESSUMURL="http://www.hof-university.de/impressum.html";
-	public final static String DATENSCHUTZURL="http://www.hof-university.de/datenschutz.html";
-	public final static String PLAYSTOREURL="https://play.google.com/store/apps/details?id=de.hof.university.app";
+	public final static String ABOUTUSURL = "http://www.hof-university.de/ueber-uns.html";
+	public final static String IMPRESSUMURL = "http://www.hof-university.de/impressum.html";
+	public final static String DATENSCHUTZURL = "http://www.hof-university.de/datenschutz.html";
+	public final static String PLAYSTOREURL = "https://play.google.com/store/apps/details?id=de.hof.university.app";
+	public final static String PRIMUSSURL = "https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhh";
+	public final static String DBURL = "https://mobile.bahn.de/bin/mobil/query.exe/dox?country=DEU&rt=1&use_realtime_filter=1&webview=&searchMode=NORMAL";
 
 
 	// how long to store content from

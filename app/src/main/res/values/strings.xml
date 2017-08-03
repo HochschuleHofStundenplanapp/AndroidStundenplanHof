@@ -140,4 +140,5 @@
     <string name="calendar_synchronization_chooseCalendar">Please choose a calendar</string>
     <string name="PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION" translatable="false">calendar_synchronization</string>
     <string name="calendar_synchronization_permissionNotGranted">Permission for the calendar not granted</string>
+    <string name="navigation">Navigation</string>
 </resources>
