@@ -60,13 +60,13 @@ public class AboutusFragment extends Fragment {
 	public final View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                               Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		View v = inflater.inflate(R.layout.fragment_aboutus, container, false);
+		final View v = inflater.inflate(R.layout.fragment_aboutus, container, false);
 
-		Button btnRate = (Button) v.findViewById(R.id.btnRate);
+		final Button btnRate = (Button) v.findViewById(R.id.btnRate);
 		btnRate.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Define.PLAYSTOREURL));
+				final Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Define.PLAYSTOREURL));
 				if (browserIntent.resolveActivity(getActivity().getPackageManager()) != null) {
 					startActivity(browserIntent);
 				} else {
@@ -75,11 +75,11 @@ public class AboutusFragment extends Fragment {
 			}
 		});
 
-		Button btnFeedback = (Button) v.findViewById(R.id.btnFeedback);
+		final Button btnFeedback = (Button) v.findViewById(R.id.btnFeedback);
 		btnFeedback.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent mailIntent = new Intent(Intent.ACTION_SENDTO);
+				final Intent mailIntent = new Intent(Intent.ACTION_SENDTO);
 				mailIntent.setData(Uri.parse("mailto:")); // only email apps should handle this
 				mailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {Define.FEEDBACKEMAILADDRESS});
 				mailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.feedbackSubject));
