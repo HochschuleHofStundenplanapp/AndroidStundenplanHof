@@ -24,6 +24,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -32,6 +33,7 @@ import android.webkit.WebViewClient;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.Util.Define;
+import de.hof.university.app.experimental.LoginController;
 
 /**
  * Created by Christian Pfeiffer on 14.12.16.
@@ -88,6 +90,12 @@ public class PrimussTabFragment extends Fragment {
 
 									   public void onPageFinished(WebView view, String url) {
 										   swipeContainer.setRefreshing(false);
+										   LoginController loginController = LoginController.getInstance(getActivity());
+										   myWebView.loadUrl("javascript: (function() {document.getElementById('username').value= '" + loginController.getUsername() + "';}) ();" );
+										   myWebView.loadUrl("javascript: (function() {document.getElementById('password').value= '" + loginController.getPassword() + "';}) ();" );
+										   myWebView.loadUrl("javascript: (function() {document.getElementsByName('_eventId_proceed')[0].click();}) ();" );
+										   //myWebView.loadUrl("javascript: (function() {document.forms[0].submit();}) ();" );
+										   //String cookies = CookieManager.getInstance().getCookie(Define.PRIMUSSURL);
 									   }
 								   });
 

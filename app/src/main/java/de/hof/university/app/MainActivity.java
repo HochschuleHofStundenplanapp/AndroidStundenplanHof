@@ -38,6 +38,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import java.net.CookieHandler;
+import java.net.CookieManager;
+
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.fragment.MapFragment;
@@ -93,6 +96,10 @@ public class MainActivity extends AppCompatActivity
 
 		setContentView(R.layout.activity_main);
 		appContext = this;
+
+		// Let the cookieManager handle the Cookies
+		CookieManager cookieManager = new CookieManager();
+		CookieHandler.setDefault(cookieManager);
 
 		// getActionBar geht nicht wahrscheinlich weil doch noch irgendwo dafür die Support Libary eingebunden wird
 		// zum Nachlesen: http://codetheory.in/difference-between-setdisplayhomeasupenabled-sethomebuttonenabled-and-setdisplayshowhomeenabled/
