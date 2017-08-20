@@ -124,8 +124,8 @@ public class ScheduleFragment extends AbstractListFragment {
     @Override
     public void onPause() {
         super.onPause();
-        MainActivity mainActivity = (MainActivity) getActivity();
-        NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+        final MainActivity mainActivity = (MainActivity) getActivity();
+        final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
         navigationView.getMenu().findItem(R.id.nav_stundenplan).setChecked(false);
     }
 
@@ -169,7 +169,7 @@ public class ScheduleFragment extends AbstractListFragment {
 
     protected final ArrayList<Object> updateListView(List<LectureItem> list) {
         String weekday = "";
-        String curWeekDay = new SimpleDateFormat("EEEE", DataManager.getInstance().getLocale()).format(new Date());
+        final String curWeekDay = new SimpleDateFormat("EEEE", DataManager.getInstance().getLocale()).format(new Date());
 
         // Temporäre Liste für die neuen Vorlesungen damit sie erst später in ListView hinzugefügt werden können
         ArrayList<Object> tmpDataList = new ArrayList<>();
@@ -178,8 +178,8 @@ public class ScheduleFragment extends AbstractListFragment {
         ArrayList<LectureItem> fixDataList = new ArrayList<>();
         for ( LectureItem lectureItem : list ) {
             // Wenn eine Vorlesung nur an einem Tag stattfindet sind Start- und Enddate gleich
-            String startDate = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(lectureItem.getStartDate());
-            String endDate   = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(lectureItem.getEndDate());
+            final String startDate = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(lectureItem.getStartDate());
+            final String endDate   = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(lectureItem.getEndDate());
             if ( startDate.equals(endDate) ) {
                 fixDataList.add(lectureItem);
             } else {
@@ -200,7 +200,7 @@ public class ScheduleFragment extends AbstractListFragment {
             String tmpStartDate = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(fixDataList.get(0).getStartDate());
             sortDataList.add(new BigListItem(tmpStartDate));
             for (LectureItem lectureItem : fixDataList) {
-                String startDate = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(lectureItem.getStartDate());
+                final String startDate = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(lectureItem.getStartDate());
                 if (!tmpStartDate.equals(startDate)) {
                     sortDataList.add(new BigListItem(startDate));
                     tmpStartDate = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(lectureItem.getStartDate());

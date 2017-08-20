@@ -43,8 +43,8 @@ import java.net.CookieManager;
 
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.data.DataManager;
-import de.hof.university.app.experimental.fragment.MapFragment;
-import de.hof.university.app.experimental.fragment.NavigationFragment;
+import de.hof.university.app.fragment.MapFragment;
+import de.hof.university.app.fragment.NavigationFragment;
 import de.hof.university.app.experimental.fragment.NotenbekanntgabeFragment;
 import de.hof.university.app.experimental.fragment.NotenblattFragment;
 import de.hof.university.app.experimental.fragment.RaumsucheFragment;

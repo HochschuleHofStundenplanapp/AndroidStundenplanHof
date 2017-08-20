@@ -23,7 +23,7 @@ import de.hof.university.app.BuildConfig;
  */
 public final class ParserFactory {
 
-    public final static String TAG = "ParserFactory";
+    private final static String TAG = "ParserFactory";
 
     public static Parser create(Enum<ParserFactory.EParser> parserEnum) {
         if (parserEnum == ParserFactory.EParser.SCHEDULE) {
@@ -36,8 +36,10 @@ public final class ParserFactory {
             return new MealParser();
         } else if (parserEnum == ParserFactory.EParser.MYSCHEDULE) {
             return new MyScheduleParser();
-        } else
-        if ( BuildConfig.DEBUG) { assert(false); }
+        }
+
+        if (BuildConfig.DEBUG) { assert (false); }
+
         return null;
     }
 

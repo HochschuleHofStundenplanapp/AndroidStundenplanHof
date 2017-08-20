@@ -15,7 +15,7 @@
  */
 
 
-package de.hof.university.app.experimental.fragment;
+package de.hof.university.app.fragment;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -64,6 +64,7 @@ import de.hof.university.app.Util.Log;
 public class MapFragment extends Fragment {
 
     final private int REQUEST_CODE_ASK_PERMISSIONS = 1;
+    final public static String TAG = "MapFragment";
 
     MapView myOpenMapView;
     IMapController myMapController;
@@ -140,7 +141,7 @@ public class MapFragment extends Fragment {
         } else {
             // Android Marshmallow or higher
             if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // Einen Dialog bringen wenn der Nutzer den Hacken bei "Nicht noch einmal anzeigen" setzt oder beim ersten Mal
+                // Einen Dialog bringen wenn der Nutzer den Haken bei "Nicht noch einmal anzeigen" setzt oder beim ersten Mal
                 if (!ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
                     new AlertDialog.Builder(getView().getContext())
                             .setTitle(getString(R.string.needPermissionTitle))
@@ -256,7 +257,7 @@ public class MapFragment extends Fragment {
         locationManager.removeUpdates(locationListener);
     }
 
-    public void updateLoc(Location loc) {
+    public void updateLoc(final Location loc) {
         GeoPoint locGeoPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
         myMapController.setCenter(locGeoPoint);
         myOpenMapView.invalidate();
@@ -264,7 +265,7 @@ public class MapFragment extends Fragment {
         marker.setPosition(locGeoPoint);
     }
 
-    public void updateLocationInfo(Location location) {
+    public void updateLocationInfo(final Location location) {
         Log.i("LocationInfo", location.toString());
         TextView addressTextView = (TextView) getView().findViewById(R.id.addressTextView);
 
@@ -298,7 +299,7 @@ public class MapFragment extends Fragment {
             }
             addressTextView.setText(address);
         } catch (IOException e) {
-            e.printStackTrace();
+	        Log.e(TAG, "updateLocationInfo failed");
         }
     }
 }
