@@ -81,6 +81,9 @@ public class PrimussTabFragment extends Fragment {
 		});
 
 		myWebView.setWebChromeClient(new WebChromeClient());
+
+		final int[] counter = {3};
+
 		myWebView.setWebViewClient(new WebViewClient() {
 
 									   @Override
@@ -90,10 +93,19 @@ public class PrimussTabFragment extends Fragment {
 
 									   public void onPageFinished(WebView view, String url) {
 										   swipeContainer.setRefreshing(false);
-										   LoginController loginController = LoginController.getInstance(getActivity());
-										   myWebView.loadUrl("javascript: (function() {document.getElementById('username').value= '" + loginController.getUsername() + "';}) ();" );
-										   myWebView.loadUrl("javascript: (function() {document.getElementById('password').value= '" + loginController.getPassword() + "';}) ();" );
-										   myWebView.loadUrl("javascript: (function() {document.getElementsByName('_eventId_proceed')[0].click();}) ();" );
+										   if (view.getUrl().contains("idp")) {
+											   LoginController loginController = LoginController.getInstance(getActivity());
+											   if (!loginController.getUsername().isEmpty() && !loginController.getPassword().isEmpty()) {
+												   if (counter[0] > 0) {
+													   counter[0]--;
+													   view.loadUrl("javascript: (function() {document.getElementById('username').value= '" + loginController.getUsername() + "';}) ();");
+													   view.loadUrl("javascript: (function() {document.getElementById('password').value= '" + loginController.getPassword() + "';}) ();");
+													   view.loadUrl("javascript: (function() {document.getElementsByName('_eventId_proceed')[0].click();}) ();");
+												   }
+											   }
+										   }
+
+
 										   //myWebView.loadUrl("javascript: (function() {document.forms[0].submit();}) ();" );
 										   //String cookies = CookieManager.getInstance().getCookie(Define.PRIMUSSURL);
 									   }
