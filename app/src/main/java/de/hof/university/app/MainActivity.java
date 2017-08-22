@@ -54,7 +54,7 @@ import de.hof.university.app.fragment.PrimussTabFragment;
 import de.hof.university.app.fragment.schedule.ChangesFragment;
 import de.hof.university.app.fragment.schedule.MyScheduleFragment;
 import de.hof.university.app.fragment.schedule.ScheduleFragment;
-import de.hof.university.app.fragment.settings.SettingsFragment;
+import de.hof.university.app.fragment.SettingsFragment;
 
 
 public class MainActivity extends AppCompatActivity

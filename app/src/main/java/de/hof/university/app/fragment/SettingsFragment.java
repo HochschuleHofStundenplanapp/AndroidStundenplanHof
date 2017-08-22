@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.hof.university.app.fragment.settings;
+package de.hof.university.app.fragment;
 
 
 import android.Manifest;
@@ -52,6 +52,8 @@ import de.hof.university.app.calendar.CalendarSynchronization;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.LoginController;
 import de.hof.university.app.model.settings.StudyCourse;
+
+import static android.os.Build.VERSION_CODES;
 
 /**
  * Created by Lukas on 24.11.2015.
@@ -490,7 +492,9 @@ public class SettingsFragment extends PreferenceFragment {
 	}
 
 	public void requestCalendarPermission() {
-		if (Build.VERSION.SDK_INT > 23) {
+
+		// From MARSHMELLOW (OS 6) on
+		if (Build.VERSION.SDK_INT >= VERSION_CODES.M ) {
 			this.requestPermissions(
 					new String[]{Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR},
 					REQUEST_CODE_ASK_CALENDAR_PERMISSIONS);
