@@ -32,6 +32,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -43,9 +44,12 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
+import de.hof.university.app.Util.Define;
 import de.hof.university.app.experimental.LoginController;
 import de.hof.university.app.experimental.adapter.NotenAdapter;
 import de.hof.university.app.experimental.model.Noten;
@@ -141,7 +145,7 @@ public class NotenbekanntgabeFragment extends Fragment {
         String errorText = "";
         final Context context;
 
-        public GetNotenTask(Context context) {
+        GetNotenTask(Context context) {
             this.context = context;
         }
 
@@ -180,34 +184,179 @@ public class NotenbekanntgabeFragment extends Fragment {
             System.setProperty("jsse.enableSNIExtension", "false");
 
             try {
-                //Login und Session holen
-                Connection.Response res = Jsoup.connect("https://www1.primuss.de/cgi/Sesam/sesam.pl").
-                        data("User", params[0], "Javascript", "1", "Stage", "1", "Password", params[1], "Auth", "radius", "Portal", "1", "FH", "fhh", "Language", "de").
-                        method(Connection.Method.POST).timeout(10000).execute();
-                Document doc = res.parse();
+                /*URL url = new URL("http://ipaddress:port/module/manager");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setDoOutput(true);
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "*application/json;*charset=UTF-8");
 
-                String session = doc.getElementsByAttributeValueMatching("name", "Session").val();
-                String user = doc.getElementsByAttributeValueMatching("name", "User").val();
-                String language = doc.getElementsByAttributeValueMatching("name", "Language").val();
-                String fh = doc.getElementsByAttributeValueMatching("name", "FH").val();
-                String portal = doc.getElementsByAttributeValueMatching("name", "Portal").val();
-                String javascript = doc.getElementsByAttributeValueMatching("name", "Javascript").val();
+                OutputStream os = conn.getOutputStream();
+                os.write(request.getBytes());
+                os.flush();
+                if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                    throw new RuntimeException("Failed : HTTP error code : "
+                            + conn.getResponseCode());
+                }
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(
+                        (conn.getInputStream())));
+                String output;
+                StringBuffer sb = new StringBuffer();
+                while ((output = br.readLine()) != null) {
+                    sb.append(output);
+                }
+                return sb.toString();*/
+
+                //Login URL holen
+                // Try to go to the SP
+               /* Connection.Response res0 = Jsoup.connect(Define.PRIMUSSURL).
+                        method(Connection.Method.GET).timeout(10000).execute();
+                Document doc0 = res0.parse();
+
+                URL idpURL = res0.url();
+                Map<String, String> cookies = res0.cookies();
+
+                // Login to the IDP
+                HttpsURLConnection idpCon = (HttpsURLConnection)idpURL.openConnection();
+
+                String charset = "UTF-8";
+
+                try {
+                    idpCon.setRequestMethod("POST");
+                    idpCon.setDoInput(true);
+                    idpCon.setDoOutput(true);
+
+                    idpCon.setRequestProperty("Accept-Charset", charset);
+
+                    // Cookies setzen
+                    *//*for (String key: cookies.keySet()) {
+                        idpCon.addRequestProperty(key, cookies.get(key));
+                    }*//*
+
+                    // Login Daten
+                    *//*String paramsString = URLEncoder.encode("j_username", charset) + "="+ params[0] + "&" + URLEncoder.encode("j_password", charset) + "=" + URLEncoder.encode(params[1], charset);
+
+                    DataOutputStream wr = new DataOutputStream(idpActionCon.getOutputStream());
+                    wr.writeBytes(paramsString);
+                    wr.flush();
+                    wr.close();*//*
+
+                    String userPassword = params[0] + ":" + params[1];
+                    String encoding = Base64.encodeToString(userPassword.getBytes(charset), Base64.DEFAULT);
+
+                    idpCon.setRequestProperty("Authorization", "Basic " + encoding);
+                    idpCon.connect();
+
+                    *//*idpLoginRequest.getParams().setBooleanParameter(AUTH_IN_PROGRESS, true);
+                    idpLoginRequest.addHeader(HttpHeaders.AUTHORIZATION,
+                            "Basic " + Base64.encodeBytes((params[0] + ":" + params[1]).getBytes()));
+                    idpLoginRequest.setEntity(new StringEntity(xmlToString(idpLoginSoapRequest)));
+                    HttpResponse idpLoginResponse = client.execute(idpLoginRequest);*//*
+
+                    *//*Authenticator.setDefault(new Authenticator() {
+                        protected PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(username, password.toCharArray());
+                        }
+                    });*//*
+
+                    if (idpCon.getResponseCode() == 302) {
+                        String newUrl = idpCon.getHeaderField("Location");
+                    }
+
+
+                    idpCon.getURL();
+
+                    InputStream in = new BufferedInputStream(idpCon.getInputStream());
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                    StringBuilder result = new StringBuilder();
+                    String line;
+
+                    while ((line = reader.readLine()) != null) {
+                        result.append(line);
+                    }
+
+                    Log.d(TAG, "result: " + result.toString());
+                } finally {
+                    idpCon.disconnect();
+                }*/
+
+
+
+                //Login und Session holen
+//                Connection.Response res = Jsoup.connect("https://www1.primuss.de/cgi/Sesam/sesam.pl").
+                /*Connection.Response res = Jsoup.connect(idpURL.toString()).
+                        cookies(cookies).
+                        //data("User", params[0], "Javascript", "1", "Stage", "1", "Password", params[1], "Auth", "radius", "Portal", "1", "FH", "fhh", "Language", "de").
+                        //data("j_username", params[0], "j_password", params[1]).
+                        method(Connection.Method.POST).timeout(10000).execute();
+                Document idpDoc = res.parse();
+
+                *//*Element idpFormElement = idpDoc.select("form").get(0);
+                String idpActionPath = idpFormElement.attr("action");
+
+                String idpURLString = idpURL.toString();
+                idpURLString = idpURLString.substring(0, idpURLString.indexOf("?"));
+                idpURLString += idpActionPath;
+                URL idpActionUrl = new URL(idpURLString);*//*
+
+                String session = idpDoc.getElementsByAttributeValueMatching("name", "Session").val();
+                String user = idpDoc.getElementsByAttributeValueMatching("name", "User").val();
+                String language = idpDoc.getElementsByAttributeValueMatching("name", "Language").val();
+                String fh = idpDoc.getElementsByAttributeValueMatching("name", "FH").val();
+                String portal = idpDoc.getElementsByAttributeValueMatching("name", "Portal").val();
+                String javascript = idpDoc.getElementsByAttributeValueMatching("name", "Javascript").val();
+
+                *//*HttpPost httpPost2 = new HttpPost(idpUrl.replace("/idp/shibboleth", idpActionPath));
+                List<NameValuePair> nameValuePairs2 = new ArrayList<NameValuePair>();
+                nameValuePairs2.add(new BasicNameValuePair("j_username", username));
+                nameValuePairs2.add(new BasicNameValuePair("j_password", password));
+                httpPost2.setEntity(new UrlEncodedFormEntity(nameValuePairs2, HTTP.UTF_8));
+                HttpResponse response2 = httpClient.execute(httpPost2);
+                String strResponse2 = readResponse(response2.getEntity().getContent()).toString();*//*
+
 
                 //Wenn session leer ist, dann ist der Login fehlgeschlagen
                 if (session.isEmpty()) {
                     errorText = getString(R.string.loginFailed);
                     return null;
+                }*/
+
+                Map<String, String> cookies = new HashMap<>();
+
+                String cookiesString = CookieManager.getInstance().getCookie(Define.PRIMUSSURL);
+
+                String[] cookiesArray = cookiesString.split(";");
+
+                for (String ar1 : cookiesArray ) {
+                    String[] temp = ar1.split("=");
+                    cookies.put(temp[0], temp[1]);
                 }
 
-                //Rechtsbelehrung
-                Connection.Response res2 = Jsoup.connect("https://www3.primuss.de/cgi-bin/pg_Notenbekanntgabe/index.pl").data(
-                        "Session", session, "User", user, "Language", language, "FH", fh, "Portal", portal, "Javascript", javascript).method(Connection.Method.POST).timeout(10000).execute();
+                if (cookies.isEmpty()) {
+                    errorText = getString(R.string.loginFailed);
+                    return null;
+                }
+
+                // Rechtsbelehrung
+                //Connection.Response res2 = Jsoup.connect("https://www3.primuss.de/cgi-bin/pg_Notenbekanntgabe/index.pl").data(
+                Connection.Response res2 = Jsoup.connect(Define.PRIMUSSRECHTSBELEHRUNGURL)
+                        .cookies(cookies)
+                        //.data("Session", session, "User", user, "Language", language, "FH", fh, "Portal", portal, "Javascript", javascript)
+                        .data("Language", "de", "User", params[0], "FH", "fhh", "Portal", "1")
+                        .method(Connection.Method.POST)
+                        .timeout(10000)
+                        .execute();
                 Document doc2 = res2.parse();
                 String poison = doc2.getElementsByAttributeValueMatching("name", "Poison").val();
 
                 //Notenbekanntgabe
-                Connection.Response res3 = Jsoup.connect("https://www3.primuss.de/cgi-bin/pg_Notenbekanntgabe/showajax.pl").data(
-                        "Language", "de", "Session", session, "Poison", poison, "User", user, "FH", fh, "Accept", "X").method(Connection.Method.GET).timeout(10000).execute();
+                //Connection.Response res3 = Jsoup.connect("https://www3.primuss.de/cgi-bin/pg_Notenbekanntgabe/showajax.pl")
+                Connection.Response res3 = Jsoup.connect(Define.PRIMUSSNOTENBEKANNTGABEURL)
+                        .cookies(cookies)
+                        //.data("Language", "de", "Session", session, "Poison", poison, "User", user, "FH", fh, "Accept", "X")
+                        .method(Connection.Method.GET)
+                        .timeout(10000)
+                        .execute();
 
                 // TODO falls keine Daten kommen Fehlermeldung anzeigen
 

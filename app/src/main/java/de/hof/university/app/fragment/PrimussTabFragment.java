@@ -101,13 +101,16 @@ public class PrimussTabFragment extends Fragment {
 													   view.loadUrl("javascript: (function() {document.getElementById('username').value= '" + loginController.getUsername() + "';}) ();");
 													   view.loadUrl("javascript: (function() {document.getElementById('password').value= '" + loginController.getPassword() + "';}) ();");
 													   view.loadUrl("javascript: (function() {document.getElementsByName('_eventId_proceed')[0].click();}) ();");
+
+													   // Not working
+													   //myWebView.loadUrl("javascript: (function() {document.forms[0].submit();}) ();" );
 												   }
 											   }
 										   }
-
-
-										   //myWebView.loadUrl("javascript: (function() {document.forms[0].submit();}) ();" );
-										   //String cookies = CookieManager.getInstance().getCookie(Define.PRIMUSSURL);
+										   // for testing
+										   /*view.getUrl();
+										   String cookiesString = CookieManager.getInstance().getCookie(Define.PRIMUSSURL);
+										   String cookiesString2 = CookieManager.getInstance().getCookie(Define.PRIMUSSRECHTSBELEHRUNGURL);*/
 									   }
 								   });
 

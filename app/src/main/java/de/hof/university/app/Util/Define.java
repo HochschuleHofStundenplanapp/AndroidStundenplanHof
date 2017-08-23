@@ -129,6 +129,8 @@ public final class Define {
 	public final static String DATENSCHUTZURL = "http://www.hof-university.de/datenschutz.html";
 	public final static String PLAYSTOREURL = "https://play.google.com/store/apps/details?id=de.hof.university.app";
 	public final static String PRIMUSSURL = "https://www3.primuss.de/cgi-bin/login/index.pl?FH=fhh";
+	public final static String PRIMUSSRECHTSBELEHRUNGURL = "https://www3.primuss.de/cgi-bin/pg_Notenbekanntgabe/index.pl";
+	public final static String PRIMUSSNOTENBEKANNTGABEURL = "https://www3.primuss.de/cgi-bin/pg_Notenbekanntgabe/showajax.pl";
 	public final static String DBURL = "https://mobile.bahn.de/bin/mobil/query.exe/dox?country=DEU&rt=1&use_realtime_filter=1&webview=&searchMode=NORMAL";
 
 
