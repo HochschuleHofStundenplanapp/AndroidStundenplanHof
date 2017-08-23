@@ -48,10 +48,30 @@ android {
             pseudoLocalesEnabled true
             /* proguardFile 'D:/Projekt/Mobile.AndroidStudio/VideoChat/app/proguard-project.txt' */
             proguardFile 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def appName = variant.applicationId
+                    def versionName = variant.versionName
+                    def variantName = variant.name // e. g. freeDebug
+
+                    def apkName = appName + '_' + variantName + '_' + versionName + '.apk';
+                    output.outputFile = new File(output.outputFile.parentFile, apkName)
+                }
+            }
         }
         debug {
             debuggable true
             signingConfig signingConfigs.debug
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def appName = variant.applicationId
+                    def versionName = variant.versionName
+                    def variantName = variant.name // e. g. freeDebug
+
+                    def apkName = appName + '_' + variantName + '_' + versionName + '.apk';
+                    output.outputFile = new File(output.outputFile.parentFile, apkName)
+                }
+            }
         }
     }
     productFlavors {
@@ -94,6 +114,11 @@ dependencies {
     testCompile 'junit:junit:4.12'
     //compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support.constraint:constraint-layout:+'
+
+    // Libarays for Shibboleth Auth
+    //compile 'de.tudarmstadt.ukp.shibhttpclient:shib-http-client:1.0.0'
+    //compile 'org.jasig.service:delegated-saml-authentication:1.1.2'
+    //compile 'org.springframework.security.extensions:spring-security-saml2-core:1.0.2.RELEASE'
 }
 
 apply plugin: 'com.google.gms.google-services'
