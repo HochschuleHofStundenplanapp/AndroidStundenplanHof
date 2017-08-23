@@ -323,7 +323,7 @@ public class RaumlisteFragment extends Fragment {
                         tmpRaumList.add(new Raum(td.text()));
                     }
 
-                } catch ( IOException e ) {
+                } catch ( Exception e ) { // eigentlich IOException, aber es kann auch NullPointer wenn Login fehlgeschlagen ist
                     if ( e.getClass() == InterruptedIOException.class ) //Wurde einfach abgebrochen -> nichts tun
                     {
                         errorText = getString(R.string.raumsuchefehler);
