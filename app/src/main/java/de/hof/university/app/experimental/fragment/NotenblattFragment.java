@@ -21,6 +21,7 @@ package de.hof.university.app.experimental.fragment;
  */
 
 import android.app.Fragment;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -29,7 +30,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import org.jsoup.Connection;
@@ -42,6 +45,7 @@ import java.io.InterruptedIOException;
 import de.hof.university.app.BuildConfig;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
+import de.hof.university.app.Util.Define;
 import de.hof.university.app.experimental.LoginController;
 
 
@@ -54,7 +58,7 @@ public class NotenblattFragment extends Fragment {
     private NotenblattFragment.GetNotenblattTask task;
     private String html;
     private LoginController loginController;
-
+    private String session;
 
     @Override
     public final void onDestroyView() {
@@ -79,7 +83,7 @@ public class NotenblattFragment extends Fragment {
             html = savedInstanceState.getString("DATA");
         }
 
-
+        session = "";
     }
 
     @Override
@@ -98,7 +102,6 @@ public class NotenblattFragment extends Fragment {
         MenuItem item = navigationView.getMenu().findItem(R.id.nav_experimental);
         //item.setChecked(true);
         item.getSubMenu().findItem(R.id.nav_notenblatt).setChecked(true);
-
     }
 
 
@@ -130,7 +133,44 @@ public class NotenblattFragment extends Fragment {
         });
 
         if (html.isEmpty()) {
-            updateData();
+            // Webview zum einloggen
+            WebSettings webSettings = webView.getSettings();
+            webSettings.setJavaScriptEnabled(true);
+
+            final int[] counter = {3};
+
+            webView.setWebViewClient(new WebViewClient() {
+
+                @Override
+                public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                    swipeContainer.setRefreshing(true);
+                }
+
+                public void onPageFinished(WebView view, String url) {
+                    swipeContainer.setRefreshing(false);
+                    if (view.getUrl().contains("idp")) {
+                        LoginController loginController = LoginController.getInstance(getActivity());
+                        if (!loginController.getUsername().isEmpty() && !loginController.getPassword().isEmpty()) {
+                            if (counter[0] > 0) {
+                                counter[0]--;
+                                view.loadUrl("javascript: (function() {document.getElementById('username').value= '" + loginController.getUsername() + "';}) ();");
+                                view.loadUrl("javascript: (function() {document.getElementById('password').value= '" + loginController.getPassword() + "';}) ();");
+                                view.loadUrl("javascript: (function() {document.getElementsByName('_eventId_proceed')[0].click();}) ();");
+
+                                // Not working
+                                //myWebView.loadUrl("javascript: (function() {document.forms[0].submit();}) ();" );
+                            }
+                        }
+                    } else {
+                        if (view.getUrl().contains("Session=")) {
+                            session = view.getUrl().substring(view.getUrl().indexOf("Session=") + 8, view.getUrl().indexOf("&User"));
+                            updateData();
+                        }
+                    }
+                }
+            });
+
+            webView.loadUrl(Define.PRIMUSSURL);
         } else {
             webView.loadData(html, "text/html", null);
         }
@@ -171,7 +211,7 @@ public class NotenblattFragment extends Fragment {
 
             try {
                 //Login und Session holen
-                Connection.Response res = Jsoup.connect("https://www1.primuss.de/cgi/Sesam/sesam.pl").
+                /*Connection.Response res = Jsoup.connect("https://www1.primuss.de/cgi/Sesam/sesam.pl").
                         data("User", params[0], "Javascript", "1", "Stage", "1", "Password", params[1], "Auth", "radius", "Portal", "1", "FH", "fhh", "Language", "de").
                         method(Connection.Method.POST).timeout(10000).execute();
 
@@ -188,10 +228,15 @@ public class NotenblattFragment extends Fragment {
                 if (session.isEmpty()) {
                     errorText = getString(R.string.loginFailed);
                     return "";
-                }
+                }*/
+
                 //Notenblatt
-                Connection.Response res4 = Jsoup.connect("https://www1.primuss.de/cgi/pg_Notenblatt/index.pl").data(
-                        "Session", session, "User", user, "Language", "de", "FH", fh, "Portal", portal, "Javascript", javascript).method(Connection.Method.POST).execute();
+                Connection.Response res4 = Jsoup.connect("https://www1.primuss.de/cgi/pg_Notenblatt/index.pl")
+                        //.cookies()
+                        //.data("Session", session, "User", user, "Language", "de", "FH", fh, "Portal", portal, "Javascript", javascript)
+                        .data("Session", session, "User", params[0], "Language", "de", "FH", "fhh", "Portal", "1")
+                        .method(Connection.Method.POST)
+                        .execute();
                 Document doc2 = res4.parse();
                 doc2.getElementsByTag("a").remove();
                 result = doc2.html();
@@ -221,10 +266,9 @@ public class NotenblattFragment extends Fragment {
             if (!errorText.isEmpty()) {
                 Toast.makeText(getView().getContext(), errorText, Toast.LENGTH_LONG).show();
             }
+
             html = aString; //Ergebnis merken, damit beim erneuten Anzeigen nicht neu gelesen werden muss
             webView.loadData(aString, "text/html", null);
-
-
         }
     }
 
