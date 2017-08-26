@@ -18,14 +18,26 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/swipeContainer"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clickable="false"
+    android:contextClickable="false">
 
     <ListView
-        android:id="@+id/lvItems"
+        android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"
+        android:dividerHeight="1dp"
+        android:divider="@android:color/darker_gray"
+        android:clickable="false"
+        android:contextClickable="false">
+
     </ListView>
+
+    <WebView
+        android:id="@+id/webview"
+        android:layout_width="1dp"
+        android:layout_height="1dp" />
 
 </android.support.v4.widget.SwipeRefreshLayout>

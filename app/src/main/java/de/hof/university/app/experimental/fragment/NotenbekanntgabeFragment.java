@@ -23,6 +23,7 @@ package de.hof.university.app.experimental.fragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -33,6 +34,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -65,6 +69,8 @@ public class NotenbekanntgabeFragment extends Fragment {
     private NotenbekanntgabeFragment.GetNotenTask task;
     private LoginController loginController;
 
+    private String session;
+
     public NotenbekanntgabeFragment() {
     }
 
@@ -74,6 +80,7 @@ public class NotenbekanntgabeFragment extends Fragment {
         loginController = LoginController.getInstance(getActivity());
 
         items = new ArrayList<>();
+        session = "";
     }
 
 
@@ -101,7 +108,7 @@ public class NotenbekanntgabeFragment extends Fragment {
     @Override
     public final View onCreateView(LayoutInflater inflater, ViewGroup container,
                                    Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_list, container, false);
+        View v = inflater.inflate(R.layout.fragment_notenbekanntgabe, container, false);
         swipeContainer = (SwipeRefreshLayout) v.findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -113,10 +120,46 @@ public class NotenbekanntgabeFragment extends Fragment {
         ListView listView = (ListView) v.findViewById(R.id.listView);
         listView.setAdapter(adapter);
 
-        //Wenn noch keine Daten gelesen wurden
-        if (items.isEmpty()) {
-            updateData();
-        }
+        // Webview zum einloggen
+        final WebView myWebView = (WebView) v.findViewById(R.id.webview);
+        WebSettings webSettings = myWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+
+        final int[] counter = {3};
+
+        myWebView.setWebViewClient(new WebViewClient() {
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                swipeContainer.setRefreshing(true);
+            }
+
+            public void onPageFinished(WebView view, String url) {
+                swipeContainer.setRefreshing(false);
+                if (view.getUrl().contains("idp")) {
+                    LoginController loginController = LoginController.getInstance(getActivity());
+                    if (!loginController.getUsername().isEmpty() && !loginController.getPassword().isEmpty()) {
+                        if (counter[0] > 0) {
+                            counter[0]--;
+                            view.loadUrl("javascript: (function() {document.getElementById('username').value= '" + loginController.getUsername() + "';}) ();");
+                            view.loadUrl("javascript: (function() {document.getElementById('password').value= '" + loginController.getPassword() + "';}) ();");
+                            view.loadUrl("javascript: (function() {document.getElementsByName('_eventId_proceed')[0].click();}) ();");
+
+                            // Not working
+                            //myWebView.loadUrl("javascript: (function() {document.forms[0].submit();}) ();" );
+                        }
+                    }
+                } else {
+                    session = view.getUrl().substring(view.getUrl().indexOf("Session=") + 8, view.getUrl().indexOf("&User"));
+                    //Wenn noch keine Daten gelesen wurden
+                    if (items.isEmpty()) {
+                        updateData();
+                    }
+                }
+            }
+        });
+
+        myWebView.loadUrl(Define.PRIMUSSURL);
 
         return v;
     }
@@ -321,6 +364,8 @@ public class NotenbekanntgabeFragment extends Fragment {
                     return null;
                 }*/
 
+
+                //Methode mit Webview
                 Map<String, String> cookies = new HashMap<>();
 
                 String cookiesString = CookieManager.getInstance().getCookie(Define.PRIMUSSURL);
@@ -332,7 +377,7 @@ public class NotenbekanntgabeFragment extends Fragment {
                     cookies.put(temp[0], temp[1]);
                 }
 
-                if (cookies.isEmpty()) {
+                if (cookies.isEmpty() || session.isEmpty()) {
                     errorText = getString(R.string.loginFailed);
                     return null;
                 }
@@ -342,7 +387,7 @@ public class NotenbekanntgabeFragment extends Fragment {
                 Connection.Response res2 = Jsoup.connect(Define.PRIMUSSRECHTSBELEHRUNGURL)
                         .cookies(cookies)
                         //.data("Session", session, "User", user, "Language", language, "FH", fh, "Portal", portal, "Javascript", javascript)
-                        .data("Language", "de", "User", params[0], "FH", "fhh", "Portal", "1")
+                        .data("Session", session, "Language", "de", "User", params[0], "FH", "fhh", "Portal", "1")
                         .method(Connection.Method.POST)
                         .timeout(10000)
                         .execute();
@@ -354,6 +399,7 @@ public class NotenbekanntgabeFragment extends Fragment {
                 Connection.Response res3 = Jsoup.connect(Define.PRIMUSSNOTENBEKANNTGABEURL)
                         .cookies(cookies)
                         //.data("Language", "de", "Session", session, "Poison", poison, "User", user, "FH", fh, "Accept", "X")
+                        .data("Language", "de", "Session", session, "Poison", poison, "User", params[0], "FH", "fhh", "Accept", "X")
                         .method(Connection.Method.GET)
                         .timeout(10000)
                         .execute();
