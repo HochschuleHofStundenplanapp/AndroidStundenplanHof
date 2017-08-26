@@ -150,16 +150,18 @@ public class NotenbekanntgabeFragment extends Fragment {
                         }
                     }
                 } else {
-                    session = view.getUrl().substring(view.getUrl().indexOf("Session=") + 8, view.getUrl().indexOf("&User"));
-                    //Wenn noch keine Daten gelesen wurden
-                    if (items.isEmpty()) {
+                    if (view.getUrl().contains("Session=")) {
+                        session = view.getUrl().substring(view.getUrl().indexOf("Session=") + 8, view.getUrl().indexOf("&User"));
                         updateData();
                     }
                 }
             }
         });
 
-        myWebView.loadUrl(Define.PRIMUSSURL);
+        //Wenn noch keine Daten gelesen wurden
+        if (items.isEmpty()) {
+            myWebView.loadUrl(Define.PRIMUSSURL);
+        }
 
         return v;
     }
