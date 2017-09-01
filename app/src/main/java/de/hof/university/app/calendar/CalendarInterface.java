@@ -12,6 +12,7 @@ import android.provider.CalendarContract;
 import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
 import android.support.v4.app.ActivityCompat;
+import android.text.format.DateUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -37,33 +38,37 @@ class CalendarInterface {
 
     // Projection array. Creating indices for this array instead of doing
     // dynamic lookups improves performance.
-    private static final String[] EVENT_PROJECTION = new String[]{
+    private static final String[] CALENDAR_PROJECTION = new String[]{
             Calendars._ID,                          // 0
-            Calendars.ACCOUNT_NAME,                 // 1
-            Calendars.CALENDAR_DISPLAY_NAME,        // 2
-            Calendars.OWNER_ACCOUNT,                // 3
-            Calendars.ACCOUNT_TYPE,                 // 4
-            Calendars.NAME                          // 5
-    };
-
-    private static final String[] INSTANCE_PROJECTION = new String[]{
-            CalendarContract.Instances.EVENT_ID,      // 0
-            CalendarContract.Instances.BEGIN,         // 1
-            CalendarContract.Instances.TITLE          // 2
+            Calendars.CALENDAR_DISPLAY_NAME,        // 1
+            //Calendars.ACCOUNT_NAME,                 // 2
+            //Calendars.OWNER_ACCOUNT,                // 3
+            //Calendars.ACCOUNT_TYPE,                 // 4
     };
 
     // The indices for the projection array above.
-    private static final int PROJECTION_ID_INDEX = 0;
-    private static final int PROJECTION_ACCOUNT_NAME_INDEX = 1;
-    private static final int PROJECTION_DISPLAY_NAME_INDEX = 2;
-    private static final int PROJECTION_OWNER_ACCOUNT_INDEX = 3;
-    private static final int PROJECTION_ACCOUNT_TYPE_INDEX = 4;
+    private static final int PROJECTION_CALENDAR_ID_INDEX = 0;
+    private static final int PROJECTION_DISPLAY_NAME_INDEX = 1;
+    //private static final int PROJECTION_ACCOUNT_NAME_INDEX = 1;
+    //private static final int PROJECTION_OWNER_ACCOUNT_INDEX = 3;
+    //private static final int PROJECTION_ACCOUNT_TYPE_INDEX = 4;
+
+    private static final String[] EVENT_PROJECTION = new String[]{
+            CalendarContract.Instances.EVENT_ID,        // 0
+            CalendarContract.Instances.BEGIN,           // 1
+            CalendarContract.Instances.TITLE,           // 2
+            CalendarContract.Instances.DESCRIPTION      // 3
+    };
 
     // The indices for the projection array above.
+    private static final int PROJECTION_EVENT_ID_INDEX = 0;
     private static final int PROJECTION_BEGIN_INDEX = 1;
     private static final int PROJECTION_TITLE_INDEX = 2;
+    private static final int PROJECTION_DESCRIPTION_INDEX = 3;
 
     private String localCalendarName = "";
+    private String accountName = ""; // Google Account
+    private String accountType = ""; // Typ z.B.: com.google
     private CalendarData calendarData = new CalendarData();
 
     public static CalendarInterface getInstance() {
@@ -76,6 +81,8 @@ class CalendarInterface {
     private CalendarInterface() {
         Context context = MainActivity.getAppContext().getApplicationContext();
         localCalendarName = context.getString(R.string.stundenplan) + " " + context.getString(R.string.app_name);
+        accountName = context.getString(R.string.app_name);
+        accountType = CalendarContract.ACCOUNT_TYPE_LOCAL;
 
         // bereits vohandene IDs einlesen
         readCalendarData();
@@ -117,8 +124,12 @@ class CalendarInterface {
             return result;
         }
 
-        // wenn er alle Calendar liefern soll:
-        cur = cr.query(uri, EVENT_PROJECTION, null, null, null);
+        // Anfrage für alle Kalender
+        cur = cr.query(uri,
+                CALENDAR_PROJECTION,
+                null,
+                null,
+                null);
 
         if (cur == null) {
             return result;
@@ -127,7 +138,9 @@ class CalendarInterface {
         // Use the cursor to step through the returned records
         while (cur.moveToNext()) {
             // found
-            result.put(cur.getString(PROJECTION_DISPLAY_NAME_INDEX), cur.getLong(PROJECTION_ID_INDEX));
+            // put the Name and the ID of the calendar in result
+            result.put(cur.getString(PROJECTION_DISPLAY_NAME_INDEX),
+                    cur.getLong(PROJECTION_CALENDAR_ID_INDEX));
         }
 
         cur.close();
@@ -154,15 +167,19 @@ class CalendarInterface {
                 + Calendars.OWNER_ACCOUNT + " = ?) AND ("
                 + Calendars.ACCOUNT_TYPE + " = ?)"
                 + ")";
-        String[] selectionArgs = new String[]{localCalendarName, context.getString(R.string.app_name), Define.NOREPLYEMAILADDRESS, CalendarContract.ACCOUNT_TYPE_LOCAL};
+        String[] selectionArgs = new String[]{localCalendarName, accountName, accountName, accountType};
 
         // Submit the query and get a Cursor object back.
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
             return null;
         }
-        cur = cr.query(uri, EVENT_PROJECTION, selection, selectionArgs, null);
-        // wenn er alle Calendar liefern soll:
-        //cur = cr.query(uri, EVENT_PROJECTION, null, null, null);
+
+        // Anfrage
+        cur = cr.query(uri,
+                CALENDAR_PROJECTION,
+                selection,
+                selectionArgs,
+                null);
 
         if (cur == null) {
             return null;
@@ -171,7 +188,11 @@ class CalendarInterface {
         // Use the cursor to step through the returned records
         if (cur.moveToNext()) {
             // found
-            result = cur.getLong(PROJECTION_ID_INDEX);
+            //Log.d(TAG, "getLocalCalendar Name: " + cur.getString(PROJECTION_DISPLAY_NAME_INDEX));
+
+            // put the calendar ID in the result
+            result = cur.getLong(PROJECTION_CALENDAR_ID_INDEX);
+
             cur.close();
             return result;
         }
@@ -189,28 +210,36 @@ class CalendarInterface {
         Context context = MainActivity.getAppContext().getApplicationContext();
         // TODO
 
-        Uri uri = Uri.parse(CalendarContract.Calendars.CONTENT_URI.toString());
-        Uri calendarUri = uri.buildUpon()
-                .appendQueryParameter(android.provider.CalendarContract.CALLER_IS_SYNCADAPTER, "true")
-                .appendQueryParameter(Calendars.ACCOUNT_NAME, context.getString(R.string.app_name))
-                .appendQueryParameter(Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL).build();
+        Uri calendarUri = Uri.parse(Calendars.CONTENT_URI.toString());
+        calendarUri = calendarUri.buildUpon()
+                .appendQueryParameter(CalendarContract.CALLER_IS_SYNCADAPTER, "true")
+                .appendQueryParameter(Calendars.ACCOUNT_NAME, accountName)
+                .appendQueryParameter(Calendars.ACCOUNT_TYPE, accountType).build();
 
         ContentValues values = new ContentValues();
+        values.put(Calendars.OWNER_ACCOUNT, accountName);
+        values.put(Calendars.ACCOUNT_NAME, accountName);
+        values.put(Calendars.ACCOUNT_TYPE, accountType);
         values.put(Calendars.NAME, localCalendarName);
         values.put(Calendars.CALENDAR_DISPLAY_NAME, localCalendarName);
-        values.put(Calendars.CALENDAR_COLOR, 0xFF0000);
+        values.put(Calendars.CALENDAR_COLOR, 0x5c8f52);                                                 // COLOR
+        values.put(Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_ROOT);
+        values.put(Calendars.VISIBLE, 1);
+        values.put(Calendars.SYNC_EVENTS, 1);
+        //values.put(Calendars.CALENDAR_TIME_ZONE, "Europe/Rome");
         TimeZone tz = TimeZone.getDefault();
         values.put(Calendars.CALENDAR_TIME_ZONE, tz.getID());
-        values.put(Calendars.VISIBLE, 1);
-        values.put(Calendars.OWNER_ACCOUNT, Define.NOREPLYEMAILADDRESS);
-        values.put(Calendars.SYNC_EVENTS, 1);
-        values.put(Calendars.ACCOUNT_NAME, context.getString(R.string.app_name));
-        values.put(Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL);
-        //values.put(Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_ROOT);
-        //values.put(Calendars.CAN_PARTIALLY_UPDATE, 1);
+        values.put(Calendars.CAN_PARTIALLY_UPDATE, 1);
+        /*values.put(Calendars.CAL_SYNC1, "https://www.google.com/calendar/feeds/" + accountName + "/private/full");
+        values.put(Calendars.CAL_SYNC2, "https://www.google.com/calendar/feeds/default/allcalendars/full/" + accountName);
+        values.put(Calendars.CAL_SYNC3, "https://www.google.com/calendar/feeds/default/allcalendars/full/" + accountName);
+        values.put(Calendars.CAL_SYNC4, 1);
+        values.put(Calendars.CAL_SYNC5, 0);
+        values.put(Calendars.CAL_SYNC8, System.currentTimeMillis());*/
 
-        // return Uri of the new created calendar
-        return context.getContentResolver().insert(calendarUri, values);
+        Uri newCalendar = context.getContentResolver().insert(calendarUri, values);
+
+        return newCalendar;
     }
 
     /**
@@ -231,8 +260,9 @@ class CalendarInterface {
         Uri.Builder builder = Calendars.CONTENT_URI.buildUpon();
         Uri calendarToRemoveUri = builder.appendPath(localCalendarID.toString())
                 .appendQueryParameter(android.provider.CalendarContract.CALLER_IS_SYNCADAPTER, "true")
-                .appendQueryParameter(Calendars.ACCOUNT_NAME, context.getString(R.string.app_name))
-                .appendQueryParameter(Calendars.ACCOUNT_TYPE, CalendarContract.ACCOUNT_TYPE_LOCAL).build();
+                .appendQueryParameter(Calendars.ACCOUNT_NAME, accountName)
+                .appendQueryParameter(Calendars.ACCOUNT_TYPE, accountType)
+                .build();
 
         context.getContentResolver().delete(calendarToRemoveUri, null, null);
 
@@ -256,6 +286,7 @@ class CalendarInterface {
         if (calendarData.getCalendarID() == null) {
             return null;
         }
+
         ContentValues values = new ContentValues();
         values.put(Events.DTSTART, startDate.getTime());
         values.put(Events.DTEND, endDate.getTime());
@@ -297,7 +328,8 @@ class CalendarInterface {
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
             return null;
         }
-        Uri uri = cr.insert(Events.CONTENT_URI, values);
+
+        Uri uri = cr.insert(asSyncAdapter(Events.CONTENT_URI, accountName, accountType), values);
 
         if (uri == null) {
             return null;
@@ -409,7 +441,7 @@ class CalendarInterface {
 
         // Submit the query
         cur = cr.query(builder.build(),
-                INSTANCE_PROJECTION,
+                EVENT_PROJECTION,
                 selection,
                 selectionArgs,
                 null);
@@ -420,26 +452,13 @@ class CalendarInterface {
 
         while (cur.moveToNext()) {
             String eventTitle;
-            //long eventEventID;
-            //long beginVal;
 
             // Get the field values
-            //eventEventID = cur.getLong(PROJECTION_ID_INDEX);
-            //beginVal = cur.getLong(PROJECTION_BEGIN_INDEX);
             eventTitle = cur.getString(PROJECTION_TITLE_INDEX);
-
-            // Do something with the values.
-            //Log.d(TAG, "Event:  " + eventTitle);
-            //Log.d(TAG, "EventID: " + eventEventID);
-            /*
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(beginVal);
-            DateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-            Log.i(TAG, "Date: " + formatter.format(calendar.getTime()));
-            */
 
             // TODO vielleicht ohne title da dieser bearbeitet werden kann
             if (eventTitle.equals(title)) {
+                cur.close();
                 return true;
             }
         }
@@ -447,8 +466,62 @@ class CalendarInterface {
         return false;
     }
 
+    private String getEventDescription(Long eventID) {
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
+        Cursor cur;
+        ContentResolver cr = context.getContentResolver();
+
+        // The ID of the recurring event whose instances you are searching
+        // for in the Instances table
+        // TODO vielleicht ohne Event_ID als selection und dafür das ganze Array, und damit später vergleichen ob enthalten
+        String selection = CalendarContract.Instances.EVENT_ID + " = ?";
+        String[] selectionArgs = new String[]{eventID.toString()};
+
+        // Construct the query with the desired date range.
+        Uri.Builder builder = CalendarContract.Instances.CONTENT_URI.buildUpon();
+
+        long now = new Date().getTime();
+
+        ContentUris.appendId(builder, now - DateUtils.DAY_IN_MILLIS * 500);
+        ContentUris.appendId(builder, now + DateUtils.DAY_IN_MILLIS * 500);
+
+        // Submit the query
+        cur = cr.query(builder.build(),
+                EVENT_PROJECTION,
+                selection,
+                selectionArgs,
+                null);
+
+        if (cur == null) {
+            return null;
+        }
+
+        while (cur.moveToNext()) {
+            String eventDescription;
+
+            // Get the field values
+            eventDescription = cur.getString(PROJECTION_DESCRIPTION_INDEX);
+
+            /*if (!eventDescription.isEmpty()) {
+                Log.d(TAG, "Title: " + cur.getString(PROJECTION_TITLE_INDEX) + "\nDescription: " + eventDescription);
+            }*/
+
+            cur.close();
+            return eventDescription;
+        }
+        cur.close();
+        return null;
+    }
+
     private void deleteEvent(long eventID) {
         Context context = MainActivity.getAppContext().getApplicationContext();
+
+        // Events mit Description nicht löschen
+        String eventDescription = getEventDescription(eventID);
+        if (eventDescription != null && !eventDescription.isEmpty()) {
+            return;
+        }
 
         Uri deleteUri = ContentUris.withAppendedId(Events.CONTENT_URI, eventID);
 
@@ -537,5 +610,13 @@ class CalendarInterface {
         if (tmpCalendarEventIds != null && tmpCalendarEventIds instanceof CalendarData) {
             calendarData = (CalendarData) tmpCalendarEventIds;
         }
+    }
+
+    private Uri asSyncAdapter(Uri uri, String account, String accountType) {
+        return uri.buildUpon()
+                .appendQueryParameter(android.provider.CalendarContract.CALLER_IS_SYNCADAPTER, "true")
+                .appendQueryParameter(Calendars.ACCOUNT_NAME, account)
+                .appendQueryParameter(Calendars.ACCOUNT_TYPE, accountType)
+                .build();
     }
 }

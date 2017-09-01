@@ -8,6 +8,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import de.hof.university.app.MainActivity;
@@ -154,8 +156,35 @@ public class CalendarSynchronization {
     public ArrayList<String> getCalendars() {
         ArrayList<String> result = new ArrayList<>();
         calendars = calendarInterface.getCalendars();
-        // Kalender für Kontakte entfernen.
+
+        // Kalender für Kontakte entfernen
         calendars.remove("Contacts");
+
+        // Noch ein paar Kalender entfernen
+        Set<String> keysToRemove = new HashSet<>();
+
+        // Ferien/Feiertage und Sonnenauf- und untergang
+        // und persönlicher Kalender (alle mit @googlemail.com)
+        for (String key : calendars.keySet()) {
+            if (key.contains("Holidays")
+                    || key.contains("Feiertage")
+                    || key.contains("Sunrise/Sunset")
+                    || key.contains("@googlemail.com")) {
+                keysToRemove.add(key);
+            }
+        }
+        for (String key : keysToRemove) {
+            calendars.remove(key);
+        }
+
+        // Noch ein paar
+        calendars.remove("Hebrew Calendar");
+        calendars.remove("Phases of the Moon");
+        calendars.remove("Stardates");
+        calendars.remove("Day of the year");
+        calendars.remove("Week Numbers");
+        calendars.remove("Geburtstage");
+
         result.addAll(calendars.keySet());
         return result;
     }

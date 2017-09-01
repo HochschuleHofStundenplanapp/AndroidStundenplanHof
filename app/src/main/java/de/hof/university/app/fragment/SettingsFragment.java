@@ -36,9 +36,11 @@ import android.preference.PreferenceScreen;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -529,7 +531,7 @@ public class SettingsFragment extends PreferenceFragment {
 		// Die weiteren Kalender danach
 		calendars.addAll(calendarSynchronization.getCalendars());
 
-		new AlertDialog.Builder(getView().getContext())
+		final AlertDialog d = new AlertDialog.Builder(getView().getContext())
 				.setTitle(R.string.calendar_synchronization)
 				.setMessage(R.string.calendar_synchronization_infoText)
 				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
@@ -577,6 +579,10 @@ public class SettingsFragment extends PreferenceFragment {
 					}
 				})
 				.setIcon(android.R.drawable.ic_dialog_alert)
-				.show();
+				.create();
+		d.show();
+
+		// Make the textview clickable. Must be called after show()
+		((TextView)d.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
 	}
 }

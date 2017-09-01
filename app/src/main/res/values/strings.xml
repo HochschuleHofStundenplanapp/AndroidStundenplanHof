@@ -136,7 +136,7 @@
     <string name="changeNewDate">New date</string>
     <string name="noLocation">No Location</string>
     <string name="calendar_synchronitation_ownLocalCalendar">Own local Calendar</string>
-    <string name="calendar_synchronization_infoText">You have switched on the calendar synchronization.\n\nIn the next dialog, you can select the calendar to synchronize the lectures and changes, or use your own local calendar.\n\nPlease note that the holidays have not yet been considered!</string>
+    <string name="calendar_synchronization_infoText">You have switched on the calendar synchronization.\n\nIn the next dialog, you can select the calendar to synchronize the lectures and changes, or use your own local calendar.\n\n(Recommended: Create a new calendar on the <a href="https://calendar.google.com/calendar/render?hl=de#main_7">Google calendar website</a> and choose this one in the next dialog.)\n\nPlease note the following:\n- Appointments remain when deleting the app (if you want to delete them, switch off the synchronization before deleting)\n- Appointments with notes will not be deleted\n- Holidays have not yet been considered</string>
     <string name="calendar_synchronization_chooseCalendar">Please choose a calendar</string>
     <string name="PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION" translatable="false">calendar_synchronization</string>
     <string name="calendar_synchronization_permissionNotGranted">Permission for the calendar not granted</string>
