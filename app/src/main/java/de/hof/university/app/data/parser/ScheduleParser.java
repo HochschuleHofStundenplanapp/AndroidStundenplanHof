@@ -134,6 +134,7 @@ public class ScheduleParser implements Parser<LectureItem> {
         int endYear         = Integer.parseInt(endDateString.substring(6, 10));
 
         Calendar calendar = GregorianCalendar.getInstance();
+
         //Startzeit
         calendar.set(startYear, startMonth - 1, startDay, startHours, startMinutes, 0);
 

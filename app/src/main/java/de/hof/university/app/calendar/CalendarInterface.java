@@ -57,7 +57,7 @@ class CalendarInterface {
             CalendarContract.Instances.EVENT_ID,        // 0
             CalendarContract.Instances.BEGIN,           // 1
             CalendarContract.Instances.TITLE,           // 2
-            CalendarContract.Instances.DESCRIPTION      // 3
+            CalendarContract.Instances.DESCRIPTION,     // 3
     };
 
     // The indices for the projection array above.
@@ -226,9 +226,14 @@ class CalendarInterface {
         values.put(Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_ROOT);
         values.put(Calendars.VISIBLE, 1);
         values.put(Calendars.SYNC_EVENTS, 1);
-        //values.put(Calendars.CALENDAR_TIME_ZONE, "Europe/Rome");
-        TimeZone tz = TimeZone.getDefault();
-        values.put(Calendars.CALENDAR_TIME_ZONE, tz.getID());
+        // for reminders, seems not necessary
+        //values.put(Calendars.ALLOWED_REMINDERS, "" + CalendarContract.Reminders.METHOD_DEFAULT + "," + CalendarContract.Reminders.METHOD_ALERT);
+
+        //TimeZone tz = TimeZone.getDefault();
+        //values.put(Calendars.CALENDAR_TIME_ZONE, tz.getID());
+        // Deutsche Timezone da Hochschule in Deutschland
+        values.put(Calendars.CALENDAR_TIME_ZONE, "Europe/Brussels");
+
         values.put(Calendars.CAN_PARTIALLY_UPDATE, 1);
         /*values.put(Calendars.CAL_SYNC1, "https://www.google.com/calendar/feeds/" + accountName + "/private/full");
         values.put(Calendars.CAL_SYNC2, "https://www.google.com/calendar/feeds/default/allcalendars/full/" + accountName);
@@ -291,14 +296,32 @@ class CalendarInterface {
         values.put(Events.DTSTART, startDate.getTime());
         values.put(Events.DTEND, endDate.getTime());
         values.put(Events.TITLE, title);
+        values.put(Events.HAS_ALARM, true);
+        // Only Provider
+        //values.put(Events.SYNC_EVENTS, true);
+        //values.put(Events.ALLOWED_REMINDERS, "" + CalendarContract.Reminders.METHOD_DEFAULT + "," + CalendarContract.Reminders.METHOD_ALERT);
+
+        // not allowed to read
+        //values.put(Events.SYNC_DATA1, "Test"); //Splusname oder ID
         values.put(Events.DESCRIPTION, description);
         values.put(Events.EVENT_LOCATION, location);
         values.put(Events.CALENDAR_ID, calendarData.getCalendarID());
+
         TimeZone tz = TimeZone.getDefault();
         values.put(Events.EVENT_TIMEZONE, tz.getID());
+        // Deutsche Timezone macht keinen Unterschied
+        //values.put(Events.EVENT_TIMEZONE, "Europe/Brussels");
 
         // die EventID kommt zurück
-        return insertEvent(values);
+        Long eventID = insertEvent(values);
+
+        // if to want to add personal reminders
+        /*if (value) {
+            addReminderToEvent(eventID, 15);
+            addReminderToEvent(eventID, 60);
+        }*/
+
+        return eventID;
     }
 
     void createLectureEvent(String lectureID, String title, String description, Date startTime, Date endTime, String location) {
@@ -337,6 +360,22 @@ class CalendarInterface {
 
         // get the event ID that is the last element in the Uri
         return Long.parseLong(uri.getLastPathSegment());
+    }
+
+    private void addReminderToEvent(Long eventID, int minutes) {
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
+        ContentResolver cr = context.getContentResolver();
+        ContentValues values = new ContentValues();
+        values.put(CalendarContract.Reminders.EVENT_ID, eventID);
+        values.put(CalendarContract.Reminders.MINUTES, minutes); // METHOD_DEFAULT ist not working
+        values.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_DEFAULT);   // or METHOD_ALERT
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        Uri uri = cr.insert(CalendarContract.Reminders.CONTENT_URI, values);
     }
 
     void updateChange(LectureChange change) {
