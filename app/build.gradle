@@ -49,28 +49,20 @@ android {
             pseudoLocalesEnabled true
             /* proguardFile 'D:/Projekt/Mobile.AndroidStudio/VideoChat/app/proguard-project.txt' */
             proguardFile 'proguard-rules.pro'
+            //schöneren APK Namen
             applicationVariants.all { variant ->
-                variant.outputs.each { output ->
-                    def appName = variant.applicationId
-                    def versionName = variant.versionName
-                    def variantName = variant.name // e. g. freeDebug
-
-                    def apkName = appName + '_' + variantName + '_' + versionName + '.apk';
-                    output.outputFile = new File(output.outputFile.parentFile, apkName)
+                variant.outputs.all {
+                    outputFileName = "${variant.applicationId}_${variant.name}_${variant.versionName}.apk"
                 }
             }
         }
         debug {
             debuggable true
             signingConfig signingConfigs.debug
+            //schöneren APK Namen
             applicationVariants.all { variant ->
-                variant.outputs.each { output ->
-                    def appName = variant.applicationId
-                    def versionName = variant.versionName
-                    def variantName = variant.name // e. g. freeDebug
-
-                    def apkName = appName + '_' + variantName + '_' + versionName + '.apk';
-                    output.outputFile = new File(output.outputFile.parentFile, apkName)
+                variant.outputs.all {
+                    outputFileName = "${variant.applicationId}_${variant.name}_${variant.versionName}.apk"
                 }
             }
         }
