@@ -37,7 +37,7 @@ import de.hof.university.app.model.LastUpdated;
  */
 public class ChangesFragment extends AbstractListFragment {
 
-	public final static String TAG = "ChangesFragment";
+	private final static String TAG = "ChangesFragment";
 
 	@Override
 	protected final ArrayAdapter setArrayAdapter() {
@@ -102,7 +102,7 @@ public class ChangesFragment extends AbstractListFragment {
 		}
 
 		// Wenn Daten gekommen sind das ListItem LastUpdated hinzufügen
-		if (tmpDataList.size() != 0) {
+		if (!tmpDataList.isEmpty()) {
 			tmpDataList.add(new LastUpdated(getString(R.string.lastUpdated) + ": " + getLastSaved()));
 		}
 

@@ -36,7 +36,7 @@ import de.hof.university.app.Util.Define;
  */
 public class AboutusFragment extends Fragment {
 
-	public final static String TAG = "AboutusFragment";
+	private final static String TAG = "AboutusFragment";
 
 	@Override
 	public final void onResume() {

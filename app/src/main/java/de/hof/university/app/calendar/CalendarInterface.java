@@ -95,8 +95,8 @@ class CalendarInterface {
 
     public void setCalendar(Long calendarID) {
         Context context = MainActivity.getAppContext().getApplicationContext();
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+        if ((ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED)
+                && (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED)) {
             // Wenn -1 dann lokalen Calendar, sonst die übergebene ID nutzen
             if (calendarID == null) {
                 if (getLocalCalendar() == null) {
@@ -204,9 +204,8 @@ class CalendarInterface {
     /**
      * creates the local calendar
      *
-     * @return returns the Uri to the created calendar
      */
-    private Uri createLocalCalendar() {
+    private void createLocalCalendar() {
         Context context = MainActivity.getAppContext().getApplicationContext();
         // TODO
 
@@ -242,9 +241,8 @@ class CalendarInterface {
         values.put(Calendars.CAL_SYNC5, 0);
         values.put(Calendars.CAL_SYNC8, System.currentTimeMillis());*/
 
-        Uri newCalendar = context.getContentResolver().insert(calendarUri, values);
+        final Uri newCalendar = context.getContentResolver().insert(calendarUri, values);
 
-        return newCalendar;
     }
 
     /**
@@ -313,7 +311,7 @@ class CalendarInterface {
         //values.put(Events.EVENT_TIMEZONE, "Europe/Brussels");
 
         // die EventID kommt zurück
-        Long eventID = insertEvent(values);
+        final Long eventID = insertEvent(values);
 
         // if to want to add personal reminders
         /*if (value) {
@@ -522,8 +520,8 @@ class CalendarInterface {
 
         long now = new Date().getTime();
 
-        ContentUris.appendId(builder, now - DateUtils.DAY_IN_MILLIS * 500);
-        ContentUris.appendId(builder, now + DateUtils.DAY_IN_MILLIS * 500);
+        ContentUris.appendId(builder, now - (DateUtils.DAY_IN_MILLIS * 500));
+        ContentUris.appendId(builder, now + (DateUtils.DAY_IN_MILLIS * 500));
 
         // Submit the query
         cur = cr.query(builder.build(),
@@ -536,6 +534,7 @@ class CalendarInterface {
             return null;
         }
 
+        //TODO while statement does not loop
         while (cur.moveToNext()) {
             String eventDescription;
 
@@ -558,7 +557,7 @@ class CalendarInterface {
 
         // Events mit Description nicht löschen
         String eventDescription = getEventDescription(eventID);
-        if (eventDescription != null && !eventDescription.isEmpty()) {
+        if ((eventDescription != null) && !eventDescription.isEmpty()) {
             return;
         }
 
@@ -646,7 +645,7 @@ class CalendarInterface {
         Context context = MainActivity.getAppContext().getApplicationContext();
 
         Object tmpCalendarEventIds = DataManager.getInstance().readObject(context, Define.calendarIDsFilename);
-        if (tmpCalendarEventIds != null && tmpCalendarEventIds instanceof CalendarData) {
+        if ((tmpCalendarEventIds != null) && (tmpCalendarEventIds instanceof CalendarData)) {
             calendarData = (CalendarData) tmpCalendarEventIds;
         }
     }

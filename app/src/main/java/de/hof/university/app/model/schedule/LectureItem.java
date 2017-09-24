@@ -124,7 +124,7 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
 	public final String getDetails() {
 		String result = label;
 
-		if (sp != null && !sp.equals("")) {
+		if ((sp != null) && !sp.equals("")) {
 			result += " " + sp;
 		}
 

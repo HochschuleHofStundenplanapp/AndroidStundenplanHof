@@ -12,15 +12,16 @@ public class DateCorrection {
 
     private static DateCorrection dateCorrection = null;
 
-    int summerStartDay = 15;
-    int summerStartMonth = GregorianCalendar.MARCH;
-    int winterStartDay = 1;
-    int winterStartMonth = GregorianCalendar.OCTOBER;
+    /* Konstanten */
+    static final int summerStartDay = 15;
+    static final int summerStartMonth = GregorianCalendar.MARCH;
+    static final int winterStartDay = 1;
+    static final int winterStartMonth = GregorianCalendar.OCTOBER;
 
-    int summerEndDay = 10;
-    int summerEndMonth = GregorianCalendar.JULY;
-    int winterEndDay = 25;
-    int winterEndMonth = GregorianCalendar.JANUARY;
+    static final int summerEndDay = 10;
+    static final int summerEndMonth = GregorianCalendar.JULY;
+    static final int winterEndDay = 25;
+    static final int winterEndMonth = GregorianCalendar.JANUARY;
 
     private Date lastYearSummerStartDate = new Date();
     private Date lastYearSummerEndDate = new Date();

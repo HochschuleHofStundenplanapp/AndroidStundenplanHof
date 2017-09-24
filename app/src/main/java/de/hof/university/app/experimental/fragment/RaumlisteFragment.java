@@ -238,14 +238,14 @@ public class RaumlisteFragment extends Fragment {
             boolean forceRefresh = Boolean.valueOf(params[9]);
 
             if (
-                forceRefresh
-                || optRaumliste == null
-                || raumliste.getLastSaved() == null
-                || !lastCached.after(new Date())
-                || !raumliste.getTimeStart().equals(params[5])
-                || !raumliste.getTimeEnd().equals(params[6])
-                || !raumliste.getRaumTyp().equals(params[7])
-                || !raumliste.getDate().equals(params[8])
+		            forceRefresh
+				            || (optRaumliste == null)
+				            || (raumliste.getLastSaved() == null)
+				            || !lastCached.after(new Date())
+				            || !raumliste.getTimeStart().equals(params[5])
+				            || !raumliste.getTimeEnd().equals(params[6])
+				            || !raumliste.getRaumTyp().equals(params[7])
+				            || !raumliste.getDate().equals(params[8])
 	            ) {
 
 				//TODO hier stand mal ein Kommentar, wofür...
@@ -354,7 +354,7 @@ public class RaumlisteFragment extends Fragment {
             swipeContainer.setRefreshing(false);
 
             // Wenn ein schlimmer Fehler passiert ist, dann kann das Objekt null sein
-            if (result != null && errorText.isEmpty()) {
+            if ((result != null) && errorText.isEmpty()) {
                 if (result.size() > 1) {
                     raumList.clear();
                     raumList.addAll(result);

@@ -74,7 +74,7 @@ public class DataManager {
     private Meals meals;
     private StudyCourses studyCourses;
 
-    private SharedPreferences sharedPreferences;
+    private final SharedPreferences sharedPreferences;
 
     public static DataManager getInstance() {
         return instance;
@@ -90,7 +90,7 @@ public class DataManager {
         Meals meals = this.getMeals(context);
 
         if (forceRefresh
-                || (meals.getMeals().size() == 0)
+                || (meals.getMeals().isEmpty())
                 || (meals.getLastSaved() == null)
                 || !cacheStillValid(meals, Define.MEAL_CACHE_TIME)) {
             final Parser parser = ParserFactory.create(EParser.MENU);
@@ -102,7 +102,7 @@ public class DataManager {
             // falls der String leer ist war ein Problem mit dem Internet
             if (xmlString.isEmpty()) {
                 // prüfen ob es kein ForceRefreseh war, dann kann gecachtes zurück gegeben werden
-                if (!forceRefresh && meals.getMeals().size() > 0) {
+                if (!forceRefresh && !meals.getMeals().isEmpty()) {
                     return meals.getMeals();
                 } else {
                     // anderen falls null, damit dann die Fehlermeldung "Aktualisierung fehlgeschlagen" kommt
@@ -130,7 +130,7 @@ public class DataManager {
         Schedule schedule = this.getSchedule(context);
 
         if (forceRefresh
-                || (schedule.getLectures().size() == 0)
+                || (schedule.getLectures().isEmpty())
                 || (schedule.getLastSaved() == null)
                 || !cacheStillValid(schedule, Define.SCHEDULE_CACHE_TIME)
                 || !schedule.getCourse().equals(course)
@@ -144,7 +144,7 @@ public class DataManager {
             // falls der String leer ist war ein Problem mit dem Internet
             if (jsonString.isEmpty()) {
                 // prüfen ob es kein ForceRefreseh war, dann kann gecachtes zurück gegeben werden
-                if (!forceRefresh && schedule.getLectures().size() > 0) {
+                if (!forceRefresh && !schedule.getLectures().isEmpty()) {
                     return schedule.getLectures();
                 } else {
                     // anderen falls null, damit dann die Fehlermeldung "Aktualisierung fehlgeschlagen" kommt
@@ -158,7 +158,7 @@ public class DataManager {
             ArrayList<LectureItem> tmpScheduleLectureItems = (ArrayList<LectureItem>) parser.parse(params);
 
             // Wenn der Server einen unvollständigen Stundenplan (nur halb so groß oder kleiner) liefert bringe die Fehlermedlung "Aktualisierung fehlgeschlagen"
-            if (course.equals(schedule.getCourse()) && semester.equals(schedule.getSemester()) && termTime.equals(schedule.getTermtime()) && tmpScheduleLectureItems.size() < (schedule.getLectures().size() / 2)) {
+            if (course.equals(schedule.getCourse()) && semester.equals(schedule.getSemester()) && termTime.equals(schedule.getTermtime()) && (tmpScheduleLectureItems.size() < (schedule.getLectures().size() / 2))) {
                 return null;
             }
 
@@ -192,7 +192,7 @@ public class DataManager {
         MySchedule mySchedule = this.getMySchedule(context);
 
         if (forceRefresh
-                || (mySchedule.getLectures().size() == 0)
+                || (mySchedule.getLectures().isEmpty())
                 || (mySchedule.getLastSaved() == null)
                 || !cacheStillValid(mySchedule, Define.MYSCHEDULE_CACHE_TIME)
                 || (mySchedule.getIds().size() != mySchedule.getLectures().size())
@@ -215,7 +215,7 @@ public class DataManager {
             // falls der String leer ist war ein Problem mit dem Internet
             if (jsonString.isEmpty()) {
                 // prüfen ob es kein ForceRefreseh war, dann kann gecachtes zurück gegeben werden
-                if (!forceRefresh && mySchedule.getLectures().size() > 0) {
+                if (!forceRefresh && !mySchedule.getLectures().isEmpty()) {
                     return mySchedule.getLectures();
                 } else {
                     // anderen falls null, damit dann die Fehlermeldung "Aktualisierung fehlgeschlagen" kommt
@@ -225,6 +225,7 @@ public class DataManager {
 
             final String[] params = {jsonString, language};
 
+            junit.framework.Assert.assertTrue(parser != null );
             ArrayList<LectureItem> tmpMyScheduleLectureItems = (ArrayList<LectureItem>) parser.parse(params);
 
             // Wenn der Server einen unvollständigen Stundenplan (nur halb so groß oder kleiner) liefert bringe die Fehlermedlung "Aktualisierung fehlgeschlagen"
@@ -255,7 +256,7 @@ public class DataManager {
         Changes changes = this.getChanges(context);
 
         if (forceRefresh
-                || (changes.getChanges().size() == 0)
+                || (changes.getChanges().isEmpty())
                 || (changes.getLastSaved() == null)
                 || !cacheStillValid(changes, Define.CHANGES_CACHE_TIME)
                 ) {
@@ -285,7 +286,7 @@ public class DataManager {
             // falls der String leer ist war ein Problem mit dem Internet
             if (jsonString.isEmpty()) {
                 // prüfen ob es kein ForceRefreseh war, dann kann gecachtes zurück gegeben werden
-                if (!forceRefresh && changes.getChanges().size() > 0) {
+                if (!forceRefresh && !changes.getChanges().isEmpty()) {
                     return changes.getChanges();
                 } else {
                     // anderen falls null, damit dann die Fehlermeldung "Aktualisierung fehlgeschlagen" kommt
@@ -319,7 +320,7 @@ public class DataManager {
         StudyCourses studyCourses = this.getStudyCourses(context);
 
         if (forceRefresh
-                || (studyCourses.getCourses().size() == 0)
+                || (studyCourses.getCourses().isEmpty())
                 || (studyCourses.getLastSaved() == null)
                 || !cacheStillValid(studyCourses, Define.COURSES_CACHE_TIME)
                 ) {
@@ -411,7 +412,7 @@ public class DataManager {
     private Schedule getSchedule(final Context context) {
         if (this.schedule == null) {
             Object optScheduleObj = readObject(context, Define.scheduleFilename);
-            if (optScheduleObj != null && optScheduleObj instanceof Schedule) {
+            if ((optScheduleObj != null) && (optScheduleObj instanceof Schedule)) {
                 this.schedule = (Schedule) optScheduleObj;
             } else {
                 this.schedule = new Schedule();
@@ -433,10 +434,10 @@ public class DataManager {
     private MySchedule getMySchedule(final Context context) {
         if (this.mySchedule == null) {
             Object obtMyScheduleOpj = readObject(context, Define.myScheduleFilename);
-            if (obtMyScheduleOpj != null && obtMyScheduleOpj instanceof Set) {
+            if ((obtMyScheduleOpj != null) && (obtMyScheduleOpj instanceof Set)) {
                 this.mySchedule = new MySchedule();
                 this.mySchedule.setIds((Set<String>) obtMyScheduleOpj);
-            } else if (obtMyScheduleOpj != null && obtMyScheduleOpj instanceof MySchedule) {
+            } else if ((obtMyScheduleOpj != null) && (obtMyScheduleOpj instanceof MySchedule)) {
                 this.mySchedule = (MySchedule) obtMyScheduleOpj;
             } else {
                 this.mySchedule = new MySchedule();
@@ -458,7 +459,7 @@ public class DataManager {
     public Changes getChanges(final Context context) {
         if (this.changes == null) {
             Object obtChangesObj = readObject(context, Define.changesFilename);
-            if (obtChangesObj != null && obtChangesObj instanceof Changes) {
+            if ((obtChangesObj != null) && (obtChangesObj instanceof Changes)) {
                 this.changes = (Changes) obtChangesObj;
             } else {
                 this.changes = new Changes();
@@ -476,7 +477,7 @@ public class DataManager {
     private Meals getMeals(final Context context) {
         if (this.meals == null) {
             Object obtMealsObj = readObject(context, Define.mealsFilename);
-            if (obtMealsObj != null && obtMealsObj instanceof Meals) {
+            if ((obtMealsObj != null) && (obtMealsObj instanceof Meals)) {
                 this.meals = (Meals) obtMealsObj;
             } else {
                 this.meals = new Meals();
@@ -494,7 +495,7 @@ public class DataManager {
     private StudyCourses getStudyCourses(final Context context) {
         if (this.studyCourses == null) {
             Object obtStudyCoursesObj = readObject(context, Define.coursesFilename);
-            if (obtStudyCoursesObj != null && obtStudyCoursesObj instanceof StudyCourses) {
+            if ((obtStudyCoursesObj != null) && (obtStudyCoursesObj instanceof StudyCourses)) {
                 this.studyCourses = (StudyCourses) obtStudyCoursesObj;
             } else {
                 this.studyCourses = new StudyCourses();
@@ -547,7 +548,7 @@ public class DataManager {
             Log.e(TAG, "Fehler beim Speichern des Objektes", e);
         }
 
-        if (object instanceof Schedule || object instanceof MySchedule) {
+        if ((object instanceof Schedule) || (object instanceof MySchedule)) {
             // Änderungen neu holen
             resetChangesLastSave(context);
             // Stundenplan registrieren
@@ -638,7 +639,7 @@ public class DataManager {
 
         if (calendarSynchronization) {
             // falls es nicht die ersten Vorlesungen sind die hinzugefügt werden, denn dann stehen sie schon drin.
-            if (getMySchedule(context).getLectures().size() != 0) {
+            if (!getMySchedule(context).getLectures().isEmpty()) {
                 CalendarSynchronization.getInstance().createAllEvents(lecturesItems);
             }
         }
@@ -690,9 +691,9 @@ public class DataManager {
     public ArrayList<LectureItem> getSelectedLectures(Context context) {
         final Schedule schedule = this.getSchedule(context);
 
-        if (getMySchedule(context).getIds().size() > 0) {
+        if (!getMySchedule(context).getIds().isEmpty()) {
             return getMySchedule(context).getLectures();
-        } else if (schedule.getLectures().size() > 0) {
+        } else if (!schedule.getLectures().isEmpty()) {
             return schedule.getLectures();
         }
         return null;
@@ -702,10 +703,10 @@ public class DataManager {
     private boolean isTwoArrayListsWithSameValues(ArrayList<LectureItem> list1, ArrayList<LectureItem> list2)
     {
         //null checking
-        if(list1 == null && list2 == null) {
+        if((list1 == null) && (list2 == null)) {
             return true;
         }
-        if(list1 == null || list2 == null) {
+        if((list1 == null) || (list2 == null)) {
             return false;
         }
 

@@ -32,6 +32,7 @@ android {
             //Folgender Pfad führt zum Absturz des Gradle Wrappers auf manchen Systemen (wie meinen Mac)!
             //storeFile file('D:\\Projekt\\Mobile.AndroidStudio\\Hof.Stundenplaner\\fhhkey.jks')
             keyAlias "fhhkey"
+			keyPassword 'IUwbayNG54S5C4udGkjs'
             storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
         }
     }
@@ -91,7 +92,8 @@ dependencies {
     compile 'com.android.support:support-v4:+'
     //compile 'com.android.support:recyclerview-v7:25.2.0'
     compile 'com.android.support:recyclerview-v7:+'
-    compile 'org.jsoup:jsoup:1.9.2'
+    compile 'org.jsoup:jsoup:1.10.3'
+    //compile 'org.jsoup:jsoup:1.9.2'
     //compile 'org.jsoup:jsoup:1.9.+'
     // Die Versionsnummer sollte die gleiche sein
     //compile 'com.google.android.gms:play-services-gcm:10.2.0'

@@ -38,7 +38,7 @@ public final class ParserFactory {
             return new MyScheduleParser();
         }
 
-        if (BuildConfig.DEBUG) { assert (false); }
+        junit.framework.Assert.assertTrue(false);
 
         return null;
     }

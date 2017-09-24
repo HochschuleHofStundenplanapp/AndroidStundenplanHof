@@ -133,7 +133,7 @@ public class MealFragment extends AbstractListFragment {
 		}
 
 		// Wenn Daten gekommen sind das ListItem LastUpdated hinzufügen
-		if (tmpDataList.size() != 0) {
+		if (!tmpDataList.isEmpty()) {
 			tmpDataList.add(new LastUpdated(getString(R.string.lastUpdated) + ": " + getLastSaved()));
 		}
 

@@ -196,7 +196,7 @@ public class ScheduleFragment extends AbstractListFragment {
         // sortieren
         Collections.sort(fixDataList);
         ArrayList<Object> sortDataList = new ArrayList<>();
-        if (fixDataList.size() > 0) {
+        if (!fixDataList.isEmpty()) {
             String tmpStartDate = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(fixDataList.get(0).getStartDate());
             sortDataList.add(new BigListItem(tmpStartDate));
             for (LectureItem lectureItem : fixDataList) {
@@ -211,7 +211,7 @@ public class ScheduleFragment extends AbstractListFragment {
         }
 
         // Wenn Daten gekommen sind das ListItem LastUpdated hinzufügen
-        if (tmpDataList.size() != 0) {
+        if (!tmpDataList.isEmpty()) {
             tmpDataList.add(new LastUpdated(getString(R.string.lastUpdated) + ": " + getLastSaved()));
         }
 
@@ -240,7 +240,7 @@ public class ScheduleFragment extends AbstractListFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         MainActivity mainActivity = (MainActivity) getActivity();
-        CharSequence title = mainActivity.getSupportActionBar().getTitle();
+        final CharSequence title = mainActivity.getSupportActionBar().getTitle();
         if (title.equals(getString(R.string.stundenplan))) {
             inflater.inflate(R.menu.schedule_main, menu);
         }

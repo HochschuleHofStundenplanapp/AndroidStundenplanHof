@@ -16,6 +16,8 @@
 
 package de.hof.university.app.model.settings;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
@@ -29,8 +31,8 @@ public class StudyCourse implements Serializable, Comparable<StudyCourse> {
     private static final long serialVersionUID = Define.serialVersionUIDv1;
 
     private long id = 0L;
-    private String name;
-    private String tag;
+    private final String name;
+    private final String tag;
     private List<String> terms = null;
 
     public StudyCourse(final long id, final String name, final String tag) {
@@ -69,7 +71,7 @@ public class StudyCourse implements Serializable, Comparable<StudyCourse> {
     }
 
     @Override
-    public int compareTo(StudyCourse other) {
+    public int compareTo(@NonNull final StudyCourse other) {
         return name.compareTo(other.name);
     }
 }

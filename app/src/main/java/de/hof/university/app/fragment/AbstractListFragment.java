@@ -156,19 +156,19 @@ public abstract class AbstractListFragment extends Fragment {
 
                     // Damit man unter Änderungen ein Feedback bekommt wenn es keine Änderungen gibt.
                     final ChangesFragment changesFragment = (ChangesFragment) getFragmentManager().findFragmentByTag(Define.changesFragmentName);
-                    if ((changesFragment != null) && changesFragment.isVisible() && (dataList.size() == 0)) {
+                    if ((changesFragment != null) && changesFragment.isVisible() && (dataList.isEmpty())) {
                         Toast.makeText(getActivity().getApplicationContext(), getString(R.string.noChanges), Toast.LENGTH_SHORT).show();
                     }
 
                     // Damit man unter Speiseplan ein Feedback bekommt wenn es keinen Speiseplan gibt.
                     final MealFragment mealFragment = (MealFragment) getFragmentManager().findFragmentByTag(Define.mealsFragmentName);
-                    if ((mealFragment != null) && mealFragment.isVisible() && (dataList.size() == 0)) {
+                    if ((mealFragment != null) && mealFragment.isVisible() && (dataList.isEmpty())) {
                         Toast.makeText(getActivity().getApplicationContext(), getString(R.string.noMeal), Toast.LENGTH_SHORT).show();
                     }
 
                     // Damit man unter Stundenplan ein Feedback bekommt wenn kein Stundenplan vorhanden ist.
                     final ScheduleFragment scheduleFragment = (ScheduleFragment) getFragmentManager().findFragmentByTag(Define.scheduleFragmentName);
-                    if ((scheduleFragment != null) && scheduleFragment.isVisible() && (dataList.size() == 0)) {
+                    if ((scheduleFragment != null) && scheduleFragment.isVisible() && (dataList.isEmpty())) {
                         Toast.makeText(getActivity().getApplicationContext(), getString(R.string.noScheduleText), Toast.LENGTH_SHORT).show();
                     }
 
@@ -177,8 +177,8 @@ public abstract class AbstractListFragment extends Fragment {
                     final MyScheduleFragment myScheduleFragment = (MyScheduleFragment) getFragmentManager().findFragmentByTag(Define.myScheduleFragmentName);
 
                     // Damit man ein Feedback bekommt wenn das aktualisieren fehlgeschlagen ist
-                    if ((changesFragment != null) && changesFragment.isVisible()
-                            || (myScheduleFragment != null) && myScheduleFragment.isVisible()) {
+                    if (((changesFragment != null) && changesFragment.isVisible())
+                            || ((myScheduleFragment != null) && myScheduleFragment.isVisible())) {
                         if ((changesFragment != null) && changesFragment.isVisible()) {
                             if (DataManager.getInstance().getScheduleSize(getActivity().getApplicationContext()) > 0) {
                                 Toast.makeText(getActivity().getApplicationContext(), getString(R.string.refreshFailed), Toast.LENGTH_SHORT).show();

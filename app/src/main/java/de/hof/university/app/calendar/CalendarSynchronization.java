@@ -24,7 +24,7 @@ import de.hof.university.app.model.schedule.LectureItem;
 public class CalendarSynchronization {
     private static final CalendarSynchronization instance = new CalendarSynchronization();
 
-    private CalendarInterface calendarInterface;
+    private final CalendarInterface calendarInterface;
     private HashMap<String, Long> calendars = new HashMap<>();
 
     public static CalendarSynchronization getInstance() {
@@ -44,19 +44,20 @@ public class CalendarSynchronization {
         if (lectureItems == null) return;
 
         CreateAllEventsTask task = new CreateAllEventsTask();
-        task.execute(lectureItems);
+        final AsyncTask<ArrayList<LectureItem>, Void, Boolean> execute = task.execute(lectureItems);
     }
 
     public void createAllEvents(final ArrayList<LectureItem> lectureItems) {
-        if (lectureItems == null) return;
+        if (lectureItems == null)
+            return;
 
-        CreateAllEventsTask task = new CreateAllEventsTask();
+        final CreateAllEventsTask task = new CreateAllEventsTask();
         task.execute(lectureItems);
     }
 
     public void createAllEvents(final LectureItem lecture) {
-        CreateAllEventsTask task = new CreateAllEventsTask();
-        ArrayList<LectureItem> list = new ArrayList<>();
+        final CreateAllEventsTask task = new CreateAllEventsTask();
+        final ArrayList<LectureItem> list = new ArrayList<>();
         list.add(lecture);
         task.execute(list);
     }
@@ -190,7 +191,7 @@ public class CalendarSynchronization {
     }
 
     public void setCalendar(String calendarName) {
-        if (calendarName == null || calendarName.isEmpty()) {
+        if ((calendarName == null) || calendarName.isEmpty()) {
             // lokalen Kalender
             calendarInterface.setCalendar(null);
         } else {
@@ -219,7 +220,7 @@ public class CalendarSynchronization {
 
     private class DeleteAllEventsTask extends AsyncTask<String, Void, Boolean> {
         protected Boolean doInBackground(final String... p_lectureItems) {
-            if (p_lectureItems == null || p_lectureItems.length == 0) {
+            if ((p_lectureItems == null) || (p_lectureItems.length == 0)) {
                 calendarInterface.deleteAllEvents();
             } else {
                 calendarInterface.deleteAllEvents(p_lectureItems[0]);

@@ -144,7 +144,7 @@ public class ScheduleParser implements Parser<LectureItem> {
         Date endDate = calendar.getTime();
 
         // Falls es kein Einzeltermin ist
-        if (startDay != endDay || startMonth != endMonth || startYear != endYear) {
+        if ((startDay != endDay) || (startMonth != endMonth) || (startYear != endYear)) {
             // Date Correction
             startDate = DateCorrection.getInstance().getCorrectStartDate(startDate, endDate);
             endDate = DateCorrection.getInstance().getCorrectEndDate(startDate, endDate);

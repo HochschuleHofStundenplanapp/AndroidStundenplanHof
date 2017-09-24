@@ -194,9 +194,9 @@ public class MainActivity extends AppCompatActivity
 			}
 			// Hier noch weitere Überprüfungen für andere Intents falls nötig
 		} else {
-            String action = getIntent().getAction();
+            final String action = getIntent().getAction();
 
-            if (action.equals("de.hof.university.app.CHANGES")) {
+            if ("de.hof.university.app.CHANGES".equals(action)) {
                 firstStart = true;
                 onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_aenderung));
             }
