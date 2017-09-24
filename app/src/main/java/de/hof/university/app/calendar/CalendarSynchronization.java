@@ -32,7 +32,6 @@ public class CalendarSynchronization {
     }
 
     private CalendarSynchronization() {
-        // TODO
         calendarInterface = CalendarInterface.getInstance();
     }
 
@@ -69,7 +68,6 @@ public class CalendarSynchronization {
         endDateCalendar.setTime(lectureItem.getEndDate());
 
         do {
-            // TODO für jeden Termin das Datum ermitteln
             Calendar newEndDateCalendar = GregorianCalendar.getInstance();
             newEndDateCalendar.setTime(tmpStartDate);
 

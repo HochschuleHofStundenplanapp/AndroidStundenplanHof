@@ -398,7 +398,7 @@ class CalendarInterface {
 					// Verschoben oder Raumänderung
 					if (change.getBegin_new().equals(change.getBegin_old())) {
 						// Raumänderung
-						instance.updateEvent(eventID, context.getString(R.string.changeRoomchange) + " " + change.getLabel(), null, null, null, "");
+						instance.updateEvent(eventID, context.getString(R.string.changeRoomchange) + " " + change.getLabel(), null, null, null, getLocation(change.getRoom_new()));
 					} else {
 						// Verschoben
 						instance.updateEvent(eventID, context.getString(R.string.changeMoved) + " " + change.getLabel(), context.getString(R.string.changeNewDate) + ": " + DataManager.getInstance().formatDate(change.getBegin_new()), null, null, "");
