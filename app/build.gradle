@@ -32,8 +32,14 @@ android {
             //Folgender Pfad führt zum Absturz des Gradle Wrappers auf manchen Systemen (wie meinen Mac)!
             //storeFile file('D:\\Projekt\\Mobile.AndroidStudio\\Hof.Stundenplaner\\fhhkey.jks')
             keyAlias "fhhkey"
-			keyPassword 'IUwbayNG54S5C4udGkjs'
+            keyPassword 'IUwbayNG54S5C4udGkjs'
             storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
+        }
+        debug {
+            // Ein fester debug keystore damit, wenn man mit verschiedenen Rechnern arbeitet, die APK updaten kann.
+            // Der dubug.keystore liegt im Projekt unter /app/debug.keystore und kann auch ausgetauscht werden.
+            storeFile file('debug.keystore')
+            storePassword 'android'
         }
     }
 
