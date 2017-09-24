@@ -219,18 +219,12 @@ public class RaumlisteFragment extends Fragment {
             if (optRaumliste != null) {
                 raumliste = (Raumliste) optRaumliste;
 
-                //TODO was ist das? Warum 1? Kann man das wegwerfen?
-                // Zeit in Minuten wie lange die Raumliste gecached wird, könnte auch in die Define.
-                // 1 Minute da länger nicht von nöten ist. Dann hat man wahrscheinlich eh weil eine andere Zeit.
-                // Ist quasi nur falls man gleich hintereinander der selbe Abfrage nochmal macht, dann wird sie gleich wieder angezeigt und nicht neu geholt.
-                int raumlisteCache = 1;
-
                 if ( raumliste.getLastSaved() != null ) {
                     lastCached = raumliste.getLastSaved();
 
                     Calendar cal = Calendar.getInstance();
                     cal.setTime(lastCached);
-                    cal.add(Calendar.MINUTE, raumlisteCache);
+                    cal.add(Calendar.MINUTE, Define.ROOMSEARCH_CAHCE_TIME);
                     lastCached = cal.getTime();
                 }
             }

@@ -143,6 +143,7 @@ public final class Define {
 	public static final int CHANGES_CACHE_TIME = 60 * 8;			// acht Stunden
 	public static final int MEAL_CACHE_TIME = 60 * 24 * 7;			// eine Woche
 	public static final int COURSES_CACHE_TIME = 60 * 24 * 7;		// eine Woche
+	public static final int ROOMSEARCH_CAHCE_TIME = 1;		        // eine Minute
 
 	//timeouts
 	public static final int connectTimeout = 1000;		// eine Sekunde
@@ -167,4 +168,7 @@ public final class Define {
 	public final static String ROOM_MUEB = "Mueb";
 	public final static String LOCATION_HOF = "Alfons-Goppel-Platz-1 95028 Hof";
 	public final static String LOCATION_MUEB = "Kulmbacher Str. 76 95213 Münchberg";
+
+	//Intents
+	public final static String SHORTCUT_INTENT_CHANGES = "de.hof.university.app.CHANGES";
 }
