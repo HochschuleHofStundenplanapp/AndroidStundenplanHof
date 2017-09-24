@@ -18,7 +18,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.0'
+    buildToolsVersion '26.0.1'
     defaultConfig {
         applicationId 'de.hof.university.app'
         minSdkVersion 16
@@ -34,10 +34,6 @@ android {
             keyAlias "fhhkey"
             storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
         }
-        debug {
-            storeFile file('debug.keystore')
-            storePassword 'android'
-        }
     }
 
     buildTypes {
@@ -45,9 +41,9 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-            pseudoLocalesEnabled true
+            pseudoLocalesEnabled false
             /* proguardFile 'D:/Projekt/Mobile.AndroidStudio/VideoChat/app/proguard-project.txt' */
-            proguardFile 'proguard-rules.pro'
+            proguardFile 'proguard-project.txt'
             //schöneren APK Namen
             applicationVariants.all { variant ->
                 variant.outputs.all {
@@ -59,7 +55,6 @@ android {
         }
         debug {
             debuggable true
-            signingConfig signingConfigs.debug
             //schöneren APK Namen
             applicationVariants.all { variant ->
                 variant.outputs.all {
