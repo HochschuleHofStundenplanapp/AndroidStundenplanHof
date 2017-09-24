@@ -45,23 +45,15 @@ android {
             pseudoLocalesEnabled false
             /* proguardFile 'D:/Projekt/Mobile.AndroidStudio/VideoChat/app/proguard-project.txt' */
             proguardFile 'proguard-project.txt'
-            //schöneren APK Namen
-            applicationVariants.all { variant ->
-                variant.outputs.all {
-                    outputFileName = "${variant.applicationId}_${variant.name}_${variant.versionName}.apk"
-                }
-            }
             debuggable false
             jniDebuggable false
+            //schöneren APK Namen
+            archivesBaseName = 'Hochschule_Hof_Stundenplan_App'
         }
         debug {
             debuggable true
             //schöneren APK Namen
-            applicationVariants.all { variant ->
-                variant.outputs.all {
-                    outputFileName = "${variant.applicationId}_${variant.name}_${variant.versionName}.apk"
-                }
-            }
+            archivesBaseName = 'Hochschule_Hof_Stundenplan_App'
         }
     }
     productFlavors {
