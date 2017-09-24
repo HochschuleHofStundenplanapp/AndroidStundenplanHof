@@ -23,9 +23,8 @@ android {
         applicationId 'de.hof.university.app'
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 20
+        versionCode 23
         versionName '3.2'
-        versionNameSuffix 'beta'
     }
 
     signingConfigs {
@@ -55,6 +54,8 @@ android {
                     outputFileName = "${variant.applicationId}_${variant.name}_${variant.versionName}.apk"
                 }
             }
+            debuggable false
+            jniDebuggable false
         }
         debug {
             debuggable true
