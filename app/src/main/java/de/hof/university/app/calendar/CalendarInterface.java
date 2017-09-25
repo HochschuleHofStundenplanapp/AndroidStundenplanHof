@@ -250,7 +250,6 @@ class CalendarInterface {
 	boolean removeLocalCalendar() {
 		Context context = MainActivity.getAppContext().getApplicationContext();
 
-		// TODO
 		Long localCalendarID = getLocalCalendar();
 
 		if (localCalendarID == null) {
@@ -376,7 +375,6 @@ class CalendarInterface {
 	void updateChange(LectureChange change) {
 		Context context = MainActivity.getAppContext().getApplicationContext();
 
-		// TODO
 		String lectureID;
 
 		lectureID = change.getId().substring(0, change.getId().indexOf(Define.CHANGES_SUBSTRING));
@@ -435,7 +433,6 @@ class CalendarInterface {
 	private void updateEvent(long eventID, String title, String description, Date startTime, Date endTime, String location) {
 		Context context = MainActivity.getAppContext().getApplicationContext();
 
-		// TODO
 		ContentValues values = new ContentValues();
 		values.put(Events.TITLE, title);
 		if (description != null) {

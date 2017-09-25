@@ -75,7 +75,6 @@ public class MyScheduleFragment extends ScheduleFragment {
 
     @Override
     public void onPause() {
-        // TODO Auto-generated method stub
         super.onPause();
         MainActivity mainActivity = (MainActivity) getActivity();
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);

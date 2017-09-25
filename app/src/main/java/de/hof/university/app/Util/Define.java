@@ -115,7 +115,6 @@ public final class Define {
 	// show the fragments dealing with the location of the user
 	//not used: public static final boolean SHOW_LOCATION_FRAGMENT = true;
 	// show Notenblatt and Notenfreigabe
-	// TODO Weil ausblenden solange die neue Authentifizierungsmethode noch nicht funktioniert
 	public static final boolean SHOW_NOTEN = true;
 	// publish notification FMC von Google verwenden
 	// Push-Notifications
