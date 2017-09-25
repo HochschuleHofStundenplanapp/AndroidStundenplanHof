@@ -269,16 +269,19 @@ public class RaumlisteFragment extends Fragment {
                         // Thread beenden wenn gecancelt
                         if ( isCancelled() ) break;
                         loginForm = Jsoup
-                                            .connect(Define.URL_RAUMSUCHE_LOGIN)
-                                            .timeout(5 * 1000) //4 Sekunden würden reichen aber 1 Sekunde zur Sicherheit
-                                            .data("user", user, "pass", password)
-                                            .data("logintype", "login")
-                                            .data("pid", "27")
-                                            .data("redirect_url", Define.URL_RAUMSUCHE_LOGIN_SUCCESS)
-                                            .data("tx_felogin_pi1[noredirect]", "0")
-                                            .method(Connection.Method.POST).execute();
+                                .connect(Define.URL_RAUMSUCHE_LOGIN)
+                                .timeout(5 * 1000) //4 Sekunden würden reichen aber 1 Sekunde zur Sicherheit
+                                .data("user", user, "pass", password)
+                                .data("logintype", "login")
+                                .data("pid", "27")
+                                .data("redirect_url", Define.URL_RAUMSUCHE_LOGIN_SUCCESS)
+                                .data("tx_felogin_pi1[noredirect]", "0")
+                                .method(Connection.Method.POST)
+                                .execute();
+
                         loginRetry = 0;
                     } catch ( IOException e ) {
+                        Log.e(TAG, "Login fehlgeschlagen: ", e);
                         loginRetry--;
                         if ( loginRetry <= 0 ) {
                             errorText = getString(R.string.loginFailed);
@@ -287,17 +290,21 @@ public class RaumlisteFragment extends Fragment {
                     }
                 }
 
+                // zum debuggen hilfreich
+                //loginForm.body();
+
                 // Daten lesen
                 try {
                     document = Jsoup
-                       .connect( Define.URL_RAUMSUCHE + raumTyp)
-                       .timeout(10 * 1000) //5 Sekunden würden reichen aber auf älteren Geräten braucht es mehr
-                       .data("tx_raumsuche_pi1[day]", day)
-                       .data("tx_raumsuche_pi1[month]", month)
-                       .data("tx_raumsuche_pi1[year]", year)
-                       .data("tx_raumsuche_pi1[timestart]",timeFrom)
-                       .data("tx_raumsuche_pi1[timeend]", timeTo)
-                       .cookies(loginForm.cookies()).get();
+                            .connect(Define.URL_RAUMSUCHE + raumTyp)
+                            .timeout(10 * 1000) //5 Sekunden würden reichen aber auf älteren Geräten braucht es mehr
+                            .data("tx_raumsuche_pi1[day]", day)
+                            .data("tx_raumsuche_pi1[month]", month)
+                            .data("tx_raumsuche_pi1[year]", year)
+                            .data("tx_raumsuche_pi1[timestart]", timeFrom)
+                            .data("tx_raumsuche_pi1[timeend]", timeTo)
+                            .cookies(loginForm.cookies())
+                            .get();
 
                     final Elements tables = document.getElementsByTag("table");
                     String curCategory = "";
