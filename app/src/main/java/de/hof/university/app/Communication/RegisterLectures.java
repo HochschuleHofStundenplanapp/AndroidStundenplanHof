@@ -69,7 +69,7 @@ public class RegisterLectures {
 		    try {
 			    jo.put("vorlesung_id", aData);
 		    } catch ( JSONException e ) {
-			    e.printStackTrace();
+		        Log.e(TAG, "JSONException", e);
 		    }
 		    json.put(jo);
 	    }
@@ -97,8 +97,7 @@ public class RegisterLectures {
             try {
                 url = new URL(Define.URL_REGISTER_PUSH_NOTIFICATIONS_HOF); // Debug: ( + "?debug=1")
             } catch (MalformedURLException e) {
-                Log.d(TAG, "URL ist nicht URL-konform: " + Define.URL_REGISTER_PUSH_NOTIFICATIONS_HOF);
-                e.printStackTrace();
+                Log.e(TAG, "URL ist nicht URL-konform: " + Define.URL_REGISTER_PUSH_NOTIFICATIONS_HOF, e);
             }
             HttpURLConnection client = null;
             try {

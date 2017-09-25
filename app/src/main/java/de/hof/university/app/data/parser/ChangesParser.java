@@ -27,6 +27,7 @@ import java.util.GregorianCalendar;
 
 import de.hof.university.app.BuildConfig;
 import de.hof.university.app.Util.Define;
+import de.hof.university.app.Util.Log;
 import de.hof.university.app.model.schedule.LectureChange;
 
 /**
@@ -52,7 +53,7 @@ public final class ChangesParser implements Parser<LectureChange> {
                 JSONObject jsonObject = new JSONObject(jsonString);
                 jsonArray = jsonObject.optJSONArray(Define.PARSER_CHANGES);
             } catch (final JSONException e) {
-                if ( BuildConfig.DEBUG) e.printStackTrace();
+                Log.e(TAG, "JSONException", e);
                 return result;
             }
 

@@ -46,6 +46,7 @@ import de.hof.university.app.BuildConfig;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.Util.Define;
+import de.hof.university.app.Util.Log;
 import de.hof.university.app.experimental.LoginController;
 
 
@@ -241,7 +242,7 @@ public class NotenblattFragment extends Fragment {
                 doc2.getElementsByTag("a").remove();
                 result = doc2.html();
             } catch (IOException e) {
-                if (BuildConfig.DEBUG) e.printStackTrace();
+                Log.e(TAG, "IOException", e);
 
                 if (e.getClass() == InterruptedIOException.class) { //Wurde einfach abgebrochen -> nichts tun
                     return "";

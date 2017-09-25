@@ -28,9 +28,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 
-import de.hof.university.app.BuildConfig;
+import de.hof.university.app.Util.Log;
 import de.hof.university.app.model.meal.Meal;
 
 /**
@@ -98,7 +97,7 @@ final public class MealParser implements Parser<Meal> {
                                 try {
                                     xmlDay = MealParser.sdf.parse(xmlParser.getAttributeValue(null, "datum"));
                                 } catch (ParseException e) {
-                                    if (BuildConfig.DEBUG) e.printStackTrace();
+                                    Log.e(TAG, "ParseException", e);
                                 }
                                 xmlWeekday = xmlParser.getAttributeValue(null, "wochentag");
 //                                Log.d(TAG, xmlParser.getAttributeValue(null, "wochentag"));
@@ -137,7 +136,7 @@ final public class MealParser implements Parser<Meal> {
                     eventType = xmlParser.next();
                 }
             } catch (final XmlPullParserException | IOException e) {
-                if (BuildConfig.DEBUG) e.printStackTrace();
+                Log.e(TAG, "XmlPullParserException | IOException", e);
                 result.clear();
             }
         }
@@ -161,7 +160,7 @@ final public class MealParser implements Parser<Meal> {
                     result.addAll(convertJsonObject(tmpObject));
                 }
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.e(TAG, "JSONException", e);
             }
         }
         return result;
@@ -200,9 +199,9 @@ final public class MealParser implements Parser<Meal> {
             }
 
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(TAG, "JSONException", e);
         } catch (ParseException e) {
-            e.printStackTrace();
+            Log.e(TAG, "ParseException", e);
         }
 
         return result;

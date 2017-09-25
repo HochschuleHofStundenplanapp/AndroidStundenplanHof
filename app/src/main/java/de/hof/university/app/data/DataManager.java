@@ -204,7 +204,7 @@ public class DataManager {
                 try {
                     url += "&id[]=" + URLEncoder.encode(iterator.next(), "UTF-8");
                 } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "Encoding not supported", e);
                 }
             }
 
@@ -275,7 +275,7 @@ public class DataManager {
                     try {
                         url += "&id[]=" + URLEncoder.encode(iterator.next(), "UTF-8");
                     } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
+                        Log.e(TAG, "Encoding not supported", e);
                     }
                 }
             }

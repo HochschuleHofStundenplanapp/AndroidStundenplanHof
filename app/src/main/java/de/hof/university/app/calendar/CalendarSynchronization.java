@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import de.hof.university.app.MainActivity;
+import de.hof.university.app.Util.Log;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.model.schedule.LectureChange;
 import de.hof.university.app.model.schedule.LectureItem;
@@ -23,6 +24,7 @@ import de.hof.university.app.model.schedule.LectureItem;
 
 public class CalendarSynchronization {
     private static final CalendarSynchronization instance = new CalendarSynchronization();
+    private static final String TAG = "CalendarSynchronization";
 
     private final CalendarInterface calendarInterface;
     private HashMap<String, Long> calendars = new HashMap<>();
@@ -109,10 +111,10 @@ public class CalendarSynchronization {
         try {
             return task.get();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Log.e(TAG, "InterruptedException", e);
             return false;
         } catch (ExecutionException e) {
-            e.printStackTrace();
+            Log.e(TAG, "ExecutionException", e);
             return false;
         }
     }
