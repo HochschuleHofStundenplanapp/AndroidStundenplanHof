@@ -20,13 +20,13 @@
         <item>Student</item>
         <item>Bedienstete</item>
         <item>Gast</item>
-        <item>Sondertarif</item>
+        <item>Sondertarif (Hföd)</item>
     </string-array>
     <string-array name="speiseplan_tarife_values">
         <item>1</item>
         <item>2</item>
         <item>3</item>
-        <item>4</item>
+        <item>5</item>
     </string-array>
     <string-array name="term_time">
         <item>Sommersemester</item>
