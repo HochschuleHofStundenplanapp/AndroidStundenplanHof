@@ -399,6 +399,11 @@ public class DataManager {
         }
         this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
         this.deleteLectureFromCalendar(context, lectureItem.getId());
+
+        // falls MySchedule leer füge den Schedule zum Kalender hinzu
+        if (this.getMySchedule(context).getLectures().size() == 0) {
+            this.updateCalendar();
+        }
     }
 
     public final void addAllToMySchedule(final Context context, final Set<String> schedulesIds) {

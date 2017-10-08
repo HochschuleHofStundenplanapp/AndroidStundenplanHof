@@ -432,6 +432,12 @@ class CalendarInterface {
 
 		ArrayList<Long> eventIDs = calendarData.getLecturesEventIDs().get(lectureID);
 
+		if (eventIDs == null) {
+			// Bedeutet: Noch nicht vorhanden
+			// Nichts machen da die Events erst noch in einem anderen Thread erzeugt werden
+			return;
+		}
+
 		for (Long eventID : eventIDs) {
 			// TODO vielleicht endDatum ändern
 			if (doEventExits(eventID, lecture.getLabel(), lecture.getStartDate(), lecture.getEndDate())) {
