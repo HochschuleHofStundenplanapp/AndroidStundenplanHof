@@ -135,6 +135,8 @@ public class ScheduleParser implements Parser<LectureItem> {
 
         Calendar calendar = GregorianCalendar.getInstance();
 
+        calendar.set(Calendar.MILLISECOND, 0);
+
         //Startzeit
         calendar.set(startYear, startMonth - 1, startDay, startHours, startMinutes, 0);
 

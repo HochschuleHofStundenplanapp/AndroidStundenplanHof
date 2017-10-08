@@ -17,6 +17,7 @@ import android.text.format.DateUtils;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.TimeZone;
 
@@ -66,6 +67,18 @@ class CalendarInterface {
 	private static final int PROJECTION_BEGIN_INDEX = 1;
 	private static final int PROJECTION_TITLE_INDEX = 2;
 	private static final int PROJECTION_DESCRIPTION_INDEX = 3;
+
+	private static final String[] EVENT_PROJECTION_DATES = new String[]{
+			CalendarContract.Instances.BEGIN,        // 0
+			CalendarContract.Instances.END,           // 1
+	};
+
+	// The indices for the projection array above.
+	private static final int PROJECTION_EVENT_BEGIN = 0;
+	private static final int PROJECTION_EVENT_END = 1;
+
+	private Date eventStartDate;
+	private Date eventEndDate;
 
 	private String localCalendarName = "";
 	private String accountName = ""; // Google Account
@@ -439,20 +452,46 @@ class CalendarInterface {
 		}
 
 		for (Long eventID : eventIDs) {
-			// TODO vielleicht endDatum ändern
 			if (doEventExits(eventID, lecture.getLabel(), lecture.getStartDate(), lecture.getEndDate())) {
-				// TODO Datum von altem Event bekommen und mit neuem vergleichen
-				//getEventStartDate(eventID);
-				//getEventEndDate(eventID);
+				// null because than the date won't get updated
+				Date newStartDate = null;
+				Date newEndDate = null;
 
-				// Vergleiche lecture.startDate mit EventStartDate
-				// Wochentag, unterschied dazu oder abziehen
-				// Uhrzeit, anpassen
+				getEventDates(eventID, lecture.getStartDate(), lecture.getEndDate());
 
-				// lecture.getStartDate()
-				// lecture.getEndDate()
+				if (eventStartDate != null && eventEndDate != null) {
+					Calendar eventCalendar = new GregorianCalendar();
+					eventCalendar.setTime(eventStartDate);
 
-				instance.updateEvent(eventID, lecture.getLabel(), null, null, null, getLocation(lecture.getRoom()));
+					Calendar lectureCalendar = new GregorianCalendar();
+					lectureCalendar.setTime(lecture.getStartDate());
+
+					int eventDayOfWeek = eventCalendar.get(Calendar.DAY_OF_WEEK);
+					int lectureDayOfWeek = lectureCalendar.get(Calendar.DAY_OF_WEEK);
+
+					if (eventDayOfWeek != lectureDayOfWeek) {
+						int diferenceDays = lectureDayOfWeek - eventDayOfWeek;
+						eventCalendar.add(Calendar.DAY_OF_YEAR, diferenceDays);
+					}
+
+					// set hour and minutes from the lecture
+					eventCalendar.set(Calendar.HOUR_OF_DAY, lectureCalendar.get(Calendar.HOUR_OF_DAY));
+					eventCalendar.set(Calendar.MINUTE, lectureCalendar.get(Calendar.MINUTE));
+
+					newStartDate = eventCalendar.getTime();
+
+					// end Date
+					lectureCalendar.setTime(lecture.getEndDate());
+
+					// set hour and minutes from the lecture
+					eventCalendar.set(Calendar.HOUR_OF_DAY, lectureCalendar.get(Calendar.HOUR_OF_DAY));
+					eventCalendar.set(Calendar.MINUTE, lectureCalendar.get(Calendar.MINUTE));
+
+					newEndDate = eventCalendar.getTime();
+				}
+
+				// update the event with the new date or with null to let the date
+				instance.updateEvent(eventID, lecture.getLabel(), null, newStartDate, newEndDate, getLocation(lecture.getRoom()));
 			}
 		}
 	}
@@ -538,6 +577,54 @@ class CalendarInterface {
 		}
 		cur.close();
 		return false;
+	}
+
+	private void getEventDates(Long eventID, Date startDate, Date endDate) {
+		Context context = MainActivity.getAppContext().getApplicationContext();
+
+		Cursor cur;
+		ContentResolver cr = context.getContentResolver();
+
+		// The ID of the recurring event whose instances you are searching
+		// for in the Instances table
+		// TODO vielleicht ohne Event_ID als selection und dafür das ganze Array, und damit später vergleichen ob enthalten
+		String selection = CalendarContract.Instances.EVENT_ID + " = ?";
+		String[] selectionArgs = new String[]{eventID.toString()};
+
+		// Construct the query with the desired date range.
+		Uri.Builder builder = CalendarContract.Instances.CONTENT_URI.buildUpon();
+		ContentUris.appendId(builder, startDate.getTime());
+		// 5 Millisekunden dazu damit falls es gleich dem Startdatum ist er das Event nimmt
+		ContentUris.appendId(builder, endDate.getTime() + 5);
+
+		// Submit the query
+		cur = cr.query(builder.build(),
+				EVENT_PROJECTION_DATES,
+				selection,
+				selectionArgs,
+				null);
+
+		if (cur == null) {
+			return;
+		}
+
+		while (cur.moveToNext()) {
+			// Get the field values
+			long eventBegin = cur.getLong(PROJECTION_EVENT_BEGIN);
+
+			Calendar calendar = new GregorianCalendar();
+
+			calendar.setTimeInMillis(eventBegin);
+			calendar.set(Calendar.MILLISECOND, 0);
+			eventStartDate = calendar.getTime();
+
+			long eventEnd = cur.getLong(PROJECTION_EVENT_END);
+
+			calendar.setTimeInMillis(eventEnd);
+			calendar.set(Calendar.MILLISECOND, 0);
+			eventEndDate = calendar.getTime();
+		}
+		cur.close();
 	}
 
 	private String getEventDescription(Long eventID) {
