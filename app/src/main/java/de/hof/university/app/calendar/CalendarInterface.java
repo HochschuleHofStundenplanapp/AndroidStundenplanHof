@@ -26,6 +26,7 @@ import de.hof.university.app.Util.Define;
 import de.hof.university.app.Util.Log;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.model.schedule.LectureChange;
+import de.hof.university.app.model.schedule.LectureItem;
 
 /**
  * Created by Daniel on 13.05.2017.
@@ -372,6 +373,10 @@ class CalendarInterface {
 		Uri uri = cr.insert(CalendarContract.Reminders.CONTENT_URI, values);
 	}
 
+	/**
+	 * updates a lecture with a change
+	 * @param change
+	 */
 	void updateChange(LectureChange change) {
 		Context context = MainActivity.getAppContext().getApplicationContext();
 
@@ -410,6 +415,38 @@ class CalendarInterface {
 					}
 				}
 				break;
+			}
+		}
+	}
+
+	/**
+	 * updates a lecture
+	 * @param lecture
+	 */
+	void updateLecture(LectureItem lecture) {
+		Context context = MainActivity.getAppContext().getApplicationContext();
+
+		String lectureID;
+
+		lectureID = lecture.getId();
+
+		ArrayList<Long> eventIDs = calendarData.getLecturesEventIDs().get(lectureID);
+
+		for (Long eventID : eventIDs) {
+			// TODO vielleicht endDatum ändern
+			if (doEventExits(eventID, lecture.getLabel(), lecture.getStartDate(), lecture.getEndDate())) {
+				// TODO Datum von altem Event bekommen und mit neuem vergleichen
+				//getEventStartDate(eventID);
+				//getEventEndDate(eventID);
+
+				// Vergleiche lecture.startDate mit EventStartDate
+				// Wochentag, unterschied dazu oder abziehen
+				// Uhrzeit, anpassen
+
+				// lecture.getStartDate()
+				// lecture.getEndDate()
+
+				instance.updateEvent(eventID, lecture.getLabel(), null, null, null, getLocation(lecture.getRoom()));
 			}
 		}
 	}

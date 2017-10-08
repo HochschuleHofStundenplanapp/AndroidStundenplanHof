@@ -163,7 +163,11 @@ public class DataManager {
             }
 
             // Falls die neuen LectureItems nicht gleich der bereits vorhandenen sind
-            if (!isTwoArrayListsWithSameValues(this.getSchedule(context).getLectures(), tmpScheduleLectureItems)) {
+            // Bedeutet: Etwas hat sich geändert
+            if (!isScheduleEqualsToNewSchedule(this.getSchedule(context).getLectures(), tmpScheduleLectureItems)) {
+
+                ArrayList<LectureItem> newLectureItems = getNewLectureItems(this.getSchedule(context).getLectures(), tmpScheduleLectureItems);
+
                 // Neue Vorlesungen setzen
                 this.getSchedule(context).setLectures(tmpScheduleLectureItems);
 
@@ -174,7 +178,7 @@ public class DataManager {
                 // Wenn kein "Mein Stundenplan" vorhanden ist
                 if (getMyScheduleSize(context) == 0) {
                     // Kalender aktualisieren
-                    this.updateCalendar();
+                    this.updateCalendar(newLectureItems);
                 }
             }
             // Zuletzt aktualisert setzen
@@ -234,12 +238,16 @@ public class DataManager {
             }
 
             // Falls die neuen LectureItems nicht gleich der bereits vorhandenen sind
-            if (!isTwoArrayListsWithSameValues(this.getMySchedule(context).getLectures(), tmpMyScheduleLectureItems)) {
+            // Bedeutet: Etwas hat sich geändert
+            if (!isScheduleEqualsToNewSchedule(this.getMySchedule(context).getLectures(), tmpMyScheduleLectureItems)) {
+
+                ArrayList<LectureItem> newLectureItems = getNewLectureItems(this.getMySchedule(context).getLectures(), tmpMyScheduleLectureItems);
+
                 // Neue Vorlesungen setzen
                 this.getMySchedule(context).setLectures(tmpMyScheduleLectureItems);
 
                 // Kalender aktualisieren
-                this.updateCalendar();
+                this.updateCalendar(newLectureItems);
             }
             // Zuletzt aktualisiert setzen
             this.getMySchedule(context).setLastSaved(new Date());
@@ -663,6 +671,16 @@ public class DataManager {
         }
     }
 
+    private void updateCalendar(ArrayList<LectureItem> lectureItems) {
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
+        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION), false);
+
+        if (calendarSynchronization) {
+            CalendarSynchronization.getInstance().updateCalendar(lectureItems);
+        }
+    }
+
     private void updateChangesInCalendar() {
         Context context = MainActivity.getAppContext().getApplicationContext();
 
@@ -700,26 +718,48 @@ public class DataManager {
     }
 
 
-    private boolean isTwoArrayListsWithSameValues(ArrayList<LectureItem> list1, ArrayList<LectureItem> list2)
+    private boolean isScheduleEqualsToNewSchedule(ArrayList<LectureItem> oldSchedule, ArrayList<LectureItem> newSchedule)
     {
         //null checking
-        if((list1 == null) && (list2 == null)) {
+        if((oldSchedule == null) && (newSchedule == null)) {
             return true;
         }
-        if((list1 == null) || (list2 == null)) {
+        if((oldSchedule == null) || (newSchedule == null)) {
             return false;
         }
 
-        if(list1.size() != list2.size()) {
+        if(oldSchedule.size() != newSchedule.size()) {
             return false;
         }
 
-        for (int i = 0; i < list1.size(); i++) {
-            if (!list1.get(i).equals(list2.get(i))) {
+        for (int i = 0; i < oldSchedule.size(); i++) {
+            if (!oldSchedule.get(i).equals(newSchedule.get(i))) {
                 return false;
             }
         }
 
         return true;
+    }
+
+    private ArrayList<LectureItem> getNewLectureItems(ArrayList<LectureItem> oldSchedule, ArrayList<LectureItem> newSchedule) {
+        ArrayList<LectureItem> newLectureItems = new ArrayList<>();
+
+        for (LectureItem newLecture: newSchedule) {
+            boolean contains = false;
+
+            for (LectureItem oldLecture: oldSchedule) {
+                if (newLecture.equals(oldLecture)) {
+                    contains = true;
+                    break;
+                }
+            }
+
+            // if not containing in old schedule
+            if (contains == false) {
+                newLectureItems.add(newLecture);
+            }
+        }
+
+        return newLectureItems;
     }
 }

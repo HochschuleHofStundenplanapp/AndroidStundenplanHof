@@ -124,6 +124,10 @@ public class CalendarSynchronization {
         task.execute(lectureID);
     }
 
+    /**
+     * updates the calendar with total new lectures
+     */
+    // TODO maybe synchronized?
     public void updateCalendar() {
         // TODO Update Methode nutzen
         new Thread() {
@@ -138,15 +142,33 @@ public class CalendarSynchronization {
     }
 
     /**
+     * updates the calendar with only the changed LectureItems
+     * @param lectureItems
+     */
+    // TODO maybe synchronized?
+    public void updateCalendar(final ArrayList<LectureItem> lectureItems) {
+        // TODO Update Methode nutzen
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                for (LectureItem lecture: lectureItems) {
+                    calendarInterface.updateLecture(lecture);
+                }
+            }
+        }.start();
+    }
+
+    /**
      * removes the local calendar or removes the events from a selected calendar
      */
     public void stopCalendarSynchronization() {
         new Thread() {
             @Override
             public void run() {
-                //lösche den lokalen Kalender
+                // versuche den lokalen Kalender zu löschen
                 if (!calendarInterface.removeLocalCalendar()) {
-                    // falls es nicht geklappt hat dann lösche die Events
+                    // falls es nicht geklappt hat dann lösche die Events in dem ausgewählten Kalender
                     // Bedeutet: Nutzer hat einen eigenen Kaledner ausgweählt.
                     deleteAllEvents();
                 }
@@ -165,12 +187,13 @@ public class CalendarSynchronization {
         Set<String> keysToRemove = new HashSet<>();
 
         // Ferien/Feiertage und Sonnenauf- und untergang
-        // und persönlicher Kalender (alle mit @googlemail.com)
+        // und persönlicher Kalender (alle mit @googlemail.com oder @gmail.com)
         for (String key : calendars.keySet()) {
             if (key.contains("Holidays")
                     || key.contains("Feiertage")
                     || key.contains("Sunrise/Sunset")
-                    || key.contains("@googlemail.com")) {
+                    || key.contains("@googlemail.com")
+                    || key.contains("@gmail.com")) {
                 keysToRemove.add(key);
             }
         }

@@ -14,6 +14,7 @@ public class CalendarData extends HofObject {
     private static final long serialVersionUID = Define.serialVersionUIDv1;
 
     private Long calendarID;
+    // besteht aus lectureID und EventID
     private HashMap<String, ArrayList<Long>> lecturesEventIDs;
     private HashMap<String, ArrayList<Long>> changesEventIDs;
 
