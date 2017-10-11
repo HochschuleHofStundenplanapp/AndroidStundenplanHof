@@ -128,9 +128,6 @@
     <string name="no">Nein</string>
     <string name="notifications_question">Möchten Sie über Änderungen benachrichtigt werden?</string>
     <string name="lastUpdated">Zuletzt aktualisiert</string>
-    <string name="raum">Raum</string>
-    <string name="zeit">Zeit</string>
-    <string name="fach_dozent">Fach Dozent</string>
     <string name="calendar_synchronization">Kalender Synchronisation</string>
     <string name="changeCancelled">[Entfällt]</string>
     <string name="changeMoved">[Verschoben]</string>
