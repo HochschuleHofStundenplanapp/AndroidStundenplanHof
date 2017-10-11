@@ -74,7 +74,6 @@
     <string name="aboutus">About us</string>
     <string name="datenschutz">Privacy policy</string>
     <string name="experimental_features">Experimental features</string>
-    <string name="enableExperimental">Experimental features</string>
     <string name="enableExperimentalSure">Experimental features may cause the app to crash. Use at your own risk! Passwords are saved in clear text!</string>
     <string name="gewaehrAusschluss">For the correctness of the provided data no responsibility is taken. Please contact for reliable information to the official body or institution.</string>
     <string name="danksagung">Hof University says thank you to the following contributors in the creation of the app for Android as well the preparatory work in web service, layout, design and consultance: \n \n
