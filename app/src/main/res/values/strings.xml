@@ -125,9 +125,9 @@
     <string name="no">no</string>
     <string name="notifications_question">Do you want to get notified for changes?</string>
     <string name="lastUpdated">Last updated</string>
-    <string name="raum">Raum</string>
-    <string name="zeit">Zeit</string>
-    <string name="fach_dozent">Fach Dozent</string>
+    <string name="raum" translatable="false">Room</string>
+    <string name="zeit" translatable="false">Time</string>
+    <string name="fach_dozent" translatable="false">Fach Dozent</string>
     <string name="calendar_synchronization">Calendar synchronization</string>
     <string name="changeCancelled">[Cancelled]</string>
     <string name="changeMoved">[Moved]</string>
