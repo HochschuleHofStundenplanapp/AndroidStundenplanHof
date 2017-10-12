@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2017 Hochschule Hof, Daniel Glaser
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+
 package de.hof.university.app.calendar;
 
 import android.Manifest;
@@ -295,23 +312,31 @@ class CalendarInterface {
 	 * @param location    the location of the event
 	 * @return eventID or null if no permission
 	 */
-	private Long createEvent(String title, String description, Date startDate, Date endDate, String location) {
+	private Long createEvent(final String title, final String description, final Date startDate, final Date endDate, final String location) {
 		if (calendarData.getCalendarID() == null) {
 			return null;
 		}
+
+		junit.framework.Assert.assertTrue( !"".equals(title) );
+//TODO		junit.framework.Assert.assertTrue( !"".equals(description)) ;
+		junit.framework.Assert.assertTrue( startDate != null ) ;  // > 2016 && < 2030
+		junit.framework.Assert.assertTrue( endDate != null ) ;
+		junit.framework.Assert.assertTrue( !"".equals( location )) ;
 
 		ContentValues values = new ContentValues();
 		values.put(Events.DTSTART, startDate.getTime());
 		values.put(Events.DTEND, endDate.getTime());
 		values.put(Events.TITLE, title);
 		values.put(Events.HAS_ALARM, true);
-		// Only Provider
-		//values.put(Events.SYNC_EVENTS, true);
-		//values.put(Events.ALLOWED_REMINDERS, "" + CalendarContract.Reminders.METHOD_DEFAULT + "," + CalendarContract.Reminders.METHOD_ALERT);
 
-		// not allowed to read
-		//values.put(Events.SYNC_DATA1, "Test"); //Splusname oder ID
-		values.put(Events.DESCRIPTION, description);
+		//IDs are from "public static final class Events"
+		//TODO
+		//EVENT_COLOR
+		//ORIGINAL_ID
+		// ORIGINAL_SYNC_ID
+		//UID_2445  ???
+
+		values.put(Events.DESCRIPTION, description); //Splusname oder ID
 		values.put(Events.EVENT_LOCATION, location);
 		values.put(Events.CALENDAR_ID, calendarData.getCalendarID());
 
@@ -324,6 +349,8 @@ class CalendarInterface {
 		final Long eventID = insertEvent(values);
 
 		// if to want to add personal reminders
+		//TODO in configuration: Let the user decide
+		//TODO how many minutes before
         /*if (value) {
             addReminderToEvent(eventID, 15);
             addReminderToEvent(eventID, 60);
@@ -332,11 +359,20 @@ class CalendarInterface {
 		return eventID;
 	}
 
-	void createLectureEvent(String lectureID, String title, String description, Date startTime, Date endTime, String location) {
-		Long eventID = createEvent(title, description, startTime, endTime, location);
+	void createLectureEvent(final String lectureID, final String title, final String description, final Date startTime, final Date endTime, final String location) {
+
+		junit.framework.Assert.assertTrue( !"".equals(lectureID) );
+		junit.framework.Assert.assertTrue( !"".equals(title) );
+//TODO		junit.framework.Assert.assertTrue( !"".equals(description) );
+		junit.framework.Assert.assertTrue( startTime != null );
+		junit.framework.Assert.assertTrue( endTime != null );
+		junit.framework.Assert.assertTrue( !"".equals(location) );
+
+		final Long eventID = createEvent(title, description, startTime, endTime, location);
 
 		// Wenn null dann keine Berechtigung oder keine CalendarID und returnen
-		if (eventID == null) return;
+		if (eventID == null)
+			return;
 
 		// zu den IDs hinzufügen
 		addLecturesEventID(lectureID, eventID);
