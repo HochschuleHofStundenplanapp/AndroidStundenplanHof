@@ -60,34 +60,26 @@ class CalendarInterface {
 	private static final String[] CALENDAR_PROJECTION = new String[]{
 			Calendars._ID,                          // 0
 			Calendars.CALENDAR_DISPLAY_NAME,        // 1
-			//Calendars.ACCOUNT_NAME,                 // 2
-			//Calendars.OWNER_ACCOUNT,                // 3
-			//Calendars.ACCOUNT_TYPE,                 // 4
 	};
 
 	// The indices for the projection array above.
 	private static final int PROJECTION_CALENDAR_ID_INDEX = 0;
 	private static final int PROJECTION_DISPLAY_NAME_INDEX = 1;
-	//private static final int PROJECTION_ACCOUNT_NAME_INDEX = 1;
-	//private static final int PROJECTION_OWNER_ACCOUNT_INDEX = 3;
-	//private static final int PROJECTION_ACCOUNT_TYPE_INDEX = 4;
 
-	private static final String[] EVENT_PROJECTION = new String[]{
-			CalendarContract.Instances.EVENT_ID,        // 0
-			CalendarContract.Instances.BEGIN,           // 1
-			CalendarContract.Instances.TITLE,           // 2
-			CalendarContract.Instances.DESCRIPTION,     // 3
+	private static final String[] EVENT_PROJECTION_TITLE_DESCRIPTION = new String[]{
+			CalendarContract.Instances.TITLE,            // 0
+			CalendarContract.Instances.DESCRIPTION,      // 1
+			CalendarContract.Instances.ORIGINAL_SYNC_ID, // 2
 	};
 
 	// The indices for the projection array above.
-	private static final int PROJECTION_EVENT_ID_INDEX = 0;
-	private static final int PROJECTION_BEGIN_INDEX = 1;
-	private static final int PROJECTION_TITLE_INDEX = 2;
-	private static final int PROJECTION_DESCRIPTION_INDEX = 3;
+	private static final int PROJECTION_TITLE_INDEX = 0;
+	private static final int PROJECTION_DESCRIPTION_INDEX = 1;
+	private static final int PROJECTION_ORIGNAL_SYNC_ID_INDEX = 2;
 
 	private static final String[] EVENT_PROJECTION_DATES = new String[]{
 			CalendarContract.Instances.BEGIN,        // 0
-			CalendarContract.Instances.END,           // 1
+			CalendarContract.Instances.END,          // 1
 	};
 
 	// The indices for the projection array above.
@@ -312,7 +304,7 @@ class CalendarInterface {
 	 * @param location    the location of the event
 	 * @return eventID or null if no permission
 	 */
-	private Long createEvent(final String title, final String description, final Date startDate, final Date endDate, final String location) {
+	private Long createEvent(final String title, final String description, final Date startDate, final Date endDate, final String location, final String lectureID) {
 		if (calendarData.getCalendarID() == null) {
 			return null;
 		}
@@ -328,6 +320,15 @@ class CalendarInterface {
 		values.put(Events.DTEND, endDate.getTime());
 		values.put(Events.TITLE, title);
 		values.put(Events.HAS_ALARM, true);
+		values.put(Events.EVENT_LOCATION, location);
+		values.put(Events.CALENDAR_ID, calendarData.getCalendarID());
+
+		values.put(Events.DESCRIPTION, description);
+
+		// put the ID of the lecutre in the ORIGNAL_SYNC_ID
+		// ORIGNAL_SYNC_ID might be used for something else, but we use it for ower own ID
+		// currently ower ID is the splusname
+		values.put(Events.ORIGINAL_SYNC_ID, lectureID);
 
 		//IDs are from "public static final class Events"
 		//TODO
@@ -335,10 +336,6 @@ class CalendarInterface {
 		//ORIGINAL_ID
 		// ORIGINAL_SYNC_ID
 		//UID_2445  ???
-
-		values.put(Events.DESCRIPTION, description); //Splusname oder ID
-		values.put(Events.EVENT_LOCATION, location);
-		values.put(Events.CALENDAR_ID, calendarData.getCalendarID());
 
 		TimeZone tz = TimeZone.getDefault();
 		values.put(Events.EVENT_TIMEZONE, tz.getID());
@@ -368,7 +365,7 @@ class CalendarInterface {
 		junit.framework.Assert.assertTrue( endTime != null );
 		junit.framework.Assert.assertTrue( !"".equals(location) );
 
-		final Long eventID = createEvent(title, description, startTime, endTime, location);
+		final Long eventID = createEvent(title, description, startTime, endTime, location, lectureID);
 
 		// Wenn null dann keine Berechtigung oder keine CalendarID und returnen
 		if (eventID == null)
@@ -379,7 +376,7 @@ class CalendarInterface {
 	}
 
 	private void createChangeEvent(String lectureID, String title, String description, Date startTime, Date endTime, String location) {
-		Long eventID = createEvent(title, description, startTime, endTime, location);
+		Long eventID = createEvent(title, description, startTime, endTime, location, lectureID);
 
 		// Wenn null dann keine Berechtigung oder keine CalendarID und returnen
 		if (eventID == null) return;
@@ -424,7 +421,7 @@ class CalendarInterface {
 
 	/**
 	 * updates a lecture with a change
-	 * @param change
+	 * @param change a change with should update the correct lecture
 	 */
 	void updateChange(LectureChange change) {
 		Context context = MainActivity.getAppContext().getApplicationContext();
@@ -470,7 +467,7 @@ class CalendarInterface {
 
 	/**
 	 * updates a lecture
-	 * @param lecture
+	 * @param lecture a lecture with should get updated
 	 */
 	void updateLecture(LectureItem lecture) {
 		Context context = MainActivity.getAppContext().getApplicationContext();
@@ -590,7 +587,7 @@ class CalendarInterface {
 
 		// Submit the query
 		cur = cr.query(builder.build(),
-				EVENT_PROJECTION,
+				EVENT_PROJECTION_TITLE_DESCRIPTION,
 				selection,
 				selectionArgs,
 				null);
@@ -604,6 +601,8 @@ class CalendarInterface {
 
 			// Get the field values
 			eventTitle = cur.getString(PROJECTION_TITLE_INDEX);
+
+			cur.getString(PROJECTION_ORIGNAL_SYNC_ID_INDEX);
 
 			// TODO vielleicht ohne title da dieser bearbeitet werden kann
 			if (eventTitle.equals(title)) {
@@ -685,7 +684,7 @@ class CalendarInterface {
 
 		// Submit the query
 		cur = cr.query(builder.build(),
-				EVENT_PROJECTION,
+				EVENT_PROJECTION_TITLE_DESCRIPTION,
 				selection,
 				selectionArgs,
 				null);

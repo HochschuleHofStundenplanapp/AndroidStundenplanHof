@@ -25,6 +25,9 @@
 # do not warn on this stupid fucking library of open source developers
 #-dontwarn org.apache.http.**
 
+#dontwarn for OSMDROID Android O requestRouteToHost() unresolved reference error
+-dontwarn org.osmdroid.tileprovider.modules.NetworkAvailabliltyCheck
+
 #bottombar für Hike
 -dontwarn com.roughike.bottombar.**
 #file picker for import of files

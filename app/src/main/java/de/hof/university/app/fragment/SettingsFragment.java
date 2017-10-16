@@ -193,7 +193,7 @@ public class SettingsFragment extends PreferenceFragment {
 				final MainActivity activity = (MainActivity) getActivity();
 				if ( (Boolean) newValue ) {
 					new AlertDialog.Builder(getView().getContext())
-							.setTitle(getString(R.string.enableExperimental))
+							.setTitle(getString(R.string.experimental_features))
 							.setMessage(getString(R.string.enableExperimentalSure))
 							.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 								@Override
