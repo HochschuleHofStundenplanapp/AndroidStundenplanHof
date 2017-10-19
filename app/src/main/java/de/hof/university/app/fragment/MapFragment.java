@@ -23,6 +23,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -46,6 +47,7 @@ import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.util.CloudmadeUtil;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.CopyrightOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.TilesOverlay;
 
@@ -92,7 +94,9 @@ public class MapFragment extends Fragment {
         // Falls man möchte das die Karte immmer zur aktuellen Position springt
         //myOpenMapView.setFlingEnabled(true);
         // Falls man möchte das man näher ran gezoomt ist
-        //myOpenMapView.setTilesScaledToDpi(true);
+        myOpenMapView.setTilesScaledToDpi(true);
+        myOpenMapView.getOverlays().add(new CopyrightOverlay(getActivity().getApplicationContext()));
+
         myMapController = myOpenMapView.getController();
         myMapController.setZoom(40);
         marker = new Marker(myOpenMapView);
