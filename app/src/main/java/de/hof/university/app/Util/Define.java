@@ -136,11 +136,11 @@ public final class Define {
 	// how long to store content from
 	//not used: public static final int MAX_CACHE_TIME = 60 * 24 * 2;			// zwei Tage
 
-	//how long to not auto refresh
+	//how long to not auto refresh in minutes
 	public static final int SCHEDULE_CACHE_TIME = 60 * 24 * 7;		// eine Woche
 	public static final int MYSCHEDULE_CACHE_TIME = 60 * 24 * 7;	// eine Woche
-	public static final int CHANGES_CACHE_TIME = 60 * 8;			// acht Stunden
-	public static final int MEAL_CACHE_TIME = 60 * 24 * 7;			// eine Woche
+	public static final int CHANGES_CACHE_TIME = 60 * 2;			// zwei Stunden
+	public static final int MEAL_CACHE_TIME = 60;			        // eine Stunde
 	public static final int COURSES_CACHE_TIME = 60 * 24 * 7;		// eine Woche
 	public static final int ROOMSEARCH_CAHCE_TIME = 1;		        // eine Minute
 

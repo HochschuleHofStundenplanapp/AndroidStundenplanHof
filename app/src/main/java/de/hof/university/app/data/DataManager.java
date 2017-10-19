@@ -590,6 +590,12 @@ public class DataManager {
     // Caching
     // ---------------------------------------------------------------------------------------------
 
+    /**
+     * checks if the cache is still valid
+     * @param hofObject the object in witch the time of last savling is saved
+     * @param cacheTime time to cahce, in minutes
+     * @return returns if the cache is still valid
+     */
     private boolean cacheStillValid(HofObject hofObject, final int cacheTime) {
         final Date today = new Date();
         Date lastCached = new Date();
