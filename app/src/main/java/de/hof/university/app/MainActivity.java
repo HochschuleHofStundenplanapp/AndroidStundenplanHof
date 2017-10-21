@@ -43,32 +43,32 @@ import java.net.CookieManager;
 
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.data.DataManager;
-import de.hof.university.app.fragment.MapFragment;
-import de.hof.university.app.fragment.NavigationFragment;
 import de.hof.university.app.experimental.fragment.NotenbekanntgabeFragment;
 import de.hof.university.app.experimental.fragment.NotenblattFragment;
 import de.hof.university.app.experimental.fragment.RaumsucheFragment;
 import de.hof.university.app.fragment.AboutusFragment;
+import de.hof.university.app.fragment.MapFragment;
 import de.hof.university.app.fragment.MealFragment;
+import de.hof.university.app.fragment.NavigationFragment;
 import de.hof.university.app.fragment.PrimussTabFragment;
+import de.hof.university.app.fragment.SettingsFragment;
 import de.hof.university.app.fragment.schedule.ChangesFragment;
 import de.hof.university.app.fragment.schedule.MyScheduleFragment;
 import de.hof.university.app.fragment.schedule.ScheduleFragment;
-import de.hof.university.app.fragment.SettingsFragment;
 
 
 public class MainActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener {
 
-	public final String TAG = "MainActivity";
 	private static Context appContext;
-
+	public final String TAG = "MainActivity";
+	DrawerLayout mDrawerLayout;
+	ActionBarDrawerToggle mDrawerToggle;
 	private MealFragment mealFragment;
 	private ScheduleFragment scheduleFragment;
 	private ChangesFragment changesFragment;
 	private MyScheduleFragment myScheduleFragment;
 	private AboutusFragment aboutusFragment;
-
 	// Experimentelle Fragmente
 	private PrimussTabFragment primussTabFragment;
 	private NotenblattFragment notenblattFragment;
@@ -76,12 +76,7 @@ public class MainActivity extends AppCompatActivity
 	private RaumsucheFragment raumsucheFragment;
 	private MapFragment mapFragment;
 	private NavigationFragment navigationFragment;
-
 	private NavigationView navigationView;
-
-	DrawerLayout mDrawerLayout;
-	ActionBarDrawerToggle mDrawerToggle;
-
 	// für Navigation
 	private boolean backButtonPressedOnce = false;
 	private boolean firstStart = true;
@@ -142,8 +137,8 @@ public class MainActivity extends AppCompatActivity
 		displayExperimentalFeaturesMenuEntries(showExperimentalFeatures);
 
 
-        // wurde die App gerade neu gestartet?
-        if(savedInstanceState == null) {
+		// wurde die App gerade neu gestartet?
+		if (savedInstanceState == null) {
 			// ja die App wurde neu gestartet
 
 			// Ist ein "Mein Stundenplan" vorhanden?
@@ -164,19 +159,19 @@ public class MainActivity extends AppCompatActivity
 				// returnen damit keine Intents gehandelt werden und keine Dialoge kommen.
 				return;
 			}
-        }
+		}
 
-        // wurde die Activity durch ein Intent gestartet, vermutlich durch klicken auf eine Benachrichtigung?
-        handleIntent();
+		// wurde die Activity durch ein Intent gestartet, vermutlich durch klicken auf eine Benachrichtigung?
+		handleIntent();
 
-        // beim ersten Start einen Hinweis auf die experimentellen Funktionen geben
-        showExperimentalFeaturesInfoDialog(sharedPreferences);
+		// beim ersten Start einen Hinweis auf die experimentellen Funktionen geben
+		showExperimentalFeaturesInfoDialog(sharedPreferences);
 
-        // Fragen ob die Push-Benachrichtungen aktiviert werden sollen
-        showPushNotificationDialog(sharedPreferences);
+		// Fragen ob die Push-Benachrichtungen aktiviert werden sollen
+		showPushNotificationDialog(sharedPreferences);
 	}
 
-    @Override
+	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		setIntent(intent);
@@ -194,13 +189,13 @@ public class MainActivity extends AppCompatActivity
 			}
 			// Hier noch weitere Überprüfungen für andere Intents falls nötig
 		} else {
-            final String action = getIntent().getAction();
+			final String action = getIntent().getAction();
 
-            if (action.equals(Define.SHORTCUT_INTENT_CHANGES)) {
-                firstStart = true;
-                onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_aenderung));
-            }
-        }
+			if (action.equals(Define.SHORTCUT_INTENT_CHANGES)) {
+				firstStart = true;
+				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_aenderung));
+			}
+		}
 	}
 
 	@Override
@@ -214,7 +209,7 @@ public class MainActivity extends AppCompatActivity
 		// Pass the event to ActionBarDrawerToggle
 		// If it returns true, then it has handled
 		// the nav drawer indicator touch event
-		if ( mDrawerToggle.onOptionsItemSelected(item) ) {
+		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
 
@@ -224,21 +219,21 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	public final void displayExperimentalFeaturesMenuEntries(final boolean enabled) {
-		if ( enabled ) {
+		if (enabled) {
 			navigationView.getMenu().findItem(R.id.nav_experimental).setVisible(true);
-			navigationView.getMenu().findItem(R.id.nav_raumsuche).setVisible(true); 	// Raumsuche anzeigen
+			navigationView.getMenu().findItem(R.id.nav_raumsuche).setVisible(true);    // Raumsuche anzeigen
 //			navigationView.getMenu().findItem(R.id.nav_primuss).setVisible(true); 		// Primuss anzeigen
-			navigationView.getMenu().findItem(R.id.nav_map).setVisible(true); 			// Map anzeigen
-			navigationView.getMenu().findItem(R.id.nav_navigation).setVisible(true); 	// Navigation anzeigen
+			navigationView.getMenu().findItem(R.id.nav_map).setVisible(true);            // Map anzeigen
+			navigationView.getMenu().findItem(R.id.nav_navigation).setVisible(true);    // Navigation anzeigen
 
 			// TODO Weil ausblenden solange die neue Authentifizierungsmethode noch nicht funktioniert
-			if ( Define.SHOW_NOTEN == false ) {
+			if (Define.SHOW_NOTEN == false) {
 				navigationView.getMenu().findItem(R.id.nav_notenbekanntgabe).setVisible(false);
 				navigationView.getMenu().findItem(R.id.nav_notenblatt).setVisible(false);
 			} else {
 				// Nur bei höheren Versionen von Android funktioniert auch Primuss
 				// HTML Connectivity mit Verschlüsselung ist dann erst vorhanden
-				if ( Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP ) {
+				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
 					navigationView.getMenu().findItem(R.id.nav_notenbekanntgabe).setVisible(false);
 					navigationView.getMenu().findItem(R.id.nav_notenblatt).setVisible(false);
 				} else {
@@ -252,86 +247,86 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	private void showPushNotificationDialog(final SharedPreferences sharedPreferences) {
-        final boolean showPushNotificationsDialog = sharedPreferences.getBoolean("show_push_notifications_dialog", true);
-        final boolean getPushNotifications = sharedPreferences.getBoolean("changes_notifications", false);
+		final boolean showPushNotificationsDialog = sharedPreferences.getBoolean("show_push_notifications_dialog", true);
+		final boolean getPushNotifications = sharedPreferences.getBoolean("changes_notifications", false);
 
-        if (showPushNotificationsDialog) {
-            sharedPreferences.edit()
-                    .putBoolean("show_push_notifications_dialog", false)
-                    .apply();
+		if (showPushNotificationsDialog) {
+			sharedPreferences.edit()
+					.putBoolean("show_push_notifications_dialog", false)
+					.apply();
 
-            if (!getPushNotifications) {
-                new AlertDialog.Builder(this)
-                        .setTitle(R.string.notifications)
-                        .setMessage(R.string.notifications_question)
-                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                sharedPreferences.edit()
-                                        .putBoolean("changes_notifications", true)
-                                        .apply();
-                                DataManager.getInstance().registerFCMServerForce(getApplicationContext());
-                            }
-                        })
-                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //nothing to do here. Just close the dialog
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_info)
-                        .show();
-            }
-        }
+			if (!getPushNotifications) {
+				new AlertDialog.Builder(this)
+						.setTitle(R.string.notifications)
+						.setMessage(R.string.notifications_question)
+						.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								sharedPreferences.edit()
+										.putBoolean("changes_notifications", true)
+										.apply();
+								DataManager.getInstance().registerFCMServerForce(getApplicationContext());
+							}
+						})
+						.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								//nothing to do here. Just close the dialog
+							}
+						})
+						.setIcon(android.R.drawable.ic_dialog_info)
+						.show();
+			}
+		}
 	}
 
-    private void showExperimentalFeaturesInfoDialog(SharedPreferences sharedPreferences) {
-        final boolean showExperimentalFeaturesInfo = sharedPreferences.getBoolean("show_experimental_features_info", true);
-        final boolean showExperimentalFeatures = sharedPreferences.getBoolean("experimental_features", false);
+	private void showExperimentalFeaturesInfoDialog(SharedPreferences sharedPreferences) {
+		final boolean showExperimentalFeaturesInfo = sharedPreferences.getBoolean("show_experimental_features_info", true);
+		final boolean showExperimentalFeatures = sharedPreferences.getBoolean("experimental_features", false);
 
-        if (showExperimentalFeaturesInfo) {
-            sharedPreferences.edit()
-                    .putBoolean("show_experimental_features_info", false)
-                    .apply();
+		if (showExperimentalFeaturesInfo) {
+			sharedPreferences.edit()
+					.putBoolean("show_experimental_features_info", false)
+					.apply();
 
-            // Anzeigen falls nicht schon aktiviert
-            if (!showExperimentalFeatures) {
-                new AlertDialog.Builder(this)
-                        .setTitle(R.string.experimental_features)
-                        .setMessage(R.string.experimental_features_infotext)
-                        .setPositiveButton(R.string.einstellungen, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_einstellungen));
-                            }
-                        })
-                        .setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //nothing to do here. Just close the dialog
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_info)
-                        .show();
-            }
-        }
-    }
+			// Anzeigen falls nicht schon aktiviert
+			if (!showExperimentalFeatures) {
+				new AlertDialog.Builder(this)
+						.setTitle(R.string.experimental_features)
+						.setMessage(R.string.experimental_features_infotext)
+						.setPositiveButton(R.string.einstellungen, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_einstellungen));
+							}
+						})
+						.setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								//nothing to do here. Just close the dialog
+							}
+						})
+						.setIcon(android.R.drawable.ic_dialog_info)
+						.show();
+			}
+		}
+	}
 
 	@Override
 	// Idee: Wir wollen beim Rückwärtsgehen in den Activities nicht aus Versehen die App
 	// verlassen.
 	public final void onBackPressed() {
 		final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-		if ( drawer.isDrawerOpen(GravityCompat.START) ) {
+		if (drawer.isDrawerOpen(GravityCompat.START)) {
 			drawer.closeDrawer(GravityCompat.START);
 		} else {
 			// Bis zum letzten Fenster ganz normal zurückgehen,
 			// aber in der Haupt-Activity wollen wir ja eben noch mal nachfragen.
-			if ( getFragmentManager().getBackStackEntryCount() >= 1 ) {
+			if (getFragmentManager().getBackStackEntryCount() >= 1) {
 				getFragmentManager().popBackStack();
 			} else {
 				// Wurde der Zurück-Button zwei Mal gedrückt? Dann verlassen wir erst die App
-				if ( !backButtonPressedOnce ) {
+				if (!backButtonPressedOnce) {
 					backButtonPressedOnce = true;
 					Toast.makeText(getApplication(), getString(R.string.doubleBackOnClose), Toast.LENGTH_SHORT).show();
 					getWindow().getDecorView().getHandler().postDelayed(new Runnable() {
@@ -353,173 +348,199 @@ public class MainActivity extends AppCompatActivity
 	public final boolean onNavigationItemSelected(@NonNull final MenuItem item) {
 		final int id = item.getItemId();
 
-		if ( R.id.nav_speiseplan == id ) {
-			FragmentManager manager = getFragmentManager();
-			if ( !manager.popBackStackImmediate(MealFragment.class.getName(), 0) ) {
-				if ( mealFragment == null ) {
-					mealFragment = new MealFragment();
-				}
-				FragmentTransaction trans = manager.beginTransaction();
-				trans.addToBackStack(MealFragment.class.getName());
-				trans.replace(R.id.content_main, mealFragment, Define.mealsFragmentName);
-				trans.commit();
-			}
-		} else if ( R.id.nav_notenbekanntgabe == id ) {
-			FragmentManager manager = getFragmentManager();
-			if ( !manager.popBackStackImmediate(NotenbekanntgabeFragment.class.getName(), 0) ) {
+		FragmentManager manager = getFragmentManager();
 
-				FragmentTransaction trans = manager.beginTransaction();
-				trans.addToBackStack(NotenbekanntgabeFragment.class.getName());
-				if ( notenbekanntgabeFragment == null ) {
-					notenbekanntgabeFragment = new NotenbekanntgabeFragment();
-				}
-				trans.replace(R.id.content_main, notenbekanntgabeFragment);
-				trans.commit();
-			}
-		} else if ( R.id.nav_notenblatt == id ) {
-			FragmentManager manager = getFragmentManager();
-			if ( !manager.popBackStackImmediate(NotenblattFragment.class.getName(), 0) ) {
 
-				FragmentTransaction trans = manager.beginTransaction();
-				trans.addToBackStack(NotenblattFragment.class.getName());
-				if ( notenblattFragment == null ) {
-					notenblattFragment = new NotenblattFragment();
+		switch (id) {
+			case R.id.nav_speiseplan:
+				if (!manager.popBackStackImmediate(MealFragment.class.getName(), 0)) {
+					if (mealFragment == null) {
+						mealFragment = new MealFragment();
+					}
+					FragmentTransaction trans = manager.beginTransaction();
+					trans.addToBackStack(MealFragment.class.getName());
+					trans.replace(R.id.content_main, mealFragment, Define.mealsFragmentName);
+					trans.commit();
 				}
-				trans.replace(R.id.content_main, notenblattFragment);
-				trans.commit();
-			}
-		} else if ( R.id.nav_raumsuche == id ) {
-			FragmentManager manager = getFragmentManager();
-			if ( !manager.popBackStackImmediate(RaumsucheFragment.class.getName(), 0) ) {
-				if ( raumsucheFragment == null ) {
-					raumsucheFragment = new RaumsucheFragment();
+				break;
+
+			case R.id.nav_notenbekanntgabe:
+				if (!manager.popBackStackImmediate(NotenbekanntgabeFragment.class.getName(), 0)) {
+
+					FragmentTransaction trans = manager.beginTransaction();
+					trans.addToBackStack(NotenbekanntgabeFragment.class.getName());
+					if (notenbekanntgabeFragment == null) {
+						notenbekanntgabeFragment = new NotenbekanntgabeFragment();
+					}
+					trans.replace(R.id.content_main, notenbekanntgabeFragment);
+					trans.commit();
+
 				}
-				FragmentTransaction trans = manager.beginTransaction();
-				trans.addToBackStack(RaumsucheFragment.class.getName());
-				trans.replace(R.id.content_main, raumsucheFragment);
-				trans.commit();
-			}
-		} else if(R.id.nav_map == id){
-			FragmentManager manager = getFragmentManager();
-			if( !manager.popBackStackImmediate(MapFragment.class.getName(), 0)){
-				if(mapFragment == null){
-					mapFragment = new MapFragment();
+				break;
+
+			case R.id.nav_notenblatt:
+				if (!manager.popBackStackImmediate(NotenblattFragment.class.getName(), 0)) {
+
+					FragmentTransaction trans = manager.beginTransaction();
+					trans.addToBackStack(NotenblattFragment.class.getName());
+					if (notenblattFragment == null) {
+						notenblattFragment = new NotenblattFragment();
+					}
+					trans.replace(R.id.content_main, notenblattFragment);
+					trans.commit();
 				}
-				FragmentTransaction trans = manager.beginTransaction();
-				trans.addToBackStack(MapFragment.class.getName());
-				trans.replace(R.id.content_main, mapFragment);
-				trans.commit();
-			}
-		} else if(R.id.nav_navigation == id){
-			FragmentManager manager = getFragmentManager();
-			if( !manager.popBackStackImmediate(NavigationFragment.class.getName(), 0)){
-				if(navigationFragment == null){
-					navigationFragment = new NavigationFragment();
+				break;
+
+			case R.id.nav_raumsuche:
+				if (!manager.popBackStackImmediate(RaumsucheFragment.class.getName(), 0)) {
+					if (raumsucheFragment == null) {
+						raumsucheFragment = new RaumsucheFragment();
+					}
+					FragmentTransaction trans = manager.beginTransaction();
+					trans.addToBackStack(RaumsucheFragment.class.getName());
+					trans.replace(R.id.content_main, raumsucheFragment);
+					trans.commit();
 				}
-				FragmentTransaction trans = manager.beginTransaction();
-				trans.addToBackStack(NavigationFragment.class.getName());
-				trans.replace(R.id.content_main, navigationFragment);
-				trans.commit();
-			}
-		} else if ( R.id.nav_stundenplan == id ) {
-			FragmentManager manager = getFragmentManager();
-			if ( !manager.popBackStackImmediate(ScheduleFragment.class.getName(), 0) ) {
-				if ( scheduleFragment == null ) {
-					scheduleFragment = new ScheduleFragment();
+				break;
+
+			case R.id.nav_map:
+				if (!manager.popBackStackImmediate(MapFragment.class.getName(), 0)) {
+					if (mapFragment == null) {
+						mapFragment = new MapFragment();
+					}
+					FragmentTransaction trans = manager.beginTransaction();
+					trans.addToBackStack(MapFragment.class.getName());
+					trans.replace(R.id.content_main, mapFragment);
+					trans.commit();
 				}
-				// starting ist ein leerer Bildschirm
-				// deswegen wollen wir beim Zurückgehen diesen Bildschirm nicht auf den BackStack... legen
-				FragmentTransaction trans = manager.beginTransaction();
-				if ( firstStart ) {
-					firstStart = false;
-				} else {
-					trans.addToBackStack(ScheduleFragment.class.getName());
+				break;
+
+			case R.id.nav_navigation:
+				if (!manager.popBackStackImmediate(NavigationFragment.class.getName(), 0)) {
+					if (navigationFragment == null) {
+						navigationFragment = new NavigationFragment();
+					}
+					FragmentTransaction trans = manager.beginTransaction();
+					trans.addToBackStack(NavigationFragment.class.getName());
+					trans.replace(R.id.content_main, navigationFragment);
+					trans.commit();
 				}
-				trans.replace(R.id.content_main, scheduleFragment, Define.scheduleFragmentName);
-				trans.commit();
-			}
-		} else if ( R.id.nav_mySchedule == id ) {
-			FragmentManager manager = getFragmentManager();
-			if ( !manager.popBackStackImmediate(MyScheduleFragment.class.getName(), 0) ) {
-				if ( myScheduleFragment == null ) {
-					myScheduleFragment = new MyScheduleFragment();
+				break;
+
+			case R.id.nav_stundenplan:
+				if (!manager.popBackStackImmediate(ScheduleFragment.class.getName(), 0)) {
+					if (scheduleFragment == null) {
+						scheduleFragment = new ScheduleFragment();
+					}
+					// starting ist ein leerer Bildschirm
+					// deswegen wollen wir beim Zurückgehen diesen Bildschirm nicht auf den BackStack... legen
+					FragmentTransaction trans = manager.beginTransaction();
+					if (firstStart) {
+						firstStart = false;
+					} else {
+						trans.addToBackStack(ScheduleFragment.class.getName());
+					}
+					trans.replace(R.id.content_main, scheduleFragment, Define.scheduleFragmentName);
+					trans.commit();
 				}
-				// starting ist ein leerer Bildschirm
-				// deswegen wollen wir beim Zurückgehen diesen Bildschirm nicht auf den BackStack... legen
-				FragmentTransaction trans = manager.beginTransaction();
-				if ( firstStart ) {
-					firstStart = false;
-				} else {
-					trans.addToBackStack(MyScheduleFragment.class.getName());
+				break;
+
+			case R.id.nav_mySchedule:
+				if (!manager.popBackStackImmediate(MyScheduleFragment.class.getName(), 0)) {
+					if (myScheduleFragment == null) {
+						myScheduleFragment = new MyScheduleFragment();
+					}
+					// starting ist ein leerer Bildschirm
+					// deswegen wollen wir beim Zurückgehen diesen Bildschirm nicht auf den BackStack... legen
+					FragmentTransaction trans = manager.beginTransaction();
+					if (firstStart) {
+						firstStart = false;
+					} else {
+						trans.addToBackStack(MyScheduleFragment.class.getName());
+					}
+					trans.replace(R.id.content_main, myScheduleFragment, Define.myScheduleFragmentName);
+					trans.commit();
 				}
-				trans.replace(R.id.content_main, myScheduleFragment, Define.myScheduleFragmentName);
-				trans.commit();
-			}
-		} else if ( R.id.nav_aenderung == id ) {
-			FragmentManager manager = getFragmentManager();
-			if ( !manager.popBackStackImmediate(ChangesFragment.class.getName(), 0) ) {
-				if ( changesFragment == null ) {
-					changesFragment = new ChangesFragment();
+				break;
+
+			case R.id.nav_aenderung:
+				if (!manager.popBackStackImmediate(ChangesFragment.class.getName(), 0)) {
+					if (changesFragment == null) {
+						changesFragment = new ChangesFragment();
+					}
+					FragmentTransaction trans = manager.beginTransaction();
+					// starting ist ein leerer Bildschirm
+					// deswegen wollen wir beim Zurückgehen diesen Bildschirm nicht auf den BackStack... legen
+					if (firstStart) {
+						firstStart = false;
+					} else {
+						trans.addToBackStack(ChangesFragment.class.getName());
+					}
+					trans.replace(R.id.content_main, changesFragment, Define.changesFragmentName);
+					trans.commit();
 				}
-				FragmentTransaction trans = manager.beginTransaction();
-                // starting ist ein leerer Bildschirm
-                // deswegen wollen wir beim Zurückgehen diesen Bildschirm nicht auf den BackStack... legen
-                if ( firstStart ) {
-                    firstStart = false;
-                } else {
-                    trans.addToBackStack(ChangesFragment.class.getName());
-                }
-				trans.replace(R.id.content_main, changesFragment, Define.changesFragmentName);
-				trans.commit();
+
+				// Notifications entfernen wenn man zu den Änderungen geht
+				NotificationManager nm = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+				nm.cancelAll();
+				break;
+
+			case R.id.nav_einstellungen:
+				if (!manager.popBackStackImmediate(SettingsFragment.class.getName(), 0)) {
+					// starting ist ein leerer Bildschirm
+					// deswegen wollen wir beim Zurückgehen diesen Bildschirm nicht auf den BackStack... legen
+					FragmentTransaction trans = manager.beginTransaction();
+					// Wenn dies der erste Start der Application ist, so haben wir noch keinen
+					// Rück-Bildschirm, das heißt, wir können auch nichts in den BackStack ablegen
+					if (firstStart) {
+						firstStart = false;
+					} else {
+						// Trage dieses Fragment in die Rückwärts-Historie ein.
+						trans.addToBackStack(SettingsFragment.class.getName());
+					}
+					trans.replace(R.id.content_main, new SettingsFragment());
+					trans.commit();
+				}
+				break;
+
+			case R.id.nav_impressum: {
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Define.IMPRESSUMURL));
+				startActivity(browserIntent);
+
+				break;
 			}
 
-            // Notifications entfernen wenn man zu den Änderungen geht
-            NotificationManager nm = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-            nm.cancelAll();
-		} else if ( R.id.nav_einstellungen == id ) {
-			FragmentManager manager = getFragmentManager();
-			if ( !manager.popBackStackImmediate(SettingsFragment.class.getName(), 0) ) {
-				// starting ist ein leerer Bildschirm
-				// deswegen wollen wir beim Zurückgehen diesen Bildschirm nicht auf den BackStack... legen
-				FragmentTransaction trans = manager.beginTransaction();
-				if ( firstStart ) {
-					firstStart = false;
-				} else {
-					trans.addToBackStack(SettingsFragment.class.getName());
-				}
-				trans.replace(R.id.content_main, new SettingsFragment());
-				trans.commit();
-			}
-		} else if ( R.id.nav_impressum == id ) {
-			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse( Define.IMPRESSUMURL ));
-			startActivity(browserIntent);
-		} else if ( R.id.nav_aboutus == id ) {
-			FragmentManager manager = getFragmentManager();
-			if ( !manager.popBackStackImmediate(AboutusFragment.class.getName(), 0) ) {
+			case R.id.nav_aboutus:
+				if (!manager.popBackStackImmediate(AboutusFragment.class.getName(), 0)) {
 
-				FragmentTransaction trans = manager.beginTransaction();
-				trans.addToBackStack(AboutusFragment.class.getName());
-				if (aboutusFragment == null) {
-					aboutusFragment = new AboutusFragment();
+					FragmentTransaction trans = manager.beginTransaction();
+					trans.addToBackStack(AboutusFragment.class.getName());
+					if (aboutusFragment == null) {
+						aboutusFragment = new AboutusFragment();
+					}
+					trans.replace(R.id.content_main, aboutusFragment);
+					trans.commit();
 				}
-				trans.replace(R.id.content_main, aboutusFragment);
-				trans.commit();
-			}
-		} else if ( R.id.nav_datenschutz == id ) {
-			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse( Define.DATENSCHUTZURL));
-			startActivity(browserIntent);
-		} else if (R.id.nav_primuss == id){
-			FragmentManager manager = getFragmentManager();
-			if ( !manager.popBackStackImmediate(PrimussTabFragment.class.getName(), 0) ) {
+				break;
 
-				FragmentTransaction trans = manager.beginTransaction();
-				trans.addToBackStack(PrimussTabFragment.class.getName());
-				if ( primussTabFragment == null ) {
-					primussTabFragment = new PrimussTabFragment();
-				}
-				trans.replace(R.id.content_main, primussTabFragment);
-				trans.commit();
+			case R.id.nav_datenschutz: {
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Define.DATENSCHUTZURL));
+				startActivity(browserIntent);
+				break;
 			}
+
+			case R.id.nav_primuss:
+				if (!manager.popBackStackImmediate(PrimussTabFragment.class.getName(), 0)) {
+
+					FragmentTransaction trans = manager.beginTransaction();
+					trans.addToBackStack(PrimussTabFragment.class.getName());
+					if (primussTabFragment == null) {
+						primussTabFragment = new PrimussTabFragment();
+					}
+					trans.replace(R.id.content_main, primussTabFragment);
+					trans.commit();
+				}
+				break;
 		}
 
 		final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
