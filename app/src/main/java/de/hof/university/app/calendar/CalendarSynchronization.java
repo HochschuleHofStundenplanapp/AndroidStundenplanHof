@@ -19,6 +19,7 @@ package de.hof.university.app.calendar;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -241,6 +242,8 @@ public class CalendarSynchronization {
     }
 
     private class CreateAllEventsTask extends AsyncTask<ArrayList<LectureItem>, Void, Boolean> {
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
         protected Boolean doInBackground(final ArrayList<LectureItem>... lectureItems) {
             for (LectureItem lectureItem :
                     lectureItems[0]) {
@@ -251,7 +254,7 @@ public class CalendarSynchronization {
 
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
-            //Toast.makeText(context, "CreateAllEventsTask fertig. Result: " + result, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "CreateAllEventsTask fertig. Result: " + result, Toast.LENGTH_SHORT).show();
             if (result) {
                 calendarInterface.saveCalendarData();
             }
@@ -259,6 +262,8 @@ public class CalendarSynchronization {
     }
 
     private class DeleteAllEventsTask extends AsyncTask<String, Void, Boolean> {
+        Context context = MainActivity.getAppContext().getApplicationContext();
+
         protected Boolean doInBackground(final String... p_lectureItems) {
             if ((p_lectureItems == null) || (p_lectureItems.length == 0)) {
                 calendarInterface.deleteAllEvents();
@@ -270,7 +275,7 @@ public class CalendarSynchronization {
 
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
-            //Toast.makeText(context, "DeleteAllEventsTask fertig. Result: " + result, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "DeleteAllEventsTask fertig. Result: " + result, Toast.LENGTH_SHORT).show();
             if (result) {
                 calendarInterface.saveCalendarData();
             }

@@ -66,7 +66,7 @@ class CalendarInterface {
 	private static final int PROJECTION_CALENDAR_ID_INDEX = 0;
 	private static final int PROJECTION_DISPLAY_NAME_INDEX = 1;
 
-	private static final String[] EVENT_PROJECTION_EVENT_ID_TITLE_DESCRIPTION_ORGINAL_SYNC_ID = new String[]{
+	private static final String[] EVENT_PROJECTION_EVENT_ID_TITLE_DESCRIPTION_ORIGINAL_SYNC_ID = new String[]{
 			CalendarContract.Instances.EVENT_ID,         // 0
 			CalendarContract.Instances.TITLE,            // 1
 			CalendarContract.Instances.DESCRIPTION,      // 2
@@ -77,7 +77,7 @@ class CalendarInterface {
 	private static final int PROJECTION_EVENT_ID = 0;
 	private static final int PROJECTION_TITLE_INDEX = 1;
 	private static final int PROJECTION_DESCRIPTION_INDEX = 2;
-	private static final int PROJECTION_ORIGNAL_SYNC_ID_INDEX = 3;
+	private static final int PROJECTION_ORIGINAL_SYNC_ID_INDEX = 3;
 
 	private static final String[] EVENT_PROJECTION_DATES = new String[]{
 			CalendarContract.Instances.BEGIN,        // 0
@@ -297,6 +297,57 @@ class CalendarInterface {
 	}
 
 	/**
+	 * creates the event for a lecture, and checks if it is already existing
+	 * @param lectureID
+	 * @param title
+	 * @param description
+	 * @param startTime
+	 * @param endTime
+	 * @param location
+	 */
+	void createLectureEvent(final String lectureID, final String title, final String description, final Date startTime, final Date endTime, final String location) {
+
+		junit.framework.Assert.assertTrue( !"".equals(lectureID) );
+		junit.framework.Assert.assertTrue( !"".equals(title) );
+//TODO		junit.framework.Assert.assertTrue( !"".equals(description) );
+		junit.framework.Assert.assertTrue( startTime != null );
+		junit.framework.Assert.assertTrue( endTime != null );
+		junit.framework.Assert.assertTrue( !"".equals(location) );
+
+		// checks if exits, if true than update event otherwise create event
+		ArrayList<Long> eventIDs = getEventIDs(lectureID, title, startTime, endTime );
+		if (eventIDs != null) {
+			for (Long eventID : eventIDs) {
+				updateEvent(eventID, title, null, startTime, endTime, location);
+			}
+		} else {
+			Long newEventID = createEvent(title, description, startTime, endTime, location, lectureID);
+
+			// Wenn null dann keine Berechtigung oder keine CalendarID und returnen
+			if (newEventID == null) {
+				return;
+			}
+			eventIDs = new ArrayList<>();
+			eventIDs.add(newEventID);
+		}
+
+		// zu den IDs hinzufügen
+		for (Long eventID : eventIDs) {
+			addLecturesEventID(lectureID, eventID);
+		}
+	}
+
+	private void createChangeEvent(String lectureID, String title, String description, Date startTime, Date endTime, String location) {
+		Long eventID = createEvent(title, description, startTime, endTime, location, lectureID);
+
+		// Wenn null dann keine Berechtigung oder keine CalendarID und returnen
+		if (eventID == null) return;
+
+		// zu den IDs hinzufügen
+		addChangesEventID(lectureID, eventID);
+	}
+
+	/**
 	 * creates a event
 	 *
 	 * @param title       the title of the event
@@ -358,41 +409,6 @@ class CalendarInterface {
 		return eventID;
 	}
 
-	void createLectureEvent(final String lectureID, final String title, final String description, final Date startTime, final Date endTime, final String location) {
-
-		junit.framework.Assert.assertTrue( !"".equals(lectureID) );
-		junit.framework.Assert.assertTrue( !"".equals(title) );
-//TODO		junit.framework.Assert.assertTrue( !"".equals(description) );
-		junit.framework.Assert.assertTrue( startTime != null );
-		junit.framework.Assert.assertTrue( endTime != null );
-		junit.framework.Assert.assertTrue( !"".equals(location) );
-
-		// checks if exits, if true than update event otherwise create event
-		Integer oldEventID = doEventExits( startTime, endTime, lectureID );
-		if (oldEventID != null) {
-			updateEvent(oldEventID, title,description,startTime, endTime, location);
-		} else {
-			final Long newEventID = createEvent(title, description, startTime, endTime, location, lectureID);
-
-			// Wenn null dann keine Berechtigung oder keine CalendarID und returnen
-			if (newEventID == null)
-				return;
-
-			// zu den IDs hinzufügen
-			addLecturesEventID(lectureID, newEventID);
-		}
-	}
-
-	private void createChangeEvent(String lectureID, String title, String description, Date startTime, Date endTime, String location) {
-		Long eventID = createEvent(title, description, startTime, endTime, location, lectureID);
-
-		// Wenn null dann keine Berechtigung oder keine CalendarID und returnen
-		if (eventID == null) return;
-
-		// zu den IDs hinzufügen
-		addChangesEventID(lectureID, eventID);
-	}
-
 	private Long insertEvent(ContentValues values) {
 		Context context = MainActivity.getAppContext().getApplicationContext();
 
@@ -446,7 +462,7 @@ class CalendarInterface {
 		for (Long eventID :
 				eventIDs) {
 			// TODO vielleicht endDatum ändern
-			if (doEventExits(change.getBegin_old(), change.getBegin_old(), lectureID) != null) {
+			if (getEventIDs(lectureID, change.getLabel(), change.getBegin_old(), change.getBegin_old()) != null) {
 
 				if (change.getBegin_new() == null) {
 					// Entfällt
@@ -493,7 +509,7 @@ class CalendarInterface {
 		}
 
 		for (Long eventID : eventIDs) {
-			if (doEventExits(lecture.getStartDate(), lecture.getEndDate(), lectureID) != null) {
+			if (getEventIDs(lectureID, lecture.getLabel(), lecture.getStartDate(), lecture.getEndDate()) != null) {
 				// null because than the date won't get updated
 				Date newStartDate = null;
 				Date newEndDate = null;
@@ -575,14 +591,7 @@ class CalendarInterface {
 		cr.update(updateUri, values, null, null);
 	}
 
-	/**
-	 * checks if the event exists
-	 * @param startDate the startDate
-	 * @param endDate the endDate
-	 * @param lectureID the lectureID
-	 * @return the eventID if exits, else null if not
-	 */
-	private Integer doEventExits(Date startDate, Date endDate, String lectureID) {
+	/*private Boolean doEventExits(Long eventID, String title, Date startDate, Date endDate) {
 		Context context = MainActivity.getAppContext().getApplicationContext();
 
 		Cursor cur;
@@ -590,9 +599,9 @@ class CalendarInterface {
 
 		// The ID of the recurring event whose instances you are searching
 		// for in the Instances table
-		// OLD vielleicht ohne Event_ID als selection und dafür das ganze Array, und damit später vergleichen ob enthalten
-		//String selection = CalendarContract.Instances.EVENT_ID + " = ?";
-		//String[] selectionArgs = new String[]{eventID.toString()};
+		// TODO vielleicht ohne Event_ID als selection und dafür das ganze Array, und damit später vergleichen ob enthalten
+		String selection = CalendarContract.Instances.EVENT_ID + " = ?";
+		String[] selectionArgs = new String[]{eventID.toString()};
 
 		// Construct the query with the desired date range.
 		Uri.Builder builder = CalendarContract.Instances.CONTENT_URI.buildUpon();
@@ -602,9 +611,68 @@ class CalendarInterface {
 
 		// Submit the query
 		cur = cr.query(builder.build(),
-				EVENT_PROJECTION_EVENT_ID_TITLE_DESCRIPTION_ORGINAL_SYNC_ID,
-				null,
-				null,
+				EVENT_PROJECTION_EVENT_ID_TITLE_DESCRIPTION_ORIGINAL_SYNC_ID,
+				selection,
+				selectionArgs,
+				null);
+
+		if (cur == null) {
+			return false;
+		}
+
+		while (cur.moveToNext()) {
+			String eventTitle;
+
+			// Get the field values
+			eventTitle = cur.getString(PROJECTION_TITLE_INDEX);
+
+			// TODO vielleicht ohne title da dieser bearbeitet werden kann
+			// überprpfe ob lecture ID gesetzt und gleich ist
+			if (eventLectureID != null && eventLectureID.equals(lectureID)) {
+				resultEventIDs.add(eventID);
+			} else
+			if (eventTitle.equals(title)) {
+				cur.close();
+				return true;
+			}
+		}
+		cur.close();
+		return false;
+	}*/
+
+	/**
+	 * gets the eventIDs of a event
+	 * @param lectureID the ID of the lecture
+	 * @param lectureTitle the title of the lecture
+	 * @param startDate the startDate
+	 * @param endDate the endDate
+	 * @return the eventID if exits, else null if not
+	 */
+	private ArrayList<Long> getEventIDs(String lectureID, String lectureTitle, Date startDate, Date endDate) {
+		Context context = MainActivity.getAppContext().getApplicationContext();
+
+		ArrayList<Long> resultEventIDs = new ArrayList<>();
+
+		Cursor cur;
+		ContentResolver cr = context.getContentResolver();
+
+		// The ID of the recurring event whose instances you are searching
+		// for in the Instances table
+		// the calendarID that it only search in the right calendar
+		String selection = CalendarContract.Instances.CALENDAR_ID + " = ?";
+		String[] selectionArgs = new String[]{calendarData.getCalendarID().toString()};
+
+		// Construct the query with the desired date range.
+		Uri.Builder builder = CalendarContract.Instances.CONTENT_URI.buildUpon();
+		ContentUris.appendId(builder, startDate.getTime());
+		// 5 Millisekunden dazu damit falls es gleich dem Startdatum ist er das Event nimmt
+		ContentUris.appendId(builder, endDate.getTime() + 5);
+
+		// Submit the query
+		cur = cr.query(builder.build(),
+				EVENT_PROJECTION_EVENT_ID_TITLE_DESCRIPTION_ORIGINAL_SYNC_ID,
+				selection,
+				selectionArgs,
 				null);
 
 		if (cur == null) {
@@ -613,19 +681,31 @@ class CalendarInterface {
 
 		while (cur.moveToNext()) {
 			String eventLectureID;
-			Integer eventID;
+			Long eventID;
+			String eventTitle;
 
 			// Get the field values
-			eventLectureID = cur.getString(PROJECTION_ORIGNAL_SYNC_ID_INDEX);
-			eventID = cur.getInt(PROJECTION_EVENT_ID);
+			eventLectureID = cur.getString(PROJECTION_ORIGINAL_SYNC_ID_INDEX);
+			eventID = cur.getLong(PROJECTION_EVENT_ID);
+			eventTitle = cur.getString(PROJECTION_TITLE_INDEX);
 
+			// überprpfe ob lecture ID gesetzt und gleich ist
 			if (eventLectureID != null && eventLectureID.equals(lectureID)) {
-				cur.close();
-				return eventID;
+				resultEventIDs.add(eventID);
+			} else if (eventTitle != null && eventTitle.equals(lectureTitle)) {
+				// falls nicht überprüfe noch den title
+				resultEventIDs.add(eventID);
 			}
 		}
 		cur.close();
-		return null;
+
+		// if eventIDs were found return them
+		if (resultEventIDs.size() != 0) {
+			return resultEventIDs;
+		} else {
+			// otherwise return null
+			return null;
+		}
 	}
 
 	private void getEventDates(Long eventID, Date startDate, Date endDate) {
@@ -698,7 +778,7 @@ class CalendarInterface {
 
 		// Submit the query
 		cur = cr.query(builder.build(),
-				EVENT_PROJECTION_EVENT_ID_TITLE_DESCRIPTION_ORGINAL_SYNC_ID,
+				EVENT_PROJECTION_EVENT_ID_TITLE_DESCRIPTION_ORIGINAL_SYNC_ID,
 				selection,
 				selectionArgs,
 				null);
@@ -740,22 +820,25 @@ class CalendarInterface {
 	}
 
 	void deleteAllEvents(String lectureID) {
+		// get the eventIDs
 		ArrayList<Long> eventIDs = calendarData.getLecturesEventIDs().get(lectureID);
 
+		// prüfen ob welche vorhanden sind, falls nein, mache nichts
 		if (eventIDs == null) {
 			return;
 		}
 
-		for (Long eventID :
-				eventIDs) {
+		// delete the events
+		for (Long eventID : eventIDs) {
 			deleteEvent(eventID);
 		}
+
+		// remove the eventIDs
 		removeAllLectureEventIDs(lectureID);
 	}
 
 	void deleteAllEvents() {
-		for (String lectureID :
-				calendarData.getLecturesEventIDs().keySet()) {
+		for (String lectureID : calendarData.getLecturesEventIDs().keySet()) {
 			deleteAllEvents(lectureID);
 		}
 		removeAllLectruesEventIDs();
