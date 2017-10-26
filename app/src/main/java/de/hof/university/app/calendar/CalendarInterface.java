@@ -70,14 +70,14 @@ class CalendarInterface {
 			CalendarContract.Instances.EVENT_ID,         // 0
 			CalendarContract.Instances.TITLE,            // 1
 			CalendarContract.Instances.DESCRIPTION,      // 2
-			CalendarContract.Instances.ORIGINAL_SYNC_ID, // 3
+			//CalendarContract.Instances.ORIGINAL_SYNC_ID, // 3
 	};
 
 	// The indices for the projection array above.
 	private static final int PROJECTION_EVENT_ID = 0;
 	private static final int PROJECTION_TITLE_INDEX = 1;
 	private static final int PROJECTION_DESCRIPTION_INDEX = 2;
-	private static final int PROJECTION_ORIGINAL_SYNC_ID_INDEX = 3;
+	//private static final int PROJECTION_ORIGINAL_SYNC_ID_INDEX = 3;
 
 	private static final String[] EVENT_PROJECTION_DATES = new String[]{
 			CalendarContract.Instances.BEGIN,        // 0
@@ -135,7 +135,9 @@ class CalendarInterface {
 		}
 	}
 
-	HashMap<String, Long> getCalendars() {
+	// Alle Kalender des Geräts werden eingelesen
+	// Google-Kalender, Exchange-Kalender, lokaler Kalender
+	final HashMap<String, Long> getCalendars() {
 		Context context = MainActivity.getAppContext().getApplicationContext();
 
 		HashMap<String, Long> result = new HashMap<>();
@@ -152,7 +154,7 @@ class CalendarInterface {
 		// Anfrage für alle Kalender
 		cur = cr.query(uri,
 				CALENDAR_PROJECTION,
-				null,
+				null,           // alle Kalender
 				null,
 				null);
 
@@ -161,11 +163,15 @@ class CalendarInterface {
 		}
 
 		// Use the cursor to step through the returned records
+		int i = 0;
 		while (cur.moveToNext()) {
 			// found
 			// put the Name and the ID of the calendar in result
-			result.put(cur.getString(PROJECTION_DISPLAY_NAME_INDEX),
-					cur.getLong(PROJECTION_CALENDAR_ID_INDEX));
+			final String sDisplayName = cur.getString(PROJECTION_DISPLAY_NAME_INDEX);
+			final long iIndex = cur.getLong(PROJECTION_CALENDAR_ID_INDEX);
+			result.put( sDisplayName, iIndex );
+
+			Log.v( TAG, "Kalender: " + sDisplayName + " Idx:"+iIndex);
 		}
 
 		cur.close();
@@ -298,6 +304,8 @@ class CalendarInterface {
 
 	/**
 	 * creates the event for a lecture, and checks if it is already existing
+	 * Kalendereintrag = Event
+	 *
 	 * @param lectureID
 	 * @param title
 	 * @param description
@@ -314,7 +322,7 @@ class CalendarInterface {
 		junit.framework.Assert.assertTrue( endTime != null );
 		junit.framework.Assert.assertTrue( !"".equals(location) );
 
-		// checks if exits, if true than update event otherwise create event
+		// checks if exists, if true than update event otherwise create event
 		ArrayList<Long> eventIDs = getEventIDs(lectureID, title, startTime, endTime );
 		if (eventIDs != null) {
 			for (Long eventID : eventIDs) {
@@ -327,6 +335,7 @@ class CalendarInterface {
 			if (newEventID == null) {
 				return;
 			}
+			//Liste ist noch leer
 			eventIDs = new ArrayList<>();
 			eventIDs.add(newEventID);
 		}
@@ -381,7 +390,7 @@ class CalendarInterface {
 		// put the ID of the lecutre in the ORIGNAL_SYNC_ID
 		// ORIGNAL_SYNC_ID might be used for something else, but we use it for ower own ID
 		// currently ower ID is the splusname
-		values.put(Events.ORIGINAL_SYNC_ID, lectureID);
+		/* MS values.put(Events.ORIGINAL_SYNC_ID, lectureID); */
 
 		//IDs are from "public static final class Events"
 		//TODO
@@ -569,6 +578,8 @@ class CalendarInterface {
 		}
 	}
 
+	// Dss Event (Kalendereintrag) wird im Kalender aktualisiert
+	//
 	private void updateEvent(long eventID, String title, String description, Date startTime, Date endTime, String location) {
 		Context context = MainActivity.getAppContext().getApplicationContext();
 
@@ -641,14 +652,15 @@ class CalendarInterface {
 	}*/
 
 	/**
-	 * gets the eventIDs of a event
-	 * @param lectureID the ID of the lecture
+	 * gets the eventIDs of an event retrieved by lectureID (SPlusName) from the calendar
+	 *
+	 * @param lectureID the ID of the lecture (SPlusName)
 	 * @param lectureTitle the title of the lecture
 	 * @param startDate the startDate
 	 * @param endDate the endDate
 	 * @return the eventID if exits, else null if not
 	 */
-	private ArrayList<Long> getEventIDs(String lectureID, String lectureTitle, Date startDate, Date endDate) {
+	private ArrayList<Long> getEventIDs(final String lectureID, final String lectureTitle, Date startDate, Date endDate) {
 		Context context = MainActivity.getAppContext().getApplicationContext();
 
 		ArrayList<Long> resultEventIDs = new ArrayList<>();
@@ -680,21 +692,31 @@ class CalendarInterface {
 		}
 
 		while (cur.moveToNext()) {
-			String eventLectureID;
+			/* MS String eventLectureID; */
 			Long eventID;
 			String eventTitle;
 
 			// Get the field values
-			eventLectureID = cur.getString(PROJECTION_ORIGINAL_SYNC_ID_INDEX);
+			/* MS: eventLectureID = cur.getString(PROJECTION_ORIGINAL_SYNC_ID_INDEX); */
 			eventID = cur.getLong(PROJECTION_EVENT_ID);
 			eventTitle = cur.getString(PROJECTION_TITLE_INDEX);
 
 			// überprpfe ob lecture ID gesetzt und gleich ist
+			/* MS
 			if (eventLectureID != null && eventLectureID.equals(lectureID)) {
 				resultEventIDs.add(eventID);
-			} else if (eventTitle != null && eventTitle.equals(lectureTitle)) {
-				// falls nicht überprüfe noch den title
-				resultEventIDs.add(eventID);
+			} else
+			*/
+			if (eventTitle != null){
+
+				// Der Titel kann manipuliert worden sein, bspw. mit "[Entfällt]"
+				final String eventTitleLower = eventTitle.toLowerCase();
+				final String lectureTitleLower = lectureTitle.toLowerCase();
+
+				if ( eventTitleLower.contains(lectureTitleLower)) {
+					// falls nicht überprüfe noch den title
+					resultEventIDs.add(eventID);
+				}
 			}
 		}
 		cur.close();
@@ -819,7 +841,7 @@ class CalendarInterface {
 		cr.delete(deleteUri, null, null);
 	}
 
-	void deleteAllEvents(String lectureID) {
+	void deleteAllEvents(final String lectureID) {
 		// get the eventIDs
 		ArrayList<Long> eventIDs = calendarData.getLecturesEventIDs().get(lectureID);
 
