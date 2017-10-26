@@ -119,13 +119,13 @@ final public class MealParser implements Parser<Meal> {
                         case XmlPullParser.END_TAG:
                             if (xmlTag.equalsIgnoreCase("preis")) {
                                 if (tariff.equals(xmlTariff)) {
-                                    assert meal != null;
+                                    junit.framework.Assert.assertTrue( meal != null );
                                     meal.setPrice(xmlText);
                                     meal.setTariff(xmlGroup);
                                     result.add(meal);
                                 }
                             } else if (xmlTag.equalsIgnoreCase("gerichtAttribut")) {
-                                assert meal != null;
+                                junit.framework.Assert.assertTrue( meal != null );
                                 meal.addAttribute(xmlText);
                             }
                             break;

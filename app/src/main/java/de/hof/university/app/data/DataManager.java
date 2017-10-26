@@ -112,7 +112,7 @@ public class DataManager {
 
             final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             final String[] params = {xmlString, sharedPreferences.getString("speiseplan_tarif", "1")};
-            assert parser != null;
+            junit.framework.Assert.assertTrue(parser != null);
 
             ArrayList<Meal> tmpMeals = (ArrayList<Meal>) parser.parse(params);
 
@@ -153,7 +153,7 @@ public class DataManager {
             }
 
             final String[] params = {jsonString, language};
-            assert parser != null;
+            junit.framework.Assert.assertTrue( parser != null );
 
             ArrayList<LectureItem> tmpScheduleLectureItems = (ArrayList<LectureItem>) parser.parse(params);
 
@@ -303,7 +303,7 @@ public class DataManager {
             }
 
             final String[] params = {jsonString};
-            assert parser != null;
+            junit.framework.Assert.assertTrue( parser != null );
 
             ArrayList<Object> tmpChanges = (ArrayList<Object>) parser.parse(params);
 
@@ -354,7 +354,7 @@ public class DataManager {
             }
 
             final String[] params = {jsonString, language};
-            assert parser != null;
+            junit.framework.Assert.assertTrue( parser != null );
 
             ArrayList<StudyCourse> tmpCourses = (ArrayList<StudyCourse>) parser.parse(params);
 
