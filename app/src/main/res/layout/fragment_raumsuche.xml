@@ -15,10 +15,13 @@
   -->
 
 
-<TableLayout
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tableLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_marginBottom="20dp"
     android:layout_marginEnd="20dp"
     android:layout_marginStart="20dp"
@@ -26,126 +29,106 @@
     android:layout_weight="5"
     android:gravity="center">
 
-    <TableRow
-        android:layout_width="match_parent"
+
+    <TextView
+        android:id="@+id/textViewDate"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center">
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:width="100dp"
+        android:text="@string/date"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/edt_date"
+        />
 
-        <TextView
-            android:id="@+id/textViewDate"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="20dp"
-            android:layout_marginRight="20dp"
-            android:width="100dp"
-            android:gravity="center"
-            android:text="@string/date"
-            android:textAlignment="textEnd"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            />
+    <EditText
+        android:id="@+id/edt_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:focusable="true"
+        android:inputType="date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textViewDate"
+        app:layout_constraintTop_toTopOf="parent"/>
 
-        <EditText
-            android:id="@+id/edt_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:focusable="false"
-            android:inputType="date"/>
-    </TableRow>
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center">
+    <TextView
+        android:id="@+id/textViewFrom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/from"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        app:layout_constraintStart_toStartOf="@+id/textViewDate"
+        app:layout_constraintTop_toTopOf="@+id/edt_from"/>
 
-        <TextView
-            android:id="@+id/textViewFrom"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="20dp"
-            android:layout_marginRight="20dp"
-            android:gravity="center"
-            android:text="@string/from"
-            android:textAlignment="textEnd"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            />
+    <EditText
+        android:id="@+id/edt_from"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:focusable="true"
+        android:inputType="time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/edt_date"
+        app:layout_constraintTop_toBottomOf="@+id/edt_date"
+        />
 
-        <EditText
-            android:id="@+id/edt_from"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:focusable="false"
-            android:inputType="time"
-            />
-    </TableRow>
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center">
+    <TextView
+        android:id="@+id/textViewTo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/to"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        app:layout_constraintStart_toStartOf="@+id/textViewDate"
+        app:layout_constraintTop_toTopOf="@+id/edt_to"/>
 
-        <TextView
-            android:id="@+id/textViewTo"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="20dp"
-            android:layout_marginRight="20dp"
-            android:gravity="center"
-            android:text="@string/to"
-            android:textAlignment="textEnd"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            />
+    <EditText
+        android:id="@+id/edt_to"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:focusable="false"
+        android:inputType="time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/edt_date"
+        app:layout_constraintTop_toBottomOf="@+id/edt_from"
+        />
 
-        <EditText
-            android:id="@+id/edt_to"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:focusable="false"
-            android:inputType="time"
-            />
-    </TableRow>
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center">
+    <CheckBox
+        android:id="@+id/cb_edv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/edvraum"
+        app:layout_constraintStart_toStartOf="@+id/edt_date"
+        app:layout_constraintTop_toBottomOf="@+id/edt_to"/>
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
 
-        <CheckBox
-            android:id="@+id/cb_edv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left|center"
-            android:text="@string/edvraum"
-            />
+    <Button
+        android:id="@+id/btn_search"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/search"
+        app:layout_constraintStart_toStartOf="@+id/edt_date"
+        app:layout_constraintTop_toBottomOf="@+id/cb_edv"/>
 
-    </TableRow>
-
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="3"
-        android:gravity="top|center">
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <Button
-            android:id="@+id/btn_search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/search"
-            />
-    </TableRow>
-</TableLayout>
+</android.support.constraint.ConstraintLayout>
 
