@@ -30,7 +30,7 @@ import de.hof.university.app.model.schedule.LectureItem;
  */
 public class MyScheduleParser extends ScheduleParser {
 
-    public final static String TAG = "MyScheduleParser";
+    private final static String TAG = "MyScheduleParser";
 
     @Override
     public final ArrayList<LectureItem> parse(String[] params) {

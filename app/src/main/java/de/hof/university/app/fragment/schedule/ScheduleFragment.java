@@ -136,11 +136,12 @@ public class ScheduleFragment extends AbstractListFragment {
 
     @Override
     protected final String[] setTaskParameter(boolean forceRefresh) {
-        String[] params = new String[4];
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        final String course = sharedPref.getString("studiengang", "");
-        final String semester = sharedPref.getString("semester", "");
-        final String termTime = sharedPref.getString("term_time", "");
+
+        final String[] params = new String[4];
+        final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        final String course = sharedPref.getString(getString(R.string.PREFERENCE_KEY_STUDIENGANG), "");
+        final String semester = sharedPref.getString(getString(R.string.PREFERENCE_KEY_SEMESTER), "");
+        final String termTime = sharedPref.getString(getString(R.string.PREFERENCE_KEY_TERM_TIME), "");
 
         // Meldungen nur bringen wenn im Stundenplan Fragment
         if (this.getClass().getSimpleName().equals(ScheduleFragment.class.getSimpleName())) {
@@ -159,7 +160,6 @@ public class ScheduleFragment extends AbstractListFragment {
             }
         }
 
-        // TODO Warum geben wir eine Parametersammlung zurück? Wir können hier ein StudyCourse Objekt erstellen
         params[0] = course;
         params[1] = semester;
         params[2] = termTime;
@@ -167,7 +167,7 @@ public class ScheduleFragment extends AbstractListFragment {
         return params;
     }
 
-    protected final ArrayList<Object> updateListView(List<LectureItem> list) {
+    final ArrayList<Object> updateListView(List<LectureItem> list) {
         String weekday = "";
         final String curWeekDay = new SimpleDateFormat("EEEE", DataManager.getInstance().getLocale()).format(new Date());
 
@@ -175,11 +175,12 @@ public class ScheduleFragment extends AbstractListFragment {
         ArrayList<Object> tmpDataList = new ArrayList<>();
 
         // Temporäre Liste für die Vorlesungen die nur an einem Tag stattfinden (fix) damit sie am Ende angezeigt werden.
-        ArrayList<LectureItem> fixDataList = new ArrayList<>();
-        for ( LectureItem lectureItem : list ) {
+        final ArrayList<LectureItem> fixDataList = new ArrayList<>();
+        for ( final LectureItem lectureItem : list ) {
             // Wenn eine Vorlesung nur an einem Tag stattfindet sind Start- und Enddate gleich
             final String startDate = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(lectureItem.getStartDate());
             final String endDate   = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(lectureItem.getEndDate());
+
             if ( startDate.equals(endDate) ) {
                 fixDataList.add(lectureItem);
             } else {
@@ -193,13 +194,14 @@ public class ScheduleFragment extends AbstractListFragment {
                 tmpDataList.add(lectureItem);
             }
         }
+
         // sortieren
         Collections.sort(fixDataList);
         ArrayList<Object> sortDataList = new ArrayList<>();
         if (!fixDataList.isEmpty()) {
             String tmpStartDate = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(fixDataList.get(0).getStartDate());
             sortDataList.add(new BigListItem(tmpStartDate));
-            for (LectureItem lectureItem : fixDataList) {
+            for (final LectureItem lectureItem : fixDataList) {
                 final String startDate = DateFormat.getDateInstance(DateFormat.DEFAULT, DataManager.getInstance().getLocale()).format(lectureItem.getStartDate());
                 if (!tmpStartDate.equals(startDate)) {
                     sortDataList.add(new BigListItem(startDate));
@@ -222,7 +224,7 @@ public class ScheduleFragment extends AbstractListFragment {
      * gibt das Datum zurück wann der Stundenplan zuletzt geholt wurde
      * @return lastSaved
      */
-    public String getLastSaved() {
+    String getLastSaved() {
         return DataManager.getInstance().formatDate(DataManager.getInstance().getScheduleLastSaved());
     }
 
@@ -237,46 +239,58 @@ public class ScheduleFragment extends AbstractListFragment {
      * @param inflater
      */
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        MainActivity mainActivity = (MainActivity) getActivity();
+
+        final MainActivity mainActivity = (MainActivity) getActivity();
         final CharSequence title = mainActivity.getSupportActionBar().getTitle();
-        if (title.equals(getString(R.string.stundenplan))) {
+
+        junit.framework.Assert.assertTrue( title.length() > 0 );
+
+        if (getString(R.string.stundenplan).equals(title)) {
             inflater.inflate(R.menu.schedule_main, menu);
         }
     }
 
     /**
      * @param item
-     * @return
+     * @return boolean Return false to allow normal menu processing to
+     *         proceed, true to consume it here.
      */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected( final MenuItem item) {
         // handle item selection
         if (item.getItemId() == R.id.action_add_all) {
-            Set<String> schedulesIds = new HashSet<>();
-            for (Object object : dataList) {
+
+            final Set<String> schedulesIds = new HashSet<>();
+            for (final Object object : dataList) {
                 if (object instanceof LectureItem ) {
-                    LectureItem lectureItem = (LectureItem) object;
-                    schedulesIds.add(String.valueOf(lectureItem.getId()));
+                    final LectureItem lectureItem = (LectureItem) object;
+                    final String scheduleID = String.valueOf(lectureItem.getId());
+                    // Haben wir eine ID erhalten oder doch nur eine "null"
+                    junit.framework.Assert.assertTrue( ! "null".equals(scheduleID) );
+                    schedulesIds.add( scheduleID );
                 }
             }
             DataManager.getInstance().addAllToMySchedule(getActivity().getApplicationContext(), schedulesIds);
+
             Toast.makeText(getView().getContext(), getString(R.string.changesMyScheduleText), Toast.LENGTH_LONG).show();
-            return super.onOptionsItemSelected(item);
-        } else {
-            return super.onOptionsItemSelected(item);
         }
+
+        return super.onOptionsItemSelected(item);
     }
 
 
     @Override
-    protected ArrayList<Object> background(String[] params) {
+    protected ArrayList<Object> background(final String[] params) {
         final String course = params[0];
         final String semester = params[1];
         final String termTime = params[2];
+        final boolean bForceRefresh = Boolean.valueOf(params[3]);
 
-        List<LectureItem> scheduleList = DataManager.getInstance().getSchedule(getActivity().getApplicationContext(), getString(R.string.language), course, semester, termTime, Boolean.valueOf(params[3]));
+        final List<LectureItem> scheduleList = DataManager.getInstance().getSchedule(
+        		getActivity().getApplicationContext(),
+		        getString(R.string.language), course, semester, termTime, bForceRefresh );
 
         if (scheduleList != null) {
             return this.updateListView(scheduleList);

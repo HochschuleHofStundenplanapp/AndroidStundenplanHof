@@ -16,8 +16,6 @@
 
 package de.hof.university.app.data.parser;
 
-import de.hof.university.app.BuildConfig;
-
 /**
  * Created by larsg on 17.06.2016.
  */

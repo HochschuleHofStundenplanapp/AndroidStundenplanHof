@@ -32,7 +32,8 @@ public class HofObject implements Serializable {
 
 	private Date lastSaved = null;
 
-	public HofObject() {
+	protected HofObject() {
+		super();
 	}
 
 	public Date getLastSaved() {

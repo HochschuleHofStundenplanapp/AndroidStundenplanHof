@@ -16,7 +16,7 @@
 
 package de.hof.university.app.experimental;
 
-/**
+/*
  * Created by Lukas on 05.07.2016.
  */
 
@@ -60,6 +60,7 @@ final public class LoginController {
 	}
 
 	private LoginController(final Context context) {
+		super();
 
 		password = "";
 		sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -81,7 +82,7 @@ final public class LoginController {
 		checkBoxShowPasswordLogin.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if ( isChecked ) {
+				if (isChecked) {
 					editTextPasswordLogin.setTransformationMethod(null);
 				} else {
 					editTextPasswordLogin.setTransformationMethod(new PasswordTransformationMethod());
@@ -93,32 +94,32 @@ final public class LoginController {
 
 		AlertDialog.Builder builderLogin = new AlertDialog.Builder(context);
 		loginAlertDialog = builderLogin.setTitle(context.getString(R.string.LOGIN_DIALOG)).setView(loginDialogView)
-				                   .setPositiveButton(context.getString(android.R.string.ok), new DialogInterface.OnClickListener() {
-					                   @Override
-					                   public void onClick(DialogInterface dialog, int which) {
-						                   sharedPref.edit().putBoolean("save_password", checkBoxSavePasswordLogin.isChecked()).apply();
-						                   sharedPref.edit().putString("username", editTextUsernameLogin.getText().toString()).apply();
+				.setPositiveButton(context.getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						sharedPref.edit().putBoolean("save_password", checkBoxSavePasswordLogin.isChecked()).apply();
+						sharedPref.edit().putString("username", editTextUsernameLogin.getText().toString()).apply();
 
-						                   if ( checkBoxSavePasswordLogin.isChecked() ) {
-							                   sharedPref.edit().putString("password", editTextPasswordLogin.getText().toString()).apply();
-						                   } else {
-							                   password = editTextPasswordLogin.getText().toString();
-						                   }
-						                   editTextPasswordLogin.setText("");
-						                   checkBoxShowPasswordLogin.setChecked(false);
-						                   handler.sendMessage(handler.obtainMessage());
-					                   }
-				                   })
-				                   .setNegativeButton(context.getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
-					                   @Override
-					                   public void onClick(DialogInterface dialog, int which) {
-						                   editTextPasswordLogin.setText("");
-						                   checkBoxShowPasswordLogin.setChecked(false);
-						                   handler.sendMessage(handler.obtainMessage());
-						                   dialog.dismiss();
-					                   }
-				                   }).setCancelable(false)
-				                   .create();
+						if (checkBoxSavePasswordLogin.isChecked()) {
+							sharedPref.edit().putString("password", editTextPasswordLogin.getText().toString()).apply();
+						} else {
+							password = editTextPasswordLogin.getText().toString();
+						}
+						editTextPasswordLogin.setText("");
+						checkBoxShowPasswordLogin.setChecked(false);
+						handler.sendMessage(handler.obtainMessage());
+					}
+				})
+				.setNegativeButton(context.getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						editTextPasswordLogin.setText("");
+						checkBoxShowPasswordLogin.setChecked(false);
+						handler.sendMessage(handler.obtainMessage());
+						dialog.dismiss();
+					}
+				}).setCancelable(false)
+				.create();
 
 		// PASSWORD DIALOG
 		View passwordDialogView = View.inflate(context, R.layout.dialog_password, null);
@@ -127,7 +128,7 @@ final public class LoginController {
 		checkBoxShowPasswordPassword.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if ( isChecked ) {
+				if (isChecked) {
 					editTextPasswordPassword.setTransformationMethod(null);
 				} else {
 					editTextPasswordPassword.setTransformationMethod(new PasswordTransformationMethod());
@@ -137,24 +138,24 @@ final public class LoginController {
 
 		AlertDialog.Builder builderPassword = new AlertDialog.Builder(context);
 		passwordAlertDialog = builderPassword.setTitle(context.getString(R.string.LOGIN_DIALOG)).setView(passwordDialogView)
-				                      .setPositiveButton(context.getString(android.R.string.ok), new DialogInterface.OnClickListener() {
-					                      @Override
-					                      public void onClick(DialogInterface dialog, int which) {
-						                      password = editTextPasswordPassword.getText().toString();
-						                      editTextPasswordPassword.setText("");
-						                      checkBoxShowPasswordPassword.setChecked(false);
-						                      handler.sendMessage(handler.obtainMessage());
-					                      }
-				                      })
-				                      .setNegativeButton(context.getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
-					                      @Override
-					                      public void onClick(DialogInterface dialog, int which) {
-						                      editTextPasswordPassword.setText("");
-						                      checkBoxShowPasswordPassword.setChecked(false);
-						                      handler.sendMessage(handler.obtainMessage());
-						                      dialog.dismiss();
-					                      }
-				                      }).setCancelable(false).create();
+				.setPositiveButton(context.getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						password = editTextPasswordPassword.getText().toString();
+						editTextPasswordPassword.setText("");
+						checkBoxShowPasswordPassword.setChecked(false);
+						handler.sendMessage(handler.obtainMessage());
+					}
+				})
+				.setNegativeButton(context.getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						editTextPasswordPassword.setText("");
+						checkBoxShowPasswordPassword.setChecked(false);
+						handler.sendMessage(handler.obtainMessage());
+						dialog.dismiss();
+					}
+				}).setCancelable(false).create();
 	}
 
 	public final boolean showDialog() {

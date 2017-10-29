@@ -16,10 +16,6 @@
 
 package de.hof.university.app.experimental.fragment;
 
-/**
- * Created by Lukas on 05.07.2016.
- */
-
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -65,7 +61,7 @@ import static android.widget.Toast.makeText;
 
 public class NotenbekanntgabeFragment extends Fragment {
 
-    public final static String TAG = "NotenbekanntgabeFragment";
+    private final static String TAG = "NotenbekanntgabeFragment";
 
     private NotenAdapter adapter;
     private ArrayList<Noten> items;
@@ -76,6 +72,7 @@ public class NotenbekanntgabeFragment extends Fragment {
     private String session;
 
     public NotenbekanntgabeFragment() {
+	    super();
     }
 
     @Override
@@ -195,7 +192,8 @@ public class NotenbekanntgabeFragment extends Fragment {
         final Context context;
 
         GetNotenTask(Context context) {
-            this.context = context;
+	        super();
+	        this.context = context;
         }
 
         @Override

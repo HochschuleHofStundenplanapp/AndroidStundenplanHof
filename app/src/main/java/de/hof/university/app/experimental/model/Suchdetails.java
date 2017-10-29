@@ -25,11 +25,12 @@ public class Suchdetails implements Level, Serializable {
 
 	public final static String TAG = "Suchdetails";
 
-	final String datum;
-	final String timeFrom;
-	final String timeTo;
+	private final String datum;
+	private final String timeFrom;
+	private final String timeTo;
 
 	public Suchdetails(final String datum, final String timeFrom, final String timeTo) {
+		super();
 		this.datum = datum;
 		this.timeFrom = timeFrom;
 		this.timeTo = timeTo;

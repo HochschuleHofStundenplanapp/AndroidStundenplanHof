@@ -52,15 +52,17 @@ public class CalendarSynchronization {
     }
 
     private CalendarSynchronization() {
-        calendarInterface = CalendarInterface.getInstance();
+	    super();
+	    calendarInterface = CalendarInterface.getInstance();
     }
 
     public void createAllEvents() {
-        Context context = MainActivity.getAppContext().getApplicationContext();
+        final Context context = MainActivity.getAppContext().getApplicationContext();
 
         final ArrayList<LectureItem> lectureItems = DataManager.getInstance().getSelectedLectures(context);
 
-        if (lectureItems == null) return;
+        if (lectureItems == null)
+            return;
 
         CreateAllEventsTask task = new CreateAllEventsTask();
         final AsyncTask<ArrayList<LectureItem>, Void, Boolean> execute = task.execute(lectureItems);
@@ -71,20 +73,21 @@ public class CalendarSynchronization {
             return;
 
         final CreateAllEventsTask task = new CreateAllEventsTask();
-        task.execute(lectureItems);
+	    final AsyncTask<ArrayList<LectureItem>, Void, Boolean> execute = task.execute(lectureItems);
     }
 
     public void createAllEvents(final LectureItem lecture) {
         final CreateAllEventsTask task = new CreateAllEventsTask();
         final ArrayList<LectureItem> list = new ArrayList<>();
         list.add(lecture);
-        task.execute(list);
+	    final AsyncTask<ArrayList<LectureItem>, Void, Boolean> execute = task.execute(list);
     }
 
     private void createEventsForLecture(LectureItem lectureItem) {
-        Date tmpStartDate = lectureItem.getStartDate();
 
-        Calendar endDateCalendar = GregorianCalendar.getInstance();
+    	Date tmpStartDate = lectureItem.getStartDate();
+
+        final Calendar endDateCalendar = GregorianCalendar.getInstance();
         endDateCalendar.setTime(lectureItem.getEndDate());
 
         do {
@@ -161,7 +164,7 @@ public class CalendarSynchronization {
 
     /**
      * updates the calendar with only the changed LectureItems
-     * @param lectureItems
+     * @param lectureItems Liste der Vorlesungen #LectureItem
      */
     // TODO maybe synchronized?
     public void updateCalendar(final ArrayList<LectureItem> lectureItems) {
@@ -242,10 +245,10 @@ public class CalendarSynchronization {
     }
 
     private class CreateAllEventsTask extends AsyncTask<ArrayList<LectureItem>, Void, Boolean> {
-        Context context = MainActivity.getAppContext().getApplicationContext();
+        final Context context = MainActivity.getAppContext().getApplicationContext();
 
-        protected Boolean doInBackground(final ArrayList<LectureItem>... lectureItems) {
-            for (LectureItem lectureItem :
+        protected final Boolean doInBackground(final ArrayList<LectureItem>... lectureItems) {
+            for (final LectureItem lectureItem :
                     lectureItems[0]) {
                 createEventsForLecture(lectureItem);
             }
@@ -262,7 +265,7 @@ public class CalendarSynchronization {
     }
 
     private class DeleteAllEventsTask extends AsyncTask<String, Void, Boolean> {
-        Context context = MainActivity.getAppContext().getApplicationContext();
+        final Context context = MainActivity.getAppContext().getApplicationContext();
 
         protected Boolean doInBackground(final String... p_lectureItems) {
             if ((p_lectureItems == null) || (p_lectureItems.length == 0)) {

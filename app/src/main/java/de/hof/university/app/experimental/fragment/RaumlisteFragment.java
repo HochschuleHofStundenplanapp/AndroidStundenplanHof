@@ -16,10 +16,6 @@
 
 package de.hof.university.app.experimental.fragment;
 
-/**
- * Created by Lukas on 05.07.2016.
- */
-
 import android.app.Fragment;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -67,7 +63,7 @@ import de.hof.university.app.experimental.model.Suchdetails;
  */
 public class RaumlisteFragment extends Fragment {
 
-    public final static String TAG = "RaumlisteFragment";
+    private final static String TAG = "RaumlisteFragment";
 
     private static final String ARG_PARAM1 = "user";
     private static final String ARG_PARAM2 = "password";
@@ -97,7 +93,8 @@ public class RaumlisteFragment extends Fragment {
 
 
     public RaumlisteFragment() {
-        // Required empty public constructor
+	    super();
+	    // Required empty public constructor
     }
 
 

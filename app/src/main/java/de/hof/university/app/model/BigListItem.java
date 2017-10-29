@@ -26,10 +26,11 @@ import de.hof.university.app.Util.Define;
 public class BigListItem implements Serializable{
     private static final long serialVersionUID = Define.serialVersionUIDv1;
 
-    final String title;
+    private final String title;
 
     public BigListItem(final String title) {
-        this.title = title;
+	    super();
+	    this.title = title;
     }
 
     public final String getTitle() {

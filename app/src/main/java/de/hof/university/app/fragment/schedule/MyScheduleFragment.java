@@ -28,7 +28,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.hof.university.app.BuildConfig;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.data.DataManager;
@@ -104,28 +103,31 @@ public class MyScheduleFragment extends ScheduleFragment {
      * @param inflater
      */
     @Override
-    public final void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public final void onCreateOptionsMenu(final Menu menu, final MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.myschedule_main, menu);
     }
 
     /**
      * @param item
-     * @return
+     * @return boolean Return false to allow normal menu processing to
+     *         proceed, true to consume it here.
      */
     @Override
-    public final boolean onOptionsItemSelected(MenuItem item) {
+    public final boolean onOptionsItemSelected( final MenuItem item) {
+
         //AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
         // handle item selection
+        //we consume this event here and proceed normal
         if (item.getItemId() == R.id.action_delete_all) {
+
             DataManager.getInstance().deleteAllFromMySchedule(getActivity().getApplicationContext());
             dataList.clear();
             adapter.notifyDataSetChanged();
             Toast.makeText(getView().getContext(), getString(R.string.changesScheduleText), Toast.LENGTH_LONG).show();
-            return super.onOptionsItemSelected(item);
-        } else {
-            return super.onOptionsItemSelected(item);
         }
+
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -139,7 +141,7 @@ public class MyScheduleFragment extends ScheduleFragment {
 
 
     @Override
-    protected final ArrayList<Object> background(String[] params) {
+    protected ArrayList<Object> background(String[] params) {
         if (DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) > 0) {
             /*
             final String course = params[0];

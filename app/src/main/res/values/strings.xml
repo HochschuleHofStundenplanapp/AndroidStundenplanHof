@@ -89,7 +89,7 @@
                                - Angelina Scheler</string>
     <string name="noCourseSelected">No course of studies selected!</string>
     <string name="to">To:</string>
-    <string name="doubleBackOnClose">To close press back again</string>
+    <string name="doubleBackOnClose">To close press back twice</string>
     <string name="noChanges">There are no changes</string>
     <string name="refreshFailed">Refresh failed</string>
     <string name="action_add_all">Add all</string>
@@ -109,24 +109,18 @@
     <string name="where_am_i">Where am I?</string>
     <string name="address">Address:</string>
     <string name="no_address">Could not find address</string>
-
     <string name="feedbackBtn">Give feedback</string>
     <string name="feedbackSubject">Feedback</string>
-
     <string name="noEmailApp">No e-mail app installed</string>
     <string name="noBrowserApp">No browser App installed</string>
     <string name="rateThisAppBtn">Rate this App</string>
     <string name="experimental_features_infotext">Experimental features can be enabled in the settings.</string>
     <string name="notifications_infotext">You receive now notifications for changes according.</string>
-
     <string name="disabled_shortcut">The shortcut is disabled.</string>
     <string name="yes">yes</string>
     <string name="no">no</string>
-    <string name="notifications_question">Do you want to get notified for changes?</string>
+    <string name="notifications_question">Do you want to get notifications for changes?</string>
     <string name="lastUpdated">Last updated</string>
-    <string name="raum" translatable="false">Room</string>
-    <string name="zeit" translatable="false">Time</string>
-    <string name="fach_dozent" translatable="false">Fach Dozent</string>
     <string name="calendar_synchronization">Calendar synchronization</string>
     <string name="changeCancelled">[Cancelled]</string>
     <string name="changeMoved">[Moved]</string>
@@ -137,7 +131,19 @@
     <string name="calendar_synchronitation_ownLocalCalendar">Own local Calendar</string>
     <string name="calendar_synchronization_infoText">You have switched on the calendar synchronization.\n\nIn the next dialog, you can select the calendar to synchronize the lectures and changes, or use your own local calendar.\n\n(Recommended: Create a new calendar on the <a href="https://calendar.google.com/calendar/render?hl=de#main_7">Google calendar website</a> and choose this one in the next dialog.)\n\nPlease note the following:\n- Appointments remain when deleting the app (if you want to delete them, switch off the synchronization before deleting)\n- Appointments with notes will not be deleted\n- Holidays have not yet been considered</string>
     <string name="calendar_synchronization_chooseCalendar">Please choose a calendar</string>
-    <string name="PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION" translatable="false">calendar_synchronization</string>
     <string name="calendar_synchronization_permissionNotGranted">Permission for the calendar not granted</string>
     <string name="navigation">Navigation</string>
+
+    <string name="raum" translatable="false">Room</string>
+    <string name="zeit" translatable="false">Time</string>
+    <string name="fach_dozent" translatable="false">Fach Dozent</string>
+    <string name="PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION" translatable="false">calendar_synchronization</string>
+    <string translatable="false" name="PREFERENCE_KEY_CATEGORY_NOTIFICATION">category_notification</string>
+    <string translatable="false" name="PREFERENCE_KEY_STUDIENGANG">studiengang</string>
+    <string translatable="false" name="PREFERENCE_KEY_CHANGES_NOTIFICATION">changes_notifications</string>
+    <string translatable="false" name="PREFERENCE_KEY_SEMESTER">semester</string>
+    <string translatable="false" name="PREFERENCE_KEY_LOGIN">login</string>
+    <string translatable="false" name="PREFERENCE_KEY_EXPERIMENTAL_FEATURES">experimental_features</string>
+    <string translatable="false" name="PREFERENCE_KEY_TERM_TIME">term_time</string>
+    <string translatable="false" name="PREFERENCE_KEY_EXPERIMENTAL_FEATURES_ENABLED">experimental_features</string>
 </resources>

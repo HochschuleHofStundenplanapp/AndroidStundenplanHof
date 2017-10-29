@@ -25,7 +25,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import de.hof.university.app.BuildConfig;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.Util.Log;
 import de.hof.university.app.model.schedule.LectureChange;
@@ -38,11 +37,12 @@ public final class ChangesParser implements Parser<LectureChange> {
     private final static String TAG = "ChangesParser";
 
     @Override
-    public final ArrayList<LectureChange> parse(String[] params) {
+    public final ArrayList<LectureChange> parse(final String[] params) {
 
         ArrayList<LectureChange> result = new ArrayList<>();
+
         if (1 == params.length) {
-            String jsonString = params[0];
+            final String jsonString = params[0];
             //Escape, if String is empty
             if (jsonString.isEmpty()) {
                 return result;
@@ -50,7 +50,7 @@ public final class ChangesParser implements Parser<LectureChange> {
 
             JSONArray jsonArray = null;
             try {
-                JSONObject jsonObject = new JSONObject(jsonString);
+                final JSONObject jsonObject = new JSONObject(jsonString);
                 jsonArray = jsonObject.optJSONArray(Define.PARSER_CHANGES);
             } catch (final JSONException e) {
                 Log.e(TAG, "JSONException", e);
@@ -78,7 +78,7 @@ public final class ChangesParser implements Parser<LectureChange> {
     }
 
     // Wozu brauchen wir diese Methode
-    protected static LectureChange convertJsonObject(JSONObject jsonObject) {
+    private static LectureChange convertJsonObject(JSONObject jsonObject) {
 
         // Die Antwort vom Server enthält die folgenden Objekte und werden weparat in Teil.Strings zerleigt
         // optSting: wirft keine Exception, wenn das JSON Element NICHT vorhanden ist.
@@ -101,7 +101,7 @@ public final class ChangesParser implements Parser<LectureChange> {
         }
         final String room_old = jsonObject.optJSONObject(Define.PARSER_ORIGNAL).optString(Define.PARSER_ROOM);
         final String lecturer = jsonObject.optString(Define.PARSER_DOCENT);
-
+		//TODO Beispielzeile ergänzen
         int orginalHours      = Integer.parseInt(orginalTimeString.substring(0, 2));
         int orginalMinutes    = Integer.parseInt(orginalTimeString.substring(3, 5));
         int orginalDay        = Integer.parseInt(orginalDateString.substring(0, 2));
@@ -115,7 +115,7 @@ public final class ChangesParser implements Parser<LectureChange> {
         Date orginalDate = calendar.getTime();
 
         Date alternativeDate = null;
-
+		//TODO Beispielzeile ergänzen
         if (!alternativeTimeString.equals("") && !alternativeDateString.equals("")) {
             int alternativeHours        = Integer.parseInt(alternativeTimeString.substring(0, 2));
             int alternativeMinutes      = Integer.parseInt(alternativeTimeString.substring(3, 5));

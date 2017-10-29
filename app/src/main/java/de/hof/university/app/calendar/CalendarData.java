@@ -36,9 +36,10 @@ public class CalendarData extends HofObject {
     private HashMap<String, ArrayList<Long>> changesEventIDs;
 
     public CalendarData() {
-        calendarID = null;
-        lecturesEventIDs = new HashMap<>();
-        changesEventIDs = new HashMap<>();
+	    super();
+	    calendarID = null;
+	    lecturesEventIDs = new HashMap<>();
+	    changesEventIDs = new HashMap<>();
     }
 
     public Long getCalendarID() {
@@ -57,6 +58,7 @@ public class CalendarData extends HofObject {
         return changesEventIDs;
     }
 
+    /* TODO never used???
     public void setLecturesEventIDs(HashMap<String, ArrayList<Long>> lecturesEventIDs) {
         this.lecturesEventIDs = lecturesEventIDs;
     }
@@ -64,4 +66,5 @@ public class CalendarData extends HofObject {
     public void setChangesEventIDs(HashMap<String, ArrayList<Long>> changesEventIDs) {
         this.changesEventIDs = changesEventIDs;
     }
+    */
 }

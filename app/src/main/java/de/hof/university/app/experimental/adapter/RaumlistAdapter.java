@@ -16,10 +16,6 @@
 
 package de.hof.university.app.experimental.adapter;
 
-/**
- * Created by Lukas on 05.07.2016.
- */
-
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;

@@ -73,11 +73,12 @@ public class RaumsucheFragment extends Fragment {
     private LoginController loginController = null;
 
     public RaumsucheFragment() {
-        cacheDate = Calendar.getInstance();
-        cacheTimeFrom = Calendar.getInstance();
-        cacheTimeTo = Calendar.getInstance();
-        cacheTimeTo.add(Calendar.HOUR_OF_DAY, 1); // für differenz der beiden DatePicker
-        cacheTimeTo.add(Calendar.MINUTE, 30);
+	    super();
+	    cacheDate = Calendar.getInstance();
+	    cacheTimeFrom = Calendar.getInstance();
+	    cacheTimeTo = Calendar.getInstance();
+	    cacheTimeTo.add(Calendar.HOUR_OF_DAY, 1); // für differenz der beiden DatePicker
+	    cacheTimeTo.add(Calendar.MINUTE, 30);
     }
 
     @Override
@@ -164,8 +165,8 @@ public class RaumsucheFragment extends Fragment {
             }
         }, cacheDate.get(Calendar.YEAR), cacheDate.get(Calendar.MONTH), cacheDate.get(Calendar.DAY_OF_MONTH));
 
-        /**
-         * Picker from-Time
+        /*
+          Picker from-Time
          */
         timeFromPicker = new TimePickerDialog(v.getContext(), new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -178,8 +179,8 @@ public class RaumsucheFragment extends Fragment {
         }, cacheTimeFrom.get(Calendar.HOUR_OF_DAY), cacheTimeFrom.get(Calendar.MINUTE), true);
         timeFromPicker.setTitle(getString(R.string.timeFrom));
 
-        /**
-         * Picker to-Time
+        /*
+          Picker to-Time
          */
         timeToPicker = new TimePickerDialog(v.getContext(), new TimePickerDialog.OnTimeSetListener() {
             @Override

@@ -26,9 +26,10 @@ import de.hof.university.app.Util.Define;
 public class LastUpdated implements Serializable{
     private static final long serialVersionUID = Define.serialVersionUIDv1;
 
-    final String title;
+    private final String title;
 
     public LastUpdated(final String title) {
+        super();
         this.title = title;
     }
 

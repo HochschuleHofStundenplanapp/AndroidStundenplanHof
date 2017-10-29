@@ -61,9 +61,9 @@ public class MainActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener {
 
 	private static Context appContext;
-	public final String TAG = "MainActivity";
-	DrawerLayout mDrawerLayout;
-	ActionBarDrawerToggle mDrawerToggle;
+	private final String TAG = "MainActivity";
+	private DrawerLayout mDrawerLayout;
+	private ActionBarDrawerToggle mDrawerToggle;
 	private MealFragment mealFragment;
 	private ScheduleFragment scheduleFragment;
 	private ChangesFragment changesFragment;
@@ -86,14 +86,14 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	@Override
-	protected final void onCreate(Bundle savedInstanceState) {
+	protected final void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
 		appContext = this;
 
 		// Let the cookieManager handle the Cookies
-		CookieManager cookieManager = new CookieManager();
+		final CookieManager cookieManager = new CookieManager();
 		CookieHandler.setDefault(cookieManager);
 
 		// getActionBar geht nicht wahrscheinlich weil doch noch irgendwo dafür die Support Libary eingebunden wird
@@ -132,8 +132,8 @@ public class MainActivity extends AppCompatActivity
 		navigationView.setNavigationItemSelectedListener(this);
 
 		// Experimentelle Features anzeigen?
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		final boolean showExperimentalFeatures = sharedPreferences.getBoolean("experimental_features", false);
+		final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		final boolean showExperimentalFeatures = sharedPreferences.getBoolean(getString(R.string.PREFERENCE_KEY_EXPERIMENTAL_FEATURES_ENABLED), false);
 		displayExperimentalFeaturesMenuEntries(showExperimentalFeatures);
 
 
@@ -147,9 +147,9 @@ public class MainActivity extends AppCompatActivity
 				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_mySchedule));
 			}
 			// Sind die Einstellungen vorhanden?
-			else if (!sharedPreferences.getString("term_time", "").isEmpty()
-					&& !sharedPreferences.getString("studiengang", "").isEmpty()
-					&& !sharedPreferences.getString("semester", "").isEmpty()) {
+			else if (!sharedPreferences.getString(getString(R.string.PREFERENCE_KEY_TERM_TIME), "").isEmpty()
+					&& !sharedPreferences.getString(getString(R.string.PREFERENCE_KEY_STUDIENGANG), "").isEmpty()
+					&& !sharedPreferences.getString(getString(R.string.PREFERENCE_KEY_SEMESTER), "").isEmpty()) {
 				// ja, also gehen wir zum Stundenplan
 				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_stundenplan));
 			} else {

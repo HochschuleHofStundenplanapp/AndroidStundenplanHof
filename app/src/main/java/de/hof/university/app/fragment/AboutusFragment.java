@@ -41,24 +41,25 @@ public class AboutusFragment extends Fragment {
 	@Override
 	public final void onResume() {
 		super.onResume();
-		MainActivity mainActivity = (MainActivity) getActivity();
+		final MainActivity mainActivity = (MainActivity) getActivity();
 		mainActivity.getSupportActionBar().setTitle(R.string.aboutus);
 
-		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+		final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
 		navigationView.getMenu().findItem(R.id.nav_aboutus).setChecked(true);
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		MainActivity mainActivity = (MainActivity) getActivity();
-		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+		final MainActivity mainActivity = (MainActivity) getActivity();
+		final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+
 		navigationView.getMenu().findItem(R.id.nav_aboutus).setChecked(false);
 	}
 
 	@Override
-	public final View onCreateView(LayoutInflater inflater, ViewGroup container,
-	                               Bundle savedInstanceState) {
+	public final View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+	                               final Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		final View v = inflater.inflate(R.layout.fragment_aboutus, container, false);
 

@@ -28,10 +28,10 @@ import de.hof.university.app.model.HofObject;
 public class Schedule extends HofObject {
 	private static final long serialVersionUID = Define.serialVersionUIDv1;
 
-	ArrayList<LectureItem> lectures;
-	String course;
-	String semester;
-	String termtime;
+	private ArrayList<LectureItem> lectures;
+	private String course;
+	private String semester;
+	private String termtime;
 
 	public Schedule() {
 		super();
@@ -42,7 +42,7 @@ public class Schedule extends HofObject {
 		return lectures;
 	}
 
-	public void setLectures(ArrayList<LectureItem> lectures) {
+	public void setLectures(final ArrayList<LectureItem> lectures) {
 		this.lectures = lectures;
 	}
 
@@ -50,7 +50,7 @@ public class Schedule extends HofObject {
 		return course;
 	}
 
-	public void setCourse(String course) {
+	public void setCourse(final String course) {
 		this.course = course;
 	}
 
@@ -58,7 +58,7 @@ public class Schedule extends HofObject {
 		return semester;
 	}
 
-	public void setSemester(String semester) {
+	public void setSemester(final String semester) {
 		this.semester = semester;
 	}
 
@@ -66,7 +66,7 @@ public class Schedule extends HofObject {
 		return termtime;
 	}
 
-	public void setTermtime(String termtime) {
+	public void setTermtime(final String termtime) {
 		this.termtime = termtime;
 	}
 }

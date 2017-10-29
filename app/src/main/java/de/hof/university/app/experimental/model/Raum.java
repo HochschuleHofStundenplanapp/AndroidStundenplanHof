@@ -28,7 +28,8 @@ public class Raum implements Level, Serializable {
     private final String name;
 
     public Raum(final String name) {
-        this.name = name;
+	    super();
+	    this.name = name;
     }
 
     @Override

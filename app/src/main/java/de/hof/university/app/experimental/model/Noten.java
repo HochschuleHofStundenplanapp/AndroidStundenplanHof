@@ -29,8 +29,9 @@ public class Noten implements Serializable {
     private final String note;
 
     public Noten(String fach, String note) {
-        this.fach = fach;
-        this.note = note;
+	    super();
+	    this.fach = fach;
+	    this.note = note;
     }
 
     @Override

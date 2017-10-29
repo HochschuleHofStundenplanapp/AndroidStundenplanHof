@@ -144,7 +144,7 @@ public class MealFragment extends AbstractListFragment {
 	 * gibt das Datum zurück wann der Stundenplan zuletzt geholt wurde
 	 * @return lastSaved
 	 */
-	public String getLastSaved() {
+	private String getLastSaved() {
 		return DataManager.getInstance().formatDate(DataManager.getInstance().getMealsLastSaved());
 	}
 

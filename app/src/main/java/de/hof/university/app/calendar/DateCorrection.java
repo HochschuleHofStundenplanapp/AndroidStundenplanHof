@@ -30,15 +30,15 @@ public class DateCorrection {
     private static DateCorrection dateCorrection = null;
 
     /* Konstanten */
-    static final int summerStartDay = 15;
-    static final int summerStartMonth = GregorianCalendar.MARCH;
-    static final int winterStartDay = 1;
-    static final int winterStartMonth = GregorianCalendar.OCTOBER;
+    private static final int summerStartDay = 15;
+    private static final int summerStartMonth = GregorianCalendar.MARCH;
+    private static final int winterStartDay = 1;
+    private static final int winterStartMonth = GregorianCalendar.OCTOBER;
 
-    static final int summerEndDay = 10;
-    static final int summerEndMonth = GregorianCalendar.JULY;
-    static final int winterEndDay = 25;
-    static final int winterEndMonth = GregorianCalendar.JANUARY;
+    private static final int summerEndDay = 10;
+    private static final int summerEndMonth = GregorianCalendar.JULY;
+    private static final int winterEndDay = 25;
+    private static final int winterEndMonth = GregorianCalendar.JANUARY;
 
     private Date lastYearSummerStartDate = new Date();
     private Date lastYearSummerEndDate = new Date();
@@ -60,31 +60,32 @@ public class DateCorrection {
     }
 
     private DateCorrection() {
-        Calendar currentDateCal = GregorianCalendar.getInstance();
-        currentDateCal.setTime(new Date());
+	    super();
+	    Calendar currentDateCal = GregorianCalendar.getInstance();
+	    currentDateCal.setTime(new Date());
 
-        lastYearSummerStartDate = getSemesterStartDate(currentDateCal.get(GregorianCalendar.YEAR) - 1, "SS");
-        lastYearSummerEndDate = getSemesterEndDate(currentDateCal.get(GregorianCalendar.YEAR) - 1, "SS");
-        lastYearWinterStartDate = getSemesterStartDate(currentDateCal.get(GregorianCalendar.YEAR) - 1, "WS");
+	    lastYearSummerStartDate = getSemesterStartDate(currentDateCal.get(GregorianCalendar.YEAR) - 1, "SS");
+	    lastYearSummerEndDate = getSemesterEndDate(currentDateCal.get(GregorianCalendar.YEAR) - 1, "SS");
+	    lastYearWinterStartDate = getSemesterStartDate(currentDateCal.get(GregorianCalendar.YEAR) - 1, "WS");
 
-        thisYearWinterEndDate = getSemesterEndDate(currentDateCal.get(GregorianCalendar.YEAR), "WS");
-        thisYearSummerStartDate = getSemesterStartDate(currentDateCal.get(GregorianCalendar.YEAR), "SS");
-        thisYearSummerEndDate = getSemesterEndDate(currentDateCal.get(GregorianCalendar.YEAR), "SS");
-        thisYearWinterStartDate = getSemesterStartDate(currentDateCal.get(GregorianCalendar.YEAR), "WS");
+	    thisYearWinterEndDate = getSemesterEndDate(currentDateCal.get(GregorianCalendar.YEAR), "WS");
+	    thisYearSummerStartDate = getSemesterStartDate(currentDateCal.get(GregorianCalendar.YEAR), "SS");
+	    thisYearSummerEndDate = getSemesterEndDate(currentDateCal.get(GregorianCalendar.YEAR), "SS");
+	    thisYearWinterStartDate = getSemesterStartDate(currentDateCal.get(GregorianCalendar.YEAR), "WS");
 
-        nextYearWinterEndDate = getSemesterEndDate(currentDateCal.get(GregorianCalendar.YEAR) + 1, "WS");
+	    nextYearWinterEndDate = getSemesterEndDate(currentDateCal.get(GregorianCalendar.YEAR) + 1, "WS");
 
-        Calendar beginOfYearCalendar = GregorianCalendar.getInstance();
-        beginOfYearCalendar.setTime(new Date());
-        beginOfYearCalendar.set(GregorianCalendar.MONTH, GregorianCalendar.JANUARY);
-        beginOfYearCalendar.set(GregorianCalendar.DATE, 1);
-        beginOfThisYearDate = beginOfYearCalendar.getTime();
+	    Calendar beginOfYearCalendar = GregorianCalendar.getInstance();
+	    beginOfYearCalendar.setTime(new Date());
+	    beginOfYearCalendar.set(GregorianCalendar.MONTH, GregorianCalendar.JANUARY);
+	    beginOfYearCalendar.set(GregorianCalendar.DATE, 1);
+	    beginOfThisYearDate = beginOfYearCalendar.getTime();
 
-        Calendar endOfYearCalendar = GregorianCalendar.getInstance();
-        endOfYearCalendar.setTime(new Date());
-        endOfYearCalendar.set(GregorianCalendar.MONTH, GregorianCalendar.DECEMBER);
-        endOfYearCalendar.set(GregorianCalendar.DATE, 31);
-        endOfThisYearDate = endOfYearCalendar.getTime();
+	    Calendar endOfYearCalendar = GregorianCalendar.getInstance();
+	    endOfYearCalendar.setTime(new Date());
+	    endOfYearCalendar.set(GregorianCalendar.MONTH, GregorianCalendar.DECEMBER);
+	    endOfYearCalendar.set(GregorianCalendar.DATE, 31);
+	    endOfThisYearDate = endOfYearCalendar.getTime();
     }
 
     private Date getSemesterStartDate(int year, String semester) {
@@ -140,8 +141,9 @@ public class DateCorrection {
     private Date getSemesterEndDate(int year, String semester) {
         Date correctEndDate = new Date();
 
-        if (semester.equals("SS")) {
-            Calendar summerEndDateCalendar = GregorianCalendar.getInstance();
+        if ("SS".equals(semester)) {
+
+            final Calendar summerEndDateCalendar = GregorianCalendar.getInstance();
             summerEndDateCalendar.set(GregorianCalendar.YEAR, year);
             summerEndDateCalendar.set(GregorianCalendar.MONTH, summerEndMonth);
             summerEndDateCalendar.set(GregorianCalendar.DATE, summerEndDay);
@@ -161,8 +163,9 @@ public class DateCorrection {
             }
 
             correctEndDate = summerEndDateCalendar.getTime();
-        } else if (semester.equals("WS")) {
-            Calendar winterEndDateCalendar = GregorianCalendar.getInstance();
+        } else if ("WS".equals(semester)) {
+
+            final Calendar winterEndDateCalendar = GregorianCalendar.getInstance();
             winterEndDateCalendar.set(GregorianCalendar.YEAR, year);
             winterEndDateCalendar.set(GregorianCalendar.MONTH, winterEndMonth);
             winterEndDateCalendar.set(GregorianCalendar.DATE, winterEndDay);
@@ -183,14 +186,15 @@ public class DateCorrection {
 
             correctEndDate = winterEndDateCalendar.getTime();
         }
+        else junit.framework.Assert.assertTrue( false );
 
         return correctEndDate;
     }
 
     public Date getCorrectStartDate(Date startDate, Date endDate) {
-        Calendar correctStartDateCal = GregorianCalendar.getInstance();
+        final Calendar correctStartDateCal = GregorianCalendar.getInstance();
 
-        Calendar startDateCal = GregorianCalendar.getInstance();
+        final Calendar startDateCal = GregorianCalendar.getInstance();
         startDateCal.setTime(startDate);
 
         Date semesterStartDate = thisYearSummerStartDate;
@@ -222,9 +226,9 @@ public class DateCorrection {
     }
 
     public Date getCorrectEndDate(Date startDate, Date endDate) {
-        Calendar correctEndDateCal = GregorianCalendar.getInstance();
+        final Calendar correctEndDateCal = GregorianCalendar.getInstance();
 
-        Calendar endDateCal = GregorianCalendar.getInstance();
+        final Calendar endDateCal = GregorianCalendar.getInstance();
         endDateCal.setTime(endDate);
 
         Date semesterEndDate = thisYearSummerEndDate;

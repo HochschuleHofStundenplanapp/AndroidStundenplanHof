@@ -29,6 +29,7 @@ public class MediumListItem implements Serializable{
     private final String title;
 
     public MediumListItem(final String title) {
+        super();
         this.title = title;
     }
 
