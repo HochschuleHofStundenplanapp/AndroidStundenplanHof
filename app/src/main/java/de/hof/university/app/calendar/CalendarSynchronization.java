@@ -31,6 +31,7 @@ import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 import de.hof.university.app.MainActivity;
+import de.hof.university.app.R;
 import de.hof.university.app.Util.Log;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.model.schedule.LectureChange;
@@ -41,8 +42,10 @@ import de.hof.university.app.model.schedule.LectureItem;
  */
 
 public class CalendarSynchronization {
-    private static final CalendarSynchronization instance = new CalendarSynchronization();
     private static final String TAG = "CalendarSynchronization";
+    private static final boolean DEBUG_CALENDAR_SYNCHRONIZATION = true;
+
+    private static final CalendarSynchronization instance = new CalendarSynchronization();
 
     private final CalendarInterface calendarInterface;
     private HashMap<String, Long> calendars = new HashMap<>();
@@ -52,11 +55,13 @@ public class CalendarSynchronization {
     }
 
     private CalendarSynchronization() {
-	    super();
+        super();
+        if (DEBUG_CALENDAR_SYNCHRONIZATION) Log.d(TAG, "Constructor");
 	    calendarInterface = CalendarInterface.getInstance();
     }
 
     public void createAllEvents() {
+        if (DEBUG_CALENDAR_SYNCHRONIZATION) Log.d(TAG, "createAllEvents");
         final Context context = MainActivity.getAppContext().getApplicationContext();
 
         final ArrayList<LectureItem> lectureItems = DataManager.getInstance().getSelectedLectures(context);
@@ -69,14 +74,17 @@ public class CalendarSynchronization {
     }
 
     public void createAllEvents(final ArrayList<LectureItem> lectureItems) {
-        if (lectureItems == null)
+        if (DEBUG_CALENDAR_SYNCHRONIZATION) Log.d(TAG, "createAllEvents | lectureItems: " + lectureItems);
+        if (lectureItems == null) {
             return;
+        }
 
         final CreateAllEventsTask task = new CreateAllEventsTask();
 	    final AsyncTask<ArrayList<LectureItem>, Void, Boolean> execute = task.execute(lectureItems);
     }
 
     public void createAllEvents(final LectureItem lecture) {
+        if (DEBUG_CALENDAR_SYNCHRONIZATION) Log.d(TAG, "createAllEvents | lectureItem: " + lecture);
         final CreateAllEventsTask task = new CreateAllEventsTask();
         final ArrayList<LectureItem> list = new ArrayList<>();
         list.add(lecture);
@@ -84,6 +92,7 @@ public class CalendarSynchronization {
     }
 
     private void createEventsForLecture(LectureItem lectureItem) {
+        if (DEBUG_CALENDAR_SYNCHRONIZATION) Log.d(TAG, "createEventsForLecture | lectureItem: " + lectureItem);
 
     	Date tmpStartDate = lectureItem.getStartDate();
 
@@ -127,6 +136,7 @@ public class CalendarSynchronization {
     }
 
     public Boolean deleteAllEvents() {
+        if (DEBUG_CALENDAR_SYNCHRONIZATION) Log.d(TAG, "deleteAllEvents");
         DeleteAllEventsTask task = new DeleteAllEventsTask();
         task.execute();
         try {
@@ -141,6 +151,7 @@ public class CalendarSynchronization {
     }
 
     public void deleteAllEvents(String lectureID) {
+        if (DEBUG_CALENDAR_SYNCHRONIZATION) Log.d(TAG, " | deleteAllEvents | lectureID: " + lectureID);
         DeleteAllEventsTask task = new DeleteAllEventsTask();
         task.execute(lectureID);
     }
@@ -168,22 +179,15 @@ public class CalendarSynchronization {
      */
     // TODO maybe synchronized?
     public void updateCalendar(final ArrayList<LectureItem> lectureItems) {
-        // TODO Update Methode nutzen
-        new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                for (LectureItem lecture: lectureItems) {
-                    calendarInterface.updateLecture(lecture);
-                }
-            }
-        }.start();
+        UpdateAllEventsTask task = new UpdateAllEventsTask();
+        task.execute(lectureItems);
     }
 
     /**
      * removes the local calendar or removes the events from a selected calendar
      */
     public void stopCalendarSynchronization() {
+        if (DEBUG_CALENDAR_SYNCHRONIZATION) Log.d(TAG, "stopCalendarSynchronization");
         new Thread() {
             @Override
             public void run() {
@@ -191,13 +195,14 @@ public class CalendarSynchronization {
                 if (!calendarInterface.removeLocalCalendar()) {
                     // falls es nicht geklappt hat dann lösche die Events in dem ausgewählten Kalender
                     // Bedeutet: Nutzer hat einen eigenen Kaledner ausgweählt.
+                    if (DEBUG_CALENDAR_SYNCHRONIZATION) Log.d(TAG, "deleteAllEvents in stopCalendarSynchronization");
                     deleteAllEvents();
                 }
             }
         }.start();
     }
 
-    public ArrayList<String> getCalendars() {
+    public ArrayList<String> getCalendarsNames() {
         ArrayList<String> result = new ArrayList<>();
         calendars = calendarInterface.getCalendars();
 
@@ -247,9 +252,8 @@ public class CalendarSynchronization {
     private class CreateAllEventsTask extends AsyncTask<ArrayList<LectureItem>, Void, Boolean> {
         final Context context = MainActivity.getAppContext().getApplicationContext();
 
-        protected final Boolean doInBackground(final ArrayList<LectureItem>... lectureItems) {
-            for (final LectureItem lectureItem :
-                    lectureItems[0]) {
+        protected final Boolean doInBackground(final ArrayList<LectureItem>... p_lectureItems) {
+            for (final LectureItem lectureItem : p_lectureItems[0]) {
                 createEventsForLecture(lectureItem);
             }
             return true;
@@ -257,10 +261,28 @@ public class CalendarSynchronization {
 
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
-            Toast.makeText(context, "CreateAllEventsTask fertig. Result: " + result, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.calendar_synchronization_successful, Toast.LENGTH_SHORT).show();
             if (result) {
                 calendarInterface.saveCalendarData();
             }
+        }
+    }
+
+    private class UpdateAllEventsTask extends AsyncTask<ArrayList<LectureItem>, Void, Boolean> {
+        final Context context = MainActivity.getAppContext().getApplicationContext();
+
+        @Override
+        protected Boolean doInBackground(ArrayList<LectureItem>... p_lectureItems) {
+            for (LectureItem lecture: p_lectureItems[0]) {
+                calendarInterface.updateLecture(lecture);
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+            Toast.makeText(context, R.string.calendar_synchronization_successful, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -278,7 +300,7 @@ public class CalendarSynchronization {
 
         protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
-            Toast.makeText(context, "DeleteAllEventsTask fertig. Result: " + result, Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, R.string.calendar_synchronization_successful, Toast.LENGTH_SHORT).show();
             if (result) {
                 calendarInterface.saveCalendarData();
             }

@@ -734,8 +734,13 @@ public class DataManager {
     }
 
 
-    private boolean isScheduleEqualsToNewSchedule(ArrayList<LectureItem> oldSchedule, ArrayList<LectureItem> newSchedule)
-    {
+    /**
+     * to compare to ArrayList with are schedules
+     * @param oldSchedule the old schedule
+     * @param newSchedule the new schedule
+     * @return if there are the same elements in it
+     */
+    private boolean isScheduleEqualsToNewSchedule(ArrayList<LectureItem> oldSchedule, ArrayList<LectureItem> newSchedule) {
         //null checking
         if((oldSchedule == null) && (newSchedule == null)) {
             return true;

@@ -786,10 +786,18 @@ class CalendarInterface {
 		cur.close();
 	}
 
+	/**
+	 * get the event description
+	 * @param eventID the eventID of the event
+	 * @return the description or null if no permission or the event is not found
+	 */
 	private String getEventDescription(Long eventID) {
 		Context context = MainActivity.getAppContext().getApplicationContext();
 
-		//TODO Check permission
+		if ((ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED)) {
+			// keine Berechtigung
+			return null;
+		}
 
 		Cursor cur;
 		ContentResolver cr = context.getContentResolver();
@@ -839,6 +847,11 @@ class CalendarInterface {
 	private void deleteEvent(long eventID) {
 		Context context = MainActivity.getAppContext().getApplicationContext();
 
+		if ((ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED)) {
+			// keine Berechtigung
+			return;
+		}
+
 		// Events mit Description nicht löschen
 		String eventDescription = getEventDescription(eventID);
 		if ((eventDescription != null) && !eventDescription.isEmpty()) {
@@ -852,6 +865,12 @@ class CalendarInterface {
 	}
 
 	void deleteAllEvents(final String lectureID) {
+		Context context = MainActivity.getAppContext().getApplicationContext();
+
+		if ((ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED)) {
+			// keine Berechtigung
+			return;
+		}
 		// get the eventIDs
 		ArrayList<Long> eventIDs = calendarData.getLecturesEventIDs().get(lectureID);
 

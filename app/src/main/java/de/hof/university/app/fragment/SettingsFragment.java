@@ -69,7 +69,8 @@ public class SettingsFragment extends PreferenceFragment {
 	private LoginController loginController = null;
 	private CalendarSynchronization calendarSynchronization = null;
 
-    private final int REQUEST_CODE_ASK_CALENDAR_PERMISSIONS =  2;
+    private final int REQUEST_CODE_CALENDAR_TURN_ON_PERMISSION =  2;
+    private final int REQUEST_CODE_CALENDAR_TURN_OFF_PERMISSION =  3;
 
 	/**
 	 * @param savedInstanceState
@@ -147,14 +148,23 @@ public class SettingsFragment extends PreferenceFragment {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				if ( (Boolean) newValue ) {
+					// an schalten
 					if ((ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED)
 							|| (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED)) {
-						requestCalendarPermission();
+						// keine Berechtigung
+						requestCalendarPermission(REQUEST_CODE_CALENDAR_TURN_ON_PERMISSION);
 					} else {
 						turnCalendarSyncOn();
 					}
 				} else {
-					calendarSynchronization.stopCalendarSynchronization();
+					// aus schalten
+					if ((ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED)
+							|| (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED)) {
+						// keine Berechtigung
+						requestCalendarPermission(REQUEST_CODE_CALENDAR_TURN_OFF_PERMISSION);
+					} else {
+						calendarSynchronization.stopCalendarSynchronization();
+					}
 				}
 				return true;
 			}
@@ -500,20 +510,21 @@ public class SettingsFragment extends PreferenceFragment {
 		}
 	}
 
-	private void requestCalendarPermission() {
+	private void requestCalendarPermission(int requestCode) {
 
 		// From MARSHMELLOW (OS 6) on
 		if (Build.VERSION.SDK_INT >= VERSION_CODES.M ) {
 			this.requestPermissions(
-					new String[]{Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR},
-					REQUEST_CODE_ASK_CALENDAR_PERMISSIONS);
+					new String[]{Manifest.permission.READ_CALENDAR,
+							Manifest.permission.WRITE_CALENDAR},
+					requestCode);
 		}
     }
 
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 		switch (requestCode) {
-			case REQUEST_CODE_ASK_CALENDAR_PERMISSIONS:
+			case REQUEST_CODE_CALENDAR_TURN_ON_PERMISSION:
 				if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 					// Permission granted
 					turnCalendarSyncOn();
@@ -523,6 +534,18 @@ public class SettingsFragment extends PreferenceFragment {
 							.show();
 					// Calendar Sync aus schalten
 					((CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
+				}
+				break;
+			case REQUEST_CODE_CALENDAR_TURN_OFF_PERMISSION:
+				if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					// Permission granted
+					calendarSynchronization.stopCalendarSynchronization();
+				} else {
+					// Permission Denied
+					Toast.makeText(getActivity(), R.string.calendar_synchronization_permissionNotGranted, Toast.LENGTH_SHORT)
+							.show();
+					// Calendar Sync ein schalten
+					((CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(true);
 				}
 			default:
 				super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -536,7 +559,7 @@ public class SettingsFragment extends PreferenceFragment {
 		calendars.add(getString(R.string.calendar_synchronitation_ownLocalCalendar));
 
 		// Die weiteren Kalender danach
-		calendars.addAll(calendarSynchronization.getCalendars());
+		calendars.addAll(calendarSynchronization.getCalendarsNames());
 
 		final AlertDialog d = new AlertDialog.Builder(getView().getContext())
 				.setTitle(R.string.calendar_synchronization)
