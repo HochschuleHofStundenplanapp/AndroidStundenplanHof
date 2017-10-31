@@ -66,7 +66,7 @@ class CalendarInterface {
 	private static final int PROJECTION_CALENDAR_ID_INDEX = 0;
 	private static final int PROJECTION_DISPLAY_NAME_INDEX = 1;
 
-	private static final String[] EVENT_PROJECTION_EVENT_ID_TITLE_DESCRIPTION_ORIGINAL_SYNC_ID = new String[]{
+	private static final String[] EVENT_PROJECTION_EVENT_ID_TITLE_DESCRIPTION = new String[]{
 			CalendarContract.Instances.EVENT_ID,         // 0
 			CalendarContract.Instances.TITLE,            // 1
 			CalendarContract.Instances.DESCRIPTION,      // 2
@@ -622,7 +622,7 @@ class CalendarInterface {
 
 		// Submit the query
 		cur = cr.query(builder.build(),
-				EVENT_PROJECTION_EVENT_ID_TITLE_DESCRIPTION_ORIGINAL_SYNC_ID,
+				EVENT_PROJECTION_EVENT_ID_TITLE_DESCRIPTION,
 				selection,
 				selectionArgs,
 				null);
@@ -682,7 +682,7 @@ class CalendarInterface {
 
 		// Submit the query
 		cur = cr.query(builder.build(),
-				EVENT_PROJECTION_EVENT_ID_TITLE_DESCRIPTION_ORIGINAL_SYNC_ID,
+				EVENT_PROJECTION_EVENT_ID_TITLE_DESCRIPTION,
 				selection,
 				selectionArgs,
 				null);
@@ -781,6 +781,8 @@ class CalendarInterface {
 	private String getEventDescription(Long eventID) {
 		Context context = MainActivity.getAppContext().getApplicationContext();
 
+		//TODO Check permission
+
 		Cursor cur;
 		ContentResolver cr = context.getContentResolver();
 
@@ -800,7 +802,7 @@ class CalendarInterface {
 
 		// Submit the query
 		cur = cr.query(builder.build(),
-				EVENT_PROJECTION_EVENT_ID_TITLE_DESCRIPTION_ORIGINAL_SYNC_ID,
+				EVENT_PROJECTION_EVENT_ID_TITLE_DESCRIPTION,
 				selection,
 				selectionArgs,
 				null);
