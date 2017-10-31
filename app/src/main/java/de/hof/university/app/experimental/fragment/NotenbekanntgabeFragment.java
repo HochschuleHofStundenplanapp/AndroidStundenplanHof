@@ -374,6 +374,12 @@ public class NotenbekanntgabeFragment extends Fragment {
 
                 final String cookiesString = CookieManager.getInstance().getCookie(Define.PRIMUSSURL);
 
+                if (cookiesString == null) {
+                    Log.e(TAG, "cookieString ist null");
+                    errorText = "Internal (e0): " + getString(R.string.lesenotenbekanntgabefehler);
+                    return null;
+                }
+
                 final String[] cookiesArray = cookiesString.split(";");
 
                 for (String ar1 : cookiesArray ) {
