@@ -64,11 +64,11 @@ public class ChangesFragment extends AbstractListFragment {
 
 	@Override
 	protected final String[] setTaskParameter(boolean forceRefresh) {
-		String[] params = new String[ 4 ];
-		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		String course = sharedPref.getString("studiengang", "");
-		String semester = sharedPref.getString("semester", "");
-		String termTime = sharedPref.getString("term_time", "");
+		final String[] params = new String[ 4 ];
+		final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+		final String course = sharedPref.getString(getString(R.string.PREFERENCE_KEY_STUDIENGANG), "");
+		final String semester = sharedPref.getString(getString(R.string.PREFERENCE_KEY_SEMESTER), "");
+		final String termTime = sharedPref.getString(getString(R.string.PREFERENCE_KEY_TERM_TIME), "");
 
 		// Meldungen nur bringen wenn kein "Mein Stundenplan" angelegt ist
 		if (DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) == 0) {
@@ -94,7 +94,7 @@ public class ChangesFragment extends AbstractListFragment {
 		return params;
 	}
 
-	protected final ArrayList<Object> updateListView(ArrayList<Object> list) {
+	private ArrayList<Object> updateListView(ArrayList<Object> list) {
 		ArrayList<Object> tmpDataList = new ArrayList<>();
 
 		for (Object obt: list) {
@@ -113,7 +113,7 @@ public class ChangesFragment extends AbstractListFragment {
 	 * gibt das Datum zurück wann der Stundenplan zuletzt geholt wurde
 	 * @return lastSaved
 	 */
-	public String getLastSaved() {
+	private String getLastSaved() {
 		return DataManager.getInstance().formatDate(DataManager.getInstance().getChangesLastSaved());
 	}
 

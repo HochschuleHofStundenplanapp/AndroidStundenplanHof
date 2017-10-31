@@ -67,13 +67,13 @@ import de.hof.university.app.Util.Log;
 public class MapFragment extends Fragment {
 
     final private int REQUEST_CODE_ASK_PERMISSIONS = 1;
-    final public static String TAG = "MapFragment";
+    private final static String TAG = "MapFragment";
 
-    MapView myOpenMapView;
-    IMapController myMapController;
-    LocationManager locationManager;
-    LocationListener locationListener;
-    Marker marker;
+    private MapView myOpenMapView;
+    private IMapController myMapController;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
+    private Marker marker;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -188,7 +188,7 @@ public class MapFragment extends Fragment {
         }
     }
 
-    public void requestPermission() {
+    private void requestPermission() {
         if (Build.VERSION.SDK_INT > 23) {
             this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_CODE_ASK_PERMISSIONS);
@@ -265,7 +265,7 @@ public class MapFragment extends Fragment {
         locationManager.removeUpdates(locationListener);
     }
 
-    public void updateLoc(final Location loc) {
+    private void updateLoc(final Location loc) {
         GeoPoint locGeoPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
         myMapController.setCenter(locGeoPoint);
         myOpenMapView.invalidate();
@@ -273,7 +273,7 @@ public class MapFragment extends Fragment {
         marker.setPosition(locGeoPoint);
     }
 
-    public void updateLocationInfo(final Location location) {
+    private void updateLocationInfo(final Location location) {
         Log.i("LocationInfo", location.toString());
         TextView addressTextView = (TextView) getView().findViewById(R.id.addressTextView);
 

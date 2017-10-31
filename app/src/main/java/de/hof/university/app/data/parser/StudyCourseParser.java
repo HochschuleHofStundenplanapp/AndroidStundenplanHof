@@ -31,7 +31,7 @@ import de.hof.university.app.model.settings.StudyCourse;
  */
 public class StudyCourseParser implements Parser<StudyCourse> {
 
-    public final static String TAG = "StudyCourseParser";
+    private final static String TAG = "StudyCourseParser";
 
     // Die Sprache der Meldungen aus der Datenbank werden in diese Zielsprache überführt
     private String language;
@@ -76,10 +76,11 @@ public class StudyCourseParser implements Parser<StudyCourse> {
     }
 
     // Convert one JSonObject in a StudyCourse-Object
-    protected final StudyCourse convertJsonObject(JSONObject jsonObject) {
+    private StudyCourse convertJsonObject(JSONObject jsonObject) {
         final String name = jsonObject.optJSONObject(Define.COURSE_PARSER_LABELS).optString(language);
         final String tag = jsonObject.optString(Define.COURSE_PARSER_COURSE);
-        JSONArray jsonArray = jsonObject.optJSONArray(Define.COURSE_PARSER_SEMESTER);
+        final JSONArray jsonArray = jsonObject.optJSONArray(Define.COURSE_PARSER_SEMESTER);
+
         ArrayList<String> terms = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); ++i) {
             terms.add(jsonArray.optString(i));

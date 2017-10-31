@@ -36,17 +36,19 @@ public class StudyCourse implements Serializable, Comparable<StudyCourse> {
     private List<String> terms = null;
 
     public StudyCourse(final long id, final String name, final String tag) {
-        this.id = id;
-        this.name = name;
-        this.tag = tag;
+	    super();
+	    this.id = id;
+	    this.name = name;
+	    this.tag = tag;
     }
 
     public StudyCourse(final String course, final String courseTag, final List<String> termsParams) {
-        name = course;
-        tag = courseTag;
-        // sortieren
-        Collections.sort(termsParams);
-        this.terms = termsParams;
+	    super();
+	    name = course;
+	    tag = courseTag;
+	    // sortieren
+	    Collections.sort(termsParams);
+	    this.terms = termsParams;
     }
 
 

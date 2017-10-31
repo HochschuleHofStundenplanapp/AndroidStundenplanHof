@@ -48,11 +48,11 @@ import de.hof.university.app.Util.Log;
 
 public class RegisterLectures {
 
-    public static final String TAG = "FCMService";
+    private static final String TAG = "FCMService";
 
     // für übergebene Vorlesungen registrieren
     public void registerLectures(Set<String> ids) {
-        new MyAcyncTask().execute(ids);
+        final AsyncTask<Set<String>, String, String> execute = new MyAcyncTask().execute(ids);
     }
 
     // von Push-Notifications abmelden,
@@ -61,7 +61,7 @@ public class RegisterLectures {
         new MyAcyncTask().execute(new HashSet<String>());
     }
 
-    public String makeJSONString(String data[]) {
+    private String makeJSONString(String data[]) {
         JSONArray json = new JSONArray();
 
 	    for ( final String aData : data ) {

@@ -39,9 +39,10 @@ upstream messages, and so on.
 */
 
 public final class FcmMessagingService extends FirebaseMessagingService {
-    public final static String TAG = "FcmMessagingService";
+    private final static String TAG = "FcmMessagingService";
 
     public FcmMessagingService() {
+        super();
     }
 
     /*

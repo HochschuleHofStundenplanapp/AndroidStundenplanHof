@@ -22,7 +22,6 @@ import android.preference.PreferenceManager;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
-import de.hof.university.app.MainActivity;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.Util.Log;
 import de.hof.university.app.data.DataManager;
@@ -33,7 +32,7 @@ import de.hof.university.app.data.DataManager;
 
 public class FcmInstanceIdService extends FirebaseInstanceIdService {
 
-    public final static String TAG = "FcmInstanceIdService";
+    private final static String TAG = "FcmInstanceIdService";
 
     /*
     On initial startup of your app, the FCM SDK generates a registration token for

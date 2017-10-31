@@ -32,6 +32,7 @@ public class StudyCourses extends HofObject {
 	private ArrayList<StudyCourse> courses;
 
 	public StudyCourses() {
+		super();
 		this.courses = new ArrayList<>();
 	}
 

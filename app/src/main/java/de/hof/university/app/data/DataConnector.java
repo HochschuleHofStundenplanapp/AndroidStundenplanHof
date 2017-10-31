@@ -36,7 +36,7 @@ import de.hof.university.app.Util.Log;
  */
 public class DataConnector {
 
-    public static final String TAG = "DataConnector";
+    private static final String TAG = "DataConnector";
 
     final String readStringFromUrl(final String strUrl) {
         InputStream inputStream;

@@ -39,9 +39,9 @@ import de.hof.university.app.model.schedule.LectureItem;
  */
 public class ScheduleParser implements Parser<LectureItem> {
 
-    public final static String TAG = "ScheduleParser";
+    private final static String TAG = "ScheduleParser";
 
-    protected String language;
+    String language;
 
     @Override
     public ArrayList<LectureItem> parse(String[] params) {
@@ -77,7 +77,7 @@ public class ScheduleParser implements Parser<LectureItem> {
         return result;
     }
 
-    protected int parseDayOfWeek(String day, Locale locale)
+    private int parseDayOfWeek(String day, Locale locale)
             throws ParseException {
         final SimpleDateFormat dayFormat = new SimpleDateFormat("E", locale);
         final Date date = dayFormat.parse(day);
@@ -86,7 +86,7 @@ public class ScheduleParser implements Parser<LectureItem> {
         return calendar.get(Calendar.DAY_OF_WEEK);
     }
 
-    protected final LectureItem convertJsonObject(JSONObject jsonObject) {
+    final LectureItem convertJsonObject(JSONObject jsonObject) {
 
         String weekday = jsonObject.optString(Define.PARSER_DAY);
         // Wenn Sprache der App auf Englisch gestellt ist englische Wochentage nehmen
@@ -153,6 +153,6 @@ public class ScheduleParser implements Parser<LectureItem> {
         }
 
 
-        return new LectureItem(id, weekday, label, type, style, sp, group, startDate, endDate, room, lecturer, comment);
+        return new LectureItem(id, weekday, label, type, sp, group, startDate, endDate, room, lecturer, comment);
     }
 }

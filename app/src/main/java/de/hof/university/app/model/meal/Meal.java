@@ -41,6 +41,7 @@ public class Meal implements Serializable {
 
 
 	public Meal(final Date tag, final String weeekDay, final String category, final String name) {
+		super();
 		this.weekDay = weeekDay;
 		this.day = tag;
 		this.category = category;
@@ -74,15 +75,17 @@ public class Meal implements Serializable {
 	}
 
 	public final String getName() {
-		String result;
-		result = name;
+		String result = this.name;
 		String tmpAttributes = "";
-		for ( int a : attributes
-				) {
+
+		for ( int a : attributes ) {
+
 			if ( !tmpAttributes.isEmpty() ) {
 				tmpAttributes += ", ";
 			}
-			if ( a == 1 ) {                          // TODO Schöner machen nicht hardcoded
+
+
+			if ( a == 1 ) {
 				tmpAttributes += "hausgemacht";
 			} else if ( a == 2 ) {
 				tmpAttributes += "Wild";

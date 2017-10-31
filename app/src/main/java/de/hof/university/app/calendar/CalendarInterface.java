@@ -51,7 +51,7 @@ import de.hof.university.app.model.schedule.LectureItem;
  */
 
 class CalendarInterface {
-	public static final String TAG = "CalendarInterface";
+	private static final String TAG = "CalendarInterface";
 
 	private static final CalendarInterface instance = new CalendarInterface();
 
@@ -104,6 +104,7 @@ class CalendarInterface {
 	 * Constructor for the default local calendar
 	 */
 	private CalendarInterface() {
+		super();
 		Context context = MainActivity.getAppContext().getApplicationContext();
 		localCalendarName = context.getString(R.string.stundenplan) + " " + context.getString(R.string.app_name);
 		accountName = context.getString(R.string.app_name);
@@ -163,7 +164,6 @@ class CalendarInterface {
 		}
 
 		// Use the cursor to step through the returned records
-		int i = 0;
 		while (cur.moveToNext()) {
 			// found
 			// put the Name and the ID of the calendar in result
@@ -306,14 +306,15 @@ class CalendarInterface {
 	 * creates the event for a lecture, and checks if it is already existing
 	 * Kalendereintrag = Event
 	 *
-	 * @param lectureID
-	 * @param title
-	 * @param description
-	 * @param startTime
-	 * @param endTime
-	 * @param location
+	 * @param lectureID     SPlusName
+	 * @param title         Vorlesungstitel
+	 * @param description   Beschreibung - normalerweise leer
+	 * @param startTime     Beginn der Vorlesung (Datum und Uhrzeit)
+	 * @param endTime       Ende der Vorlesung  (Datum und Uhrzeit)
+	 * @param location      Ort/Raum
 	 */
-	void createLectureEvent(final String lectureID, final String title, final String description, final Date startTime, final Date endTime, final String location) {
+	void createLectureEvent(final String lectureID, final String title, final String description,
+	                        final Date startTime, final Date endTime, final String location) {
 
 		junit.framework.Assert.assertTrue( !"".equals(lectureID) );
 		junit.framework.Assert.assertTrue( !"".equals(title) );
@@ -346,11 +347,14 @@ class CalendarInterface {
 		}
 	}
 
-	private void createChangeEvent(String lectureID, String title, String description, Date startTime, Date endTime, String location) {
-		Long eventID = createEvent(title, description, startTime, endTime, location, lectureID);
+	private void createChangeEvent(final String lectureID, final String title, final String description,
+	                               final Date startTime, final Date endTime, final String location) {
+
+		final Long eventID = createEvent(title, description, startTime, endTime, location, lectureID);
 
 		// Wenn null dann keine Berechtigung oder keine CalendarID und returnen
-		if (eventID == null) return;
+		if (eventID == null)
+			return;
 
 		// zu den IDs hinzufügen
 		addChangesEventID(lectureID, eventID);
@@ -366,7 +370,10 @@ class CalendarInterface {
 	 * @param location    the location of the event
 	 * @return eventID or null if no permission
 	 */
-	private Long createEvent(final String title, final String description, final Date startDate, final Date endDate, final String location, final String lectureID) {
+	private Long createEvent(final String title, final String description, final Date startDate,
+	                         final Date endDate, final String location, final String lectureID) {
+		//TODO lectureID not used
+
 		if (calendarData.getCalendarID() == null) {
 			return null;
 		}
@@ -449,7 +456,7 @@ class CalendarInterface {
 			return;
 		}
 
-		Uri uri = cr.insert(CalendarContract.Reminders.CONTENT_URI, values);
+		final Uri uri = cr.insert(CalendarContract.Reminders.CONTENT_URI, values);
 	}
 
 	/**
@@ -503,11 +510,9 @@ class CalendarInterface {
 	 * @param lecture a lecture with should get updated
 	 */
 	void updateLecture(LectureItem lecture) {
-		Context context = MainActivity.getAppContext().getApplicationContext();
+		//never used: Context context = MainActivity.getAppContext().getApplicationContext();
 
-		String lectureID;
-
-		lectureID = lecture.getId();
+		final String lectureID = lecture.getId();
 
 		ArrayList<Long> eventIDs = calendarData.getLecturesEventIDs().get(lectureID);
 
@@ -525,18 +530,18 @@ class CalendarInterface {
 
 				getEventDates(eventID, lecture.getStartDate(), lecture.getEndDate());
 
-				if (eventStartDate != null && eventEndDate != null) {
+				if ((eventStartDate != null) && (eventEndDate != null)) {
 					Calendar eventCalendar = new GregorianCalendar();
 					eventCalendar.setTime(eventStartDate);
 
 					Calendar lectureCalendar = new GregorianCalendar();
 					lectureCalendar.setTime(lecture.getStartDate());
 
-					int eventDayOfWeek = eventCalendar.get(Calendar.DAY_OF_WEEK);
-					int lectureDayOfWeek = lectureCalendar.get(Calendar.DAY_OF_WEEK);
+					final int eventDayOfWeek = eventCalendar.get(Calendar.DAY_OF_WEEK);
+					final int lectureDayOfWeek = lectureCalendar.get(Calendar.DAY_OF_WEEK);
 
 					if (eventDayOfWeek != lectureDayOfWeek) {
-						int diferenceDays = lectureDayOfWeek - eventDayOfWeek;
+						final int diferenceDays = lectureDayOfWeek - eventDayOfWeek;
 						eventCalendar.add(Calendar.DAY_OF_YEAR, diferenceDays);
 					}
 
@@ -660,7 +665,10 @@ class CalendarInterface {
 	 * @param endDate the endDate
 	 * @return the eventID if exits, else null if not
 	 */
-	private ArrayList<Long> getEventIDs(final String lectureID, final String lectureTitle, Date startDate, Date endDate) {
+	private ArrayList<Long> getEventIDs(final String lectureID, final String lectureTitle,
+	                                    Date startDate, Date endDate) {
+		//TODO lectureID not used
+
 		Context context = MainActivity.getAppContext().getApplicationContext();
 
 		ArrayList<Long> resultEventIDs = new ArrayList<>();
@@ -722,7 +730,7 @@ class CalendarInterface {
 		cur.close();
 
 		// if eventIDs were found return them
-		if (resultEventIDs.size() != 0) {
+		if (!resultEventIDs.isEmpty()) {
 			return resultEventIDs;
 		} else {
 			// otherwise return null
@@ -879,15 +887,15 @@ class CalendarInterface {
 		calendarData.getLecturesEventIDs().put(lectureID, eventIDs);
 	}
 
-	private void removeLectureEventID(String lectureID, Long eventID) {
-		ArrayList<Long> eventIDs = calendarData.getLecturesEventIDs().get(lectureID);
+	private void removeLectureEventID(final String lectureID, final Long eventID) {
+		final ArrayList<Long> eventIDs = calendarData.getLecturesEventIDs().get(lectureID);
 		if (eventIDs != null) {
 			eventIDs.remove(eventID);
 			calendarData.getLecturesEventIDs().put(lectureID, eventIDs);
 		}
 	}
 
-	private void removeAllLectureEventIDs(String lectureID) {
+	private void removeAllLectureEventIDs(final String lectureID) {
 		calendarData.getLecturesEventIDs().put(lectureID, new ArrayList<Long>());
 	}
 
@@ -895,41 +903,43 @@ class CalendarInterface {
 		calendarData.getLecturesEventIDs().clear();
 	}
 
-	private void addChangesEventID(String lectureID, Long eventID) {
+	private void addChangesEventID(final String lectureID, final Long eventID) {
 		ArrayList<Long> eventIDs = calendarData.getChangesEventIDs().get(lectureID);
 		if (eventIDs == null) {
 			eventIDs = new ArrayList<>();
-			eventIDs.add(eventID);
-		} else {
-			eventIDs.add(eventID);
 		}
+		eventIDs.add(eventID);
+
 		calendarData.getChangesEventIDs().put(lectureID, eventIDs);
 	}
 
-	private void removeChangesEventID(String lectureID, Long eventID) {
-		ArrayList<Long> eventIDs = calendarData.getChangesEventIDs().get(lectureID);
-		if (eventIDs != null) {
-			eventIDs.remove(eventID);
-			calendarData.getChangesEventIDs().put(lectureID, eventIDs);
-		}
-	}
+// --Commented out by Inspection START (28.10.2017 23:24):
+//	private void removeChangesEventID(final String lectureID, final Long eventID) {
+//
+//		final ArrayList<Long> eventIDs = calendarData.getChangesEventIDs().get(lectureID);
+//		if (eventIDs != null) {
+//			eventIDs.remove(eventID);
+//			calendarData.getChangesEventIDs().put(lectureID, eventIDs);
+//		}
+//	}
+// --Commented out by Inspection STOP (28.10.2017 23:24)
 
 	void saveCalendarData() {
-		Context context = MainActivity.getAppContext().getApplicationContext();
+		final Context context = MainActivity.getAppContext().getApplicationContext();
 
 		DataManager.getInstance().saveObject(context, calendarData, Define.calendarIDsFilename);
 	}
 
 	private void readCalendarData() {
-		Context context = MainActivity.getAppContext().getApplicationContext();
+		final Context context = MainActivity.getAppContext().getApplicationContext();
 
-		Object tmpCalendarEventIds = DataManager.getInstance().readObject(context, Define.calendarIDsFilename);
+		final Object tmpCalendarEventIds = DataManager.getInstance().readObject(context, Define.calendarIDsFilename);
 		if ((tmpCalendarEventIds != null) && (tmpCalendarEventIds instanceof CalendarData)) {
-			calendarData = (CalendarData) tmpCalendarEventIds;
+			this.calendarData = (CalendarData) tmpCalendarEventIds;
 		}
 	}
 
-	private Uri asSyncAdapter(Uri uri, String account, String accountType) {
+	private Uri asSyncAdapter(final Uri uri, final String account, final String accountType) {
 		return uri.buildUpon()
 				.appendQueryParameter(android.provider.CalendarContract.CALLER_IS_SYNCADAPTER, "true")
 				.appendQueryParameter(Calendars.ACCOUNT_NAME, account)

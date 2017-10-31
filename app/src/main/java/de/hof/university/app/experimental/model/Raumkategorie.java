@@ -28,7 +28,8 @@ public class Raumkategorie implements Level, Serializable {
     private final String title;
 
     public Raumkategorie(final String title) {
-        this.title = title;
+	    super();
+	    this.title = title;
     }
 
     public final String getTitle() {

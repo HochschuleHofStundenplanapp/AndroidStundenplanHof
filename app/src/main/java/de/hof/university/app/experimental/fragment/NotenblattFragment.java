@@ -16,10 +16,6 @@
 
 package de.hof.university.app.experimental.fragment;
 
-/**
- * Created by Lukas on 05.07.2016.
- */
-
 import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -42,7 +38,6 @@ import org.jsoup.nodes.Document;
 import java.io.IOException;
 import java.io.InterruptedIOException;
 
-import de.hof.university.app.BuildConfig;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.Util.Define;
@@ -52,7 +47,7 @@ import de.hof.university.app.experimental.LoginController;
 
 public class NotenblattFragment extends Fragment {
 
-    public final static String TAG = "NotenblattFragment";
+    private final static String TAG = "NotenblattFragment";
 
     private SwipeRefreshLayout swipeContainer;
     private WebView webView;

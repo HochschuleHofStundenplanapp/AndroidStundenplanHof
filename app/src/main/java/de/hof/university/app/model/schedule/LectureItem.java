@@ -47,20 +47,21 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
     private final String lecturer;
     private final String comment;
 
-    public LectureItem(final String id, final String weekday, final String label, final String type, final String style, final String sp, final String group,
+    public LectureItem(final String id, final String weekday, final String label, final String type, final String sp, final String group,
                        final Date startDate, final Date endDate, final String room, final String lecturer, final String comment) {
-        this.id = id;
-        this.weekday = weekday;
-        this.label = label;
-        this.type = type;
-        //this.style = style;
-        this.sp = sp;
-        this.group = group;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.room = room;
-        this.lecturer = lecturer;
-        this.comment = comment.replaceFirst("^- ", "");
+	    super();
+	    this.id = id;
+	    this.weekday = weekday;
+	    this.label = label;
+	    this.type = type;
+	    //this.style = style;
+	    this.sp = sp;
+	    this.group = group;
+	    this.startDate = startDate;
+	    this.endDate = endDate;
+	    this.room = room;
+	    this.lecturer = lecturer;
+	    this.comment = comment.replaceFirst("^- ", "");
     }
 
     @Override

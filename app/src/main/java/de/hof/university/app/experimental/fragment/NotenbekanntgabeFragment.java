@@ -16,10 +16,6 @@
 
 package de.hof.university.app.experimental.fragment;
 
-/**
- * Created by Lukas on 05.07.2016.
- */
-
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -43,6 +39,7 @@ import android.widget.Toast;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
@@ -54,14 +51,17 @@ import java.util.Map;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.Util.Define;
+import de.hof.university.app.Util.Log;
 import de.hof.university.app.experimental.LoginController;
 import de.hof.university.app.experimental.adapter.NotenAdapter;
 import de.hof.university.app.experimental.model.Noten;
 
+import static android.widget.Toast.makeText;
+
 
 public class NotenbekanntgabeFragment extends Fragment {
 
-    public final static String TAG = "NotenbekanntgabeFragment";
+    private final static String TAG = "NotenbekanntgabeFragment";
 
     private NotenAdapter adapter;
     private ArrayList<Noten> items;
@@ -72,6 +72,7 @@ public class NotenbekanntgabeFragment extends Fragment {
     private String session;
 
     public NotenbekanntgabeFragment() {
+	    super();
     }
 
     @Override
@@ -191,7 +192,8 @@ public class NotenbekanntgabeFragment extends Fragment {
         final Context context;
 
         GetNotenTask(Context context) {
-            this.context = context;
+	        super();
+	        this.context = context;
         }
 
         @Override
@@ -368,14 +370,14 @@ public class NotenbekanntgabeFragment extends Fragment {
 
 
                 //Methode mit Webview
-                Map<String, String> cookies = new HashMap<>();
+                final Map<String, String> cookies = new HashMap<>();
 
-                String cookiesString = CookieManager.getInstance().getCookie(Define.PRIMUSSURL);
+                final String cookiesString = CookieManager.getInstance().getCookie(Define.PRIMUSSURL);
 
-                String[] cookiesArray = cookiesString.split(";");
+                final String[] cookiesArray = cookiesString.split(";");
 
                 for (String ar1 : cookiesArray ) {
-                    String[] temp = ar1.split("=");
+                    final String[] temp = ar1.split("=");
                     cookies.put(temp[0], temp[1]);
                 }
 
@@ -393,8 +395,17 @@ public class NotenbekanntgabeFragment extends Fragment {
                         .method(Connection.Method.POST)
                         .timeout(10000)
                         .execute();
-                Document doc2 = res2.parse();
-                String poison = doc2.getElementsByAttributeValueMatching("name", "Poison").val();
+
+                Document doc2 = null;
+                try {
+                    doc2 = res2.parse();
+                } catch ( final IOException e )
+                {
+                    Log.e(TAG, "Parse error 1", e);
+	                errorText = "Internal (e1): "+ getString(R.string.lesenotenbekanntgabefehler);
+	                return null;
+                }
+                final String poison = doc2.getElementsByAttributeValueMatching("name", "Poison").val();
 
                 //Notenbekanntgabe
                 //Connection.Response res3 = Jsoup.connect("https://www3.primuss.de/cgi-bin/pg_Notenbekanntgabe/showajax.pl")
@@ -406,20 +417,45 @@ public class NotenbekanntgabeFragment extends Fragment {
                         .timeout(10000)
                         .execute();
 
-                // TODO falls keine Daten kommen Fehlermeldung anzeigen
+                // falls keine Daten kommen Fehlermeldung anzeigen
+	            Document doc3 ;
+	            try {
+                    doc3 = res3.parse();
+	            } catch ( final IOException e )
+	            {
+		            Log.e(TAG, "Parse error 2", e);
+		            errorText = "Internal (e2): "+ getString(R.string.lesenotenbekanntgabefehler);
+		            return null;
+	            }
 
-                SharedPreferences.Editor edit = sp.edit();
-                Document doc3 = res3.parse();
-                // Prüfe ob Notenbekanntgabe bereits beendet wurde.
+
+	            // Prüfe ob Notenbekanntgabe bereits beendet wurde.
                 if (doc3.getElementsByTag("h2").hasClass("error")) {
-                    Elements tr = doc3.getElementsByClass("table1").get(0).getElementsByTag("tr");
+                    final Elements tr = doc3.getElementsByClass("table1").get(0).getElementsByTag("tr");
                     for (org.jsoup.nodes.Element line : tr) {
                         items.add(new Noten(line.child(0).text(), line.child(1).text()));
                     }
                 } else {
-                    Elements elements = doc3.getElementsByClass("table2").get(0).child(1).children();
-                    for (int i = 0; i < elements.size(); ++i) {
-                        items.add(new Noten(elements.get(i).child(2).text(), elements.get(i).child(5).child(0).text()));
+                    final SharedPreferences.Editor edit = sp.edit();
+
+	                Elements elements ;
+	                try {
+		                final Elements eTable = doc3.getElementsByClass("table2");
+		                final Element element = eTable.get(0).child(1) ;
+	                    elements = element.children();
+
+	                } catch ( final Exception e )
+		            {
+			            Log.e(TAG, "Parse error 3", e);
+			            errorText = "Internal (e3): "+ getString(R.string.lesenotenbekanntgabefehler);
+			            return null;
+		            }
+	                for (int i = 0; i < elements.size(); ++i) {
+                    	final String text1 = elements.get(i).child(2).text();
+						final String text2 = elements.get(i).child(5).child(0).text();
+
+                    	final Noten noten = new Noten( text1, text2);
+                        items.add( noten );
                         edit.putString(String.valueOf(elements.get(i).child(2).text().hashCode()), elements.get(i).child(5).child(0).text());
                     }
                     edit.apply();
@@ -430,7 +466,7 @@ public class NotenbekanntgabeFragment extends Fragment {
 //			DBConnection.Response res4 = Jsoup.connect("https://www1.primuss.de/cgi/pg_Notenblatt/index.pl").data(
 //					"Session", session, "User", user, "Language", "de", "FH", fh, "Portal", portal, "Javascript", javascript).method(Method.POST).execute();
 //			Log.d(TAG, res4.body());
-            } catch (IOException e) {
+            } catch (final IOException e) {
 
                 if (e.getClass() == InterruptedIOException.class) //Wurde einfach abgebrochen -> nichts tun
                 {
@@ -449,7 +485,7 @@ public class NotenbekanntgabeFragment extends Fragment {
 
             //Wenn es einen Fehler gab -> ausgeben
             if (!errorText.isEmpty()) {
-                Toast.makeText(getActivity(), errorText, Toast.LENGTH_LONG).show();
+                makeText(getActivity(), errorText, Toast.LENGTH_LONG).show();
             }
             super.onPostExecute(aVoid);
         }

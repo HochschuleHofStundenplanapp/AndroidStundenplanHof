@@ -25,13 +25,14 @@ import de.hof.university.app.model.HofObject;
  */
 
 public class Raumliste extends HofObject {
-	ArrayList<Level> raumlist;
-	String timeStart;
-	String timeEnd;
-	String raumTyp;
-	String date;
+	private ArrayList<Level> raumlist;
+	private String timeStart;
+	private String timeEnd;
+	private String raumTyp;
+	private String date;
 
 	public Raumliste() {
+		super();
 		this.raumlist = new ArrayList<>();
 		this.timeStart = null;
 		this.timeEnd = null;

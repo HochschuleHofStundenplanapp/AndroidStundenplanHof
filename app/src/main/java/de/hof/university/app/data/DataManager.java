@@ -61,7 +61,7 @@ import de.hof.university.app.model.settings.StudyCourses;
  *
  */
 public class DataManager {
-    public static final String TAG = "DataManager";
+    private static final String TAG = "DataManager";
 
     private static final DataManager instance = new DataManager();
 
@@ -81,13 +81,14 @@ public class DataManager {
     }
 
     private DataManager() {
-        Context context = MainActivity.getAppContext().getApplicationContext();
+	    super();
+	    Context context = MainActivity.getAppContext().getApplicationContext();
 
-        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+	    this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public final ArrayList<Meal> getMeals(Context context, boolean forceRefresh) {
-        Meals meals = this.getMeals(context);
+    public final ArrayList<Meal> getMeals(final Context context, boolean forceRefresh) {
+        final Meals meals = this.getMeals(context);
 
         if (forceRefresh
                 || (meals.getMeals().isEmpty())
@@ -125,9 +126,11 @@ public class DataManager {
         return this.getMeals(context).getMeals();
     }
 
-    public final ArrayList<LectureItem> getSchedule(Context context, String language, String course, String semester,
-                                                    String termTime, boolean forceRefresh) {
-        Schedule schedule = this.getSchedule(context);
+    public final ArrayList<LectureItem> getSchedule(
+            final Context context, final String language, final String course,
+            final String semester, final String termTime, final boolean forceRefresh) {
+
+        final Schedule schedule = this.getSchedule(context);
 
         if (forceRefresh
                 || (schedule.getLectures().isEmpty())
@@ -259,9 +262,11 @@ public class DataManager {
         return this.getMySchedule(context).getLectures();
     }
 
-    public final ArrayList<Object> getChanges(Context context, String course, String semester,
-                                              String termTime, boolean forceRefresh) {
-        Changes changes = this.getChanges(context);
+    public final ArrayList<Object> getChanges(
+    		final Context context, final String course, final String semester,
+            final String termTime, final boolean forceRefresh) {
+
+        final Changes changes = this.getChanges(context);
 
         if (forceRefresh
                 || (changes.getChanges().isEmpty())
@@ -401,7 +406,7 @@ public class DataManager {
         this.deleteLectureFromCalendar(context, lectureItem.getId());
 
         // falls MySchedule leer füge den Schedule zum Kalender hinzu
-        if (this.getMySchedule(context).getLectures().size() == 0) {
+        if (this.getMySchedule(context).getLectures().isEmpty()) {
             this.updateCalendar();
         }
     }

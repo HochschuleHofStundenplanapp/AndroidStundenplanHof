@@ -78,13 +78,14 @@ public class SettingsFragment extends PreferenceFragment {
 	public final void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true);
-		loginController = LoginController.getInstance(getActivity());
-		calendarSynchronization = CalendarSynchronization.getInstance();
+
+		this.loginController = LoginController.getInstance(getActivity());
+		this.calendarSynchronization = CalendarSynchronization.getInstance();
 
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.preferences);
 
-		final ListPreference lpSemester = (ListPreference) findPreference("semester");
+		final ListPreference lpSemester = (ListPreference) findPreference(getString(R.string.PREFERENCE_KEY_SEMESTER));
 
 		if ( lpSemester != null ) {
 			lpSemester.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -97,16 +98,13 @@ public class SettingsFragment extends PreferenceFragment {
 		}
 
 
-		final ListPreference lpCourse = (ListPreference) findPreference("studiengang");
+		final ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREFERENCE_KEY_STUDIENGANG));
 		if ( lpCourse != null ) {
 			lpCourse.setEnabled(false);
 		}
 
 		// Benachrichtigungen
-		final PreferenceCategory category_notification = (PreferenceCategory) findPreference("category_notification");
-		final CheckBoxPreference changes_notifications = (CheckBoxPreference) findPreference("changes_notifications");
-
-		PreferenceScreen preferenceScreen = getPreferenceScreen();
+		final CheckBoxPreference changes_notifications = (CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CHANGES_NOTIFICATION));
 
 		if (Define.PUSH_NOTIFICATIONS_ENABLED) {
 			changes_notifications.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -135,11 +133,14 @@ public class SettingsFragment extends PreferenceFragment {
 				}
 			});
 		} else {
+			final PreferenceScreen preferenceScreen = getPreferenceScreen();
+			final PreferenceCategory category_notification = (PreferenceCategory) findPreference(getString(R.string.PREFERENCE_KEY_CATEGORY_NOTIFICATION));
+
 			preferenceScreen.removePreference(category_notification);
 			preferenceScreen.removePreference(changes_notifications);
 		}
 
-		// Calendar syncronization
+		// Calendar synchronization
 		final CheckBoxPreference calendar_syncronization = (CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION));
 
 		calendar_syncronization.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -160,7 +161,7 @@ public class SettingsFragment extends PreferenceFragment {
 		});
 
 		//Login für die experimentellen Funktionen
-		Preference edtLogin = findPreference("login");
+		final Preference edtLogin = findPreference(getString(R.string.PREFERENCE_KEY_LOGIN));
 		edtLogin.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
@@ -173,7 +174,7 @@ public class SettingsFragment extends PreferenceFragment {
 			}
 		});
 
-		final CheckBoxPreference experimentalFeatures = (CheckBoxPreference) findPreference("experimental_features");
+		final CheckBoxPreference experimentalFeatures = (CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_EXPERIMENTAL_FEATURES));
 
 		if ( experimentalFeatures.isChecked() ) {
 			edtLogin.setEnabled(true);
@@ -239,17 +240,18 @@ public class SettingsFragment extends PreferenceFragment {
 	@Override
 	public final void onResume() {
 		super.onResume();
-		MainActivity mainActivity = (MainActivity) getActivity();
+
+		final MainActivity mainActivity = (MainActivity) getActivity();
 		mainActivity.getSupportActionBar().setTitle(R.string.einstellungen);
 
-		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+		final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
 		navigationView.getMenu().findItem(R.id.nav_einstellungen).setChecked(true);
 
 		if ( studyCourseList == null ) {
 			updateCourseListPreference("", false);
 		}
 
-		updateSemesterData(PreferenceManager.getDefaultSharedPreferences(getView().getContext()).getString("studiengang", ""));
+		updateSemesterData(PreferenceManager.getDefaultSharedPreferences(getView().getContext()).getString(getString(R.string.PREFERENCE_KEY_STUDIENGANG), ""));
 //        updateSemesterListPreference();
 		refreshSummaries();
 	}
@@ -257,8 +259,10 @@ public class SettingsFragment extends PreferenceFragment {
 	@Override
 	public void onPause() {
 		super.onPause();
-		MainActivity mainActivity = (MainActivity) getActivity();
-		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+
+		final MainActivity mainActivity = (MainActivity) getActivity();
+		final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+
 		navigationView.getMenu().findItem(R.id.nav_einstellungen).setChecked(false);
 	}
 
@@ -268,18 +272,18 @@ public class SettingsFragment extends PreferenceFragment {
         edtName.setSummary(edtName.getText());
         */
 
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getView().getContext());
+		final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getView().getContext());
 
-		ListPreference lpCourse = (ListPreference) findPreference("studiengang");
-		lpCourse.setSummary(sharedPreferences.getString("studiengang", ""));
+		final ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREFERENCE_KEY_STUDIENGANG));
+		lpCourse.setSummary(sharedPreferences.getString(getString(R.string.PREFERENCE_KEY_STUDIENGANG), ""));
 
-		ListPreference lpSemester = (ListPreference) findPreference("semester");
-		lpSemester.setSummary(sharedPreferences.getString("semester", ""));
+		final ListPreference lpSemester = (ListPreference) findPreference(getString(R.string.PREFERENCE_KEY_SEMESTER));
+		lpSemester.setSummary(sharedPreferences.getString(getString(R.string.PREFERENCE_KEY_SEMESTER), ""));
 
-		ListPreference lpTarif = (ListPreference) findPreference("speiseplan_tarif");
+		final ListPreference lpTarif = (ListPreference) findPreference("speiseplan_tarif");
 		lpTarif.setSummary(lpTarif.getEntry());
 
-		ListPreference lpTermTime = (ListPreference) findPreference("term_time");
+		final ListPreference lpTermTime = (ListPreference) findPreference(getString(R.string.PREFERENCE_KEY_TERM_TIME));
 		lpTermTime.setSummary(lpTermTime.getEntry());
 	}
 
@@ -288,7 +292,7 @@ public class SettingsFragment extends PreferenceFragment {
 	 * Alle eingestellten Werte werden nun unterhalb des jeweiligen Punktes angezeigt.
 	 */
 	private void enableSettingsSummary() {
-		ListPreference lpCourse = (ListPreference) findPreference("studiengang");
+		final ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREFERENCE_KEY_STUDIENGANG));
 		lpCourse.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, final Object newValue) {
@@ -298,7 +302,7 @@ public class SettingsFragment extends PreferenceFragment {
 			}
 		});
 
-		ListPreference lpSemester = (ListPreference) findPreference("semester");
+		final ListPreference lpSemester = (ListPreference) findPreference(getString(R.string.PREFERENCE_KEY_SEMESTER));
 		lpSemester.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -307,7 +311,7 @@ public class SettingsFragment extends PreferenceFragment {
 			}
 		});
 
-		ListPreference lpTarif = (ListPreference) findPreference("speiseplan_tarif");
+		final ListPreference lpTarif = (ListPreference) findPreference("speiseplan_tarif");
 		lpTarif.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -323,13 +327,13 @@ public class SettingsFragment extends PreferenceFragment {
 			}
 		});
 
-		ListPreference lpTermTime = (ListPreference) findPreference("term_time");
+		final ListPreference lpTermTime = (ListPreference) findPreference("term_time");
 		lpTermTime.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				if ( preference instanceof ListPreference ) {
-					ListPreference listPreference = (ListPreference) preference;
-					int index = listPreference.findIndexOfValue(newValue.toString());
+					final ListPreference listPreference = (ListPreference) preference;
+					final int index = listPreference.findIndexOfValue(newValue.toString());
 					if ( index >= 0 ) {
 						listPreference.setSummary(listPreference.getEntries()[ index ]);
 						updateCourseListPreference(newValue.toString(), true);
@@ -362,11 +366,11 @@ public class SettingsFragment extends PreferenceFragment {
 			return;
 		}
 
-		String[] params = new String[ 2 ];
+		final String[] params = new String[ 2 ];
 		params[ 0 ] = term;
 		params[ 1 ] = String.valueOf(forceRefresh);
 
-		SettingsFragment.GetSemesterTask getSemesterTask = new SettingsFragment.GetSemesterTask();
+		final SettingsFragment.GetSemesterTask getSemesterTask = new SettingsFragment.GetSemesterTask();
 		getSemesterTask.execute(params);
 
 	}
@@ -399,22 +403,23 @@ public class SettingsFragment extends PreferenceFragment {
 
 
 	/**
-	 * Öffnet Prozessdialog und aktuallisiert die Semester zum dem zuvor ausgewählten Studiengang
+	 * Öffnet Prozessdialog und aktualisiert die Semester zu dem zuvor ausgewählten Studiengang
 	 *
 	 * @param courseStr Studiengang dessen Semester geladen werden
 	 */
 	private void updateSemesterData(final String courseStr) {
-		ListPreference lpSemester = (ListPreference) findPreference("semester");
+
+		final ListPreference lpSemester = (ListPreference) findPreference(getString(R.string.PREFERENCE_KEY_SEMESTER));
 		if ( (studyCourseList == null) || courseStr.isEmpty() ) {
 			lpSemester.setEntries(new CharSequence[]{});
 			lpSemester.setEntryValues(new CharSequence[]{});
 			return;
 		}
 
-		for ( StudyCourse studyCourse : studyCourseList ) {
+		for ( final StudyCourse studyCourse : studyCourseList ) {
 			if ( studyCourse.getTag().equals(courseStr) ) {
-				CharSequence[] entries = new CharSequence[ studyCourse.getTerms().size() ];
-				CharSequence[] entryValues = new CharSequence[ studyCourse.getTerms().size() ];
+				final CharSequence[] entries = new CharSequence[ studyCourse.getTerms().size() ];
+				final CharSequence[] entryValues = new CharSequence[ studyCourse.getTerms().size() ];
 
 				for ( int j = 0; j < studyCourse.getTerms().size(); ++j ) {
 					entries[ j ] = studyCourse.getTerms().get(j);
@@ -443,6 +448,7 @@ public class SettingsFragment extends PreferenceFragment {
 		@Override
 		protected final void onPreExecute() {
 			super.onPreExecute();
+
 			progressDialog = new ProgressDialog(getActivity());
 			progressDialog.setCancelable(true);
 			progressDialog.setMessage(getString(R.string.onclick_refresh));
@@ -454,10 +460,11 @@ public class SettingsFragment extends PreferenceFragment {
 
 		@Override
 		protected final Void doInBackground(String... params) {
-			String termTime = params[ 0 ];
-			boolean pForceRefresh = Boolean.valueOf(params[ 1 ]);
+			final String termTime = params[ 0 ];
+			final boolean pForceRefresh = Boolean.valueOf(params[ 1 ]);
 
-			studyCourseList = DataManager.getInstance().getCourses(getActivity().getBaseContext(), getString(R.string.language), termTime, pForceRefresh);
+			studyCourseList = DataManager.getInstance().getCourses(getActivity().getBaseContext(),
+					getString(R.string.language), termTime, pForceRefresh);
 
 			if (studyCourseList != null) {
 				entries = new CharSequence[studyCourseList.size()];
@@ -479,7 +486,7 @@ public class SettingsFragment extends PreferenceFragment {
 		@Override
 		protected final void onPostExecute(Void aVoid) {
 			super.onPostExecute(aVoid);
-			ListPreference lpCourse = (ListPreference) findPreference("studiengang");
+			ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREFERENCE_KEY_STUDIENGANG));
 			if (entries != null) {
 				if (entries.length > 0) {
 					lpCourse.setEntries(entries);
@@ -493,7 +500,7 @@ public class SettingsFragment extends PreferenceFragment {
 		}
 	}
 
-	public void requestCalendarPermission() {
+	private void requestCalendarPermission() {
 
 		// From MARSHMELLOW (OS 6) on
 		if (Build.VERSION.SDK_INT >= VERSION_CODES.M ) {

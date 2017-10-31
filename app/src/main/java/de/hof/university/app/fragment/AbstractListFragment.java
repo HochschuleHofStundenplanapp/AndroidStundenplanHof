@@ -45,14 +45,14 @@ import de.hof.university.app.fragment.schedule.ScheduleFragment;
  */
 public abstract class AbstractListFragment extends Fragment {
 
-    public final static String TAG = "AbstractListFragment";
+    private final static String TAG = "AbstractListFragment";
 
     private SwipeRefreshLayout swipeContainer;
     protected ListView listView;
     protected ArrayAdapter adapter;
     protected ArrayList<Object> dataList;
-    protected AbstractListFragment.Task task;
-    protected SharedPreferences sharedPref;
+    private AbstractListFragment.Task task;
+    SharedPreferences sharedPref;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -131,7 +131,7 @@ public abstract class AbstractListFragment extends Fragment {
         }
 
         @Override
-        protected final ArrayList<Object> doInBackground(String... params) {
+        protected ArrayList<Object> doInBackground(String... params) {
             if (!isCancelled()) {
                 return background(params);
             }

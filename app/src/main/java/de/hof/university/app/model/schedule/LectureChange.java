@@ -43,16 +43,17 @@ public class LectureChange implements Serializable {
 
     public LectureChange(final String id, final String label, final String comment, final String group, final String reason,
                          final Date begin_old, final Date begin_new, final String room_old, final String room_new, final String lecturer) {
-        this.id = id;
-        this.label = label;
-        this.comment = comment;
-        this.group = group;
-        this.reason = reason;
-        this.begin_old = begin_old;
-        this.begin_new = begin_new;
-        this.room_old = room_old;
-        this.room_new = room_new;
-        this.lecturer = lecturer;
+	    super();
+	    this.id = id;
+	    this.label = label;
+	    this.comment = comment;
+	    this.group = group;
+	    this.reason = reason;
+	    this.begin_old = begin_old;
+	    this.begin_new = begin_new;
+	    this.room_old = room_old;
+	    this.room_new = room_new;
+	    this.lecturer = lecturer;
     }
 
     @Override

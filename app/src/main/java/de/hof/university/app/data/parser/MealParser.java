@@ -37,22 +37,24 @@ import de.hof.university.app.model.meal.Meal;
  */
 final public class MealParser implements Parser<Meal> {
 
-	public final static String TAG = "MealParser";
+	private final static String TAG = "MealParser";
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY);
     private Integer tariff;
 
 
     public MealParser() {
+	    super();
     }
 
     @Override
-    public final ArrayList<Meal> parse(String[] params) {
+    public final ArrayList<Meal> parse(final String[] params) {
+
         ArrayList<Meal> result = new ArrayList<>();
 
         if (params.length == 2) {
 
-            String xmlString = params[0];
+            final String xmlString = params[0];
             try {
                 tariff = Integer.valueOf(params[1]);
             } catch (NumberFormatException nfe) {
@@ -65,7 +67,7 @@ final public class MealParser implements Parser<Meal> {
             }
 
             try {
-                XmlPullParser xmlParser = Xml.newPullParser();
+                final XmlPullParser xmlParser = Xml.newPullParser();
                 xmlParser.setInput(new StringReader(xmlString));
                 Meal meal = null;
                 String xmlText = "";
