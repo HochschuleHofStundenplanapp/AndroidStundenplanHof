@@ -330,7 +330,7 @@ class CalendarInterface {
 				updateEvent(eventID, title, null, startTime, endTime, location);
 			}
 		} else {
-			Long newEventID = createEvent(title, description, startTime, endTime, location, lectureID);
+			final Long newEventID = createEvent(title, description, startTime, endTime, location, lectureID);
 
 			// Wenn null dann keine Berechtigung oder keine CalendarID und returnen
 			if (newEventID == null) {
