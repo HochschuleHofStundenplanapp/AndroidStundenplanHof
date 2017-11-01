@@ -99,6 +99,9 @@ public class CalendarSynchronization {
 
             calendarInterface.createLectureEvent(lectureItem.getId(), lectureItem.getLabel(), "", tmpStartDate, newEndDateCalendar.getTime(), calendarInterface.getLocation(lectureItem.getRoom()));
 
+			// Ausgabe, was wir anlegen
+            Log.i( TAG, "createLectureEvent: " + lectureItem.getLabel() + " " + tmpStartDate.toString() );
+
             Calendar startDateCalendar = GregorianCalendar.getInstance();
             startDateCalendar.setTime(tmpStartDate);
 
