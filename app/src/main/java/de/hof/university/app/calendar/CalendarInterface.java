@@ -475,8 +475,7 @@ class CalendarInterface {
 		// wenn leer dann zurück
 		if (eventIDs == null) return;
 
-		for (Long eventID :
-				eventIDs) {
+		for (Long eventID : eventIDs) {
 			// TODO vielleicht endDatum ändern
 			if (getEventIDs(lectureID, change.getLabel(), change.getBegin_old(), change.getBegin_old()) != null) {
 

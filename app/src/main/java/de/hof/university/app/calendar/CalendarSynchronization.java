@@ -60,6 +60,9 @@ public class CalendarSynchronization {
 	    calendarInterface = CalendarInterface.getInstance();
     }
 
+    /**
+     * create the events for all lectures
+     */
     public void createAllEvents() {
         if (DEBUG_CALENDAR_SYNCHRONIZATION) Log.d(TAG, "createAllEvents");
         final Context context = MainActivity.getAppContext().getApplicationContext();
@@ -73,6 +76,10 @@ public class CalendarSynchronization {
         final AsyncTask<ArrayList<LectureItem>, Void, Boolean> execute = task.execute(lectureItems);
     }
 
+    /**
+     * creates the events for a given list of lectures
+     * @param lectureItems the list of lectures
+     */
     public void createAllEvents(final ArrayList<LectureItem> lectureItems) {
         if (DEBUG_CALENDAR_SYNCHRONIZATION) Log.d(TAG, "createAllEvents | lectureItems: " + lectureItems);
         if (lectureItems == null) {
@@ -83,6 +90,10 @@ public class CalendarSynchronization {
 	    final AsyncTask<ArrayList<LectureItem>, Void, Boolean> execute = task.execute(lectureItems);
     }
 
+    /**
+     * creates the events for a lecture
+     * @param lecture the lecture
+     */
     public void createAllEvents(final LectureItem lecture) {
         if (DEBUG_CALENDAR_SYNCHRONIZATION) Log.d(TAG, "createAllEvents | lectureItem: " + lecture);
         final CreateAllEventsTask task = new CreateAllEventsTask();
@@ -91,6 +102,10 @@ public class CalendarSynchronization {
 	    final AsyncTask<ArrayList<LectureItem>, Void, Boolean> execute = task.execute(list);
     }
 
+    /**
+     * creates the events for a lecture
+     * @param lectureItem the lecture
+     */
     private void createEventsForLecture(LectureItem lectureItem) {
         if (DEBUG_CALENDAR_SYNCHRONIZATION) Log.d(TAG, "createEventsForLecture | lectureItem: " + lectureItem);
 
@@ -117,24 +132,22 @@ public class CalendarSynchronization {
         } while (tmpStartDate.before(lectureItem.getEndDate()));
     }
 
+    /**
+     * update the lecture changes to the calendar
+     */
     public void updateChanges() {
         final Context context = MainActivity.getAppContext().getApplicationContext();
-        new Thread() {
-            @Override
-            public void run() {
-                ArrayList<Object> changes = DataManager.getInstance().getChanges(context).getChanges();
-                for (Object changeObject :
-                        changes) {
-                    if (changeObject instanceof LectureChange) {
-                        LectureChange change = (LectureChange) changeObject;
 
-                        calendarInterface.updateChange(change);
-                    }
-                }
-            }
-        }.start();
+        ArrayList<Object> changes = DataManager.getInstance().getChanges(context).getChanges();
+
+        UpdateChangesTask task = new UpdateChangesTask();
+        task.execute(changes);
     }
 
+    /**
+     * deletes all events
+     * @return if it was successful
+     */
     public Boolean deleteAllEvents() {
         if (DEBUG_CALENDAR_SYNCHRONIZATION) Log.d(TAG, "deleteAllEvents");
         DeleteAllEventsTask task = new DeleteAllEventsTask();
@@ -150,6 +163,10 @@ public class CalendarSynchronization {
         }
     }
 
+    /**
+     * deletes all events of the given lecture
+     * @param lectureID the lectureID of the lecture witch should be deleted
+     */
     public void deleteAllEvents(String lectureID) {
         if (DEBUG_CALENDAR_SYNCHRONIZATION) Log.d(TAG, " | deleteAllEvents | lectureID: " + lectureID);
         DeleteAllEventsTask task = new DeleteAllEventsTask();
@@ -202,6 +219,10 @@ public class CalendarSynchronization {
         }.start();
     }
 
+    /**
+     * returns the names of the existing calendars
+     * @return returns the names of the existing calendars
+     */
     public ArrayList<String> getCalendarsNames() {
         ArrayList<String> result = new ArrayList<>();
         calendars = calendarInterface.getCalendars();
@@ -239,6 +260,10 @@ public class CalendarSynchronization {
         return result;
     }
 
+    /**
+     * sets the calendar
+     * @param calendarName the name of the calendar or null if it should be the local one
+     */
     public void setCalendar(String calendarName) {
         if ((calendarName == null) || calendarName.isEmpty()) {
             // lokalen Kalender
@@ -275,6 +300,28 @@ public class CalendarSynchronization {
         protected Boolean doInBackground(ArrayList<LectureItem>... p_lectureItems) {
             for (LectureItem lecture: p_lectureItems[0]) {
                 calendarInterface.updateLecture(lecture);
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+            Toast.makeText(context, R.string.calendar_synchronization_successful, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class UpdateChangesTask extends AsyncTask<ArrayList<Object>, Void, Boolean> {
+        final Context context = MainActivity.getAppContext().getApplicationContext();
+
+        @Override
+        protected Boolean doInBackground(ArrayList<Object>... p_changes) {
+            for (Object changeObject : p_changes[0]) {
+                if (changeObject instanceof LectureChange) {
+                    LectureChange change = (LectureChange) changeObject;
+
+                    calendarInterface.updateChange(change);
+                }
             }
             return true;
         }
