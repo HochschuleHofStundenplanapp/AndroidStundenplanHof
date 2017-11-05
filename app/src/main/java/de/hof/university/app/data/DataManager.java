@@ -449,7 +449,7 @@ public class DataManager {
         return getSchedule(context).getLastSaved();
     }
 
-    private MySchedule getMySchedule(final Context context) {
+    public MySchedule getMySchedule(final Context context) {
         if (this.mySchedule == null) {
             Object obtMyScheduleOpj = readObject(context, Define.myScheduleFilename);
             if ((obtMyScheduleOpj != null) && (obtMyScheduleOpj instanceof Set)) {

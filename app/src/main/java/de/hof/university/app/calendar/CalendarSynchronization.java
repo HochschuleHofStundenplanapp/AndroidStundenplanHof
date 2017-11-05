@@ -67,7 +67,11 @@ public class CalendarSynchronization {
         if (DEBUG_CALENDAR_SYNCHRONIZATION) Log.d(TAG, "createAllEvents");
         final Context context = MainActivity.getAppContext().getApplicationContext();
 
-        final ArrayList<LectureItem> lectureItems = DataManager.getInstance().getSelectedLectures(context);
+        // falls der Stundenplan und der Mein Stundenplan synchronisiert werden sollen
+        //final ArrayList<LectureItem> lectureItems = DataManager.getInstance().getSelectedLectures(context);
+
+        // falls nur der Mein Stundenplan synchronisiert werden soll
+        final ArrayList<LectureItem> lectureItems = DataManager.getInstance().getMySchedule(context).getLectures();
 
         if (lectureItems == null)
             return;

@@ -147,4 +147,5 @@
     <string translatable="false" name="PREFERENCE_KEY_TERM_TIME">term_time</string>
     <string translatable="false" name="PREFERENCE_KEY_EXPERIMENTAL_FEATURES_ENABLED">experimental_features</string>
     <string name="calendar_synchronization_successful">Schedule successfully synchronized with the calendar!</string>
+    <string name="pref_calendar_synchronization">My schedule calendar synchronization</string>
 </resources>

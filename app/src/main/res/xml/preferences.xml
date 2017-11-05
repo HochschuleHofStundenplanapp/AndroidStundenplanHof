@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2016 Lars Gaidzik & Lukas Mahr
   ~ This program is free software: you can redistribute it and/or modify
   ~ it under the terms of the GNU General Public License as published by
@@ -16,114 +15,126 @@
   -->
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:layout_width="match_parent"
-                  android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <PreferenceCategory android:title="@string/studium"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/studium">
+
         <ListPreference
-            android:key="term_time"
-            android:title="@string/term_time"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:defaultValue="WS"
             android:entries="@array/term_time"
             android:entryValues="@array/term_time_values"
-            android:defaultValue="WS"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:key="term_time"
+            android:title="@string/term_time" />
 
         <ListPreference
-            android:key="studiengang"
-            android:title="@string/studiengang"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:defaultValue="Sprachenprogramm"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:key="studiengang"
+            android:title="@string/studiengang" />
         <ListPreference
-            android:key="semester"
-            android:title="@string/semester"
-            android:defaultValue="1"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:defaultValue="1"
+            android:key="semester"
+            android:title="@string/semester" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/speiseplan"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="@string/speiseplan">
         <CheckBoxPreference
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:defaultValue="true"
             android:key="speiseplan_hauptgericht"
-            android:title="@string/hauptgerichte"
-            android:defaultValue="true"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:title="@string/hauptgerichte" />
         <CheckBoxPreference
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:defaultValue="true"
             android:key="speiseplan_beilage"
-            android:title="@string/beilagen"
-            android:defaultValue="true"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:title="@string/beilagen" />
         <CheckBoxPreference
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:defaultValue="true"
             android:key="speiseplan_pasta"
-            android:title="@string/pasta"
-            android:defaultValue="true"
+            android:title="@string/pasta" />
+        <CheckBoxPreference
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:defaultValue="true"
+            android:key="speiseplan_dessert"
+            android:title="@string/desserts" />
         <CheckBoxPreference
-        android:key="speiseplan_dessert"
-        android:title="@string/desserts"
-        android:defaultValue="true"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-        <CheckBoxPreference
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:defaultValue="true"
             android:key="speiseplan_salat"
-            android:title="@string/salat"
-            android:defaultValue="true"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:title="@string/salat" />
         <ListPreference
-            android:key="speiseplan_tarif"
-            android:title="@string/tariff"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:defaultValue="1"
             android:entries="@array/speiseplan_tarife"
             android:entryValues="@array/speiseplan_tarife_values"
-            android:defaultValue="1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:key="speiseplan_tarif"
+            android:title="@string/tariff" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/notifications"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:key="category_notification"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:title="@string/notifications">
         <CheckBoxPreference
-            android:key="changes_notifications"
-            android:title="@string/changes"
-            android:defaultValue="false"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:defaultValue="false"
+            android:key="changes_notifications"
+            android:title="@string/changes" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="@string/experimental"
-        android:key="category_experimental"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:key="category_experimental"
+        android:title="@string/experimental">
         <CheckBoxPreference
-            android:key="experimental_features"
-            android:title="@string/experimental_features"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:defaultValue="false"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:key="experimental_features"
+            android:title="@string/experimental_features" />
         <Preference
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:key="login"
-            android:title="@string/LOGIN_DIALOG"
+            android:title="@string/LOGIN_DIALOG" />
+
+        <!--<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"
+            android:key="pref_screen_calendar_synchronization"
+            android:title="@string/calendar_synchronization">-->
+
         <CheckBoxPreference
-            android:key="calendar_synchronization"
-            android:title="@string/calendar_synchronization"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:key="calendar_synchronization"
+            android:title="@string/pref_calendar_synchronization" />
+
+        <!--</PreferenceScreen>-->
 
     </PreferenceCategory>
 
