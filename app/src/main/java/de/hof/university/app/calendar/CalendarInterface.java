@@ -46,9 +46,71 @@ import de.hof.university.app.data.DataManager;
 import de.hof.university.app.model.schedule.LectureChange;
 import de.hof.university.app.model.schedule.LectureItem;
 
-/**
- * Created by Daniel on 13.05.2017.
+/*
+	reading from https://developer.android.com/reference/android/provider/CalendarContract.EventsColumns.html
+
+ACCESS_CONFIDENTIAL	Confidential is not used by the app.
+ACCESS_DEFAULT	Default access is controlled by the server and will be treated as public on the device.
+ACCESS_LEVEL	Defines how the event shows up for others when the calendar is shared.
+ACCESS_PRIVATE	Private shares the event as a free/busy slot with no details.
+ACCESS_PUBLIC	Public makes the contents visible to anyone with access to the calendar.
+ALL_DAY	Is the event all day (time zone independent).
+AVAILABILITY	If this event counts as busy time or is still free time that can be scheduled over.
+AVAILABILITY_BUSY	Indicates that this event takes up time and will conflict with other events.
+AVAILABILITY_FREE	Indicates that this event is free time and will not conflict with other events.
+AVAILABILITY_TENTATIVE	Indicates that the owner's availability may change, but should be considered busy time that will conflict.
+CALENDAR_ID	The _ID of the calendar the event belongs to.
+CAN_INVITE_OTHERS	Whether the user can invite others to the event.
+CUSTOM_APP_PACKAGE	The package name of the custom app that can provide a richer experience for the event.
+CUSTOM_APP_URI	The URI used by the custom app for the event.
+DESCRIPTION	The description of the event.
+DISPLAY_COLOR	This will be EVENT_COLOR if it is not null; otherwise, this will be CALENDAR_COLOR.
+DTEND	The time the event ends in UTC millis since epoch.
+DTSTART	The time the event starts in UTC millis since epoch.
+DURATION	The duration of the event in RFC2445 format.
+EVENT_COLOR	A secondary color for the individual event.
+EVENT_COLOR_KEY	A secondary color key for the individual event.
+EVENT_END_TIMEZONE	The timezone for the end time of the event.
+EVENT_LOCATION	Where the event takes place.
+EVENT_TIMEZONE	The timezone for the event.
+EXDATE	The recurrence exception dates for the event.
+EXRULE	The recurrence exception rule for the event.
+GUESTS_CAN_INVITE_OTHERS	Whether guests can invite other guests.
+GUESTS_CAN_MODIFY	Whether guests can modify the event.
+GUESTS_CAN_SEE_GUESTS	Whether guests can see the list of attendees.
+HAS_ALARM	Whether the event has an alarm or not.
+HAS_ATTENDEE_DATA	Whether the event has attendee information.
+HAS_EXTENDED_PROPERTIES	Whether the event has extended properties or not.
+IS_ORGANIZER	Are we the organizer of this event.
+LAST_DATE	The last date this event repeats on, or NULL if it never ends.
+LAST_SYNCED	Used to indicate that a row is not a real event but an original copy of a locally modified event.
+ORGANIZER	Email of the organizer (owner) of the event.
+ORIGINAL_ALL_DAY	The allDay status (true or false) of the original recurring event for which this event is an exception.
+ORIGINAL_ID	The _ID of the original recurring event for which this event is an exception.
+ORIGINAL_INSTANCE_TIME	The original instance time of the recurring event for which this event is an exception.
+ORIGINAL_SYNC_ID	The _sync_id of the original recurring event for which this event is an exception.
+RDATE	The recurrence dates for the event.
+RRULE	The recurrence rule for the event.
+SELF_ATTENDEE_STATUS	This is a copy of the attendee status for the owner of this event.
+STATUS	The event status.
+STATUS_CANCELED
+STATUS_CONFIRMED
+STATUS_TENTATIVE
+SYNC_DATA1	This column is available for use by sync adapters.
+SYNC_DATA10	This column is available for use by sync adapters.
+SYNC_DATA2	This column is available for use by sync adapters.
+SYNC_DATA3	This column is available for use by sync adapters.
+SYNC_DATA4	This column is available for use by sync adapters.
+SYNC_DATA5	This column is available for use by sync adapters.
+SYNC_DATA6	This column is available for use by sync adapters.
+SYNC_DATA7	This column is available for use by sync adapters.
+SYNC_DATA8	This column is available for use by sync adapters.
+SYNC_DATA9	This column is available for use by sync adapters.
+TITLE	The title of the event.
+UID_2445	The UID for events added from the RFC 2445 iCalendar format.
+
  */
+
 
 class CalendarInterface {
 	private static final String TAG = "CalendarInterface";
@@ -70,14 +132,14 @@ class CalendarInterface {
 			CalendarContract.Instances.EVENT_ID,         // 0
 			CalendarContract.Instances.TITLE,            // 1
 			CalendarContract.Instances.DESCRIPTION,      // 2
-			//CalendarContract.Instances.ORIGINAL_SYNC_ID, // 3
+			CalendarContract.Instances.ORIGINAL_SYNC_ID, // 3
 	};
 
 	// The indices for the projection array above.
 	private static final int PROJECTION_EVENT_ID = 0;
 	private static final int PROJECTION_TITLE_INDEX = 1;
 	private static final int PROJECTION_DESCRIPTION_INDEX = 2;
-	//private static final int PROJECTION_ORIGINAL_SYNC_ID_INDEX = 3;
+	private static final int PROJECTION_ORIGINAL_SYNC_ID_INDEX = 3;
 
 	private static final String[] EVENT_PROJECTION_DATES = new String[]{
 			CalendarContract.Instances.BEGIN,        // 0
@@ -87,6 +149,7 @@ class CalendarInterface {
 	// The indices for the projection array above.
 	private static final int PROJECTION_EVENT_BEGIN = 0;
 	private static final int PROJECTION_EVENT_END = 1;
+	public static final int HOF_CALENDAR_COLOR = 0x5c8f52;
 
 	private Date eventStartDate;
 	private Date eventEndDate;
@@ -219,7 +282,7 @@ class CalendarInterface {
 		// Use the cursor to step through the returned records
 		if (cur.moveToNext()) {
 			// found
-			//Log.d(TAG, "getLocalCalendar Name: " + cur.getString(PROJECTION_DISPLAY_NAME_INDEX));
+			Log.i(TAG, "getLocalCalendar Name: " + cur.getString(PROJECTION_DISPLAY_NAME_INDEX));
 
 			// put the calendar ID in the result
 			result = cur.getLong(PROJECTION_CALENDAR_ID_INDEX);
@@ -250,7 +313,7 @@ class CalendarInterface {
 		values.put(Calendars.ACCOUNT_TYPE, accountType);
 		values.put(Calendars.NAME, localCalendarName);
 		values.put(Calendars.CALENDAR_DISPLAY_NAME, localCalendarName);
-		values.put(Calendars.CALENDAR_COLOR, 0x5c8f52);                                                 // COLOR
+		values.put(Calendars.CALENDAR_COLOR, HOF_CALENDAR_COLOR);                                                 // COLOR
 		values.put(Calendars.CALENDAR_ACCESS_LEVEL, CalendarContract.Calendars.CAL_ACCESS_ROOT);
 		values.put(Calendars.VISIBLE, 1);
 		values.put(Calendars.SYNC_EVENTS, 1);
@@ -330,7 +393,7 @@ class CalendarInterface {
 				updateEvent(eventID, title, null, startTime, endTime, location);
 			}
 		} else {
-			Long newEventID = createEvent(title, description, startTime, endTime, location, lectureID);
+			final Long newEventID = createEvent(title, description, startTime, endTime, location, lectureID);
 
 			// Wenn null dann keine Berechtigung oder keine CalendarID und returnen
 			if (newEventID == null) {
@@ -397,16 +460,17 @@ class CalendarInterface {
 		// put the ID of the lecutre in the ORIGNAL_SYNC_ID
 		// ORIGNAL_SYNC_ID might be used for something else, but we use it for ower own ID
 		// currently ower ID is the splusname
-		/* MS values.put(Events.ORIGINAL_SYNC_ID, lectureID); */
+		// ORIGINAL_SYNC_ID
+		values.put(Events.ORIGINAL_SYNC_ID, lectureID);
 
 		//IDs are from "public static final class Events"
 		//TODO
 		//EVENT_COLOR
+		values.put(Events.EVENT_COLOR, HOF_CALENDAR_COLOR);
 		//ORIGINAL_ID
-		// ORIGINAL_SYNC_ID
 		//UID_2445  ???
 
-		TimeZone tz = TimeZone.getDefault();
+		final TimeZone tz = TimeZone.getDefault();
 		values.put(Events.EVENT_TIMEZONE, tz.getID());
 		// Deutsche Timezone macht keinen Unterschied
 		//values.put(Events.EVENT_TIMEZONE, "Europe/Brussels");
@@ -425,29 +489,36 @@ class CalendarInterface {
 		return eventID;
 	}
 
+	//TODO was für ein Long geben wir hier zurück?
 	private Long insertEvent(ContentValues values) {
-		Context context = MainActivity.getAppContext().getApplicationContext();
+		final Context context = MainActivity.getAppContext().getApplicationContext();
 
-		ContentResolver cr = context.getContentResolver();
+		final ContentResolver cr = context.getContentResolver();
 		if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
 			return null;
 		}
 
-		Uri uri = cr.insert(asSyncAdapter(Events.CONTENT_URI, accountName, accountType), values);
+		final Uri uri = cr.insert(asSyncAdapter(Events.CONTENT_URI, accountName, accountType), values);
 
 		if (uri == null) {
 			return null;
 		}
 
 		// get the event ID that is the last element in the Uri
-		return Long.parseLong(uri.getLastPathSegment());
+		final String lastPathSegment = uri.getLastPathSegment();
+		Long anID = 0L;
+		try {
+			anID = Long.parseLong(lastPathSegment);
+		} catch ( final NumberFormatException e )
+		{ Log.e( TAG, "getLastPathSegment ", e); }
+		return anID;
 	}
 
 	private void addReminderToEvent(Long eventID, int minutes) {
-		Context context = MainActivity.getAppContext().getApplicationContext();
+		final Context context = MainActivity.getAppContext().getApplicationContext();
 
-		ContentResolver cr = context.getContentResolver();
-		ContentValues values = new ContentValues();
+		final ContentResolver cr = context.getContentResolver();
+		final ContentValues values = new ContentValues();
 		values.put(CalendarContract.Reminders.EVENT_ID, eventID);
 		values.put(CalendarContract.Reminders.MINUTES, minutes); // METHOD_DEFAULT ist not working
 		values.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_DEFAULT);   // or METHOD_ALERT
@@ -699,14 +770,10 @@ class CalendarInterface {
 		}
 
 		while (cur.moveToNext()) {
-			/* MS String eventLectureID; */
-			Long eventID;
-			String eventTitle;
-
 			// Get the field values
-			/* MS: eventLectureID = cur.getString(PROJECTION_ORIGINAL_SYNC_ID_INDEX); */
-			eventID = cur.getLong(PROJECTION_EVENT_ID);
-			eventTitle = cur.getString(PROJECTION_TITLE_INDEX);
+			final String eventLectureID = cur.getString(PROJECTION_ORIGINAL_SYNC_ID_INDEX);
+			final Long eventID = cur.getLong(PROJECTION_EVENT_ID);
+			final String eventTitle = cur.getString(PROJECTION_TITLE_INDEX);
 
 			// überprpfe ob lecture ID gesetzt und gleich ist
 			/* MS
@@ -720,6 +787,7 @@ class CalendarInterface {
 				final String eventTitleLower = eventTitle.toLowerCase();
 				final String lectureTitleLower = lectureTitle.toLowerCase();
 
+				// Der Titel kann manipuliert worden sein, bspw. mit "[Entfällt]"
 				if ( eventTitleLower.contains(lectureTitleLower)) {
 					// falls nicht überprüfe noch den title
 					resultEventIDs.add(eventID);
@@ -729,25 +797,22 @@ class CalendarInterface {
 		cur.close();
 
 		// if eventIDs were found return them
-		if (!resultEventIDs.isEmpty()) {
+		if (!resultEventIDs.isEmpty())
 			return resultEventIDs;
-		} else {
-			// otherwise return null
-			return null;
-		}
+
+		// otherwise return null
+		return null;
 	}
 
-	private void getEventDates(Long eventID, Date startDate, Date endDate) {
-		Context context = MainActivity.getAppContext().getApplicationContext();
-
-		Cursor cur;
-		ContentResolver cr = context.getContentResolver();
+	private void getEventDates(final Long eventID, final Date startDate, final Date endDate) {
+		final Context context = MainActivity.getAppContext().getApplicationContext();
+		final ContentResolver cr = context.getContentResolver();
 
 		// The ID of the recurring event whose instances you are searching
 		// for in the Instances table
 		// TODO vielleicht ohne Event_ID als selection und dafür das ganze Array, und damit später vergleichen ob enthalten
-		String selection = CalendarContract.Instances.EVENT_ID + " = ?";
-		String[] selectionArgs = new String[]{eventID.toString()};
+		final String selection = CalendarContract.Instances.EVENT_ID + " = ?";
+		final String[] selectionArgs = new String[]{eventID.toString()};
 
 		// Construct the query with the desired date range.
 		Uri.Builder builder = CalendarContract.Instances.CONTENT_URI.buildUpon();
@@ -756,7 +821,7 @@ class CalendarInterface {
 		ContentUris.appendId(builder, endDate.getTime() + 5);
 
 		// Submit the query
-		cur = cr.query(builder.build(),
+		final Cursor cur = cr.query(builder.build(),
 				EVENT_PROJECTION_DATES,
 				selection,
 				selectionArgs,
@@ -776,7 +841,7 @@ class CalendarInterface {
 			calendar.set(Calendar.MILLISECOND, 0);
 			eventStartDate = calendar.getTime();
 
-			long eventEnd = cur.getLong(PROJECTION_EVENT_END);
+			final long eventEnd = cur.getLong(PROJECTION_EVENT_END);
 
 			calendar.setTimeInMillis(eventEnd);
 			calendar.set(Calendar.MILLISECOND, 0);
@@ -791,24 +856,23 @@ class CalendarInterface {
 	 * @return the description or null if no permission or the event is not found
 	 */
 	private String getEventDescription(Long eventID) {
-		Context context = MainActivity.getAppContext().getApplicationContext();
+		final Context context = MainActivity.getAppContext().getApplicationContext();
+		final ContentResolver cr = context.getContentResolver();
 
 		if ((ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED)) {
 			// keine Berechtigung
 			return null;
 		}
 
-		Cursor cur;
-		ContentResolver cr = context.getContentResolver();
 
 		// The ID of the recurring event whose instances you are searching
 		// for in the Instances table
 		// TODO vielleicht ohne Event_ID als selection und dafür das ganze Array, und damit später vergleichen ob enthalten
-		String selection = CalendarContract.Instances.EVENT_ID + " = ?";
-		String[] selectionArgs = new String[]{eventID.toString()};
+		final String selection = CalendarContract.Instances.EVENT_ID + " = ?";
+		final String[] selectionArgs = new String[]{eventID.toString()};
 
 		// Construct the query with the desired date range.
-		Uri.Builder builder = CalendarContract.Instances.CONTENT_URI.buildUpon();
+		final Uri.Builder builder = CalendarContract.Instances.CONTENT_URI.buildUpon();
 
 		long now = new Date().getTime();
 
@@ -816,7 +880,7 @@ class CalendarInterface {
 		ContentUris.appendId(builder, now + (DateUtils.DAY_IN_MILLIS * 500));
 
 		// Submit the query
-		cur = cr.query(builder.build(),
+		final Cursor cur = cr.query(builder.build(),
 				EVENT_PROJECTION_EVENT_ID_TITLE_DESCRIPTION,
 				selection,
 				selectionArgs,
@@ -826,9 +890,8 @@ class CalendarInterface {
 			return null;
 		}
 
+		String eventDescription = "";
 		if (cur.moveToNext()) {
-			String eventDescription;
-
 			// Get the field values
 			eventDescription = cur.getString(PROJECTION_DESCRIPTION_INDEX);
 
@@ -836,11 +899,9 @@ class CalendarInterface {
                 Log.d(TAG, "Title: " + cur.getString(PROJECTION_TITLE_INDEX) + "\nDescription: " + eventDescription);
             }*/
 
-			cur.close();
-			return eventDescription;
 		}
 		cur.close();
-		return null;
+		return eventDescription;
 	}
 
 	private void deleteEvent(long eventID) {
@@ -852,10 +913,13 @@ class CalendarInterface {
 		}
 
 		// Events mit Description nicht löschen
-		String eventDescription = getEventDescription(eventID);
+		final String eventDescription = getEventDescription(eventID);
 		if ((eventDescription != null) && !eventDescription.isEmpty()) {
+			Log.i( TAG, "CalendarInterface: deleteEvent: NICHT: " + String.valueOf(eventID) + " " + eventDescription );
 			return;
 		}
+
+		Log.i( TAG, "CalendarInterface: deleteEvent: " + String.valueOf(eventID) );
 
 		Uri deleteUri = ContentUris.withAppendedId(Events.CONTENT_URI, eventID);
 
@@ -895,13 +959,13 @@ class CalendarInterface {
 	}
 
 	private void addLecturesEventID(String lectureID, Long eventID) {
+
 		ArrayList<Long> eventIDs = calendarData.getLecturesEventIDs().get(lectureID);
 		if (eventIDs == null) {
 			eventIDs = new ArrayList<>();
-			eventIDs.add(eventID);
-		} else {
-			eventIDs.add(eventID);
 		}
+		eventIDs.add(eventID);
+
 		calendarData.getLecturesEventIDs().put(lectureID, eventIDs);
 	}
 
