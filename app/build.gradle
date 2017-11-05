@@ -61,7 +61,7 @@ android {
             //schöneren APK Namen
             archivesBaseName = 'Hochschule_Hof_Stundenplan_App'
             // damit wir die debug Version parallel zu der release Version installieren können
-            //applicationIdSuffix = ".debug"
+            applicationIdSuffix = ".debug"
         }
     }
     productFlavors {
