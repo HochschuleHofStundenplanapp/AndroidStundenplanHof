@@ -114,6 +114,7 @@ UID_2445	The UID for events added from the RFC 2445 iCalendar format.
 
 class CalendarInterface {
 	private static final String TAG = "CalendarInterface";
+	private static final boolean DEBUG_CALENDAR_INTERFACE = true;
 
 	private static final CalendarInterface instance = new CalendarInterface();
 
@@ -178,7 +179,7 @@ class CalendarInterface {
 
 		if (calendarData.getCalendarID() == null) {
 			// TODO CalendarID leer
-			Log.d(TAG, "CalendarID is empty in constructor");
+			if (DEBUG_CALENDAR_INTERFACE) Log.d(TAG, "CalendarID is empty in constructor");
 		}
 	}
 
@@ -379,6 +380,8 @@ class CalendarInterface {
 	void createLectureEvent(final String lectureID, final String title, final String description,
 	                        final Date startTime, final Date endTime, final String location) {
 
+		if (DEBUG_CALENDAR_INTERFACE) Log.d( TAG, "createLectureEvent in CalendarInterface" );
+
 		junit.framework.Assert.assertTrue( !"".equals(lectureID) );
 		junit.framework.Assert.assertTrue( !"".equals(title) );
 //TODO		junit.framework.Assert.assertTrue( !"".equals(description) );
@@ -389,10 +392,13 @@ class CalendarInterface {
 		// checks if exists, if true than update event otherwise create event
 		ArrayList<Long> eventIDs = getEventIDs(lectureID, title, startTime, endTime );
 		if (eventIDs != null) {
+			if (DEBUG_CALENDAR_INTERFACE) Log.d( TAG, "Event für Lecture " + title + " am " + startTime + " bereits gefunden!" );
 			for (Long eventID : eventIDs) {
+				if (DEBUG_CALENDAR_INTERFACE) Log.d( TAG, "Event wird geupdatet" );
 				updateEvent(eventID, title, null, startTime, endTime, location);
 			}
 		} else {
+			if (DEBUG_CALENDAR_INTERFACE) Log.d( TAG, "Event für Lecture " + title + " am " + startTime + " wird neu angelegt." );
 			final Long newEventID = createEvent(title, description, startTime, endTime, location, lectureID);
 
 			// Wenn null dann keine Berechtigung oder keine CalendarID und returnen
@@ -535,6 +541,7 @@ class CalendarInterface {
 	 * @param change a change with should update the correct lecture
 	 */
 	void updateChange(LectureChange change) {
+		Log.i( TAG, "updateChange: " + change );
 		Context context = MainActivity.getAppContext().getApplicationContext();
 
 		String lectureID;
@@ -548,7 +555,7 @@ class CalendarInterface {
 
 		for (Long eventID : eventIDs) {
 			// TODO vielleicht endDatum ändern
-			if (getEventIDs(lectureID, change.getLabel(), change.getBegin_old(), change.getBegin_old()) != null) {
+			if (doEventExits(eventID, change.getLabel(), change.getBegin_old(), change.getBegin_old())) {
 
 				if (change.getBegin_new() == null) {
 					// Entfällt
@@ -593,7 +600,7 @@ class CalendarInterface {
 		}
 
 		for (Long eventID : eventIDs) {
-			if (getEventIDs(lectureID, lecture.getLabel(), lecture.getStartDate(), lecture.getEndDate()) != null) {
+			if ( doEventExits( eventID, lecture.getLabel(), lecture.getStartDate(), lecture.getEndDate() ) ) {
 				// null because than the date won't get updated
 				Date newStartDate = null;
 				Date newEndDate = null;
@@ -677,7 +684,7 @@ class CalendarInterface {
 		cr.update(updateUri, values, null, null);
 	}
 
-	/*private Boolean doEventExits(Long eventID, String title, Date startDate, Date endDate) {
+	private Boolean doEventExits(Long eventID, String lectureTitle, Date startDate, Date endDate) {
 		Context context = MainActivity.getAppContext().getApplicationContext();
 
 		Cursor cur;
@@ -712,19 +719,27 @@ class CalendarInterface {
 			// Get the field values
 			eventTitle = cur.getString(PROJECTION_TITLE_INDEX);
 
-			// TODO vielleicht ohne title da dieser bearbeitet werden kann
 			// überprpfe ob lecture ID gesetzt und gleich ist
-			if (eventLectureID != null && eventLectureID.equals(lectureID)) {
+			/*if (eventLectureID != null && eventLectureID.equals(lectureID)) {
 				resultEventIDs.add(eventID);
-			} else
-			if (eventTitle.equals(title)) {
-				cur.close();
-				return true;
+			} else*/
+			if (eventTitle != null){
+
+				// Der Titel kann manipuliert worden sein, bspw. mit "[Entfällt]"
+				final String eventTitleLower = eventTitle.toLowerCase();
+				final String lectureTitleLower = lectureTitle.toLowerCase();
+
+				// Der Titel kann manipuliert worden sein, bspw. mit "[Entfällt]"
+				if ( eventTitleLower.contains(lectureTitleLower)) {
+					// gefunden
+					cur.close();
+					return true;
+				}
 			}
 		}
 		cur.close();
 		return false;
-	}*/
+	}
 
 	/**
 	 * gets the eventIDs of an event retrieved by lectureID (SPlusName) from the calendar
@@ -896,7 +911,7 @@ class CalendarInterface {
 			eventDescription = cur.getString(PROJECTION_DESCRIPTION_INDEX);
 
             /*if (!eventDescription.isEmpty()) {
-                Log.d(TAG, "Title: " + cur.getString(PROJECTION_TITLE_INDEX) + "\nDescription: " + eventDescription);
+                if (DEBUG_CALENDAR_INTERFACE) Log.d(TAG, "Title: " + cur.getString(PROJECTION_TITLE_INDEX) + "\nDescription: " + eventDescription);
             }*/
 
 		}
@@ -956,6 +971,10 @@ class CalendarInterface {
 			deleteAllEvents(lectureID);
 		}
 		removeAllLectruesEventIDs();
+		for (String changeID : calendarData.getChangesEventIDs().keySet()) {
+			deleteAllEvents( changeID );
+		}
+		removeAllChangesEventIDs();
 	}
 
 	private void addLecturesEventID(String lectureID, Long eventID) {
@@ -1005,6 +1024,10 @@ class CalendarInterface {
 //		}
 //	}
 // --Commented out by Inspection STOP (28.10.2017 23:24)
+
+	private void removeAllChangesEventIDs() {
+		calendarData.getChangesEventIDs().clear();
+	}
 
 	void saveCalendarData() {
 		final Context context = MainActivity.getAppContext().getApplicationContext();
