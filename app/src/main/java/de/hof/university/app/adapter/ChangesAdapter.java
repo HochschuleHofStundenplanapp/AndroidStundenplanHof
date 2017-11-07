@@ -62,19 +62,27 @@ public final class ChangesAdapter extends ArrayAdapter<Object> {
             v.setOnLongClickListener(null);
             v.setLongClickable(false);
 
-            final TextView tvOldDate = (TextView) v.findViewById(R.id.aenderung_oldDate);
-            final TextView tvNewDate = (TextView) v.findViewById(R.id.aenderung_newDate);
-            final TextView tvDetails = (TextView) v.findViewById(R.id.aenderung_details);
+            final TextView tvOldDate = v.findViewById(R.id.aenderung_oldDate);
+            final TextView tvNewDate = v.findViewById(R.id.aenderung_newDate);
+            final TextView tvDetails = v.findViewById(R.id.aenderung_details);
+            final TextView tvComment = v.findViewById(R.id.aenderung_comment);
 
             tvOldDate.setText(lectureChange.getOld());
             tvOldDate.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             tvNewDate.setText(lectureChange.getNew());
             tvDetails.setText(lectureChange.getDetails());
+            if (lectureChange.getComment().equals("")){
+                tvComment.setVisibility(View.GONE);
+            }
+            else {
+                tvComment.setText(lectureChange.getComment());
+            }
+
 
         } else if (obj instanceof LastUpdated) {
             final LastUpdated lastUpdated = (LastUpdated) obj;
             v = vi.inflate(R.layout.list_item_last_updated, null);
-            final TextView text = (TextView) v.findViewById(R.id.list_item_last_updated);
+            final TextView text = v.findViewById(R.id.list_item_last_updated);
             text.setText(lastUpdated.getTitle());
 
         }

@@ -63,6 +63,7 @@ public class LectureChange implements Serializable {
                 ", comment='" + comment + '\'' +
                 ", group='" + group + '\'' +
                 ", reason='" + reason + '\'' +
+                ", comment=´" + comment + '\'' +
                 ", begin_old='" + begin_old + '\'' +
                 ", begin_new='" + begin_new + '\'' +
                 ", room_old='" + room_old + '\'' +
@@ -115,13 +116,16 @@ public class LectureChange implements Serializable {
             result += reason;         // Grund
         }
 
-        /*// Kommentar für welchen Studiengang z.B. "(Inf6 + MI6 + MC 6)"
-        if (comment != null && !comment.isEmpty()) {
-            result += "\n" + comment;
-        }
-        */
-
         return result;
+    }
+
+    public final String getComment() {
+
+        if (comment != null && !comment.isEmpty()) {
+            return comment;
+        }
+        else return "";
+
     }
 
     public final String getId() {
