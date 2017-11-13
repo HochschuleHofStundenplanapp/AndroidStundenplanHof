@@ -88,6 +88,7 @@ public final class ChangesParser implements Parser<LectureChange> {
         final String comment = jsonObject.optString(Define.SCHEDULE_PARSER_COMMENT);
         final String group = jsonObject.optString(Define.SCHEDULE_PARSER_GROUP);
         final String reason = jsonObject.optString(Define.SCHEDULE_PARSER_REASON);
+        final String text = jsonObject.optString(Define.SCHEDULE_PARSER_TEXT);
         final String orginalDateString = jsonObject.optJSONObject(Define.PARSER_ORIGNAL).optString(Define.PARSER_DATE);
         final String orginalTimeString = jsonObject.optJSONObject(Define.PARSER_ORIGNAL).optString(Define.PARSER_TIME);
 
@@ -127,6 +128,6 @@ public final class ChangesParser implements Parser<LectureChange> {
             alternativeDate = calendar.getTime();
         }
 
-        return new LectureChange(id, label, comment, group, reason, orginalDate, alternativeDate, room_old, room_new, lecturer);
+        return new LectureChange(id,label,comment,text,group,reason,orginalDate,alternativeDate,room_old,room_new,lecturer);
     }
 }

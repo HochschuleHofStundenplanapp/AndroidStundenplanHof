@@ -35,13 +35,14 @@ public class LectureChange implements Serializable {
     private final String comment;
     private final String group;
     private final String reason;
+    private final String text;
     private final Date begin_old;
     private final Date begin_new;
     private final String room_old;
     private final String room_new;
     private final String lecturer;
 
-    public LectureChange(final String id, final String label, final String comment, final String group, final String reason,
+    public LectureChange(final String id, final String label, final String comment, String text, final String group, final String reason,
                          final Date begin_old, final Date begin_new, final String room_old, final String room_new, final String lecturer) {
 	    super();
 	    this.id = id;
@@ -49,6 +50,7 @@ public class LectureChange implements Serializable {
 	    this.comment = comment;
 	    this.group = group;
 	    this.reason = reason;
+	    this.text = text;
 	    this.begin_old = begin_old;
 	    this.begin_new = begin_new;
 	    this.room_old = room_old;
@@ -63,6 +65,7 @@ public class LectureChange implements Serializable {
                 ", comment='" + comment + '\'' +
                 ", group='" + group + '\'' +
                 ", reason='" + reason + '\'' +
+                ", text='" + text + '\'' +
                 ", comment=´" + comment + '\'' +
                 ", begin_old='" + begin_old + '\'' +
                 ", begin_new='" + begin_new + '\'' +
@@ -104,25 +107,31 @@ public class LectureChange implements Serializable {
 
     public final String getDetails() {
 
-        String result = label + '\n'; // Fach
+        String result = label + '\n' +'\n'; // Fach
 
         result += lecturer + '\n';     // Dozent
 
-        if ((null != group) && !group.isEmpty()) {
+        if (!group.equals("")) {
             result += group + '\n';   // Übungsgruppe
         }
 
-        if ((null != reason) && !reason.isEmpty()) {
-            result += reason;         // Grund
+        if (!reason.equals("")) {
+            //result += reason;         // Grund soll aus Datenschutzrechtlichen Gründen in den Apps nicht mehr angezeigt werden!
         }
+
+        if (!comment.equals("")){
+            result += "\n" + comment;
+        }
+
+
 
         return result;
     }
 
-    public final String getComment() {
+    public final String getText() {
 
-        if (comment != null && !comment.isEmpty()) {
-            return comment;
+        if (!text.equals("")) {
+            return text;
         }
         else return "";
 

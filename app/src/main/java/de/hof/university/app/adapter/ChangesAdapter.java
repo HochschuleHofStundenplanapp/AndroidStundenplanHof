@@ -65,17 +65,17 @@ public final class ChangesAdapter extends ArrayAdapter<Object> {
             final TextView tvOldDate = v.findViewById(R.id.aenderung_oldDate);
             final TextView tvNewDate = v.findViewById(R.id.aenderung_newDate);
             final TextView tvDetails = v.findViewById(R.id.aenderung_details);
-            final TextView tvComment = v.findViewById(R.id.aenderung_comment);
+            final TextView tvText = v.findViewById(R.id.aenderung_text);
 
             tvOldDate.setText(lectureChange.getOld());
             tvOldDate.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
             tvNewDate.setText(lectureChange.getNew());
             tvDetails.setText(lectureChange.getDetails());
-            if (lectureChange.getComment().equals("")){
-                tvComment.setVisibility(View.GONE);
+            if (lectureChange.getText().equals("")){
+                tvText.setVisibility(View.GONE);
             }
             else {
-                tvComment.setText(lectureChange.getComment());
+                tvText.setText(lectureChange.getText());
             }
 
 
