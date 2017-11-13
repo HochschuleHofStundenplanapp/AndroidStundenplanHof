@@ -28,6 +28,7 @@ public final class Define {
 	public static final String SCHEDULE_PARSER_COMMENT = "comment";     //NON-NLS
 	public static final String SCHEDULE_PARSER_GROUP = "group";     //NON-NLS
 	public static final String SCHEDULE_PARSER_REASON = "reason";     //NON-NLS
+	public static final String SCHEDULE_PARSER_TEXT = "text";     //NON-NLS
 	public static final String COURSE_PARSER_LABELS = "labels";     //NON-NLS
 	public static final String COURSE_PARSER_COURSE = "course";     //NON-NLS
 	public static final String COURSE_PARSER_SEMESTER = "semester";     //NON-NLS
