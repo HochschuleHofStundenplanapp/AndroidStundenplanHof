@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity
 		}
 	}
 
-	private void showPushNotificationDialog(final SharedPreferences sharedPreferences) {
+	public void showPushNotificationDialog(final SharedPreferences sharedPreferences) { // Sichtbarkeit auf public geändert
 		final boolean showPushNotificationsDialog = sharedPreferences.getBoolean("show_push_notifications_dialog", true);
 		final boolean getPushNotifications = sharedPreferences.getBoolean("changes_notifications", false);
 

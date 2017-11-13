@@ -119,7 +119,7 @@
     <string name="disabled_shortcut">The shortcut is disabled.</string>
     <string name="yes">yes</string>
     <string name="no">no</string>
-    <string name="notifications_question">Do you want to get notifications for changes?</string>
+    <string name="notifications_question">Do you want to get notifications for your changed lectures?</string>
     <string name="lastUpdated">Last updated</string>
     <string name="calendar_synchronization">Calendar synchronization</string>
     <string name="changeCancelled">[Cancelled]</string>

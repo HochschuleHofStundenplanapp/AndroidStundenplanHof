@@ -125,7 +125,7 @@
     <string name="disabled_shortcut">Der Shortcut wurde deaktiviert</string>
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
-    <string name="notifications_question">Möchten Sie über Änderungen benachrichtigt werden?</string>
+    <string name="notifications_question">Möchten Sie grundsätzlich über ihre Änderungen benachrichtigt werden?</string>
     <string name="lastUpdated">Zuletzt aktualisiert</string>
     <string name="calendar_synchronization">Kalender Synchronisation</string>
     <string name="changeCancelled">[Entfällt]</string>
