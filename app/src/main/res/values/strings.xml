@@ -102,8 +102,8 @@
     <string name="noMeal">There is no new menu!</string>
     <string name="needPermissionText">You need to allow access to location for this function</string>
     <string name="needPermissionTitle">Permission required</string>
-    <string name="notifications">Notifications</string>
-    <string name="changes">Changes</string>
+    <string name="notifications">Notifications (Push)</string>
+    <string name="changes">Notify for changes</string>
     <string name="noScheduleText">For your selected settings is no schedule available.</string>
     <string name="karte">Map</string>
     <string name="where_am_i">Where am I?</string>
