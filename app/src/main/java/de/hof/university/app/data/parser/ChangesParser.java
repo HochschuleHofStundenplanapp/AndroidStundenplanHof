@@ -80,7 +80,7 @@ public final class ChangesParser implements Parser<LectureChange> {
     // Wozu brauchen wir diese Methode
     private static LectureChange convertJsonObject(JSONObject jsonObject) {
 
-        // Die Antwort vom Server enthält die folgenden Objekte und werden weparat in Teil.Strings zerleigt
+        // Die Antwort vom Server enthält die folgenden Objekte und werden separat in Teil-Strings zerlegt
         // optSting: wirft keine Exception, wenn das JSON Element NICHT vorhanden ist.
         // Der splusname ist die neue ID
         final String id = jsonObject.optString(Define.PARSER_SPLUSNAME);
@@ -103,31 +103,45 @@ public final class ChangesParser implements Parser<LectureChange> {
         final String room_old = jsonObject.optJSONObject(Define.PARSER_ORIGNAL).optString(Define.PARSER_ROOM);
         final String lecturer = jsonObject.optString(Define.PARSER_DOCENT);
 		//TODO Beispielzeile ergänzen
-        int orginalHours      = Integer.parseInt(orginalTimeString.substring(0, 2));
-        int orginalMinutes    = Integer.parseInt(orginalTimeString.substring(3, 5));
-        int orginalDay        = Integer.parseInt(orginalDateString.substring(0, 2));
-        int orginalMonth      = Integer.parseInt(orginalDateString.substring(3, 5));
-        int orginalYear       = Integer.parseInt(orginalDateString.substring(6, 10));
-
-        Calendar calendar = GregorianCalendar.getInstance();
-        //Startzeit
-        calendar.set(orginalYear, orginalMonth - 1, orginalDay, orginalHours, orginalMinutes, 0);
-
-        Date orginalDate = calendar.getTime();
+        Date orginalDate = getDateFromTimeString( orginalDateString, orginalTimeString ) ;
 
         Date alternativeDate = null;
 		//TODO Beispielzeile ergänzen
-        if (!alternativeTimeString.equals("") && !alternativeDateString.equals("")) {
-            int alternativeHours        = Integer.parseInt(alternativeTimeString.substring(0, 2));
-            int alternativeMinutes      = Integer.parseInt(alternativeTimeString.substring(3, 5));
-            int alternativeDay          = Integer.parseInt(alternativeDateString.substring(0, 2));
-            int alternativeMonth        = Integer.parseInt(alternativeDateString.substring(3, 5));
-            int alternativeYear         = Integer.parseInt(alternativeDateString.substring(6, 10));
-
-            calendar.set(alternativeYear, alternativeMonth - 1, alternativeDay, alternativeHours, alternativeMinutes, 0);
-            alternativeDate = calendar.getTime();
+        if (!"".equals(alternativeTimeString) && !"".equals(alternativeDateString)) {
+            alternativeDate = getDateFromTimeString( alternativeDateString, alternativeTimeString );
         }
 
         return new LectureChange(id,label,comment,text,group,reason,orginalDate,alternativeDate,room_old,room_new,lecturer);
     }
+
+    private static final Date getDateFromTimeString( final String originalDateString, final String orginalTimeString ) {
+
+        int originalHours = 0;
+        int originalMinutes = 0;
+        int originalDay = 1;
+        int originalMonth = 1;
+        int originalYear = 2017;
+
+        try {
+            //TODO Beispielzeile ergänzen
+            originalHours = Integer.parseInt(orginalTimeString.substring(0, 2));
+            originalMinutes = Integer.parseInt(orginalTimeString.substring(3, 5));
+            originalDay = Integer.parseInt(originalDateString.substring(0, 2));
+            originalMonth = Integer.parseInt(originalDateString.substring(3, 5));
+            originalYear = Integer.parseInt(originalDateString.substring(6, 10));
+        } catch (NumberFormatException e)
+        {
+            Log.e( TAG, "getDateFromString", e );
+        }
+
+        Calendar calendar = GregorianCalendar.getInstance();
+        //Startzeit
+        calendar.set(originalYear, originalMonth - 1, originalDay, originalHours, originalMinutes, 0);
+
+        final Date originalDate = calendar.getTime();
+
+        return originalDate ;
+    }
+
+
 }
