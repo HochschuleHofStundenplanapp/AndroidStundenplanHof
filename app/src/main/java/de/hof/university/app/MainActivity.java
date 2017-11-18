@@ -179,11 +179,11 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	private void handleIntent() {
-		String notification_type = getIntent().getStringExtra("notification_type");
+		final String notification_type = getIntent().getStringExtra("notification_type");
 
 		if (notification_type != null) {
 			// Falls auf eine Änderungs-Benachrichtigung gedrückt wurde
-			if (notification_type.equals("change")) {
+			if ("change".equals(notification_type)) {
 				// Direkt zu den Änderungen springen
 				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_aenderung));
 			}
@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity
 		} else {
 			final String action = getIntent().getAction();
 
-			if (action.equals(Define.SHORTCUT_INTENT_CHANGES)) {
+			if (Define.SHORTCUT_INTENT_CHANGES.equals(action)) {
 				firstStart = true;
 				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_aenderung));
 			}

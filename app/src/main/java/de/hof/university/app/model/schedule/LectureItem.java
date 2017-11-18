@@ -125,12 +125,12 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
 	public final String getDetails() {
 		String result = label;
 
-		if ((sp != null) && !sp.equals("")) {
+		if (!"".equals(sp)) {
 			result += " " + sp;
 		}
 
 		// Bisher nur FWPM oder AWPM anzeigen
-		if (type.equals("FWPM") || type.equals("AWPM")) {
+		if ("FWPM".equals(type) || "AWPM".equals(type)) {
 			result += " (" + type + ")";
 		}
 
@@ -152,11 +152,11 @@ public class LectureItem implements Comparable<LectureItem>, Serializable {
 	/*
     ** Sortiert nach Sartzeit
      */
-    public int compareTo(@NonNull LectureItem lectureItem) {
+    public int compareTo(final @NonNull LectureItem lectureItem) {
         return startDate.compareTo(lectureItem.startDate);
     }
 
-    public boolean equals(LectureItem other) {
+    public boolean equals(final LectureItem other) {
         return (this.id.equals(other.id)
                 && this.weekday.equals(other.weekday)
                 && this.label.equals(other.label)

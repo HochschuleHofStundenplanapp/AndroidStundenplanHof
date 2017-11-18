@@ -89,9 +89,12 @@ public class ScheduleFragment extends AbstractListFragment {
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        LectureItem lectureItem = (LectureItem) listView.getItemAtPosition(info.position);
+    public boolean onContextItemSelected(final MenuItem item) {
+
+        junit.framework.Assert.assertTrue( item != null );
+
+        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        final LectureItem lectureItem = (LectureItem) listView.getItemAtPosition(info.position);
 
         if (item.getTitle().equals(getString(R.string.addToMySchedule))) {
             DataManager.getInstance().addToMySchedule(info.targetView.getContext(), lectureItem);
