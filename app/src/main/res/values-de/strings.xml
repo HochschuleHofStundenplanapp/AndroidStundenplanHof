@@ -108,7 +108,7 @@
     <string name="notifications">Benachrichtigungen (Push)</string>
     <string name="changes">Über Änderungen informieren</string>
     <string name="noScheduleText">Für Ihre gewählten Einstellungen ist kein Stundenplan verfügtbar.</string>
-    <string name="karte">Karte</string>
+    <string name="myposition">Wo bin ich?</string>
     <string name="where_am_i">Wo bin ich?</string>
     <string name="address">Adresse:</string>
     <string name="no_address">Es konnte keine Adresse gefunden werden</string>
@@ -138,7 +138,7 @@
     <string name="calendar_synchronization_infoText">Sie haben die Kalender Synchronisation eingeschaltet.\n\nIm nächsten Dialog können Sie den Kalender auswählen, mit dem die Vorlesungen und Änderungen synchronisiert werden oder einen eigenen lokalen Kalender dafür nutzen.\n\n(Empfohlen: Einen neuen Kalender auf der <a href="https://calendar.google.com/calendar/render?hl=de#main_7">Google Kalender Webseite</a> anlegen und diesen im nächsten Dialog auswählen.)\n\nBitte beachten Sie Folgendes:\n- Termine bleiben beim Löschen der App bestehen (wenn Sie sie löschen möchten, vorher die Synchronisation ausschalten)\n- Termine mit Notizen werden nicht gelöscht\n- Ferien und Feiertage werden noch nicht berücksichtigt</string>
     <string name="calendar_synchronization_chooseCalendar">Bitte wählen Sie einen Kalender</string>
     <string name="calendar_synchronization_permissionNotGranted">Berechtigung für den Kalender verweigert</string>
-    <string name="navigation">Navigation</string>
+    <string name="navigation">Bus &amp; Bahn Fahrplan</string>
     <string name="calendar_synchronization_successful">Stundenplan erfolgreich mit dem Kalender synchronisiert!</string>
     <string name="pref_calendar_synchronization">Mein Stundenplan Kalender Synchronisation</string>
 </resources>

@@ -83,7 +83,7 @@
                     android:id="@+id/nav_map"
                     android:icon="@drawable/ic_poll_black_24dp"
                     android:checkable="true"
-                    android:title="@string/karte" />
+                    android:title="@string/myposition" />
 
                 <item
                     android:id="@+id/nav_navigation"
