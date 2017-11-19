@@ -663,9 +663,10 @@ public class DataManager {
 
         if (calendarSynchronization) {
             // falls es nicht die ersten Vorlesungen sind die hinzugefügt werden, denn dann stehen sie schon drin.
-            if (!getMySchedule(context).getLectures().isEmpty()) {
+            // gilt nur wenn der Stundenplan auch in den Kalender geschrieben wurde
+            //if (!getMySchedule(context).getLectures().isEmpty()) {
                 CalendarSynchronization.getInstance().createAllEvents(lecturesItems);
-            }
+            //}
         }
     }
 
