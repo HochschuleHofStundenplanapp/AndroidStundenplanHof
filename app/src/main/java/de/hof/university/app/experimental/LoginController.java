@@ -30,11 +30,13 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import de.hof.university.app.R;
+import de.hof.university.app.Util.Log;
 
 
 final public class LoginController {
@@ -186,7 +188,17 @@ final public class LoginController {
 	}
 
 	public final void showLoginDialog() {
-		loginAlertDialog.show();
+		try {
+			loginAlertDialog.show();
+		} catch (WindowManager.BadTokenException e) {
+			Log.e(TAG, "loginAlertDialog.show: BadTokenException einmal abgefangen. Nochmal versuchen", e);
+			try {
+				loginAlertDialog.show();
+			} catch (WindowManager.BadTokenException e2) {
+				Log.e(TAG, "loginAlertDialog.show: BadTokenException zweimal abgefangen. Aufhören");
+			}
+		}
+
 		try {
 			Looper.loop();
 		} catch ( RuntimeException ignored ) {
