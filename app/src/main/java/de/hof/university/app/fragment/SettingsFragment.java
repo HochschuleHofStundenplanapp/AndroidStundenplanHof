@@ -149,22 +149,37 @@ public class SettingsFragment extends PreferenceFragment {
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				if ( (Boolean) newValue ) {
 					// an schalten
-					if ((ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED)
-							|| (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED)) {
-						// keine Berechtigung
-						requestCalendarPermission(REQUEST_CODE_CALENDAR_TURN_ON_PERMISSION);
-					} else {
-						turnCalendarSyncOn();
-					}
+					turnCalendarSyncOn();
 				} else {
 					// aus schalten
-					if ((ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED)
-							|| (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED)) {
-						// keine Berechtigung
-						requestCalendarPermission(REQUEST_CODE_CALENDAR_TURN_OFF_PERMISSION);
-					} else {
-						calendarSynchronization.stopCalendarSynchronization();
-					}
+
+					// mit einem Dialog nachfragen ob der Nutzer die Kalendereinträge behalten möchte
+					final AlertDialog d = new AlertDialog.Builder(getView().getContext())
+							.setTitle(R.string.calendar_syncronization_keep_events_title)
+							.setMessage(R.string.calendar_syncronization_keep_events_message)
+							.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									// behalten, mache nichts
+								}
+							})
+							.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									// löschen
+									if ((ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED)
+											|| (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED)) {
+										// keine Berechtigung, hole erst Berechtigung
+										requestCalendarPermission(REQUEST_CODE_CALENDAR_TURN_OFF_PERMISSION);
+									} else {
+										// lösche die Kalendereinträge oder den lokalen Kalender
+										calendarSynchronization.stopCalendarSynchronization();
+									}
+								}
+							})
+							.setIcon(android.R.drawable.ic_dialog_alert)
+							.create();
+					d.show();
 				}
 				return true;
 			}
@@ -553,6 +568,15 @@ public class SettingsFragment extends PreferenceFragment {
 	}
 
 	private void turnCalendarSyncOn() {
+		// check for permission
+		// wenn keine Berechtigung dann requeste sie und falls erfolgreich komme hier her zurück
+		if ((ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED)
+				|| (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED)) {
+			// keine Berechtigung
+			requestCalendarPermission(REQUEST_CODE_CALENDAR_TURN_ON_PERMISSION);
+			return;
+		}
+
 		final ArrayList<String> calendars = new ArrayList<>();
 
 		// Den localen Kalender als erstes

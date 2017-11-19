@@ -141,4 +141,6 @@
     <string name="navigation">Bus &amp; Bahn Fahrplan</string>
     <string name="calendar_synchronization_successful">Stundenplan erfolgreich mit dem Kalender synchronisiert!</string>
     <string name="pref_calendar_synchronization">Mein Stundenplan Kalender Synchronisation</string>
+    <string name="calendar_syncronization_keep_events_title">Kalendereinträge behalten?</string>
+    <string name="calendar_syncronization_keep_events_message">Möchten Sie die Kalendereinträge oder den lokalen Kalender behalten?</string>
 </resources>
