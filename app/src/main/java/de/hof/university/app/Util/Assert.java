@@ -7,15 +7,19 @@ import de.hof.university.app.BuildConfig;
  */
 
 public class Assert {
+	/**
+	 *
+	 * @param condition the condition
+	 */
 	public static void assertTrue(boolean condition) {
 		if (BuildConfig.DEBUG) {
-			Assert.assertTrue(condition);
+			junit.framework.Assert.assertTrue(condition);
 		}
 	}
 
 	public static void assertTrue(String message, boolean condition) {
 		if (BuildConfig.DEBUG) {
-			Assert.assertTrue(message, condition);
+			junit.framework.Assert.assertTrue(message, condition);
 		}
 	}
 }
