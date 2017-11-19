@@ -297,9 +297,11 @@ public class ScheduleFragment extends AbstractListFragment {
 		        getString(R.string.language), course, semester, termTime, bForceRefresh );
 
         if (scheduleList != null) {
+            // wenn etwas zurück kommt, dann aktualisiere die View
             return this.updateListView(scheduleList);
+        } else {
+            // wenn nichts zurück kommt returne null, damit ein Toast angezeigt wird
+            return null;
         }
-
-        return null;
     }
 }

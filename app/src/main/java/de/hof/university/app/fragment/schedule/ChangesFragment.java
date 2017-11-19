@@ -125,8 +125,10 @@ public class ChangesFragment extends AbstractListFragment {
 		ArrayList<Object> changesList = DataManager.getInstance().getChanges(getActivity().getApplicationContext(), course, semester, termTime, Boolean.valueOf(params[ 3 ]));
 
 		if (changesList != null ) {
+			// wenn etwas zurück kommt, dann aktualisiere die View
 			return this.updateListView(changesList);
 		} else {
+			// wenn nichts zurück kommt returne null, damit ein Toast angezeigt wird
 			return null;
 		}
 	}
