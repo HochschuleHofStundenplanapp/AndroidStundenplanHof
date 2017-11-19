@@ -177,6 +177,7 @@ public class SettingsFragment extends PreferenceFragment {
 									}
 								}
 							})
+							.setCancelable(false)
 							.setIcon(android.R.drawable.ic_dialog_alert)
 							.create();
 					d.show();
@@ -227,6 +228,7 @@ public class SettingsFragment extends PreferenceFragment {
 									//nothing to do here. Just close the message
 								}
 							})
+							.setCancelable(false)
 							.setIcon(android.R.drawable.ic_dialog_alert)
 							.show();
 					edtLogin.setEnabled(true);
