@@ -111,15 +111,15 @@ public class LectureChange implements Serializable {
 
         result += lecturer + '\n';     // Dozent
 
-        if (!group.equals("")) {
+        if (!"".equals(group)) {
             result += group + '\n';   // Übungsgruppe
         }
 
-        if (!reason.equals("")) {
-            //result += reason;         // Grund soll aus Datenschutzrechtlichen Gründen in den Apps nicht mehr angezeigt werden!
-        }
+        /*if (!"".equals(reason)) {
+            result += reason;         // Grund soll aus Datenschutzrechtlichen Gründen in den Apps nicht mehr angezeigt werden!
+        }*/
 
-        if (!comment.equals("")){
+        if (!"".equals(comment)){
             result += "\n" + comment;
         }
 
@@ -130,7 +130,7 @@ public class LectureChange implements Serializable {
 
     public final String getText() {
 
-        if (!text.equals("")) {
+        if (!"".equals(text)) {
             return text;
         }
         else return "";
