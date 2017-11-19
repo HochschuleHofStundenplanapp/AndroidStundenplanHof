@@ -473,7 +473,7 @@ class CalendarInterface {
 		//IDs are from "public static final class Events"
 		//TODO
 		//EVENT_COLOR
-		values.put(Events.EVENT_COLOR_KEY, HOF_CALENDAR_COLOR);
+		values.put(Events.EVENT_COLOR, HOF_CALENDAR_COLOR);
 		//ORIGINAL_ID
 		//UID_2445  ???
 
