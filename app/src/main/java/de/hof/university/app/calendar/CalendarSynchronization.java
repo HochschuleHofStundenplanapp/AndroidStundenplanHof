@@ -56,7 +56,7 @@ public class CalendarSynchronization {
 
     private CalendarSynchronization() {
         super();
-        if (DEBUG_CALENDAR_SYNCHRONIZATION) Log.d(TAG, "Constructor");
+        Log.i(TAG, "Constructor");
 	    calendarInterface = CalendarInterface.getInstance();
     }
 

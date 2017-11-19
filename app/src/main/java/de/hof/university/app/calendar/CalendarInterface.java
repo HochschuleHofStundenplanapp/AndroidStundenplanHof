@@ -170,9 +170,16 @@ class CalendarInterface {
 	 */
 	private CalendarInterface() {
 		super();
-		Context context = MainActivity.getAppContext().getApplicationContext();
-		localCalendarName = context.getString(R.string.stundenplan) + " " + context.getString(R.string.app_name);
-		accountName = context.getString(R.string.app_name);
+		Log.i(TAG, "Constructor");
+		Context context = MainActivity.getAppContext();
+		if (context == null) {
+			Log.e(TAG, "Context null, make nothing");
+			return;
+		}
+
+		Context applicationContext = context.getApplicationContext();
+		localCalendarName = applicationContext.getString(R.string.stundenplan) + " " + applicationContext.getString(R.string.app_name);
+		accountName = applicationContext.getString(R.string.app_name);
 		accountType = CalendarContract.ACCOUNT_TYPE_LOCAL;
 
 		// bereits vohandene IDs einlesen

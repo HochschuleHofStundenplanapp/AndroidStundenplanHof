@@ -50,6 +50,7 @@ import de.hof.university.app.Communication.RegisterLectures;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.Util.Define;
+import de.hof.university.app.Util.Log;
 import de.hof.university.app.calendar.CalendarSynchronization;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.LoginController;
@@ -78,6 +79,7 @@ public class SettingsFragment extends PreferenceFragment {
 	@Override
 	public final void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.i(TAG, "onCreate");
 		setHasOptionsMenu(true);
 
 		this.loginController = LoginController.getInstance(getActivity());
