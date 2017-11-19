@@ -42,6 +42,7 @@ import java.util.Set;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
+import de.hof.university.app.Util.Assert;
 import de.hof.university.app.adapter.ScheduleAdapter;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.fragment.AbstractListFragment;
@@ -91,7 +92,7 @@ public class ScheduleFragment extends AbstractListFragment {
     @Override
     public boolean onContextItemSelected(final MenuItem item) {
 
-        junit.framework.Assert.assertTrue( item != null );
+        Assert.assertTrue( item != null );
 
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         final LectureItem lectureItem = (LectureItem) listView.getItemAtPosition(info.position);
@@ -248,7 +249,7 @@ public class ScheduleFragment extends AbstractListFragment {
         final MainActivity mainActivity = (MainActivity) getActivity();
         final CharSequence title = mainActivity.getSupportActionBar().getTitle();
 
-        junit.framework.Assert.assertTrue( title.length() > 0 );
+        Assert.assertTrue( title.length() > 0 );
 
         if (getString(R.string.stundenplan).equals(title)) {
             inflater.inflate(R.menu.schedule_main, menu);
@@ -271,7 +272,7 @@ public class ScheduleFragment extends AbstractListFragment {
                     final LectureItem lectureItem = (LectureItem) object;
                     final String scheduleID = String.valueOf(lectureItem.getId());
                     // Haben wir eine ID erhalten oder doch nur eine "null"
-                    junit.framework.Assert.assertTrue( ! "null".equals(scheduleID) );
+                    Assert.assertTrue( ! "null".equals(scheduleID) );
                     schedulesIds.add( scheduleID );
                 }
             }

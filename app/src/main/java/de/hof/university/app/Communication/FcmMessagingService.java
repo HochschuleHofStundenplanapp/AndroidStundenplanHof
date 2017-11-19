@@ -28,6 +28,7 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
+import de.hof.university.app.Util.Assert;
 import de.hof.university.app.Util.Log;
 
 /*
@@ -90,7 +91,7 @@ public final class FcmMessagingService extends FirebaseMessagingService {
         notificationBuilder.setDefaults(Notification.DEFAULT_SOUND);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        junit.framework.Assert.assertTrue( notificationManager != null ) ;
+        Assert.assertTrue( notificationManager != null ) ;
         notificationManager.notify(0, notificationBuilder.build());
     }
 }

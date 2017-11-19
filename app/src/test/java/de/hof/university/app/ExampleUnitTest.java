@@ -18,7 +18,7 @@ package de.hof.university.app;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import de.hof.university.app.Util.Assert;
 
 /**
  * To work on unit tests, switch the Test Artifact in the Build Variants view.
@@ -26,6 +26,6 @@ import static org.junit.Assert.assertEquals;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
-        junit.framework.Assert.assertTrue(4 == 2 + 2);
+        Assert.assertTrue(4 == 2 + 2);
     }
 }

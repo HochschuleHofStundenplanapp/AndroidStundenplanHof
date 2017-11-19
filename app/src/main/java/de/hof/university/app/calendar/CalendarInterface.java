@@ -40,6 +40,7 @@ import java.util.TimeZone;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
+import de.hof.university.app.Util.Assert;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.Util.Log;
 import de.hof.university.app.data.DataManager;
@@ -382,12 +383,12 @@ class CalendarInterface {
 
 		if (DEBUG_CALENDAR_INTERFACE) Log.d( TAG, "createLectureEvent in CalendarInterface" );
 
-		junit.framework.Assert.assertTrue( !"".equals(lectureID) );
-		junit.framework.Assert.assertTrue( !"".equals(title) );
-//TODO		junit.framework.Assert.assertTrue( !"".equals(description) );
-		junit.framework.Assert.assertTrue( startTime != null );
-		junit.framework.Assert.assertTrue( endTime != null );
-		junit.framework.Assert.assertTrue( !"".equals(location) );
+		Assert.assertTrue( !"".equals(lectureID) );
+		Assert.assertTrue( !"".equals(title) );
+//TODO		Assert.assertTrue( !"".equals(description) );
+		Assert.assertTrue( startTime != null );
+		Assert.assertTrue( endTime != null );
+		Assert.assertTrue( !"".equals(location) );
 
 		// checks if exists, if true than update event otherwise create event
 		ArrayList<Long> eventIDs = getEventIDs(lectureID, title, startTime, endTime );
@@ -447,11 +448,11 @@ class CalendarInterface {
 			return null;
 		}
 
-		junit.framework.Assert.assertTrue( !"".equals(title) );
-//TODO		junit.framework.Assert.assertTrue( !"".equals(description)) ;
-		junit.framework.Assert.assertTrue( startDate != null ) ;  // > 2016 && < 2030
-		junit.framework.Assert.assertTrue( endDate != null ) ;
-		junit.framework.Assert.assertTrue( !"".equals( location )) ;
+		Assert.assertTrue( !"".equals(title) );
+//TODO		Assert.assertTrue( !"".equals(description)) ;
+		Assert.assertTrue( startDate != null ) ;  // > 2016 && < 2030
+		Assert.assertTrue( endDate != null ) ;
+		Assert.assertTrue( !"".equals( location )) ;
 
 		ContentValues values = new ContentValues();
 		values.put(Events.DTSTART, startDate.getTime());
@@ -472,7 +473,7 @@ class CalendarInterface {
 		//IDs are from "public static final class Events"
 		//TODO
 		//EVENT_COLOR
-		values.put(Events.EVENT_COLOR, HOF_CALENDAR_COLOR);
+		values.put(Events.EVENT_COLOR_KEY, HOF_CALENDAR_COLOR);
 		//ORIGINAL_ID
 		//UID_2445  ???
 
@@ -790,13 +791,15 @@ class CalendarInterface {
 			final Long eventID = cur.getLong(PROJECTION_EVENT_ID);
 			final String eventTitle = cur.getString(PROJECTION_TITLE_INDEX);
 
+			if (DEBUG_CALENDAR_INTERFACE) Log.d(TAG, "getEventIDs: OrginalSyncID: " + eventLectureID);
+
 			// überprpfe ob lecture ID gesetzt und gleich ist
 			/* MS
 			if (eventLectureID != null && eventLectureID.equals(lectureID)) {
 				resultEventIDs.add(eventID);
 			} else
 			*/
-			if (eventTitle != null){
+			if (eventTitle != null) {
 
 				// Der Titel kann manipuliert worden sein, bspw. mit "[Entfällt]"
 				final String eventTitleLower = eventTitle.toLowerCase();

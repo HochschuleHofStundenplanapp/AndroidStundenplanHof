@@ -16,6 +16,8 @@
 
 package de.hof.university.app.data.parser;
 
+import de.hof.university.app.Util.Assert;
+
 /**
  * Created by larsg on 17.06.2016.
  */
@@ -36,7 +38,7 @@ public final class ParserFactory {
             return new MyScheduleParser();
         }
 
-        junit.framework.Assert.assertTrue(false);
+        Assert.assertTrue(false);
 
         return null;
     }

@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import de.hof.university.app.Util.Assert;
 import de.hof.university.app.Util.Log;
 import de.hof.university.app.model.meal.Meal;
 
@@ -121,13 +122,13 @@ final public class MealParser implements Parser<Meal> {
                         case XmlPullParser.END_TAG:
                             if (xmlTag.equalsIgnoreCase("preis")) {
                                 if (tariff.equals(xmlTariff)) {
-                                    junit.framework.Assert.assertTrue( meal != null );
+                                    Assert.assertTrue( meal != null );
                                     meal.setPrice(xmlText);
                                     meal.setTariff(xmlGroup);
                                     result.add(meal);
                                 }
                             } else if (xmlTag.equalsIgnoreCase("gerichtAttribut")) {
-                                junit.framework.Assert.assertTrue( meal != null );
+                                Assert.assertTrue( meal != null );
                                 meal.addAttribute(xmlText);
                             }
                             break;

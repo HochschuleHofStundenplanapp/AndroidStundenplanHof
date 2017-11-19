@@ -150,12 +150,12 @@ public class MyScheduleFragment extends ScheduleFragment {
             */
             List<LectureItem> scheduleList = DataManager.getInstance().getMySchedule(getActivity().getApplicationContext(), getString(R.string.language), Boolean.valueOf(params[3]));
 
-            junit.framework.Assert.assertTrue(scheduleList != null); // ob etwas zurück kommt
-
+            // wenn etwas zurück kommt, dann aktualisiere die View
             if (scheduleList != null) {
                 return super.updateListView(scheduleList);
             }
         }
+        // wenn nichts zurück kommt returne null, damit ein Toast angezeigt wird
         return null;
     }
 }
