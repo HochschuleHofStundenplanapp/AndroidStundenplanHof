@@ -45,14 +45,19 @@ public class MyScheduleFragment extends ScheduleFragment {
 
         if (v.getId() == R.id.listView) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-            LectureItem lectureItem = (LectureItem) listView.getItemAtPosition(info.position);
 
-            DataManager dm = DataManager.getInstance();
+            Object item = listView.getItemAtPosition(info.position);
 
-            //Wenn in Mein Stundenplan enthalten -> löschen anzeigen
-            if (dm.myScheduleContains(v.getContext(), lectureItem)) {
-                menu.setHeaderTitle(R.string.myschedule);
-                menu.add(Menu.NONE, 0, 0, R.string.deleteFromMySchedule);
+            if (item instanceof LectureItem) {
+                LectureItem lectureItem = (LectureItem) item;
+
+                DataManager dm = DataManager.getInstance();
+
+                //Wenn in Mein Stundenplan enthalten -> löschen anzeigen
+                if (dm.myScheduleContains(v.getContext(), lectureItem)) {
+                    menu.setHeaderTitle(R.string.myschedule);
+                    menu.add(Menu.NONE, 0, 0, R.string.deleteFromMySchedule);
+                }
             }
         }
     }

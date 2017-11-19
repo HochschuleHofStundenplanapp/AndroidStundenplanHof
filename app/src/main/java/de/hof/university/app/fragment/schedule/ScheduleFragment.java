@@ -77,14 +77,19 @@ public class ScheduleFragment extends AbstractListFragment {
 
         if (v.getId() == R.id.listView) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-            LectureItem lectureItem = (LectureItem) listView.getItemAtPosition(info.position);
 
-            final DataManager dm = DataManager.getInstance();
+            Object item = listView.getItemAtPosition(info.position);
 
-            //Wenn noch nicht im Mein Stundenplan -> hinzufügen anzeigen
-            if (!dm.myScheduleContains(v.getContext(), lectureItem)) {
-                menu.setHeaderTitle(R.string.myschedule);
-                menu.add(Menu.NONE, 0, 0, R.string.addToMySchedule);
+            if (item instanceof LectureItem) {
+                LectureItem lectureItem = (LectureItem) item;
+
+                final DataManager dm = DataManager.getInstance();
+
+                //Wenn noch nicht im Mein Stundenplan -> hinzufügen anzeigen
+                if (!dm.myScheduleContains(v.getContext(), lectureItem)) {
+                    menu.setHeaderTitle(R.string.myschedule);
+                    menu.add(Menu.NONE, 0, 0, R.string.addToMySchedule);
+                }
             }
         }
     }
