@@ -283,6 +283,14 @@ public class ScheduleFragment extends AbstractListFragment {
             }
             DataManager.getInstance().addAllToMySchedule(getActivity().getApplicationContext(), schedulesIds);
 
+            // fragt an dieser stelle beim hinzufügen, ob die push notifications dafür aktiviert werden sollen
+            MainActivity mActivity = (MainActivity) getActivity();
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mActivity.getApplicationContext());
+            sharedPreferences.edit()
+                    .putBoolean("show_push_notifications_dialog", true) // wird zurückgesetzt um den code aus der main activity weiter verwenden zu können.
+                    .apply();
+            mActivity.showPushNotificationDialog(sharedPreferences);
+
             Toast.makeText(getView().getContext(), getString(R.string.changesMyScheduleText), Toast.LENGTH_LONG).show();
         }
 
