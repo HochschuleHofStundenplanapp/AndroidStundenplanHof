@@ -52,6 +52,11 @@ public class ChangesFragment extends AbstractListFragment {
 
 		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
 		navigationView.getMenu().findItem(R.id.nav_aenderung).setChecked(true);
+
+		// fragen, ob die Push Notifications aktiviert werden sollen
+		MainActivity mActivity = (MainActivity) getActivity();
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mActivity.getApplicationContext());
+		mActivity.showPushNotificationDialog(sharedPreferences);
 	}
 
 	@Override

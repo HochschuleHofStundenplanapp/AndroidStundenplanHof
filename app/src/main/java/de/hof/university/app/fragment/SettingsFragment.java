@@ -61,7 +61,7 @@ import static android.os.Build.VERSION_CODES;
 /**
  * Created by Lukas on 24.11.2015.
  */
-public class SettingsFragment extends PreferenceFragment {
+public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 	public final static String TAG = "SettingsFragment";
 
@@ -269,6 +269,7 @@ public class SettingsFragment extends PreferenceFragment {
 	@Override
 	public final void onResume() {
 		super.onResume();
+		Log.i( TAG, "onResume" );
 
 		final MainActivity mainActivity = (MainActivity) getActivity();
 		mainActivity.getSupportActionBar().setTitle(R.string.einstellungen);
@@ -283,16 +284,27 @@ public class SettingsFragment extends PreferenceFragment {
 		updateSemesterData(PreferenceManager.getDefaultSharedPreferences(getView().getContext()).getString(getString(R.string.PREFERENCE_KEY_STUDIENGANG), ""));
 //        updateSemesterListPreference();
 		refreshSummaries();
+
+		getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
+		Log.i( TAG, "onPause" );
 
 		final MainActivity mainActivity = (MainActivity) getActivity();
 		final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
 
 		navigationView.getMenu().findItem(R.id.nav_einstellungen).setChecked(false);
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		Log.i( TAG, "onDestroy" );
+
+		getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
 	}
 
 	private void refreshSummaries() {
@@ -404,7 +416,6 @@ public class SettingsFragment extends PreferenceFragment {
 
 	}
 
-
 	/**
 	 * @param menu
 	 * @param inflater
@@ -465,6 +476,17 @@ public class SettingsFragment extends PreferenceFragment {
 					}
 				}
 			}
+		}
+	}
+
+	// Einstellungen aktualisieren wenn sie geändert werden
+	@Override
+	public void onSharedPreferenceChanged( SharedPreferences sharedPreferences, String key ) {
+		Log.i( TAG, "onSharedPreferenceChanged" );
+		if ( getString( R.string.PREFERENCE_KEY_CHANGES_NOTIFICATION ).equals( key ) ) {
+			Log.i( TAG, "CHANES_NOTIFICATION has changed" );
+			CheckBoxPreference changes_notification = (CheckBoxPreference) findPreference( key );
+			changes_notification.setChecked( sharedPreferences.getBoolean( key, false ) );
 		}
 	}
 

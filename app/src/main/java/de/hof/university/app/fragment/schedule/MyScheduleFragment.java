@@ -16,6 +16,8 @@
 
 package de.hof.university.app.fragment.schedule;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -75,6 +77,11 @@ public class MyScheduleFragment extends ScheduleFragment {
         if (DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) == 0) {
             Toast.makeText(getView().getContext(), getString(R.string.myScheduleInfo), Toast.LENGTH_LONG).show();
         }
+
+        // fragen, ob die Push Notifications aktiviert werden sollen
+        MainActivity mActivity = (MainActivity) getActivity();
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mActivity.getApplicationContext());
+        mActivity.showPushNotificationDialog(sharedPreferences);
     }
 
     @Override
