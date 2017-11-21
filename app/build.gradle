@@ -23,8 +23,6 @@ android {
         applicationId 'de.hof.university.app'
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 24
-        versionName '3.3'
         versionCode 25
         versionName '4.0'
     }
