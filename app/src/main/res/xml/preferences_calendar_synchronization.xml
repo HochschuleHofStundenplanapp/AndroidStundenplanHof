@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:key="calendar_synchronization"
+        android:title="@string/pref_calendar_synchronization" />
+
+    <PreferenceCategory
+        android:title="Erinngerungen">
+
+        <Preference
+            android:title="Erinngerung x Minuten vorher" />
+
+        <Preference
+            android:title="Erinngerung für erste Vorlesung um Uhrzeit am Tag davor" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

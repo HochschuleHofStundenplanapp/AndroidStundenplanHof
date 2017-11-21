@@ -143,6 +143,16 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 			preferenceScreen.removePreference(changes_notifications);
 		}
 
+		final Preference calendar_synchronzation_screen = findPreference( "pref_screen_calendar_synchronization" );
+
+		calendar_synchronzation_screen.setOnPreferenceClickListener( new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick( Preference preference ) {
+				// getFragmentManager()
+				return false;
+			}
+		} );
+
 		// Calendar synchronization
 		final CheckBoxPreference calendar_syncronization = (CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION));
 
@@ -286,6 +296,11 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		refreshSummaries();
 
 		getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+	}
+
+	@Override
+	public boolean onPreferenceTreeClick( PreferenceScreen preferenceScreen, Preference preference ) {
+		return super.onPreferenceTreeClick( preferenceScreen, preference );
 	}
 
 	@Override
