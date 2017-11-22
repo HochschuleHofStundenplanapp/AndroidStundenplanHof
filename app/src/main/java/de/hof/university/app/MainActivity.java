@@ -166,9 +166,6 @@ public class MainActivity extends AppCompatActivity
 
 		// beim ersten Start einen Hinweis auf die experimentellen Funktionen geben
 		showExperimentalFeaturesInfoDialog(sharedPreferences);
-
-		// Fragen ob die Push-Benachrichtungen aktiviert werden sollen
-		showPushNotificationDialog(sharedPreferences);
 	}
 
 	@Override
