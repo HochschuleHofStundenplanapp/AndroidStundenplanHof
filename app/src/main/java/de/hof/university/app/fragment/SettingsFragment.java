@@ -261,6 +261,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		});
 
 		enableSettingsSummary();
+
+		getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 	}
 
 	/**
@@ -284,8 +286,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		updateSemesterData(PreferenceManager.getDefaultSharedPreferences(getView().getContext()).getString(getString(R.string.PREFERENCE_KEY_STUDIENGANG), ""));
 //        updateSemesterListPreference();
 		refreshSummaries();
-
-		getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 	}
 
 	@Override
