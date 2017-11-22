@@ -17,14 +17,11 @@
 package de.hof.university.app.fragment;
 
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -33,17 +30,12 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.hof.university.app.Communication.RegisterLectures;
@@ -51,12 +43,9 @@ import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.Util.Log;
-import de.hof.university.app.calendar.CalendarSynchronization;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.LoginController;
 import de.hof.university.app.model.settings.StudyCourse;
-
-import static android.os.Build.VERSION_CODES;
 
 /**
  * Created by Lukas on 24.11.2015.
@@ -68,10 +57,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 	private ProgressDialog progressDialog;
 	private List<StudyCourse> studyCourseList;
 	private LoginController loginController = null;
-	private CalendarSynchronization calendarSynchronization = null;
-
-    private final int REQUEST_CODE_CALENDAR_TURN_ON_PERMISSION =  2;
-    private final int REQUEST_CODE_CALENDAR_TURN_OFF_PERMISSION =  3;
 
 	/**
 	 * @param savedInstanceState
@@ -83,7 +68,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		setHasOptionsMenu(true);
 
 		this.loginController = LoginController.getInstance(getActivity());
-		this.calendarSynchronization = CalendarSynchronization.getInstance();
 
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.preferences);
@@ -143,60 +127,25 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 			preferenceScreen.removePreference(changes_notifications);
 		}
 
-		final Preference calendar_synchronzation_screen = findPreference( "pref_screen_calendar_synchronization" );
+
+		// Calendar synchronization
+
+		final Preference calendar_synchronzation_screen = findPreference( getString( R.string.PREFERENCE_KEY_SCREEN_CALENDAR_SYNCHRONIZATION ) );
 
 		calendar_synchronzation_screen.setOnPreferenceClickListener( new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick( Preference preference ) {
-				// getFragmentManager()
+
+				SettingsCalendarSynchronizationFragment settingsCalendarSynchronizationFragment = new SettingsCalendarSynchronizationFragment();
+				getFragmentManager().beginTransaction()
+						.addToBackStack( null )
+						.replace( R.id.content_main, settingsCalendarSynchronizationFragment )
+						.commit();
+
 				return false;
 			}
 		} );
 
-		// Calendar synchronization
-		final CheckBoxPreference calendar_syncronization = (CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION));
-
-		calendar_syncronization.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				if ( (Boolean) newValue ) {
-					// an schalten
-					turnCalendarSyncOn();
-				} else {
-					// aus schalten
-
-					// mit einem Dialog nachfragen ob der Nutzer die Kalendereinträge behalten möchte
-					final AlertDialog d = new AlertDialog.Builder(getView().getContext())
-							.setTitle(R.string.calendar_syncronization_keep_events_title)
-							.setMessage(R.string.calendar_syncronization_keep_events_message)
-							.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									// behalten, mache nichts
-								}
-							})
-							.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									// löschen
-									if ((ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED)
-											|| (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED)) {
-										// keine Berechtigung, hole erst Berechtigung
-										requestCalendarPermission(REQUEST_CODE_CALENDAR_TURN_OFF_PERMISSION);
-									} else {
-										// lösche die Kalendereinträge oder den lokalen Kalender
-										calendarSynchronization.stopCalendarSynchronization();
-									}
-								}
-							})
-							.setCancelable(false)
-							.setIcon(android.R.drawable.ic_dialog_alert)
-							.create();
-					d.show();
-				}
-				return true;
-			}
-		});
 
 		//Login für die experimentellen Funktionen
 		final Preference edtLogin = findPreference(getString(R.string.PREFERENCE_KEY_LOGIN));
@@ -216,18 +165,18 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
 		if ( experimentalFeatures.isChecked() ) {
 			edtLogin.setEnabled(true);
-			calendar_syncronization.setEnabled(true);
+			//calendar_syncronization.setEnabled(true);
 			//changes_notifications.setEnabled(true);
 		} else {
 			edtLogin.setEnabled(false);
-			calendar_syncronization.setEnabled(false);
+			//calendar_syncronization.setEnabled(false);
 			//changes_notifications.setEnabled(false);
 		}
 
 		experimentalFeatures.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				final Preference edtLogin = findPreference("login");
+				final Preference edtLogin = findPreference( getString( R.string.PREFERENCE_KEY_LOGIN ) );
 //				final CheckBoxPreference changes_notifications = (CheckBoxPreference) findPreference("changes_notifications");
 				final MainActivity activity = (MainActivity) getActivity();
 				if ( (Boolean) newValue ) {
@@ -244,7 +193,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 							.setIcon(android.R.drawable.ic_dialog_alert)
 							.show();
 					edtLogin.setEnabled(true);
-					calendar_syncronization.setEnabled(true);
+					//calendar_syncronization.setEnabled(true);
 					/*if (changes_notifications != null) {
 						changes_notifications.setEnabled(true);
 						// falls ausgewählt war
@@ -258,7 +207,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
 				} else {
 					edtLogin.setEnabled(false);
-					calendar_syncronization.setEnabled(false);
+					//calendar_syncronization.setEnabled(false);
 					/*if (changes_notifications != null) {
 						changes_notifications.setEnabled(false);
 						// von Push-Notifications abmelden
@@ -564,120 +513,5 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
 			progressDialog.dismiss();
 		}
-	}
-
-	private void requestCalendarPermission(int requestCode) {
-
-		// From MARSHMELLOW (OS 6) on
-		if (Build.VERSION.SDK_INT >= VERSION_CODES.M ) {
-			this.requestPermissions(
-					new String[]{Manifest.permission.READ_CALENDAR,
-							Manifest.permission.WRITE_CALENDAR},
-					requestCode);
-		}
-    }
-
-	@Override
-	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-		switch (requestCode) {
-			case REQUEST_CODE_CALENDAR_TURN_ON_PERMISSION:
-				if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-					// Permission granted
-					turnCalendarSyncOn();
-				} else {
-					// Permission Denied
-					Toast.makeText(getActivity(), R.string.calendar_synchronization_permissionNotGranted, Toast.LENGTH_SHORT)
-							.show();
-					// Calendar Sync aus schalten
-					((CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
-				}
-				break;
-			case REQUEST_CODE_CALENDAR_TURN_OFF_PERMISSION:
-				if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-					// Permission granted
-					calendarSynchronization.stopCalendarSynchronization();
-				} else {
-					// Permission Denied
-					Toast.makeText(getActivity(), R.string.calendar_synchronization_permissionNotGranted, Toast.LENGTH_SHORT)
-							.show();
-					// Calendar Sync ein schalten
-					((CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(true);
-				}
-			default:
-				super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-		}
-	}
-
-	private void turnCalendarSyncOn() {
-		// check for permission
-		// wenn keine Berechtigung dann requeste sie und falls erfolgreich komme hier her zurück
-		if ((ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED)
-				|| (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED)) {
-			// keine Berechtigung
-			requestCalendarPermission(REQUEST_CODE_CALENDAR_TURN_ON_PERMISSION);
-			return;
-		}
-
-		final ArrayList<String> calendars = new ArrayList<>();
-
-		// Den localen Kalender als erstes
-		calendars.add(getString(R.string.calendar_synchronitation_ownLocalCalendar));
-
-		// Die weiteren Kalender danach
-		calendars.addAll(calendarSynchronization.getCalendarsNames());
-
-		final AlertDialog d = new AlertDialog.Builder(getView().getContext())
-				.setTitle(R.string.calendar_synchronization)
-				.setMessage(R.string.calendar_synchronization_infoText)
-				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-						new AlertDialog.Builder(getView().getContext())
-								.setTitle(R.string.calendar_synchronization_chooseCalendar)
-								.setItems(calendars.toArray(new String[calendars.size()]), new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface dialog, int which) {
-										String calendarName = calendars.get(which);
-										if (calendarName.equals(getString(R.string.calendar_synchronitation_ownLocalCalendar))) {
-											// lokaler Kalender
-											calendarSynchronization.setCalendar(null);
-										} else {
-											calendarSynchronization.setCalendar(calendarName);
-										}
-										calendarSynchronization.createAllEvents();
-									}
-								})
-								.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(DialogInterface dialog, int which) {
-										// Kalender Synchronisation ausschalten
-										((CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
-									}
-								})
-								.setOnCancelListener(new DialogInterface.OnCancelListener() {
-									@Override
-									public void onCancel(DialogInterface dialog) {
-										// Kalender Synchronisation ausschalten
-										((CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
-									}
-								})
-								.setIcon(android.R.drawable.ic_dialog_alert)
-								.show();
-					}
-				})
-				.setOnCancelListener(new DialogInterface.OnCancelListener() {
-					@Override
-					public void onCancel(DialogInterface dialog) {
-						// Kalender Synchronisation ausschalten
-						((CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
-					}
-				})
-				.setIcon(android.R.drawable.ic_dialog_alert)
-				.create();
-		d.show();
-
-		// Make the textview clickable. Must be called after show()
-		((TextView)d.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
 	}
 }

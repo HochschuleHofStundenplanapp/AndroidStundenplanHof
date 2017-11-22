@@ -150,4 +150,5 @@
     <string name="pref_calendar_synchronization">My schedule calendar synchronization</string>
     <string name="calendar_syncronization_keep_events_title">Keep Events?</string>
     <string name="calendar_syncronization_keep_events_message">Do you want to keep the events or the local calendar?</string>
+    <string translatable="false" name="PREFERENCE_KEY_SCREEN_CALENDAR_SYNCHRONIZATION">pref_screen_calendar_synchronization</string>
 </resources>
