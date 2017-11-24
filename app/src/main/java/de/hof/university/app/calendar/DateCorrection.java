@@ -21,8 +21,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import de.hof.university.app.Util.Assert;
-
 /**
  * Created by Daniel on 19.07.2017.
  */
@@ -188,7 +186,7 @@ public class DateCorrection {
 
             correctEndDate = winterEndDateCalendar.getTime();
         }
-        else Assert.assertTrue( false );
+        else junit.framework.Assert.assertTrue( false );
 
         return correctEndDate;
     }

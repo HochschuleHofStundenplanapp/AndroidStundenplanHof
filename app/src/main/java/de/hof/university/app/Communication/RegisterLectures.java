@@ -38,7 +38,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.hof.university.app.MainActivity;
-import de.hof.university.app.Util.Assert;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.Util.Log;
 
@@ -102,7 +101,7 @@ public class RegisterLectures {
             }
             HttpURLConnection client = null;
             try {
-                Assert.assertTrue( url != null ) ;
+                junit.framework.Assert.assertTrue( url != null ) ;
                 client = (HttpURLConnection) url.openConnection();
 
                 String data = URLEncoder.encode("fcm_token", "UTF-8")

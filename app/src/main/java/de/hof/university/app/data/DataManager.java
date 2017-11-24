@@ -40,7 +40,6 @@ import java.util.Set;
 import de.hof.university.app.Communication.RegisterLectures;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
-import de.hof.university.app.Util.Assert;
 import de.hof.university.app.Util.Define;
 import de.hof.university.app.Util.Log;
 import de.hof.university.app.Util.MyString;
@@ -114,7 +113,7 @@ public class DataManager {
 
             final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             final String[] params = {xmlString, sharedPreferences.getString("speiseplan_tarif", "1")};
-            Assert.assertTrue(parser != null);
+            junit.framework.Assert.assertTrue(parser != null);
 
             ArrayList<Meal> tmpMeals = (ArrayList<Meal>) parser.parse(params);
 
@@ -157,7 +156,7 @@ public class DataManager {
             }
 
             final String[] params = {jsonString, language};
-            Assert.assertTrue( parser != null );
+            junit.framework.Assert.assertTrue( parser != null );
 
             ArrayList<LectureItem> tmpScheduleLectureItems = (ArrayList<LectureItem>) parser.parse(params);
 
@@ -233,7 +232,7 @@ public class DataManager {
 
             final String[] params = {jsonString, language};
 
-            Assert.assertTrue(parser != null );
+            junit.framework.Assert.assertTrue(parser != null );
             ArrayList<LectureItem> tmpMyScheduleLectureItems = (ArrayList<LectureItem>) parser.parse(params);
 
             // Wenn der Server einen unvollständigen Stundenplan (nur halb so groß oder kleiner) liefert bringe die Fehlermedlung "Aktualisierung fehlgeschlagen"
@@ -309,7 +308,7 @@ public class DataManager {
             }
 
             final String[] params = {jsonString};
-            Assert.assertTrue( parser != null );
+            junit.framework.Assert.assertTrue( parser != null );
 
             ArrayList<Object> tmpChanges = (ArrayList<Object>) parser.parse(params);
 
@@ -360,7 +359,7 @@ public class DataManager {
             }
 
             final String[] params = {jsonString, language};
-            Assert.assertTrue( parser != null );
+            junit.framework.Assert.assertTrue( parser != null );
 
             ArrayList<StudyCourse> tmpCourses = (ArrayList<StudyCourse>) parser.parse(params);
 
