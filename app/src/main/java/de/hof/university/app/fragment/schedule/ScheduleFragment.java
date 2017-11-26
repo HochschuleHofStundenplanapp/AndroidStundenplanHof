@@ -152,9 +152,9 @@ public class ScheduleFragment extends AbstractListFragment {
 
         final String[] params = new String[4];
         final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        final String course = sharedPref.getString(getString(R.string.PREFERENCE_KEY_STUDIENGANG), "");
-        final String semester = sharedPref.getString(getString(R.string.PREFERENCE_KEY_SEMESTER), "");
-        final String termTime = sharedPref.getString(getString(R.string.PREFERENCE_KEY_TERM_TIME), "");
+        final String course = sharedPref.getString(getString(R.string.PREF_KEY_STUDIENGANG), "");
+        final String semester = sharedPref.getString(getString(R.string.PREF_KEY_SEMESTER), "");
+        final String termTime = sharedPref.getString(getString(R.string.PREF_KEY_TERM_TIME), "");
 
         // Meldungen nur bringen wenn im Stundenplan Fragment
         if (this.getClass().getSimpleName().equals(ScheduleFragment.class.getSimpleName())) {

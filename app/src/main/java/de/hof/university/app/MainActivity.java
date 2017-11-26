@@ -32,6 +32,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -98,10 +99,13 @@ public class MainActivity extends AppCompatActivity
 
 		// getActionBar geht nicht wahrscheinlich weil doch noch irgendwo dafür die Support Libary eingebunden wird
 		// zum Nachlesen: http://codetheory.in/difference-between-setdisplayhomeasupenabled-sethomebuttonenabled-and-setdisplayshowhomeenabled/
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		ActionBar actionBar = getSupportActionBar();
+		if (actionBar != null) {
+			actionBar.setDisplayHomeAsUpEnabled(true);
+		}
 		// getSupportActionBar().setHomeButtonEnabled(true);
 
-		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		mDrawerLayout = findViewById(R.id.drawer_layout);
 		mDrawerToggle = new ActionBarDrawerToggle(
 				this,                  /* host Activity */
 				mDrawerLayout,         /* DrawerLayout object */
@@ -128,12 +132,12 @@ public class MainActivity extends AppCompatActivity
 		mDrawerLayout.addDrawerListener(mDrawerToggle);
 
 
-		navigationView = (NavigationView) findViewById(R.id.nav_view);
+		navigationView = findViewById(R.id.nav_view);
 		navigationView.setNavigationItemSelectedListener(this);
 
 		// Experimentelle Features anzeigen?
 		final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		final boolean showExperimentalFeatures = sharedPreferences.getBoolean(getString(R.string.PREFERENCE_KEY_EXPERIMENTAL_FEATURES_ENABLED), false);
+		final boolean showExperimentalFeatures = sharedPreferences.getBoolean(getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES_ENABLED), false);
 		displayExperimentalFeaturesMenuEntries(showExperimentalFeatures);
 
 
@@ -147,9 +151,9 @@ public class MainActivity extends AppCompatActivity
 				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_mySchedule));
 			}
 			// Sind die Einstellungen vorhanden?
-			else if (!sharedPreferences.getString(getString(R.string.PREFERENCE_KEY_TERM_TIME), "").isEmpty()
-					&& !sharedPreferences.getString(getString(R.string.PREFERENCE_KEY_STUDIENGANG), "").isEmpty()
-					&& !sharedPreferences.getString(getString(R.string.PREFERENCE_KEY_SEMESTER), "").isEmpty()) {
+			else if (!sharedPreferences.getString(getString(R.string.PREF_KEY_TERM_TIME), "").isEmpty()
+					&& !sharedPreferences.getString(getString(R.string.PREF_KEY_STUDIENGANG), "").isEmpty()
+					&& !sharedPreferences.getString(getString(R.string.PREF_KEY_SEMESTER), "").isEmpty()) {
 				// ja, also gehen wir zum Stundenplan
 				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_stundenplan));
 			} else {
@@ -166,6 +170,23 @@ public class MainActivity extends AppCompatActivity
 
 		// beim ersten Start einen Hinweis auf die experimentellen Funktionen geben
 		showExperimentalFeaturesInfoDialog(sharedPreferences);
+
+		// Um den geänderten Beamten Tarif zu fixen
+		fixMealTariff();
+	}
+
+	/**
+	 * Um den geänderten Beamten Tarif zu fixen
+	 * Von Tarif 4, den es nicht mehr gibt auf Tarif 5 wechseln wenn 4 ausgewählt.
+	 */
+	private void fixMealTariff() {
+		final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		int currentTariff = sharedPreferences.getInt(getString(R.string.PREF_KEY_MEAL_TARIFF), 0);
+		if (currentTariff == 4) {
+			sharedPreferences.edit()
+					.putInt(getString(R.string.PREF_KEY_MEAL_TARIFF), 5)
+					.apply();
+		}
 	}
 
 	@Override
@@ -244,12 +265,12 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	public void showPushNotificationDialog(final SharedPreferences sharedPreferences) { // Sichtbarkeit auf public geändert
-		final boolean showPushNotificationsDialog = sharedPreferences.getBoolean("show_push_notifications_dialog", true);
-		final boolean getPushNotifications = sharedPreferences.getBoolean("changes_notifications", false);
+		final boolean showPushNotificationsDialog = sharedPreferences.getBoolean(getString(R.string.PREF_KEY_SHOW_PUSH_DIALOG), true);
+		final boolean getPushNotifications = sharedPreferences.getBoolean(getString(R.string.PREF_KEY_CHANGES_NOTIFICATION), false);
 
 		if (showPushNotificationsDialog) {
 			sharedPreferences.edit()
-					.putBoolean("show_push_notifications_dialog", false)
+					.putBoolean(getString(R.string.PREF_KEY_SHOW_PUSH_DIALOG), false)
 					.apply();
 
 			if (!getPushNotifications) {
@@ -260,7 +281,7 @@ public class MainActivity extends AppCompatActivity
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								sharedPreferences.edit()
-										.putBoolean("changes_notifications", true)
+										.putBoolean(getString(R.string.PREF_KEY_CHANGES_NOTIFICATION), true)
 										.apply();
 								DataManager.getInstance().registerFCMServerForce(getApplicationContext());
 							}
@@ -278,12 +299,12 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	private void showExperimentalFeaturesInfoDialog(SharedPreferences sharedPreferences) {
-		final boolean showExperimentalFeaturesInfo = sharedPreferences.getBoolean("show_experimental_features_info", true);
-		final boolean showExperimentalFeatures = sharedPreferences.getBoolean("experimental_features", false);
+		final boolean showExperimentalFeaturesInfo = sharedPreferences.getBoolean(getString(R.string.PREF_KEY_SHOW_EXPERIMENTAL_FEATURES_INFO), true);
+		final boolean showExperimentalFeatures = sharedPreferences.getBoolean(getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES), false);
 
 		if (showExperimentalFeaturesInfo) {
 			sharedPreferences.edit()
-					.putBoolean("show_experimental_features_info", false)
+					.putBoolean(getString(R.string.PREF_KEY_SHOW_EXPERIMENTAL_FEATURES_INFO), false)
 					.apply();
 
 			// Anzeigen falls nicht schon aktiviert
@@ -313,7 +334,7 @@ public class MainActivity extends AppCompatActivity
 	// Idee: Wir wollen beim Rückwärtsgehen in den Activities nicht aus Versehen die App
 	// verlassen.
 	public final void onBackPressed() {
-		final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+		final DrawerLayout drawer = findViewById(R.id.drawer_layout);
 		if (drawer.isDrawerOpen(GravityCompat.START)) {
 			drawer.closeDrawer(GravityCompat.START);
 		} else {
@@ -479,7 +500,9 @@ public class MainActivity extends AppCompatActivity
 
 				// Notifications entfernen wenn man zu den Änderungen geht
 				NotificationManager nm = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-				nm.cancelAll();
+				if (nm != null) {
+					nm.cancelAll();
+				}
 				break;
 
 			case R.id.nav_einstellungen:
@@ -540,7 +563,7 @@ public class MainActivity extends AppCompatActivity
 				break;
 		}
 
-		final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+		final DrawerLayout drawer = findViewById(R.id.drawer_layout);
 		drawer.closeDrawer(GravityCompat.START);
 		return true;
 	}

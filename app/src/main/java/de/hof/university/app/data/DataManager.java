@@ -642,7 +642,7 @@ public class DataManager {
     // ---------------------------------------------------------------------------------------------
 
     private void addLectureToCalendar(final Context context, final LectureItem lectureItem) {
-        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION), false);
+        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION), false);
 
         if (calendarSynchronization) {
             new Thread() {
@@ -659,7 +659,7 @@ public class DataManager {
     }
 
     private void addAllToCalendar(Context context, ArrayList<LectureItem> lecturesItems) {
-        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION), false);
+        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION), false);
 
         if (calendarSynchronization) {
             // falls es nicht die ersten Vorlesungen sind die hinzugefügt werden, denn dann stehen sie schon drin.
@@ -671,7 +671,7 @@ public class DataManager {
     }
 
     private void deleteLectureFromCalendar(Context context, String lectureID) {
-        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION), false);
+        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION), false);
 
         if (calendarSynchronization) {
             CalendarSynchronization.getInstance().deleteAllEvents(lectureID);
@@ -681,7 +681,7 @@ public class DataManager {
     private void updateCalendar() {
         Context context = MainActivity.getAppContext().getApplicationContext();
 
-        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION), false);
+        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION), false);
 
         if (calendarSynchronization) {
             CalendarSynchronization.getInstance().updateCalendar();
@@ -691,7 +691,7 @@ public class DataManager {
     private void updateCalendar(ArrayList<LectureItem> lectureItems) {
         Context context = MainActivity.getAppContext().getApplicationContext();
 
-        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION), false);
+        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION), false);
 
         if (calendarSynchronization) {
             CalendarSynchronization.getInstance().updateCalendar(lectureItems);
@@ -701,7 +701,7 @@ public class DataManager {
     private void updateChangesInCalendar() {
         Context context = MainActivity.getAppContext().getApplicationContext();
 
-        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION), false);
+        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION), false);
 
         if (calendarSynchronization) {
             CalendarSynchronization.getInstance().updateChanges();

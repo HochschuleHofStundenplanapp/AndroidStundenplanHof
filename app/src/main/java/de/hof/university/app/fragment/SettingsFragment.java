@@ -88,7 +88,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.preferences);
 
-		final ListPreference lpSemester = (ListPreference) findPreference(getString(R.string.PREFERENCE_KEY_SEMESTER));
+		final ListPreference lpSemester = (ListPreference) findPreference(getString(R.string.PREF_KEY_SEMESTER));
 
 		if ( lpSemester != null ) {
 			lpSemester.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -101,13 +101,13 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		}
 
 
-		final ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREFERENCE_KEY_STUDIENGANG));
+		final ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREF_KEY_STUDIENGANG));
 		if ( lpCourse != null ) {
 			lpCourse.setEnabled(false);
 		}
 
 		// Benachrichtigungen
-		final CheckBoxPreference changes_notifications = (CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CHANGES_NOTIFICATION));
+		final CheckBoxPreference changes_notifications = (CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_CHANGES_NOTIFICATION));
 
 		if (Define.PUSH_NOTIFICATIONS_ENABLED) {
 			changes_notifications.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -137,14 +137,14 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 			});
 		} else {
 			final PreferenceScreen preferenceScreen = getPreferenceScreen();
-			final PreferenceCategory category_notification = (PreferenceCategory) findPreference(getString(R.string.PREFERENCE_KEY_CATEGORY_NOTIFICATION));
+			final PreferenceCategory category_notification = (PreferenceCategory) findPreference(getString(R.string.PREF_KEY_CATEGORY_NOTIFICATION));
 
 			preferenceScreen.removePreference(category_notification);
 			preferenceScreen.removePreference(changes_notifications);
 		}
 
 		// Calendar synchronization
-		final CheckBoxPreference calendar_syncronization = (CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION));
+		final CheckBoxPreference calendar_syncronization = (CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION));
 
 		calendar_syncronization.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
@@ -189,7 +189,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		});
 
 		//Login für die experimentellen Funktionen
-		final Preference edtLogin = findPreference(getString(R.string.PREFERENCE_KEY_LOGIN));
+		final Preference edtLogin = findPreference(getString(R.string.PREF_KEY_LOGIN));
 		edtLogin.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
@@ -202,7 +202,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 			}
 		});
 
-		final CheckBoxPreference experimentalFeatures = (CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_EXPERIMENTAL_FEATURES));
+		final CheckBoxPreference experimentalFeatures = (CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES));
 
 		if ( experimentalFeatures.isChecked() ) {
 			edtLogin.setEnabled(true);
@@ -283,7 +283,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 			updateCourseListPreference("", false);
 		}
 
-		updateSemesterData(PreferenceManager.getDefaultSharedPreferences(getView().getContext()).getString(getString(R.string.PREFERENCE_KEY_STUDIENGANG), ""));
+		updateSemesterData(PreferenceManager.getDefaultSharedPreferences(getView().getContext()).getString(getString(R.string.PREF_KEY_STUDIENGANG), ""));
 //        updateSemesterListPreference();
 		refreshSummaries();
 	}
@@ -315,16 +315,16 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
 		final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getView().getContext());
 
-		final ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREFERENCE_KEY_STUDIENGANG));
-		lpCourse.setSummary(sharedPreferences.getString(getString(R.string.PREFERENCE_KEY_STUDIENGANG), ""));
+		final ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREF_KEY_STUDIENGANG));
+		lpCourse.setSummary(sharedPreferences.getString(getString(R.string.PREF_KEY_STUDIENGANG), ""));
 
-		final ListPreference lpSemester = (ListPreference) findPreference(getString(R.string.PREFERENCE_KEY_SEMESTER));
-		lpSemester.setSummary(sharedPreferences.getString(getString(R.string.PREFERENCE_KEY_SEMESTER), ""));
+		final ListPreference lpSemester = (ListPreference) findPreference(getString(R.string.PREF_KEY_SEMESTER));
+		lpSemester.setSummary(sharedPreferences.getString(getString(R.string.PREF_KEY_SEMESTER), ""));
 
-		final ListPreference lpTarif = (ListPreference) findPreference("speiseplan_tarif");
+		final ListPreference lpTarif = (ListPreference) findPreference(getString(R.string.PREF_KEY_MEAL_TARIFF));
 		lpTarif.setSummary(lpTarif.getEntry());
 
-		final ListPreference lpTermTime = (ListPreference) findPreference(getString(R.string.PREFERENCE_KEY_TERM_TIME));
+		final ListPreference lpTermTime = (ListPreference) findPreference(getString(R.string.PREF_KEY_TERM_TIME));
 		lpTermTime.setSummary(lpTermTime.getEntry());
 	}
 
@@ -333,7 +333,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 	 * Alle eingestellten Werte werden nun unterhalb des jeweiligen Punktes angezeigt.
 	 */
 	private void enableSettingsSummary() {
-		final ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREFERENCE_KEY_STUDIENGANG));
+		final ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREF_KEY_STUDIENGANG));
 		lpCourse.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, final Object newValue) {
@@ -343,7 +343,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 			}
 		});
 
-		final ListPreference lpSemester = (ListPreference) findPreference(getString(R.string.PREFERENCE_KEY_SEMESTER));
+		final ListPreference lpSemester = (ListPreference) findPreference(getString(R.string.PREF_KEY_SEMESTER));
 		lpSemester.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -449,7 +449,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 	 */
 	private void updateSemesterData(final String courseStr) {
 
-		final ListPreference lpSemester = (ListPreference) findPreference(getString(R.string.PREFERENCE_KEY_SEMESTER));
+		final ListPreference lpSemester = (ListPreference) findPreference(getString(R.string.PREF_KEY_SEMESTER));
 		if ( (studyCourseList == null) || courseStr.isEmpty() ) {
 			lpSemester.setEntries(new CharSequence[]{});
 			lpSemester.setEntryValues(new CharSequence[]{});
@@ -483,7 +483,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 	@Override
 	public void onSharedPreferenceChanged( SharedPreferences sharedPreferences, String key ) {
 		Log.i( TAG, "onSharedPreferenceChanged" );
-		if ( getString( R.string.PREFERENCE_KEY_CHANGES_NOTIFICATION ).equals( key ) ) {
+		if ( getString( R.string.PREF_KEY_CHANGES_NOTIFICATION).equals( key ) ) {
 			Log.i( TAG, "CHANES_NOTIFICATION has changed" );
 			CheckBoxPreference changes_notification = (CheckBoxPreference) findPreference( key );
 			changes_notification.setChecked( sharedPreferences.getBoolean( key, false ) );
@@ -537,7 +537,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		@Override
 		protected final void onPostExecute(Void aVoid) {
 			super.onPostExecute(aVoid);
-			ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREFERENCE_KEY_STUDIENGANG));
+			ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREF_KEY_STUDIENGANG));
 			if (entries != null) {
 				if (entries.length > 0) {
 					lpCourse.setEntries(entries);
@@ -574,7 +574,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 					Toast.makeText(getActivity(), R.string.calendar_synchronization_permissionNotGranted, Toast.LENGTH_SHORT)
 							.show();
 					// Calendar Sync aus schalten
-					((CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
+					((CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
 				}
 				break;
 			case REQUEST_CODE_CALENDAR_TURN_OFF_PERMISSION:
@@ -586,7 +586,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 					Toast.makeText(getActivity(), R.string.calendar_synchronization_permissionNotGranted, Toast.LENGTH_SHORT)
 							.show();
 					// Calendar Sync ein schalten
-					((CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(true);
+					((CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(true);
 				}
 			default:
 				super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -637,14 +637,14 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 									@Override
 									public void onClick(DialogInterface dialog, int which) {
 										// Kalender Synchronisation ausschalten
-										((CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
+										((CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
 									}
 								})
 								.setOnCancelListener(new DialogInterface.OnCancelListener() {
 									@Override
 									public void onCancel(DialogInterface dialog) {
 										// Kalender Synchronisation ausschalten
-										((CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
+										((CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
 									}
 								})
 								.setIcon(android.R.drawable.ic_dialog_alert)
@@ -655,7 +655,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 					@Override
 					public void onCancel(DialogInterface dialog) {
 						// Kalender Synchronisation ausschalten
-						((CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
+						((CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
 					}
 				})
 				.setIcon(android.R.drawable.ic_dialog_alert)
