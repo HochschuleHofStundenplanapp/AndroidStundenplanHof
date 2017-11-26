@@ -181,10 +181,10 @@ public class MainActivity extends AppCompatActivity
 	 */
 	private void fixMealTariff() {
 		final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		int currentTariff = sharedPreferences.getInt(getString(R.string.PREF_KEY_MEAL_TARIFF), 0);
-		if (currentTariff == 4) {
+		String currentTariff = sharedPreferences.getString(getString(R.string.PREF_KEY_MEAL_TARIFF), "0");
+		if (currentTariff.equals("4")) {
 			sharedPreferences.edit()
-					.putInt(getString(R.string.PREF_KEY_MEAL_TARIFF), 5)
+					.putString(getString(R.string.PREF_KEY_MEAL_TARIFF), "5")
 					.apply();
 		}
 	}
