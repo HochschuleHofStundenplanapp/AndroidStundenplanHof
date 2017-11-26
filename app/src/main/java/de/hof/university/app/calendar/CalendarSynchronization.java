@@ -19,6 +19,7 @@ package de.hof.university.app.calendar;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -32,7 +33,6 @@ import java.util.concurrent.ExecutionException;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
-import de.hof.university.app.Util.Log;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.model.schedule.LectureChange;
 import de.hof.university.app.model.schedule.LectureItem;

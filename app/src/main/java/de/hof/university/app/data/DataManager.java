@@ -19,6 +19,7 @@ package de.hof.university.app.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -41,7 +42,6 @@ import de.hof.university.app.Communication.RegisterLectures;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.Util.Define;
-import de.hof.university.app.Util.Log;
 import de.hof.university.app.Util.MyString;
 import de.hof.university.app.calendar.CalendarSynchronization;
 import de.hof.university.app.data.parser.Parser;

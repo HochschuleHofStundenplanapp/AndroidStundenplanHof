@@ -16,6 +16,7 @@
 
 package de.hof.university.app.data.parser;
 
+import android.util.Log;
 import android.util.Xml;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -29,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import de.hof.university.app.Util.Log;
 import de.hof.university.app.model.meal.Meal;
 
 /**

@@ -18,12 +18,12 @@ package de.hof.university.app.Communication;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
 import de.hof.university.app.Util.Define;
-import de.hof.university.app.Util.Log;
 import de.hof.university.app.data.DataManager;
 
 /**

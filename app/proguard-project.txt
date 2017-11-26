@@ -11,7 +11,8 @@
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
 # Add any project specific remove options here:
--assumenosideeffects class junit.framework.Assert {*;}
+-assumenosideeffects class junit.framework.Assert { *; }
+-assumenosideeffects class android.util.Log { *; }
 
 # Add any project specific keep options here:
 

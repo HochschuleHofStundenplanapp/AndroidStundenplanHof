@@ -30,6 +30,7 @@ import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
 import android.support.v4.app.ActivityCompat;
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,7 +42,6 @@ import java.util.TimeZone;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.Util.Define;
-import de.hof.university.app.Util.Log;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.model.schedule.LectureChange;
 import de.hof.university.app.model.schedule.LectureItem;

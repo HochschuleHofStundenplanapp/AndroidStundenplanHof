@@ -17,6 +17,7 @@
 package de.hof.university.app.data;
 
 import android.util.Base64;
+import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -29,7 +30,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import de.hof.university.app.Util.Define;
-import de.hof.university.app.Util.Log;
 
 /**
  * Created by Lukas on 14.06.2016.

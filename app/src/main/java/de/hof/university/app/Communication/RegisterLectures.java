@@ -20,6 +20,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Base64;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,7 +40,6 @@ import java.util.Set;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.Util.Define;
-import de.hof.university.app.Util.Log;
 
 /**
  * for register Lectures to our server for push-notifications

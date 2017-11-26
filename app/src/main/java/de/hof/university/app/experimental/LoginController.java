@@ -29,6 +29,7 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CheckBox;
@@ -36,7 +37,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import de.hof.university.app.R;
-import de.hof.university.app.Util.Log;
 
 
 final public class LoginController {

@@ -16,6 +16,8 @@
 
 package de.hof.university.app.data.parser;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +28,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import de.hof.university.app.Util.Define;
-import de.hof.university.app.Util.Log;
 import de.hof.university.app.model.schedule.LectureChange;
 
 /**
