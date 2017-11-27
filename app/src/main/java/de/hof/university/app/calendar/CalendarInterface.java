@@ -133,14 +133,14 @@ class CalendarInterface {
 			CalendarContract.Instances.EVENT_ID,         // 0
 			CalendarContract.Instances.TITLE,            // 1
 			CalendarContract.Instances.DESCRIPTION,      // 2
-			CalendarContract.Instances.ORIGINAL_SYNC_ID, // 3
+			//CalendarContract.Instances.ORIGINAL_SYNC_ID, // 3
 	};
 
 	// The indices for the projection array above.
 	private static final int PROJECTION_EVENT_ID = 0;
 	private static final int PROJECTION_TITLE_INDEX = 1;
 	private static final int PROJECTION_DESCRIPTION_INDEX = 2;
-	private static final int PROJECTION_ORIGINAL_SYNC_ID_INDEX = 3;
+	//private static final int PROJECTION_ORIGINAL_SYNC_ID_INDEX = 3;
 
 	private static final String[] EVENT_PROJECTION_DATES = new String[]{
 			CalendarContract.Instances.BEGIN,        // 0
@@ -474,12 +474,13 @@ class CalendarInterface {
 		// ORIGNAL_SYNC_ID might be used for something else, but we use it for ower own ID
 		// currently ower ID is the splusname
 		// ORIGINAL_SYNC_ID
-		values.put(Events.ORIGINAL_SYNC_ID, lectureID);
+		//values.put(Events.ORIGINAL_SYNC_ID, lectureID);
 
 		//IDs are from "public static final class Events"
 		//TODO
 		//EVENT_COLOR
 		values.put(Events.EVENT_COLOR, HOF_CALENDAR_COLOR);
+
 		//ORIGINAL_ID
 		//UID_2445  ???
 
@@ -502,7 +503,11 @@ class CalendarInterface {
 		return eventID;
 	}
 
-	//TODO was für ein Long geben wir hier zurück?
+	/**
+	 * insert a event in the selected calendar
+	 * @param values the contentValues of the event
+	 * @return the eventID
+	 */
 	private Long insertEvent(ContentValues values) {
 		final Context context = MainActivity.getAppContext().getApplicationContext();
 
@@ -793,11 +798,11 @@ class CalendarInterface {
 
 		while (cur.moveToNext()) {
 			// Get the field values
-			final String eventLectureID = cur.getString(PROJECTION_ORIGINAL_SYNC_ID_INDEX);
+			//final String eventLectureID = cur.getString(PROJECTION_ORIGINAL_SYNC_ID_INDEX);
 			final Long eventID = cur.getLong(PROJECTION_EVENT_ID);
 			final String eventTitle = cur.getString(PROJECTION_TITLE_INDEX);
 
-			if (DEBUG_CALENDAR_INTERFACE) Log.d(TAG, "getEventIDs: OrginalSyncID: " + eventLectureID);
+			//if (DEBUG_CALENDAR_INTERFACE) Log.d(TAG, "getEventIDs: OrginalSyncID: " + eventLectureID);
 
 			// überprpfe ob lecture ID gesetzt und gleich ist
 			/* MS
