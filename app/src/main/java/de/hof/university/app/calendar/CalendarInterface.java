@@ -406,7 +406,7 @@ class CalendarInterface {
 			}
 		} else {
 			if (DEBUG_CALENDAR_INTERFACE) Log.d( TAG, "Event für Lecture " + title + " am " + startTime + " wird neu angelegt." );
-			final Long newEventID = createEvent(title, description, startTime, endTime, location, lectureID);
+			final Long newEventID = createEvent(title, description, startTime, endTime, location, lectureID, false);
 
 			// Wenn null dann keine Berechtigung oder keine CalendarID und returnen
 			if (newEventID == null) {
@@ -426,7 +426,7 @@ class CalendarInterface {
 	private void createChangeEvent(final String lectureID, final String title, final String description,
 	                               final Date startTime, final Date endTime, final String location) {
 
-		final Long eventID = createEvent(title, description, startTime, endTime, location, lectureID);
+		final Long eventID = createEvent(title, description, startTime, endTime, location, lectureID, false);
 
 		// Wenn null dann keine Berechtigung oder keine CalendarID und returnen
 		if (eventID == null)
@@ -447,7 +447,7 @@ class CalendarInterface {
 	 * @return eventID or null if no permission
 	 */
 	private Long createEvent(final String title, final String description, final Date startDate,
-	                         final Date endDate, final String location, final String lectureID) {
+	                         final Date endDate, final String location, final String lectureID, boolean recurring) {
 		//TODO lectureID not used
 
 		if (calendarData.getCalendarID() == null) {
@@ -462,7 +462,19 @@ class CalendarInterface {
 
 		ContentValues values = new ContentValues();
 		values.put(Events.DTSTART, startDate.getTime());
-		values.put(Events.DTEND, endDate.getTime());
+		if (recurring) {
+			values.put(Events.RRULE, "FREQ=WEEKLY;UNTIL=" + endDate.getTime());
+
+			String duration = "";
+
+			// TODO weiter
+
+			values.put(Events.DURATION, endDate.getTime());
+
+		} else {
+			values.put(Events.DTEND, endDate.getTime());
+		}
+
 		values.put(Events.TITLE, title);
 		values.put(Events.HAS_ALARM, true);
 		values.put(Events.EVENT_LOCATION, location);
