@@ -101,10 +101,8 @@ public class ChangesFragment extends AbstractListFragment {
 
 	private ArrayList<Object> updateListView(ArrayList<Object> list) {
 		ArrayList<Object> tmpDataList = new ArrayList<>();
-
-		for (Object obt: list) {
-			tmpDataList.add(obt);
-		}
+		
+		tmpDataList.addAll(list);
 
 		// Wenn Daten gekommen sind das ListItem LastUpdated hinzufügen
 		if (!tmpDataList.isEmpty()) {
