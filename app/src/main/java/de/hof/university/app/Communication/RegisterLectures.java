@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.hof.university.app.Communication;
+package de.hof.university.app.communication;
 
 import android.content.SharedPreferences;
 import android.os.AsyncTask;

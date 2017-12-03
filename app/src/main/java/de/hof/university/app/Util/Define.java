@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.hof.university.app.Util;
+package de.hof.university.app.util;
 
 /**
  * For defined variables to use globally
