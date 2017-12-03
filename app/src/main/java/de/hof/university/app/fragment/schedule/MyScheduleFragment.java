@@ -51,9 +51,9 @@ public class MyScheduleFragment extends ScheduleFragment {
             Object item = listView.getItemAtPosition(info.position);
 
             if (item instanceof LectureItem) {
-                LectureItem lectureItem = (LectureItem) item;
+                final LectureItem lectureItem = (LectureItem) item;
 
-                DataManager dm = DataManager.getInstance();
+                final DataManager dm = DataManager.getInstance();
 
                 //Wenn in Mein Stundenplan enthalten -> löschen anzeigen
                 if (dm.myScheduleContains(v.getContext(), lectureItem)) {
@@ -79,8 +79,8 @@ public class MyScheduleFragment extends ScheduleFragment {
         }
 
         // fragen, ob die Push Notifications aktiviert werden sollen
-        MainActivity mActivity = (MainActivity) getActivity();
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mActivity.getApplicationContext());
+        final MainActivity mActivity = (MainActivity) getActivity();
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mActivity.getApplicationContext());
         mActivity.showPushNotificationDialog(sharedPreferences);
     }
 
