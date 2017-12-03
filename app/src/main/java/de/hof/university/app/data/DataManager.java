@@ -38,7 +38,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
 
-import de.hof.university.app.Communication.RegisterLectures;
+import de.hof.university.app.communication.RegisterLectures;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.util.Define;

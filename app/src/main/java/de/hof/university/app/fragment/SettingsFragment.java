@@ -47,7 +47,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.hof.university.app.Communication.RegisterLectures;
+import de.hof.university.app.communication.RegisterLectures;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.util.Define;
