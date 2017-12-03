@@ -31,7 +31,7 @@ import android.webkit.WebViewClient;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
-import de.hof.university.app.Util.Define;
+import de.hof.university.app.util.Define;
 
 /**
  * Created by Daniel on 02.08.2017.

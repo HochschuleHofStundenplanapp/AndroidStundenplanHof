@@ -50,7 +50,7 @@ import java.util.List;
 import de.hof.university.app.Communication.RegisterLectures;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
-import de.hof.university.app.Util.Define;
+import de.hof.university.app.util.Define;
 import de.hof.university.app.calendar.CalendarSynchronization;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.LoginController;

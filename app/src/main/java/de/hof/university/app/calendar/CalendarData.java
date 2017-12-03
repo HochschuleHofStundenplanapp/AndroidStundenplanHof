@@ -17,7 +17,7 @@
 
 package de.hof.university.app.calendar;
 
-import de.hof.university.app.Util.Define;
+import de.hof.university.app.util.Define;
 import de.hof.university.app.model.HofObject;
 
 import java.util.ArrayList;

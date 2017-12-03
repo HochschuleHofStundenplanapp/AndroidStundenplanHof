@@ -31,7 +31,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import de.hof.university.app.Util.Define;
+import de.hof.university.app.util.Define;
 import de.hof.university.app.calendar.DateCorrection;
 import de.hof.university.app.model.schedule.LectureItem;
 

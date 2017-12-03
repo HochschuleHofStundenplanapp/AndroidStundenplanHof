@@ -19,7 +19,7 @@ package de.hof.university.app.model.schedule;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.hof.university.app.Util.Define;
+import de.hof.university.app.util.Define;
 
 /**
  * Created by danie on 30.11.2016.

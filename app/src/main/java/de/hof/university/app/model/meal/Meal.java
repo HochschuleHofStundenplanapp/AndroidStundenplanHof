@@ -21,7 +21,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import de.hof.university.app.Util.Define;
+import de.hof.university.app.util.Define;
 
 /**
  * Created by Lukas on 25.11.2015.

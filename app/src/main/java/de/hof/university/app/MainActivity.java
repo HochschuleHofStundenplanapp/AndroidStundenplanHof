@@ -42,7 +42,7 @@ import android.widget.Toast;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 
-import de.hof.university.app.Util.Define;
+import de.hof.university.app.util.Define;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.fragment.NotenbekanntgabeFragment;
 import de.hof.university.app.experimental.fragment.NotenblattFragment;

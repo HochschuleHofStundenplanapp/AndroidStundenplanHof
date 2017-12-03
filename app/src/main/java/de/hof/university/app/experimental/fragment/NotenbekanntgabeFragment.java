@@ -51,7 +51,7 @@ import java.util.Map;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
-import de.hof.university.app.Util.Define;
+import de.hof.university.app.util.Define;
 import de.hof.university.app.experimental.LoginController;
 import de.hof.university.app.experimental.adapter.NotenAdapter;
 import de.hof.university.app.experimental.model.Noten;
