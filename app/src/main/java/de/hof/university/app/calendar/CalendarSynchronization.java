@@ -304,7 +304,7 @@ public class CalendarSynchronization {
         final Context context = MainActivity.getAppContext().getApplicationContext();
 
         @Override
-        protected Boolean doInBackground(ArrayList<LectureItem>... p_lectureItems) {
+        protected final Boolean doInBackground(ArrayList<LectureItem>... p_lectureItems) {
             for (LectureItem lecture: p_lectureItems[0]) {
                 calendarInterface.updateLecture(lecture);
             }
@@ -322,7 +322,7 @@ public class CalendarSynchronization {
         final Context context = MainActivity.getAppContext().getApplicationContext();
 
         @Override
-        protected Boolean doInBackground(ArrayList<Object>... p_changes) {
+        protected final Boolean doInBackground(ArrayList<Object>... p_changes) {
             for (Object changeObject : p_changes[0]) {
                 if (changeObject instanceof LectureChange) {
                     LectureChange change = (LectureChange) changeObject;
