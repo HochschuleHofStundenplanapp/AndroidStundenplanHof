@@ -38,12 +38,10 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
 
-import de.hof.university.app.communication.RegisterLectures;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
-import de.hof.university.app.util.Define;
-import de.hof.university.app.util.MyString;
 import de.hof.university.app.calendar.CalendarSynchronization;
+import de.hof.university.app.communication.RegisterLectures;
 import de.hof.university.app.data.parser.Parser;
 import de.hof.university.app.data.parser.ParserFactory;
 import de.hof.university.app.data.parser.ParserFactory.EParser;
@@ -56,6 +54,8 @@ import de.hof.university.app.model.schedule.MySchedule;
 import de.hof.university.app.model.schedule.Schedule;
 import de.hof.university.app.model.settings.StudyCourse;
 import de.hof.university.app.model.settings.StudyCourses;
+import de.hof.university.app.util.Define;
+import de.hof.university.app.util.MyString;
 
 /**
  *
