@@ -115,7 +115,7 @@ public final class ChangesParser implements Parser<LectureChange> {
         return new LectureChange(id,label,comment,text,group,reason,orginalDate,alternativeDate,room_old,room_new,lecturer);
     }
 
-    private static final Date getDateFromTimeString( final String originalDateString, final String orginalTimeString ) {
+    public static final Date getDateFromTimeString( final String originalDateString, final String orginalTimeString ) {
 
         int originalHours = 0;
         int originalMinutes = 0;
@@ -135,7 +135,7 @@ public final class ChangesParser implements Parser<LectureChange> {
             Log.e( TAG, "getDateFromString", e );
         }
 
-        Calendar calendar = GregorianCalendar.getInstance();
+        final Calendar calendar = GregorianCalendar.getInstance();
         //Startzeit
         calendar.set(originalYear, originalMonth - 1, originalDay, originalHours, originalMinutes, 0);
 

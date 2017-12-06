@@ -352,7 +352,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 			}
 		});
 
-		final ListPreference lpTarif = (ListPreference) findPreference("speiseplan_tarif");
+		final ListPreference lpTarif = (ListPreference) findPreference(getString( R.string.PREF_KEY_MEAL_TARIFF ));
 		lpTarif.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -368,7 +368,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 			}
 		});
 
-		final ListPreference lpTermTime = (ListPreference) findPreference("term_time");
+		final ListPreference lpTermTime = (ListPreference) findPreference(getString( R.string.PREF_KEY_TERM_TIME ));
 		lpTermTime.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -392,7 +392,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 	private void updateCourseListPreference(String term, boolean forceRefresh) {
 
 		if ( term.isEmpty() ) {
-			ListPreference lpTermTime = (ListPreference) findPreference("term_time");
+			ListPreference lpTermTime = (ListPreference) findPreference(MainActivity.getAppContext().getString( R.string.PREF_KEY_TERM_TIME ));
 			term = lpTermTime.getValue();
 		}
 

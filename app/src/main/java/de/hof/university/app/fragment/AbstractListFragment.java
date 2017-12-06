@@ -204,7 +204,12 @@ public abstract class AbstractListFragment extends Fragment {
 
     protected void modifyListViewAfterDataSetChanged() {
     }
-
+    
+    /**
+     *
+     * @param params
+     * @return
+     */
     protected abstract ArrayList<Object> background(String[] params);
 
 }

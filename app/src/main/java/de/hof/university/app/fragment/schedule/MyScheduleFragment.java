@@ -19,6 +19,7 @@ package de.hof.university.app.fragment.schedule;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -153,14 +154,25 @@ public class MyScheduleFragment extends ScheduleFragment {
 
 
     @Override
-    protected ArrayList<Object> background(String[] params) {
+    protected ArrayList<Object> background(final String[] params) {
+        
         if (DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) > 0) {
             /*
             final String course = params[0];
             final String semester = params[1];
             final String termTime = params[2];
             */
-            List<LectureItem> scheduleList = DataManager.getInstance().getMySchedule(getActivity().getApplicationContext(), getString(R.string.language), Boolean.valueOf(params[3]));
+            final String sForceRefresh = params[3] ;
+        
+            boolean bForceRefresh = false ;
+            try {
+                bForceRefresh = Boolean.valueOf(sForceRefresh);
+            } catch (NumberFormatException e )
+            {
+                Log.e( TAG, "background, wrong boolean:"+sForceRefresh, e );
+            }
+            
+            List<LectureItem> scheduleList = DataManager.getInstance().getMySchedule(getActivity().getApplicationContext(), getString(R.string.language), bForceRefresh );
 
             // wenn etwas zurück kommt, dann aktualisiere die View
             if (scheduleList != null) {

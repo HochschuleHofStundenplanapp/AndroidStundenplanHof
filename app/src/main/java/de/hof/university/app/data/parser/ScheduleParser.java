@@ -34,6 +34,7 @@ import java.util.Locale;
 import de.hof.university.app.util.Define;
 import de.hof.university.app.calendar.DateCorrection;
 import de.hof.university.app.model.schedule.LectureItem;
+import de.hof.university.app.data.parser.ChangesParser;
 
 /**
  * Created by larsg on 17.06.2016.
@@ -121,28 +122,50 @@ public class ScheduleParser implements Parser<LectureItem> {
             //Entferne alle Sonderzeichen bei den Dozenten, eingetragen durch SPLUS
         final String lecturer = jsonObject.optString(Define.PARSER_DOCENT).replace("§§", ",");
         final String comment = jsonObject.optString(Define.SCHEDULE_PARSER_COMMENT);
-
-        int startHours      = Integer.parseInt(beginTimeString.substring(0, 2));
-        int startMinutes    = Integer.parseInt(beginTimeString.substring(3, 5));
-        int startDay        = Integer.parseInt(startDateString.substring(0, 2));
-        int startMonth      = Integer.parseInt(startDateString.substring(3, 5));
-        int startYear       = Integer.parseInt(startDateString.substring(6, 10));
-
-        int endHours        = Integer.parseInt(endTimeString.substring(0, 2));
-        int endMinutes      = Integer.parseInt(endTimeString.substring(3, 5));
-        int endDay          = Integer.parseInt(endDateString.substring(0, 2));
-        int endMonth        = Integer.parseInt(endDateString.substring(3, 5));
-        int endYear         = Integer.parseInt(endDateString.substring(6, 10));
-
-        Calendar calendar = GregorianCalendar.getInstance();
-
+    
+        int startHours      = 0;
+        int startMinutes    = 0;
+        int startDay        = 1;
+        int startMonth      = 1;
+        int startYear       = 2017;
+    
+        try {
+            startHours      = Integer.parseInt(beginTimeString.substring(0, 2));
+            startMinutes    = Integer.parseInt(beginTimeString.substring(3, 5));
+            startDay        = Integer.parseInt(startDateString.substring(0, 2));
+            startMonth      = Integer.parseInt(startDateString.substring(3, 5));
+            startYear       = Integer.parseInt(startDateString.substring(6, 10));
+        } catch (final NumberFormatException e)
+        {
+            Log.e( TAG, "begin: Date or Time format error", e );
+        }
+    
+   
+        int endHours        = 23;
+        int endMinutes      = 59;
+        int endDay          = 31;
+        int endMonth        = 12;
+        int endYear         = 2099;
+    
+        try {
+            endHours        = Integer.parseInt(endTimeString.substring(0, 2));
+            endMinutes      = Integer.parseInt(endTimeString.substring(3, 5));
+            endDay          = Integer.parseInt(endDateString.substring(0, 2));
+            endMonth        = Integer.parseInt(endDateString.substring(3, 5));
+            endYear         = Integer.parseInt(endDateString.substring(6, 10));
+        } catch (final NumberFormatException e)
+        {
+            Log.e( TAG, "end: Date or Time format error", e );
+        }
+    
+        final Calendar calendar = GregorianCalendar.getInstance();
         calendar.set(Calendar.MILLISECOND, 0);
 
         //Startzeit
         calendar.set(startYear, startMonth - 1, startDay, startHours, startMinutes, 0);
-
         Date startDate = calendar.getTime();
 
+        //Endzeit
         calendar.set(endYear, endMonth - 1, endDay, endHours, endMinutes, 0);
         Date endDate = calendar.getTime();
 

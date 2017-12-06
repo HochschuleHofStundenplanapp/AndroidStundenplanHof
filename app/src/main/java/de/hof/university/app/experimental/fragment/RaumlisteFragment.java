@@ -226,7 +226,12 @@ public class RaumlisteFragment extends Fragment {
                 }
             }
 
-            boolean forceRefresh = Boolean.valueOf(params[9]);
+            boolean forceRefresh = false ;
+            
+            try {
+                forceRefresh = Boolean.valueOf(params[9]);
+            } catch (NumberFormatException e)
+            { Log.e( TAG, "NumberformatException, forceRefresh: "+params[9], e); }
 
             if (
 		            forceRefresh
@@ -287,6 +292,15 @@ public class RaumlisteFragment extends Fragment {
                             return null;
                         }
                     }
+                    catch ( ExceptionInInitializerError e )
+					{
+						Log.e(TAG, "Login fehlgeschlagen: ", e);
+						loginRetry--;
+						if ( loginRetry <= 0 ) {
+							errorText = getString(R.string.loginFailed);
+							return null;
+						}
+					}
                 }
 
                 // zum debuggen hilfreich
