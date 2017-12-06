@@ -656,8 +656,8 @@ class CalendarInterface {
 		}
 	}
 
-	String getLocation(String room) {
-		Context context = MainActivity.getAppContext().getApplicationContext();
+	static final String getLocation( final String room) {
+		final Context context = MainActivity.getAppContext().getApplicationContext();
 
 		if (room.length() < 4) {
 			return context.getString(R.string.noLocation);
