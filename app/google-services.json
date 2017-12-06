@@ -10,50 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1064815333976:android:875e32f98c47944a",
         "android_client_info": {
-          "package_name": "de.hof.university.app"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "1064815333976-8js27db8ovg6k8bfiqg1uv32n0t70l8i.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "de.hof.university.app",
-            "certificate_hash": "72F4621F6A722CE74DF92EB502184EE208EB74E1"
-          }
-        },
-        {
-          "client_id": "1064815333976-avqsnkqsdn2ha08jfl8oaoi8o69s2pv8.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyC04QPYHIfPFu0I0wscAdfqcHqaB9L-aLo"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1064815333976-avqsnkqsdn2ha08jfl8oaoi8o69s2pv8.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:1064815333976:android:875e32f98c47944a",
-        "android_client_info": {
+          "package_name": "de.hof.university.app",
           "package_name": "de.hof.university.app.debug"
         }
       },
