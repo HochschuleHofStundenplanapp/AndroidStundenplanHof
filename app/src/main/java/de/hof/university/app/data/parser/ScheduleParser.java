@@ -31,10 +31,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import de.hof.university.app.util.Define;
 import de.hof.university.app.calendar.DateCorrection;
 import de.hof.university.app.model.schedule.LectureItem;
-import de.hof.university.app.data.parser.ChangesParser;
+import de.hof.university.app.util.Define;
+import de.hof.university.app.util.HelpMethods;
 
 /**
  * Created by larsg on 17.06.2016.
@@ -123,33 +123,12 @@ public class ScheduleParser implements Parser<LectureItem> {
 		final String lecturer = jsonObject.optString( Define.PARSER_DOCENT ).replace( "§§", "," );
 		final String comment = jsonObject.optString( Define.SCHEDULE_PARSER_COMMENT );
 
-		Calendar calendar = GregorianCalendar.getInstance();
+		// Beispiele
+		// beginTimeString: 14:00
+		// beginDateString: 11.12.2017
 
-		calendar.set( Calendar.MILLISECOND, 0 );
-
-		Date startDate = new Date();
-		Date endDate = new Date();
-
-		try {
-			// Beispiele
-			// beginTimeString: 14:00
-			// beginDateString: 11.12.2017
-			// kombiniert: 14:00 11.12.2017
-
-			//Startzeit
-			SimpleDateFormat sdf = new SimpleDateFormat( "HH:mm dd.MM.yyyy" );
-			calendar.setTime( sdf.parse( beginTimeString + " " + beginDateString ) );
-			startDate = calendar.getTime();
-
-			//Endzeit
-			calendar.setTime( sdf.parse( endTimeString + " " + endDateString ) );
-			endDate = calendar.getTime();
-
-		} catch ( NumberFormatException e ) {
-			Log.e( TAG, "NumberFormatException", e );
-		} catch ( ParseException e ) {
-			Log.e( TAG, "ParseException abgefangen: ", e );
-		}
+		Date startDate = HelpMethods.getDateFromString( beginTimeString + " " + beginDateString );
+		Date endDate = HelpMethods.getDateFromString( endTimeString + " " + endDateString );
 
 		// Falls es kein Einzeltermin ist
 		if ( !startDate.equals( endDate ) ) {

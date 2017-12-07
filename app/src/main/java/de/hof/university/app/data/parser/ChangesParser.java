@@ -31,6 +31,7 @@ import java.util.GregorianCalendar;
 
 import de.hof.university.app.util.Define;
 import de.hof.university.app.model.schedule.LectureChange;
+import de.hof.university.app.util.HelpMethods;
 
 /**
  * Created by larsg on 17.06.2016.
@@ -106,36 +107,15 @@ public final class ChangesParser implements Parser<LectureChange> {
         final String room_old = jsonObject.optJSONObject(Define.PARSER_ORIGNAL).optString(Define.PARSER_ROOM);
         final String lecturer = jsonObject.optString(Define.PARSER_DOCENT);
 		//TODO Beispielzeile ergänzen
-        Date orginalDate = getDateFromTimeString( orginalDateString, orginalTimeString ) ;
+        Date orginalDate = HelpMethods.getDateFromString( orginalTimeString + " " + orginalDateString ) ;
 
         Date alternativeDate = null;
 		//TODO Beispielzeile ergänzen
         if (!"".equals(alternativeTimeString) && !"".equals(alternativeDateString)) {
-            alternativeDate = getDateFromTimeString( alternativeDateString, alternativeTimeString );
+            alternativeDate = HelpMethods.getDateFromString( alternativeTimeString + " " + alternativeDateString);
         }
 
         return new LectureChange(id,label,comment,text,group,reason,orginalDate,alternativeDate,room_old,room_new,lecturer);
     }
-
-	public static final Date getDateFromTimeString( final String originalDateString, final String orginalTimeString ) {
-
-		Calendar calendar = GregorianCalendar.getInstance();
-
-		try {
-			// Beispiele
-			// orginalTimeString: 14:00
-			// orginalDateString: 11.12.2017
-			// kombiniert: 14:00 11.12.2017
-
-			SimpleDateFormat sdf = new SimpleDateFormat( "HH:mm dd.MM.yyyy" );
-			calendar.setTime( sdf.parse( orginalTimeString + " " + originalDateString ) );
-		} catch ( NumberFormatException e ) {
-			Log.e( TAG, "getDateFromString", e );
-		} catch ( ParseException e ) {
-			Log.e( TAG, "ParseException abgefangen: ", e );
-		}
-
-		return calendar.getTime();
-	}
 
 }
