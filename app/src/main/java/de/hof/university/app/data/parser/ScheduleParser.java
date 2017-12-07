@@ -87,73 +87,76 @@ public class ScheduleParser implements Parser<LectureItem> {
         return calendar.get(Calendar.DAY_OF_WEEK);
     }
 
-    final LectureItem convertJsonObject(JSONObject jsonObject) {
+	final LectureItem convertJsonObject( JSONObject jsonObject ) {
 
-        String weekday = jsonObject.optString(Define.PARSER_DAY);
-        // Wenn Sprache der App auf Englisch gestellt ist englische Wochentage nehmen
-        // Vom Webservice kommen nur deutsche Texte. Also suchen wir erst Mal den Wochentag
-        // dann geben wir den fremdsprachlichen Text aus.
-        if (!language.equals("de")) {
-            try {
-                weekday = new DateFormatSymbols().getWeekdays()[parseDayOfWeek(weekday, Locale.GERMANY)];
-            } catch (ParseException e) {
-                /* wir konnten den fremdsprachlichen Tag nicht finden, dann bleibt es beim deutschen Tag. */
-            }
-        }
+		String weekday = jsonObject.optString( Define.PARSER_DAY );
+		// Wenn Sprache der App auf Englisch gestellt ist englische Wochentage nehmen
+		// Vom Webservice kommen nur deutsche Texte. Also suchen wir erst Mal den Wochentag
+		// dann geben wir den fremdsprachlichen Text aus.
+		if ( !language.equals( "de" ) ) {
+			try {
+				weekday = new DateFormatSymbols().getWeekdays()[parseDayOfWeek( weekday, Locale.GERMANY )];
+			} catch ( ParseException e ) {
+	            /* wir konnten den fremdsprachlichen Tag nicht finden, dann bleibt es beim deutschen Tag. */
+			}
+		}
 
-        // Der splusname ist die neue ID
-        final String id = jsonObject.optString(Define.PARSER_SPLUSNAME);
-        final String label = jsonObject.optString(Define.SCHEDULE_PARSER_LABEL);
-        String sp = jsonObject.optString(Define.PARSER_SP);
-        if (!sp.equals("-")) {
-            sp = sp.substring(3);
-        } else {
-            sp = "";
-        }
-        final String type = jsonObject.optString(Define.PARSER_TYPE);
-        final String style = jsonObject.optString(Define.PARSER_STYLE);
-        final String group = jsonObject.optString(Define.SCHEDULE_PARSER_GROUP);
-        final String beginTimeString = jsonObject.optString(Define.PARSER_STARTTIME);
-        final String endTimeString = jsonObject.optString(Define.PARSER_ENDTIME);
-        final String startDateString = jsonObject.optString(Define.PARSER_STARTDATE);
-        final String endDateString = jsonObject.optString(Define.PARSER_ENDDATE);
-        final String room = jsonObject.optString(Define.PARSER_ROOM);
-            //Entferne alle Sonderzeichen bei den Dozenten, eingetragen durch SPLUS
-        final String lecturer = jsonObject.optString(Define.PARSER_DOCENT).replace("§§", ",");
-        final String comment = jsonObject.optString(Define.SCHEDULE_PARSER_COMMENT);
+		// Der splusname ist die neue ID
+		final String id = jsonObject.optString( Define.PARSER_SPLUSNAME );
+		final String label = jsonObject.optString( Define.SCHEDULE_PARSER_LABEL );
+		String sp = jsonObject.optString( Define.PARSER_SP );
+		if ( !sp.equals( "-" ) ) {
+			sp = sp.substring( 3 );
+		} else {
+			sp = "";
+		}
+		final String type = jsonObject.optString( Define.PARSER_TYPE );
+		final String style = jsonObject.optString( Define.PARSER_STYLE );
+		final String group = jsonObject.optString( Define.SCHEDULE_PARSER_GROUP );
+		final String beginTimeString = jsonObject.optString( Define.PARSER_STARTTIME );
+		final String endTimeString = jsonObject.optString( Define.PARSER_ENDTIME );
+		final String beginDateString = jsonObject.optString( Define.PARSER_STARTDATE );
+		final String endDateString = jsonObject.optString( Define.PARSER_ENDDATE );
+		final String room = jsonObject.optString( Define.PARSER_ROOM );
+		//Entferne alle Sonderzeichen bei den Dozenten, eingetragen durch SPLUS
+		final String lecturer = jsonObject.optString( Define.PARSER_DOCENT ).replace( "§§", "," );
+		final String comment = jsonObject.optString( Define.SCHEDULE_PARSER_COMMENT );
 
-        int startHours      = Integer.parseInt(beginTimeString.substring(0, 2));
-        int startMinutes    = Integer.parseInt(beginTimeString.substring(3, 5));
-        int startDay        = Integer.parseInt(startDateString.substring(0, 2));
-        int startMonth      = Integer.parseInt(startDateString.substring(3, 5));
-        int startYear       = Integer.parseInt(startDateString.substring(6, 10));
+		Calendar calendar = GregorianCalendar.getInstance();
 
-        int endHours        = Integer.parseInt(endTimeString.substring(0, 2));
-        int endMinutes      = Integer.parseInt(endTimeString.substring(3, 5));
-        int endDay          = Integer.parseInt(endDateString.substring(0, 2));
-        int endMonth        = Integer.parseInt(endDateString.substring(3, 5));
-        int endYear         = Integer.parseInt(endDateString.substring(6, 10));
+		calendar.set( Calendar.MILLISECOND, 0 );
 
-        Calendar calendar = GregorianCalendar.getInstance();
+		Date startDate = new Date();
+		Date endDate = new Date();
 
-        calendar.set(Calendar.MILLISECOND, 0);
+		try {
+			// Beispiele
+			// beginTimeString: 14:00
+			// beginDateString: 11.12.2017
+			// kombiniert: 14:00 11.12.2017
 
-        //Startzeit
-        calendar.set(startYear, startMonth - 1, startDay, startHours, startMinutes, 0);
+			//Startzeit
+			SimpleDateFormat sdf = new SimpleDateFormat( "HH:mm dd.MM.yyyy" );
+			calendar.setTime( sdf.parse( beginTimeString + " " + beginDateString ) );
+			startDate = calendar.getTime();
 
-        Date startDate = calendar.getTime();
+			//Endzeit
+			calendar.setTime( sdf.parse( endTimeString + " " + endDateString ) );
+			endDate = calendar.getTime();
 
-        calendar.set(endYear, endMonth - 1, endDay, endHours, endMinutes, 0);
-        Date endDate = calendar.getTime();
+		} catch ( NumberFormatException e ) {
+			Log.e( TAG, "getDateFromString", e );
+		} catch ( ParseException e ) {
+			Log.e( TAG, "ParseException abgefangen: ", e );
+		}
 
-        // Falls es kein Einzeltermin ist
-        if ((startDay != endDay) || (startMonth != endMonth) || (startYear != endYear)) {
-            // Date Correction
-            startDate = DateCorrection.getInstance().getCorrectStartDate(startDate, endDate);
-            endDate = DateCorrection.getInstance().getCorrectEndDate(startDate, endDate);
-        }
+		// Falls es kein Einzeltermin ist
+		if ( !startDate.equals( endDate ) ) {
+			// Date Correction
+			startDate = DateCorrection.getInstance().getCorrectStartDate( startDate, endDate );
+			endDate = DateCorrection.getInstance().getCorrectEndDate( startDate, endDate );
+		}
 
-
-        return new LectureItem(id, weekday, label, type, sp, group, startDate, endDate, room, lecturer, comment);
-    }
+		return new LectureItem( id, weekday, label, type, sp, group, startDate, endDate, room, lecturer, comment );
+	}
 }

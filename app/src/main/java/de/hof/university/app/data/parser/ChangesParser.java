@@ -22,6 +22,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -115,34 +117,25 @@ public final class ChangesParser implements Parser<LectureChange> {
         return new LectureChange(id,label,comment,text,group,reason,orginalDate,alternativeDate,room_old,room_new,lecturer);
     }
 
-    private static final Date getDateFromTimeString( final String originalDateString, final String orginalTimeString ) {
+	private static final Date getDateFromTimeString( final String originalDateString, final String orginalTimeString ) {
 
-        int originalHours = 0;
-        int originalMinutes = 0;
-        int originalDay = 1;
-        int originalMonth = 1;
-        int originalYear = 2017;
+		Calendar calendar = GregorianCalendar.getInstance();
 
-        try {
-            //TODO Beispielzeile ergänzen
-            originalHours = Integer.parseInt(orginalTimeString.substring(0, 2));
-            originalMinutes = Integer.parseInt(orginalTimeString.substring(3, 5));
-            originalDay = Integer.parseInt(originalDateString.substring(0, 2));
-            originalMonth = Integer.parseInt(originalDateString.substring(3, 5));
-            originalYear = Integer.parseInt(originalDateString.substring(6, 10));
-        } catch (NumberFormatException e)
-        {
-            Log.e( TAG, "getDateFromString", e );
-        }
+		try {
+			// Beispiele
+			// orginalTimeString: 14:00
+			// orginalDateString: 11.12.2017
+			// kombiniert: 14:00 11.12.2017
 
-        Calendar calendar = GregorianCalendar.getInstance();
-        //Startzeit
-        calendar.set(originalYear, originalMonth - 1, originalDay, originalHours, originalMinutes, 0);
+			SimpleDateFormat sdf = new SimpleDateFormat( "HH:mm dd.MM.yyyy" );
+			calendar.setTime( sdf.parse( orginalTimeString + " " + originalDateString ) );
+		} catch ( NumberFormatException e ) {
+			Log.e( TAG, "getDateFromString", e );
+		} catch ( ParseException e ) {
+			Log.e( TAG, "ParseException abgefangen: ", e );
+		}
 
-        final Date originalDate = calendar.getTime();
-
-        return originalDate ;
-    }
-
+		return calendar.getTime();
+	}
 
 }
