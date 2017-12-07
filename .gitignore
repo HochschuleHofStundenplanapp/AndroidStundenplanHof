@@ -55,3 +55,4 @@ app/build.gradle_withKey
 .idea/inspectionProfiles/Project_Default.xml
 app/build.gradle__Stepping
 app/release/output.json
+.idea/dictionaries/stepping.xml

@@ -125,7 +125,9 @@ public class CalendarSynchronization {
             newEndDateCalendar.set(Calendar.HOUR_OF_DAY, endDateCalendar.get(Calendar.HOUR_OF_DAY));
             newEndDateCalendar.set(Calendar.MINUTE, endDateCalendar.get(Calendar.MINUTE));
 
-            calendarInterface.createLectureEvent(lectureItem.getId(), lectureItem.getLabel(), "", tmpStartDate, newEndDateCalendar.getTime(), calendarInterface.getLocation(lectureItem.getRoom()));
+            junit.framework.Assert.assertTrue( calendarInterface != null );
+            calendarInterface.createLectureEvent(lectureItem.getId(), lectureItem.getLabel(), "",
+                    tmpStartDate, newEndDateCalendar.getTime(), calendarInterface.getLocation(lectureItem.getRoom()));
 
 			// Ausgabe, was wir anlegen
             Log.i( TAG, "createLectureEvent: " + lectureItem.getLabel() + " " + tmpStartDate.toString() );
@@ -304,7 +306,7 @@ public class CalendarSynchronization {
         final Context context = MainActivity.getAppContext().getApplicationContext();
 
         @Override
-        protected Boolean doInBackground(ArrayList<LectureItem>... p_lectureItems) {
+        protected final Boolean doInBackground(ArrayList<LectureItem>... p_lectureItems) {
             for (LectureItem lecture: p_lectureItems[0]) {
                 calendarInterface.updateLecture(lecture);
             }
@@ -322,7 +324,7 @@ public class CalendarSynchronization {
         final Context context = MainActivity.getAppContext().getApplicationContext();
 
         @Override
-        protected Boolean doInBackground(ArrayList<Object>... p_changes) {
+        protected final Boolean doInBackground(ArrayList<Object>... p_changes) {
             for (Object changeObject : p_changes[0]) {
                 if (changeObject instanceof LectureChange) {
                     LectureChange change = (LectureChange) changeObject;

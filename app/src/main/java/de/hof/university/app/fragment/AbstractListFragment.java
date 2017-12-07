@@ -33,7 +33,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import de.hof.university.app.R;
-import de.hof.university.app.Util.Define;
+import de.hof.university.app.util.Define;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.fragment.schedule.ChangesFragment;
 import de.hof.university.app.fragment.schedule.MyScheduleFragment;
@@ -204,7 +204,12 @@ public abstract class AbstractListFragment extends Fragment {
 
     protected void modifyListViewAfterDataSetChanged() {
     }
-
+    
+    /**
+     *
+     * @param params
+     * @return
+     */
     protected abstract ArrayList<Object> background(String[] params);
 
 }

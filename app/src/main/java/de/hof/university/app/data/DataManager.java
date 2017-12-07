@@ -38,12 +38,10 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
 
-import de.hof.university.app.Communication.RegisterLectures;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
-import de.hof.university.app.Util.Define;
-import de.hof.university.app.Util.MyString;
 import de.hof.university.app.calendar.CalendarSynchronization;
+import de.hof.university.app.communication.RegisterLectures;
 import de.hof.university.app.data.parser.Parser;
 import de.hof.university.app.data.parser.ParserFactory;
 import de.hof.university.app.data.parser.ParserFactory.EParser;
@@ -56,6 +54,8 @@ import de.hof.university.app.model.schedule.MySchedule;
 import de.hof.university.app.model.schedule.Schedule;
 import de.hof.university.app.model.settings.StudyCourse;
 import de.hof.university.app.model.settings.StudyCourses;
+import de.hof.university.app.util.Define;
+import de.hof.university.app.util.MyString;
 
 /**
  *
@@ -112,7 +112,7 @@ public class DataManager {
             }
 
             final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-            final String[] params = {xmlString, sharedPreferences.getString("speiseplan_tarif", "1")};
+            final String[] params = {xmlString, sharedPreferences.getString( MainActivity.getAppContext().getString( R.string.PREF_KEY_MEAL_TARIFF ), "1")};
             junit.framework.Assert.assertTrue(parser != null);
 
             ArrayList<Meal> tmpMeals = (ArrayList<Meal>) parser.parse(params);
@@ -575,7 +575,9 @@ public class DataManager {
     }
 
     // this is the general method to serialize an object
-    public synchronized Object readObject(final Context context, String filename) {
+    public synchronized Object readObject(final Context context, final String filename) {
+        Log.d( TAG, "Einlesen von Objekten aus der Datei: "+filename );
+        
         Object result = null;
         try {
             final File file = new File(context.getFilesDir(), filename);
@@ -589,6 +591,7 @@ public class DataManager {
         } catch (Exception e) {
             Log.e(TAG, "Fehler beim lesen des Objektes", e);
         }
+        Log.d( TAG, "Einlesen von Objekten erfolgreich ");
         return result;
     }
 

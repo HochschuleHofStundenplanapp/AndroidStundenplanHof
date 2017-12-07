@@ -43,14 +43,14 @@
         </activity>
 
         <service
-            android:name=".Communication.FcmInstanceIdService"
+            android:name=".communication.FcmInstanceIdService"
             android:permission="">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
         <service
-            android:name=".Communication.FcmMessagingService"
+            android:name=".communication.FcmMessagingService"
             android:enabled="true"
             android:exported="true"
             android:permission="">

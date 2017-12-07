@@ -48,9 +48,12 @@ public class MyScheduleParser extends ScheduleParser {
         }
         language = params[1];
 
+        junit.framework.Assert.assertTrue( ! jsonString.isEmpty() );
+        junit.framework.Assert.assertTrue( ! language.isEmpty() );
+        
         JSONArray jsonArray = null;
         try {
-            JSONObject jsonObject = new JSONObject(jsonString);
+            final JSONObject jsonObject = new JSONObject(jsonString);
             jsonArray = jsonObject.optJSONArray("myschedule");
         } catch (final JSONException e) {
             Log.e(TAG, "readArrayList", e);

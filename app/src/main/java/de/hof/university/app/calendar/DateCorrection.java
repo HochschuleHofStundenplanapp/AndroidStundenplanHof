@@ -186,7 +186,8 @@ public class DateCorrection {
 
             correctEndDate = winterEndDateCalendar.getTime();
         }
-        else junit.framework.Assert.assertTrue( false );
+        else //noinspection ConstantConditions
+            junit.framework.Assert.assertTrue( false );
 
         return correctEndDate;
     }

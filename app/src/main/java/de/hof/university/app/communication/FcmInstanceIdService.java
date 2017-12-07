@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.hof.university.app.Communication;
+package de.hof.university.app.communication;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -23,7 +23,7 @@ import android.util.Log;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
-import de.hof.university.app.Util.Define;
+import de.hof.university.app.util.Define;
 import de.hof.university.app.data.DataManager;
 
 /**

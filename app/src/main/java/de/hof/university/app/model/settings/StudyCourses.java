@@ -19,7 +19,7 @@ package de.hof.university.app.model.settings;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import de.hof.university.app.Util.Define;
+import de.hof.university.app.util.Define;
 import de.hof.university.app.model.HofObject;
 
 /**

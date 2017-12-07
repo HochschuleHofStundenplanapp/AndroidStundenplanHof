@@ -16,12 +16,14 @@
 
 package de.hof.university.app.model.meal;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import de.hof.university.app.Util.Define;
+import de.hof.university.app.util.Define;
 
 /**
  * Created by Lukas on 25.11.2015.
@@ -29,6 +31,8 @@ import de.hof.university.app.Util.Define;
 public class Meal implements Serializable {
 	private static final long serialVersionUID = Define.serialVersionUIDv1;
 
+	final static String TAG = "Meal";
+	
 	private String name;
 	private String price;
 	private final String weekDay;
@@ -40,9 +44,14 @@ public class Meal implements Serializable {
 	final private ArrayList<Integer> attributes;
 
 
-	public Meal(final Date tag, final String weeekDay, final String category, final String name) {
+	public Meal(final Date tag, final String weekDay, final String category, final String name) {
 		super();
-		this.weekDay = weeekDay;
+		
+		junit.framework.Assert.assertTrue( !weekDay.isEmpty() );
+		junit.framework.Assert.assertTrue( !category.isEmpty() );
+		junit.framework.Assert.assertTrue( !name.isEmpty() );
+		
+		this.weekDay = weekDay;
 		this.day = tag;
 		this.category = category;
 		this.name = name.replace("\\", "");
@@ -75,6 +84,7 @@ public class Meal implements Serializable {
 	}
 
 	public final String getName() {
+	
 		String result = this.name;
 		String tmpAttributes = "";
 
@@ -135,7 +145,15 @@ public class Meal implements Serializable {
 	}
 
 	public void addAttribute(final String xmlText) {
-
-		attributes.add(Integer.parseInt(xmlText));
+		
+		int aNumber = 0;
+		try {
+			aNumber = Integer.parseInt(xmlText);
+		} catch ( final NumberFormatException e )
+		{
+			Log.e( TAG, "addAttibute: kein Integer: "+xmlText, e ) ;
+		}
+		
+		attributes.add( aNumber );
 	}
 }

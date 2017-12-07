@@ -31,9 +31,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import de.hof.university.app.Util.Define;
+import de.hof.university.app.util.Define;
 import de.hof.university.app.calendar.DateCorrection;
 import de.hof.university.app.model.schedule.LectureItem;
+import de.hof.university.app.data.parser.ChangesParser;
 
 /**
  * Created by larsg on 17.06.2016.
@@ -145,7 +146,7 @@ public class ScheduleParser implements Parser<LectureItem> {
 			endDate = calendar.getTime();
 
 		} catch ( NumberFormatException e ) {
-			Log.e( TAG, "getDateFromString", e );
+			Log.e( TAG, "NumberFormatException", e );
 		} catch ( ParseException e ) {
 			Log.e( TAG, "ParseException abgefangen: ", e );
 		}

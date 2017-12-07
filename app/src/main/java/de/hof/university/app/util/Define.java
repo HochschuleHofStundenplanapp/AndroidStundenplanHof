@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.hof.university.app.Util;
+package de.hof.university.app.util;
 
 /**
  * For defined variables to use globally
@@ -94,7 +94,7 @@ public final class Define {
 	public final static String APP_SERVER_HOF = "https://app.hof-university.de";
 
 
-	/* Communication with the Web-Services SOAP API */
+	/* communication with the Web-Services SOAP API */
 	// Produktiv-Server:
 	// user:		soapuser
 	// password:	F%98z&12

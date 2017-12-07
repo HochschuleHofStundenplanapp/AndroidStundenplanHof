@@ -31,7 +31,8 @@
         android:dividerHeight="1dp"
         android:divider="@android:color/darker_gray"
         android:clickable="false"
-        android:contextClickable="false">
+        android:contextClickable="false"
+        android:layout_alignParentStart="true">
 
     </ListView>
 

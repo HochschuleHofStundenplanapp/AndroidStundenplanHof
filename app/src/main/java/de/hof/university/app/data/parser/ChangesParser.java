@@ -29,7 +29,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import de.hof.university.app.Util.Define;
+import de.hof.university.app.util.Define;
 import de.hof.university.app.model.schedule.LectureChange;
 
 /**
@@ -117,7 +117,7 @@ public final class ChangesParser implements Parser<LectureChange> {
         return new LectureChange(id,label,comment,text,group,reason,orginalDate,alternativeDate,room_old,room_new,lecturer);
     }
 
-	private static final Date getDateFromTimeString( final String originalDateString, final String orginalTimeString ) {
+	public static final Date getDateFromTimeString( final String originalDateString, final String orginalTimeString ) {
 
 		Calendar calendar = GregorianCalendar.getInstance();
 

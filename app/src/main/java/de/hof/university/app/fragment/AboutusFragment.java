@@ -29,7 +29,7 @@ import android.widget.Toast;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
-import de.hof.university.app.Util.Define;
+import de.hof.university.app.util.Define;
 
 /**
  * Created by larsg on 28.06.2016.

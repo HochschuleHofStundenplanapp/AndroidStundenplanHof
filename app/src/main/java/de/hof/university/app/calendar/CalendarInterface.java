@@ -41,7 +41,7 @@ import java.util.TimeZone;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
-import de.hof.university.app.Util.Define;
+import de.hof.university.app.util.Define;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.model.schedule.LectureChange;
 import de.hof.university.app.model.schedule.LectureItem;
@@ -664,8 +664,8 @@ class CalendarInterface {
 		}
 	}
 
-	String getLocation(String room) {
-		Context context = MainActivity.getAppContext().getApplicationContext();
+	static final String getLocation( final String room) {
+		final Context context = MainActivity.getAppContext().getApplicationContext();
 
 		if (room.length() < 4) {
 			return context.getString(R.string.noLocation);

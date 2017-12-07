@@ -41,7 +41,7 @@ import java.io.InterruptedIOException;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
-import de.hof.university.app.Util.Define;
+import de.hof.university.app.util.Define;
 import de.hof.university.app.experimental.LoginController;
 
 
