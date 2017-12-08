@@ -12,8 +12,8 @@ import java.util.GregorianCalendar;
  * Created by Daniel on 07.12.2017.
  */
 
-public class HelpMethods {
-	private static final String TAG = "HelpMethods";
+public class MyDateTime {
+	private static final String TAG = "MyDateTime";
 
 	/**
 	 * return the date from the given string

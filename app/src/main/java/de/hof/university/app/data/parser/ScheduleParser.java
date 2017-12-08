@@ -28,13 +28,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import de.hof.university.app.calendar.DateCorrection;
 import de.hof.university.app.model.schedule.LectureItem;
 import de.hof.university.app.util.Define;
-import de.hof.university.app.util.HelpMethods;
+import de.hof.university.app.util.MyDateTime;
 
 /**
  * Created by larsg on 17.06.2016.
@@ -127,8 +126,8 @@ public class ScheduleParser implements Parser<LectureItem> {
 		// beginTimeString: 14:00
 		// beginDateString: 11.12.2017
 
-		Date startDate = HelpMethods.getDateFromString( beginTimeString + " " + beginDateString );
-		Date endDate = HelpMethods.getDateFromString( endTimeString + " " + endDateString );
+		Date startDate = MyDateTime.getDateFromString( beginTimeString + " " + beginDateString );
+		Date endDate = MyDateTime.getDateFromString( endTimeString + " " + endDateString );
 
 		// Falls es kein Einzeltermin ist
 		if ( !startDate.equals( endDate ) ) {
