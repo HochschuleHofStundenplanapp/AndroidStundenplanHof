@@ -25,8 +25,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import de.hof.university.app.BuildConfig;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.util.Define;
@@ -44,7 +46,7 @@ public class AboutusFragment extends Fragment {
 		final MainActivity mainActivity = (MainActivity) getActivity();
 		mainActivity.getSupportActionBar().setTitle(R.string.aboutus);
 
-		final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+		final NavigationView navigationView = mainActivity.findViewById(R.id.nav_view);
 		navigationView.getMenu().findItem(R.id.nav_aboutus).setChecked(true);
 	}
 
@@ -52,7 +54,7 @@ public class AboutusFragment extends Fragment {
 	public void onPause() {
 		super.onPause();
 		final MainActivity mainActivity = (MainActivity) getActivity();
-		final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+		final NavigationView navigationView = mainActivity.findViewById(R.id.nav_view);
 
 		navigationView.getMenu().findItem(R.id.nav_aboutus).setChecked(false);
 	}
@@ -63,7 +65,7 @@ public class AboutusFragment extends Fragment {
 		// Inflate the layout for this fragment
 		final View v = inflater.inflate(R.layout.fragment_aboutus, container, false);
 
-		final Button btnRate = (Button) v.findViewById(R.id.btnRate);
+		final Button btnRate = v.findViewById(R.id.btnRate);
 		btnRate.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -76,7 +78,7 @@ public class AboutusFragment extends Fragment {
 			}
 		});
 
-		final Button btnFeedback = (Button) v.findViewById(R.id.btnFeedback);
+		final Button btnFeedback = v.findViewById(R.id.btnFeedback);
 		btnFeedback.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -91,6 +93,9 @@ public class AboutusFragment extends Fragment {
                 }
 			}
 		});
+
+		TextView versionTV = v.findViewById( R.id.versionTextView );
+		versionTV.setText( String.format( "%s: %s%s %s (%d)", getString( R.string.versionString), BuildConfig.FLAVOR, BuildConfig.BUILD_TYPE, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE ) );
 
 		return v;
 	}

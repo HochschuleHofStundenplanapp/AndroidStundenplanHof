@@ -24,7 +24,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 26
         versionCode 25
-        versionName '4.0'
+        versionName '4.3'
     }
 
     signingConfigs {
