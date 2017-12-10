@@ -23,12 +23,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 import de.hof.university.app.util.Define;
 import de.hof.university.app.model.schedule.LectureChange;
+import de.hof.university.app.util.MyDateTime;
 
 /**
  * Created by larsg on 17.06.2016.
@@ -104,45 +103,15 @@ public final class ChangesParser implements Parser<LectureChange> {
         final String room_old = jsonObject.optJSONObject(Define.PARSER_ORIGNAL).optString(Define.PARSER_ROOM);
         final String lecturer = jsonObject.optString(Define.PARSER_DOCENT);
 		//TODO Beispielzeile ergänzen
-        Date orginalDate = getDateFromTimeString( orginalDateString, orginalTimeString ) ;
+        Date orginalDate = MyDateTime.getDateFromString( orginalTimeString + " " + orginalDateString ) ;
 
         Date alternativeDate = null;
 		//TODO Beispielzeile ergänzen
         if (!"".equals(alternativeTimeString) && !"".equals(alternativeDateString)) {
-            alternativeDate = getDateFromTimeString( alternativeDateString, alternativeTimeString );
+            alternativeDate = MyDateTime.getDateFromString( alternativeTimeString + " " + alternativeDateString);
         }
 
         return new LectureChange(id,label,comment,text,group,reason,orginalDate,alternativeDate,room_old,room_new,lecturer);
     }
-
-    public static final Date getDateFromTimeString( final String originalDateString, final String orginalTimeString ) {
-
-        int originalHours = 0;
-        int originalMinutes = 0;
-        int originalDay = 1;
-        int originalMonth = 1;
-        int originalYear = 2017;
-
-        try {
-            //TODO Beispielzeile ergänzen
-            originalHours = Integer.parseInt(orginalTimeString.substring(0, 2));
-            originalMinutes = Integer.parseInt(orginalTimeString.substring(3, 5));
-            originalDay = Integer.parseInt(originalDateString.substring(0, 2));
-            originalMonth = Integer.parseInt(originalDateString.substring(3, 5));
-            originalYear = Integer.parseInt(originalDateString.substring(6, 10));
-        } catch (NumberFormatException e)
-        {
-            Log.e( TAG, "getDateFromString", e );
-        }
-
-        final Calendar calendar = GregorianCalendar.getInstance();
-        //Startzeit
-        calendar.set(originalYear, originalMonth - 1, originalDay, originalHours, originalMinutes, 0);
-
-        final Date originalDate = calendar.getTime();
-
-        return originalDate ;
-    }
-
 
 }

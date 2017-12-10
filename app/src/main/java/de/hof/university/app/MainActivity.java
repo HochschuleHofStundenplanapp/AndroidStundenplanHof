@@ -61,8 +61,10 @@ import de.hof.university.app.fragment.schedule.ScheduleFragment;
 public class MainActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener {
 
-	private static Context appContext;
 	private final String TAG = "MainActivity";
+
+	private static Context appContext;
+
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private MealFragment mealFragment;
@@ -80,7 +82,6 @@ public class MainActivity extends AppCompatActivity
 	private NavigationView navigationView;
 	// für Navigation
 	private boolean backButtonPressedOnce = false;
-	private boolean firstStart = true;
 
 	public static Context getAppContext() {
 		return appContext;
@@ -210,7 +211,6 @@ public class MainActivity extends AppCompatActivity
 			final String action = getIntent().getAction();
 
 			if (Define.SHORTCUT_INTENT_CHANGES.equals(action)) {
-				firstStart = true;
 				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_aenderung));
 			}
 		}
@@ -376,7 +376,6 @@ public class MainActivity extends AppCompatActivity
 						mealFragment = new MealFragment();
 					}
 					FragmentTransaction trans = manager.beginTransaction();
-					trans.addToBackStack(MealFragment.class.getName());
 					trans.replace(R.id.content_main, mealFragment, Define.mealsFragmentName);
 					trans.commit();
 				}
@@ -386,7 +385,6 @@ public class MainActivity extends AppCompatActivity
 				if (!manager.popBackStackImmediate(NotenbekanntgabeFragment.class.getName(), 0)) {
 
 					FragmentTransaction trans = manager.beginTransaction();
-					trans.addToBackStack(NotenbekanntgabeFragment.class.getName());
 					if (notenbekanntgabeFragment == null) {
 						notenbekanntgabeFragment = new NotenbekanntgabeFragment();
 					}
@@ -400,7 +398,6 @@ public class MainActivity extends AppCompatActivity
 				if (!manager.popBackStackImmediate(NotenblattFragment.class.getName(), 0)) {
 
 					FragmentTransaction trans = manager.beginTransaction();
-					trans.addToBackStack(NotenblattFragment.class.getName());
 					if (notenblattFragment == null) {
 						notenblattFragment = new NotenblattFragment();
 					}
@@ -415,7 +412,6 @@ public class MainActivity extends AppCompatActivity
 						raumsucheFragment = new RaumsucheFragment();
 					}
 					FragmentTransaction trans = manager.beginTransaction();
-					trans.addToBackStack(RaumsucheFragment.class.getName());
 					trans.replace(R.id.content_main, raumsucheFragment);
 					trans.commit();
 				}
@@ -427,7 +423,6 @@ public class MainActivity extends AppCompatActivity
 						mapFragment = new MapFragment();
 					}
 					FragmentTransaction trans = manager.beginTransaction();
-					trans.addToBackStack(MapFragment.class.getName());
 					trans.replace(R.id.content_main, mapFragment);
 					trans.commit();
 				}
@@ -439,7 +434,6 @@ public class MainActivity extends AppCompatActivity
 						navigationFragment = new NavigationFragment();
 					}
 					FragmentTransaction trans = manager.beginTransaction();
-					trans.addToBackStack(NavigationFragment.class.getName());
 					trans.replace(R.id.content_main, navigationFragment);
 					trans.commit();
 				}
@@ -450,14 +444,7 @@ public class MainActivity extends AppCompatActivity
 					if (scheduleFragment == null) {
 						scheduleFragment = new ScheduleFragment();
 					}
-					// starting ist ein leerer Bildschirm
-					// deswegen wollen wir beim Zurückgehen diesen Bildschirm nicht auf den BackStack... legen
 					FragmentTransaction trans = manager.beginTransaction();
-					if (firstStart) {
-						firstStart = false;
-					} else {
-						trans.addToBackStack(ScheduleFragment.class.getName());
-					}
 					trans.replace(R.id.content_main, scheduleFragment, Define.scheduleFragmentName);
 					trans.commit();
 				}
@@ -468,14 +455,7 @@ public class MainActivity extends AppCompatActivity
 					if (myScheduleFragment == null) {
 						myScheduleFragment = new MyScheduleFragment();
 					}
-					// starting ist ein leerer Bildschirm
-					// deswegen wollen wir beim Zurückgehen diesen Bildschirm nicht auf den BackStack... legen
 					FragmentTransaction trans = manager.beginTransaction();
-					if (firstStart) {
-						firstStart = false;
-					} else {
-						trans.addToBackStack(MyScheduleFragment.class.getName());
-					}
 					trans.replace(R.id.content_main, myScheduleFragment, Define.myScheduleFragmentName);
 					trans.commit();
 				}
@@ -487,13 +467,6 @@ public class MainActivity extends AppCompatActivity
 						changesFragment = new ChangesFragment();
 					}
 					FragmentTransaction trans = manager.beginTransaction();
-					// starting ist ein leerer Bildschirm
-					// deswegen wollen wir beim Zurückgehen diesen Bildschirm nicht auf den BackStack... legen
-					if (firstStart) {
-						firstStart = false;
-					} else {
-						trans.addToBackStack(ChangesFragment.class.getName());
-					}
 					trans.replace(R.id.content_main, changesFragment, Define.changesFragmentName);
 					trans.commit();
 				}
@@ -507,17 +480,7 @@ public class MainActivity extends AppCompatActivity
 
 			case R.id.nav_einstellungen:
 				if (!manager.popBackStackImmediate(SettingsFragment.class.getName(), 0)) {
-					// starting ist ein leerer Bildschirm
-					// deswegen wollen wir beim Zurückgehen diesen Bildschirm nicht auf den BackStack... legen
 					FragmentTransaction trans = manager.beginTransaction();
-					// Wenn dies der erste Start der Application ist, so haben wir noch keinen
-					// Rück-Bildschirm, das heißt, wir können auch nichts in den BackStack ablegen
-					if (firstStart) {
-						firstStart = false;
-					} else {
-						// Trage dieses Fragment in die Rückwärts-Historie ein.
-						trans.addToBackStack(SettingsFragment.class.getName());
-					}
 					trans.replace(R.id.content_main, new SettingsFragment());
 					trans.commit();
 				}
@@ -534,7 +497,6 @@ public class MainActivity extends AppCompatActivity
 				if (!manager.popBackStackImmediate(AboutusFragment.class.getName(), 0)) {
 
 					FragmentTransaction trans = manager.beginTransaction();
-					trans.addToBackStack(AboutusFragment.class.getName());
 					if (aboutusFragment == null) {
 						aboutusFragment = new AboutusFragment();
 					}
@@ -553,7 +515,6 @@ public class MainActivity extends AppCompatActivity
 				if (!manager.popBackStackImmediate(PrimussTabFragment.class.getName(), 0)) {
 
 					FragmentTransaction trans = manager.beginTransaction();
-					trans.addToBackStack(PrimussTabFragment.class.getName());
 					if (primussTabFragment == null) {
 						primussTabFragment = new PrimussTabFragment();
 					}

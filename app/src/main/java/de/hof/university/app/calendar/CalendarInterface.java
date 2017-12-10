@@ -426,14 +426,15 @@ class CalendarInterface {
 	private void createChangeEvent(final String lectureID, final String title, final String description,
 	                               final Date startTime, final Date endTime, final String location) {
 
-		final Long eventID = createEvent(title, description, startTime, endTime, location, lectureID);
+		final Long eventID = createEvent( title, description, startTime, endTime, location, lectureID );
 
 		// Wenn null dann keine Berechtigung oder keine CalendarID und returnen
-		if (eventID == null)
+		if (eventID == null) {
 			return;
+		}
 
 		// zu den IDs hinzufügen
-		addChangesEventID(lectureID, eventID);
+		addChangesEventID( lectureID, eventID );
 	}
 
 	/**
@@ -450,7 +451,12 @@ class CalendarInterface {
 	                         final Date endDate, final String location, final String lectureID) {
 		//TODO lectureID not used
 
-		if (calendarData.getCalendarID() == null) {
+		// wenn bereits vorhanden tue nichts
+		if ( getEventIDs( lectureID, title, startDate, endDate ) != null ) {
+			return null;
+		}
+
+		if ( calendarData.getCalendarID() == null ) {
 			return null;
 		}
 
@@ -580,13 +586,15 @@ class CalendarInterface {
 					} else {
 						// Verschoben
 						instance.updateEvent(eventID, context.getString(R.string.changeMoved) + " " + change.getLabel(), context.getString(R.string.changeNewDate) + ": " + DataManager.getInstance().formatDate(change.getBegin_new()), null, null, "");
+
 						// TODO richtiges EndDate bekommen, weil 90 Minuten Länge nehmen
 						Calendar calendar = Calendar.getInstance();
 						calendar.setTime(change.getBegin_new());
 						calendar.add(Calendar.MINUTE, 90);
 						Date newEndDate = calendar.getTime();
+
 						// Alternativ Vorlesung erzeugen
-						createChangeEvent(lectureID, context.getString(R.string.changeNew) + " " + change.getLabel(), "", change.getBegin_new(), newEndDate, getLocation(change.getRoom_new()));
+						createChangeEvent( lectureID, context.getString( R.string.changeNew ) + " " + change.getLabel(), "", change.getBegin_new(), newEndDate, getLocation( change.getRoom_new() ) );
 					}
 				}
 				break;

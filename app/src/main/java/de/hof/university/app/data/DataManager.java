@@ -454,7 +454,9 @@ public class DataManager {
             Object obtMyScheduleOpj = readObject(context, Define.myScheduleFilename);
             if ((obtMyScheduleOpj != null) && (obtMyScheduleOpj instanceof Set)) {
                 this.mySchedule = new MySchedule();
-                this.mySchedule.setIds((Set<String>) obtMyScheduleOpj);
+                ArrayList<String> result = new ArrayList<>();
+                result.addAll( (Set) obtMyScheduleOpj );
+                this.mySchedule.setIds(result);
             } else if ((obtMyScheduleOpj != null) && (obtMyScheduleOpj instanceof MySchedule)) {
                 this.mySchedule = (MySchedule) obtMyScheduleOpj;
             } else {
