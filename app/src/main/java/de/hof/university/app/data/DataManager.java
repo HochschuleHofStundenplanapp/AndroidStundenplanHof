@@ -76,7 +76,7 @@ public class DataManager {
 
     private final SharedPreferences sharedPreferences;
 
-    public static DataManager getInstance() {
+    public final static DataManager getInstance() {
         return instance;
     }
 
@@ -330,7 +330,7 @@ public class DataManager {
     // wenn es aber
     public final ArrayList<StudyCourse> getCourses(final Context context, final String language,
                                                    final String termTime, boolean forceRefresh) {
-        StudyCourses studyCourses = this.getStudyCourses(context);
+        final StudyCourses studyCourses = this.getStudyCourses(context);
 
         if (forceRefresh
                 || (studyCourses.getCourses().isEmpty())
@@ -540,7 +540,7 @@ public class DataManager {
     }
 
     public Locale getLocale() {
-        Context context = MainActivity.getAppContext().getApplicationContext();
+        final Context context = MainActivity.getAppContext().getApplicationContext();
 
         if (context.getString(R.string.language).equals("de")) {
             return Locale.GERMANY;
@@ -638,7 +638,8 @@ public class DataManager {
 
     public void registerFCMServerForce(Context context) {
         Set<String> ids = getSelectedLecturesIDs(context);
-        if (ids == null) return;
+        if (ids == null)
+        	return;
 
         new RegisterLectures().registerLectures(ids);
     }
