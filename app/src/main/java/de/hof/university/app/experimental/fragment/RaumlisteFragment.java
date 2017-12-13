@@ -49,6 +49,7 @@ import java.util.Date;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
+import de.hof.university.app.data.DataManager;
 import de.hof.university.app.util.Define;
 import de.hof.university.app.experimental.adapter.RaumlistAdapter;
 import de.hof.university.app.experimental.model.Level;
@@ -209,7 +210,7 @@ public class RaumlisteFragment extends Fragment {
 
         @Override
         protected final ArrayList<Level> doInBackground(String... params) {
-            Object optRaumliste = RaumlisteFragment.readObject(getActivity().getApplicationContext(), Define.raumlistFilename);
+            Object optRaumliste = DataManager.getInstance().readObject(getActivity().getApplicationContext(), Define.raumlistFilename);
             Raumliste raumliste = new Raumliste();
             Date lastCached = new Date();
 
@@ -357,7 +358,7 @@ public class RaumlisteFragment extends Fragment {
                 raumliste.setDate(params[8]);
 
                 raumliste.setLastSaved(new Date());
-                RaumlisteFragment.saveObject(getActivity().getApplicationContext(), raumliste, Define.raumlistFilename);
+                DataManager.getInstance().saveObject(getActivity().getApplicationContext(), raumliste, Define.raumlistFilename);
             }
 
             return raumliste.getRaumlist();
@@ -383,38 +384,5 @@ public class RaumlisteFragment extends Fragment {
 
             super.onPostExecute(result);
         }
-    }
-
-	//TODO saveObject
-    private static void saveObject(final Context context, final Object object, final String filename) {
-        try {
-            final File file = new File(context.getFilesDir(), filename);
-            final FileOutputStream fos = new FileOutputStream(file);
-            final ObjectOutputStream os = new ObjectOutputStream(fos);
-            os.writeObject(object);
-            os.close();
-            fos.close();
-        } catch (IOException e) {
-            // TODO Fehlermeldung
-            Log.e(TAG, "saveObject failed", e);
-        }
-    }
-
-    private static Object readObject(final Context context, final String filename) {
-        Object result = null;
-        try {
-            final File file = new File(context.getFilesDir(), filename);
-            if (file.exists()) {
-                final FileInputStream fis = new FileInputStream(file);
-                final ObjectInputStream is = new ObjectInputStream(fis);
-                result = is.readObject();
-                is.close();
-                fis.close();
-            }
-        } catch (final Exception e) {
-            // TODO Fehlermeldung
-            Log.e(TAG, "readObject failed", e);
-        }
-        return result;
     }
 }
