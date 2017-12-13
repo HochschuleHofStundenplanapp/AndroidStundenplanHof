@@ -451,6 +451,7 @@ public class DataManager {
 
     public MySchedule getMySchedule(final Context context) {
         if (this.mySchedule == null) {
+        	
             Object obtMyScheduleOpj = readObject(context, Define.myScheduleFilename);
             if ((obtMyScheduleOpj != null) && (obtMyScheduleOpj instanceof Set)) {
                 this.mySchedule = new MySchedule();
@@ -577,6 +578,7 @@ public class DataManager {
     }
 
     // this is the general method to serialize an object
+    // /data/user/0/de.hof.university.app.debug/files/mySchedule
     public synchronized Object readObject(final Context context, final String filename) {
         Log.d( TAG, "Einlesen von Objekten aus der Datei: "+filename );
         
@@ -590,10 +592,10 @@ public class DataManager {
                 is.close();
                 fis.close();
             }
+			Log.d( TAG, "Einlesen von Objekten erfolgreich ");
         } catch (Exception e) {
             Log.e(TAG, "Fehler beim lesen des Objektes", e);
         }
-        Log.d( TAG, "Einlesen von Objekten erfolgreich ");
         return result;
     }
 
