@@ -558,6 +558,7 @@ public class DataManager {
     //
     public synchronized void saveObject(final Context context, Object object, final String filename) {
         try {
+            Log.d( TAG, "Write Filedir: " + context.getFilesDir() + " File: " + filename);
             final File file = new File(context.getFilesDir(), filename);
             final FileOutputStream fos = new FileOutputStream(file);
             final ObjectOutputStream os = new ObjectOutputStream(fos);
@@ -578,10 +579,9 @@ public class DataManager {
 
     // this is the general method to serialize an object
     public synchronized Object readObject(final Context context, final String filename) {
-        Log.d( TAG, "Einlesen von Objekten aus der Datei: "+filename );
-        
         Object result = null;
         try {
+            Log.d( TAG, "Read Filedir: " + context.getFilesDir() + " File: " + filename );
             final File file = new File(context.getFilesDir(), filename);
             if (file.exists()) {
                 final FileInputStream fis = new FileInputStream(file);
