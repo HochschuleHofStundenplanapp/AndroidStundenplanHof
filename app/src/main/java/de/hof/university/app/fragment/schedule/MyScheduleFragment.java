@@ -99,7 +99,7 @@ public class MyScheduleFragment extends ScheduleFragment {
         final LectureItem lectureItem = (LectureItem) listView.getItemAtPosition(info.position);
 
         if (item.getTitle().equals(getString(R.string.deleteFromMySchedule))) {
-            DataManager.getInstance().deleteFromMySchedule(info.targetView.getContext(), lectureItem);
+            DataManager.getInstance().deleteFromMySchedule(info.targetView.getContext().getApplicationContext(), lectureItem);
             dataList.remove(lectureItem);
             adapter.notifyDataSetChanged();
             Toast.makeText(getView().getContext(), getString(R.string.deleted), Toast.LENGTH_SHORT).show();

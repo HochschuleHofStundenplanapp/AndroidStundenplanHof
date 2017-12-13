@@ -102,7 +102,7 @@ public class ScheduleFragment extends AbstractListFragment {
         final LectureItem lectureItem = (LectureItem) listView.getItemAtPosition(info.position);
 
         if (item.getTitle().equals(getString(R.string.addToMySchedule))) {
-            DataManager.getInstance().addToMySchedule(info.targetView.getContext(), lectureItem);
+            DataManager.getInstance().addToMySchedule(info.targetView.getContext().getApplicationContext(), lectureItem);
             Toast.makeText(getView().getContext(), getString(R.string.added), Toast.LENGTH_SHORT).show();
             if (DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) == 1) {
                 Toast.makeText(getView().getContext(), getString(R.string.changesMyScheduleText), Toast.LENGTH_LONG).show();

@@ -514,7 +514,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 			final String termTime = params[ 0 ];
 			final boolean pForceRefresh = Boolean.valueOf(params[ 1 ]);
 
-			studyCourseList = DataManager.getInstance().getCourses(getActivity().getBaseContext(),
+			studyCourseList = DataManager.getInstance().getCourses(getActivity().getApplicationContext(),
 					getString(R.string.language), termTime, pForceRefresh);
 
 			if (studyCourseList != null) {
