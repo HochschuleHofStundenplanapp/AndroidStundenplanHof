@@ -581,9 +581,11 @@ public class DataManager {
     // this is the general method to serialize an object
     // /data/user/0/de.hof.university.app.debug/files/mySchedule
     public synchronized Object readObject(final Context context, final String filename) {
+	
+		Log.d( TAG, "Read Filedir: " + context.getFilesDir() + " File: " + filename );
+
         Object result = null;
         try {
-            Log.d( TAG, "Read Filedir: " + context.getFilesDir() + " File: " + filename );
             final File file = new File(context.getFilesDir(), filename);
             if (file.exists()) {
                 final FileInputStream fis = new FileInputStream(file);
