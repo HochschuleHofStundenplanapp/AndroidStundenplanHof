@@ -2,23 +2,6 @@
 <shortcuts xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <shortcut
-        android:shortcutId="meal"
-        android:enabled="true"
-        android:icon="@drawable/ic_info_white_24dp"
-        android:shortcutShortLabel="@string/speiseplan"
-        android:shortcutLongLabel="@string/speiseplan"
-        android:shortcutDisabledMessage="@string/disabled_shortcut"
-        tools:targetApi="n_mr1">
-        <intent
-            android:action="de.hof.university.app.MEAL"
-            android:targetPackage="de.hof.university.app"
-            android:targetClass="de.hof.university.app.MainActivity" />
-        <!-- If your shortcut is associated with multiple intents, include them
-             here. The last intent in the list determines what the user sees when
-             they launch this shortcut. -->
-        <categories android:name="android.shortcut" />
-    </shortcut>
-    <shortcut
         android:shortcutId="aenderung"
         android:enabled="true"
         android:icon="@drawable/ic_info_white_24dp"
@@ -28,6 +11,23 @@
         tools:targetApi="n_mr1">
         <intent
             android:action="de.hof.university.app.CHANGES"
+            android:targetPackage="de.hof.university.app"
+            android:targetClass="de.hof.university.app.MainActivity" />
+        <!-- If your shortcut is associated with multiple intents, include them
+             here. The last intent in the list determines what the user sees when
+             they launch this shortcut. -->
+        <categories android:name="android.shortcut" />
+    </shortcut>
+    <shortcut
+        android:shortcutId="meal"
+        android:enabled="true"
+        android:icon="@drawable/ic_info_white_24dp"
+        android:shortcutShortLabel="@string/speiseplan"
+        android:shortcutLongLabel="@string/speiseplan"
+        android:shortcutDisabledMessage="@string/disabled_shortcut"
+        tools:targetApi="n_mr1">
+        <intent
+            android:action="de.hof.university.app.MEAL"
             android:targetPackage="de.hof.university.app"
             android:targetClass="de.hof.university.app.MainActivity" />
         <!-- If your shortcut is associated with multiple intents, include them
