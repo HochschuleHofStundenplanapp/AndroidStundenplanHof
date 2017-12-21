@@ -35,6 +35,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -198,11 +199,11 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	private void handleIntent() {
-		final String notification_type = getIntent().getStringExtra("notification_type");
+		final String notification_type = getIntent().getStringExtra(Define.NOTIFICATION_TYPE);
 
 		if (notification_type != null) {
 			// Falls auf eine Änderungs-Benachrichtigung gedrückt wurde
-			if ("change".equals(notification_type)) {
+			if (Define.NOTIFICATION_TYPE_CHANGE.equals(notification_type)) {
 				// Direkt zu den Änderungen springen
 				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_aenderung));
 			}
@@ -210,8 +211,11 @@ public class MainActivity extends AppCompatActivity
 		} else {
 			final String action = getIntent().getAction();
 
+			// Start the shortcuts
 			if (Define.SHORTCUT_INTENT_CHANGES.equals(action)) {
 				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_aenderung));
+			} else if (Define.SHORTCUT_INTENT_MEAL.equals( action )) {
+				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_speiseplan));
 			}
 		}
 	}

@@ -29,6 +29,7 @@ import com.google.firebase.messaging.RemoteMessage;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
+import de.hof.university.app.util.Define;
 
 /*
 If you wish to do any message handling beyond receiving notifications on apps
@@ -76,7 +77,7 @@ public final class FcmMessagingService extends FirebaseMessagingService {
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
 
         // damit später geprüft werden kann welcher intent gestartet wurde
-        intent.putExtra("notification_type", "change");
+        intent.putExtra( Define.NOTIFICATION_TYPE, Define.NOTIFICATION_TYPE_CHANGE);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 

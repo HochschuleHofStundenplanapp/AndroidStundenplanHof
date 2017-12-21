@@ -170,5 +170,9 @@ public final class Define {
 	public final static String LOCATION_MUEB = "Kulmbacher Str. 76 95213 Münchberg";
 
 	//Intents
+	public final static String NOTIFICATION_TYPE = "notification_type";
+	public final static String NOTIFICATION_TYPE_CHANGE = "change";
 	public final static String SHORTCUT_INTENT_CHANGES = "de.hof.university.app.CHANGES";
+	public final static String SHORTCUT_INTENT_MEAL = "de.hof.university.app.MEAL";
+
 }
