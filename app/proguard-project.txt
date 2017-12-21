@@ -16,6 +16,12 @@
 
 # Add any project specific keep options here:
 
+# For Serializable Objects
+# https://www.guardsquare.com/en/proguard/manual/examples#serializable
+# this is needed for Update of the Play Store
+-keepnames class * implements java.io.Serializable
+-keepclassmembers class * implements java.io.Serializable { *; }
+
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
