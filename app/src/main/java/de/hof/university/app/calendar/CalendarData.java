@@ -32,8 +32,8 @@ public class CalendarData extends HofObject {
 
     private Long calendarID;
     // besteht aus lectureID und EventID
-    private HashMap<String, ArrayList<Long>> lecturesEventIDs;
-    private HashMap<String, ArrayList<Long>> changesEventIDs;
+    private final HashMap<String, ArrayList<Long>> lecturesEventIDs;
+    private final HashMap<String, ArrayList<Long>> changesEventIDs;
 
     public CalendarData() {
 	    super();
