@@ -725,7 +725,8 @@ public class DataManager {
         Set<String> ids = new HashSet<>();
 
         ArrayList<LectureItem> lectureItems = getSelectedLectures(context);
-        if (lectureItems == null) return null;
+        if (lectureItems == null)
+            return null;
 
         for (LectureItem li : lectureItems) {
             ids.add(String.valueOf(li.getId()));
@@ -751,7 +752,7 @@ public class DataManager {
      * @param newSchedule the new schedule
      * @return if there are the same elements in it
      */
-    private boolean isScheduleEqualsToNewSchedule(ArrayList<LectureItem> oldSchedule, ArrayList<LectureItem> newSchedule) {
+    private static boolean isScheduleEqualsToNewSchedule(ArrayList<LectureItem> oldSchedule, ArrayList<LectureItem> newSchedule) {
         //null checking
         if((oldSchedule == null) && (newSchedule == null)) {
             return true;
@@ -773,7 +774,7 @@ public class DataManager {
         return true;
     }
 
-    private ArrayList<LectureItem> getNewLectureItems(ArrayList<LectureItem> oldSchedule, ArrayList<LectureItem> newSchedule) {
+    private static ArrayList<LectureItem> getNewLectureItems(ArrayList<LectureItem> oldSchedule, ArrayList<LectureItem> newSchedule) {
         ArrayList<LectureItem> newLectureItems = new ArrayList<>();
 
         for (LectureItem newLecture: newSchedule) {

@@ -58,10 +58,10 @@ public class RegisterLectures {
     // von Push-Notifications abmelden,
     // oder sich für keine Vorlesung registrieren
     public void deRegisterLectures() {
-        new MyAcyncTask().execute(new HashSet<String>());
-    }
+		new MyAcyncTask().execute(new HashSet<String>());
+	}
 
-    private String makeJSONString(String data[]) {
+    private static String makeJSONString(String data[]) {
         JSONArray json = new JSONArray();
 
 	    for ( final String aData : data ) {
@@ -78,7 +78,7 @@ public class RegisterLectures {
         return json.toString();
     }
 
-    public class MyAcyncTask extends AsyncTask<Set<String>, String, String> {
+    public static class MyAcyncTask extends AsyncTask<Set<String>, String, String> {
 
         @SafeVarargs
         @Override
@@ -154,16 +154,16 @@ public class RegisterLectures {
 
                     Log.d(TAG, "SERVER ERROR RESPONSE: " + sb.toString());
                 }
-            } catch (MalformedURLException error) {
+            } catch (final MalformedURLException error) {
                 Log.d(TAG, "MalformedURLException error: " + error.toString());
                 //Handles an incorrectly entered URL
-            } catch (SocketTimeoutException error) {
+            } catch (final SocketTimeoutException error) {
                 Log.d(TAG, "SocketTimeoutException: " + error.toString());
                 //Handles URL access timeout.
-            } catch (IOException error) {
+            } catch (final IOException error) {
                 Log.d(TAG, "IOException: " + error.toString());
                 //Handles input and output errors
-            } catch (NullPointerException error) {
+            } catch (final NullPointerException error) {
                 Log.d(TAG, "NullPointerException: " + error.toString());
             }
             finally {
@@ -176,7 +176,8 @@ public class RegisterLectures {
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(final String result) {
+            
             super.onPostExecute(result);
         }
     }

@@ -111,7 +111,7 @@ public class ScheduleParser implements Parser<LectureItem> {
 			sp = "";
 		}
 		final String type = jsonObject.optString( Define.PARSER_TYPE );
-		final String style = jsonObject.optString( Define.PARSER_STYLE );
+		//final String style = jsonObject.optString( Define.PARSER_STYLE );
 		final String group = jsonObject.optString( Define.SCHEDULE_PARSER_GROUP );
 		final String beginTimeString = jsonObject.optString( Define.PARSER_STARTTIME );
 		final String endTimeString = jsonObject.optString( Define.PARSER_ENDTIME );

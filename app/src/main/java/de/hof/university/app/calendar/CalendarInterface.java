@@ -350,16 +350,16 @@ class CalendarInterface {
 	 * @return returns if the removing was successful
 	 */
 	boolean removeLocalCalendar() {
-		Context context = MainActivity.getAppContext().getApplicationContext();
+		final Context context = MainActivity.getAppContext().getApplicationContext();
 
-		Long localCalendarID = getLocalCalendar();
+		final Long localCalendarID = getLocalCalendar();
 
 		if (localCalendarID == null) {
 			return false;
 		}
 
-		Uri.Builder builder = Calendars.CONTENT_URI.buildUpon();
-		Uri calendarToRemoveUri = builder.appendPath(localCalendarID.toString())
+		final Uri.Builder builder = Calendars.CONTENT_URI.buildUpon();
+		final Uri calendarToRemoveUri = builder.appendPath(localCalendarID.toString())
 				.appendQueryParameter(android.provider.CalendarContract.CALLER_IS_SYNCADAPTER, "true")
 				.appendQueryParameter(Calendars.ACCOUNT_NAME, accountName)
 				.appendQueryParameter(Calendars.ACCOUNT_TYPE, accountType)
@@ -466,7 +466,7 @@ class CalendarInterface {
 		junit.framework.Assert.assertTrue( endDate != null ) ;
 		junit.framework.Assert.assertTrue( !"".equals( location )) ;
 
-		ContentValues values = new ContentValues();
+		final ContentValues values = new ContentValues();
 		values.put(Events.DTSTART, startDate.getTime());
 		values.put(Events.DTEND, endDate.getTime());
 		values.put(Events.TITLE, title);
