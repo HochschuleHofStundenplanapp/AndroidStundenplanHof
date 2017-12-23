@@ -154,5 +154,20 @@
     <string name="calendar_syncronization_keep_events_title">Keep Events?</string>
     <string name="calendar_syncronization_keep_events_message">Do you want to keep the events or the local calendar?</string>
     <string name="versionString">Version</string>
+    <string name="MEAL_hausgemacht">home made</string>
+    <string name="MEAL_Wild">Wild</string>
+    <string name="MEAL_regional">regional</string>
+    <string name="MEAL_Fisch">Fish</string>
+    <string name="MEAL_Rind">Rind</string>
+    <string name="MEAL_nachhaltigerFang">nachhaltiger Fang</string>
+    <string name="MEAL_vegan">vegan</string>
+    <string name="MEAL_Lamm">Lamb</string>
+    <string name="MEAL_Meeresfruechte">Sea fruit</string>
+    <string name="MEAL_MensaVital">Mensa Vital</string>
+    <string name="MEAL_nichtvegetarisch">non vegetarian</string>
+    <string name="MEAL_Kraueterkueche">Herbs</string>
+    <string name="MEAL_Geflügel">Geflügel</string>
+    <string name="MEAL_vegetarisch">vegatarian</string>
+    <string name="MEAL_Schwein">Pork</string>
 
 </resources>
