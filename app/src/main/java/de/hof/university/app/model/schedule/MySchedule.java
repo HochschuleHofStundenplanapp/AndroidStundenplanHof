@@ -34,7 +34,8 @@ public class MySchedule extends Schedule {
 		this.ids = new ArrayList<>();
 	}
 
-	public void setIds(ArrayList<String> ids) {
+	public void setIds(final ArrayList<String> ids) {
+		
 		this.ids = ids;
 	}
 
