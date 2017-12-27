@@ -3,18 +3,22 @@ package de.hof.university.app.fragment;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,16 +34,20 @@ import de.hof.university.app.calendar.CalendarSynchronization;
 
 public class SettingsCalendarSynchronizationFragment extends PreferenceFragment {
 
-	public final static String TAG = "SettingsCalendarSynchronizationFragment";
+	public final static String TAG = "SettingCalendarSyncFrag";
 
 	private final int REQUEST_CODE_CALENDAR_TURN_ON_PERMISSION =  2;
 	private final int REQUEST_CODE_CALENDAR_TURN_OFF_PERMISSION =  3;
 
 	private CalendarSynchronization calendarSynchronization = null;
 
+	private SharedPreferences sharedPreferences;
+
 	@Override
 	public void onCreate( @Nullable Bundle savedInstanceState ) {
 		super.onCreate( savedInstanceState );
+
+		sharedPreferences = MainActivity.getSharedPreferences();
 
 		this.calendarSynchronization = CalendarSynchronization.getInstance();
 
@@ -90,6 +98,68 @@ public class SettingsCalendarSynchronizationFragment extends PreferenceFragment 
 				return true;
 			}
 		});
+
+		final Preference calendarReminderPref = findPreference(getString(R.string.PREF_KEY_CALENDAR_REMINDER));
+
+		calendarReminderPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+
+				// Get the layout inflater
+				LayoutInflater inflater = getActivity().getLayoutInflater();
+
+				View view = inflater.inflate(R.layout.dialog_calendar_reminder, null);
+
+				final EditText calendarReminderEditText = view.findViewById(R.id.calendarReminderEditText);
+
+				AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+				dialogBuilder.setView(view)
+						.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								String minutesString = calendarReminderEditText.getText().toString();
+
+								int minutes;
+
+								try {
+									minutes = Integer.parseInt(minutesString);
+								} catch (NumberFormatException e) {
+									Log.e(TAG, "NumberFormatException", e);
+									return;
+								}
+
+								sharedPreferences.edit()
+										.putInt(getString(R.string.PREF_KEY_CALENDAR_REMINDER), minutes)
+										.apply();
+
+								calendarReminderPref.setSummary("" + minutes);
+							}
+						})
+						.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								// cancel the dialog
+							}
+						});
+
+				dialogBuilder.create().show();
+
+				// andere Methode mit TimerPickerDialog, aber dort geht nur bis 24 Stunden
+				/*TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+					@Override
+					public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+						Log.d(TAG, "TimerSet: Hours: " + hourOfDay + " Minutes: " + minute);
+					}
+				};
+
+				TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), AlertDialog.THEME_HOLO_LIGHT, onTimeSetListener, 0, 0, true);
+
+				timePickerDialog.show();*/
+
+
+				return true;
+			}
+		});
 	}
 
 	@Override
@@ -97,18 +167,22 @@ public class SettingsCalendarSynchronizationFragment extends PreferenceFragment 
 		super.onResume();
 
 		final MainActivity mainActivity = (MainActivity) getActivity();
-		mainActivity.getSupportActionBar().setTitle(R.string.einstellungen);
+		mainActivity.getSupportActionBar().setTitle(R.string.calendar_synchronization);
 
-		final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+		final NavigationView navigationView = mainActivity.findViewById(R.id.nav_view);
 		navigationView.getMenu().findItem(R.id.nav_einstellungen).setChecked(true);
 
 
-		final CheckBoxPreference calendar_syncronization = (CheckBoxPreference) findPreference(getString( R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION));
+		final CheckBoxPreference calendar_synchronization = (CheckBoxPreference) findPreference(getString( R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION));
 
 		// aktiviere oder deaktiviere die Kalender Synchronisation je nachdem ob die experimentellen Funktionen aktiviert sind oder nicht
-		boolean exerimentalFeaturesEnabled = PreferenceManager.getDefaultSharedPreferences(getView().getContext()).getBoolean(getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION), false);
+		boolean experimentalFeaturesEnabled = sharedPreferences.getBoolean(getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES_ENABLED), false);
 
-		calendar_syncronization.setEnabled( exerimentalFeaturesEnabled );
+		calendar_synchronization.setEnabled( experimentalFeaturesEnabled );
+
+		// update summary
+		final Preference calendarReminderPref = findPreference(getString(R.string.PREF_KEY_CALENDAR_REMINDER));
+		calendarReminderPref.setSummary("" + sharedPreferences.getInt(getString(R.string.PREF_KEY_CALENDAR_REMINDER), R.integer.CALENDAR_REMINDER_DEFAULT_VALUE));
 	}
 
 	private void requestCalendarPermission( int requestCode) {

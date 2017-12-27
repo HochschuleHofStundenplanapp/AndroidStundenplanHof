@@ -123,7 +123,7 @@
             android:title="@string/LOGIN_DIALOG" />
 
         <Preference
-            android:key="pref_screen_calendar_synchronization"
+            android:key="@string/PREF_KEY_SCREEN_CALENDAR_SYNCHRONIZATION"
             android:title="@string/calendar_synchronization" />
 
     </PreferenceCategory>

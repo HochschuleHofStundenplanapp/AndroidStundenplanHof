@@ -157,7 +157,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 						.replace( R.id.content_main, settingsCalendarSynchronizationFragment )
 						.commit();
 
-				return false;
+				return true;
 			}
 		} );
 
@@ -250,7 +250,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		final MainActivity mainActivity = (MainActivity) getActivity();
 		mainActivity.getSupportActionBar().setTitle(R.string.einstellungen);
 
-		final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+		final NavigationView navigationView = mainActivity.findViewById(R.id.nav_view);
 		navigationView.getMenu().findItem(R.id.nav_einstellungen).setChecked(true);
 
 		if ( studyCourseList == null ) {

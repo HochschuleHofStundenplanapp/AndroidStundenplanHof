@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity
 	private final String TAG = "MainActivity";
 
 	private static Context appContext;
+	private static SharedPreferences sharedPreferences;
 
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
@@ -87,12 +88,17 @@ public class MainActivity extends AppCompatActivity
 		return appContext;
 	}
 
+	public static SharedPreferences getSharedPreferences() {
+		return sharedPreferences;
+	}
+
 	@Override
 	protected final void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
 		appContext = this;
+		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
 		// Let the cookieManager handle the Cookies
 		final CookieManager cookieManager = new CookieManager();
@@ -137,7 +143,6 @@ public class MainActivity extends AppCompatActivity
 		navigationView.setNavigationItemSelectedListener(this);
 
 		// Experimentelle Features anzeigen?
-		final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		final boolean showExperimentalFeatures = sharedPreferences.getBoolean(getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES_ENABLED), false);
 		displayExperimentalFeaturesMenuEntries(showExperimentalFeatures);
 

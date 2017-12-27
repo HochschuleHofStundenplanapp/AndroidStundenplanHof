@@ -22,6 +22,7 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -498,13 +499,18 @@ class CalendarInterface {
 		// die EventID kommt zurück
 		final Long eventID = insertEvent(values);
 
-		// if to want to add personal reminders
-		//TODO in configuration: Let the user decide
-		//TODO how many minutes before
-        /*if (value) {
-            addReminderToEvent(eventID, 15);
-            addReminderToEvent(eventID, 60);
-        }*/
+		// set a reminder
+		// get the context and the sharedPreferences
+		Context context = MainActivity.getAppContext();
+		SharedPreferences sharedPreferences = MainActivity.getSharedPreferences();
+		// get the minutes
+		int reminderMinutes = sharedPreferences.getInt(context.getString(R.string.PREF_KEY_CALENDAR_REMINDER),
+				R.integer.CALENDAR_REMINDER_DEFAULT_VALUE);
+		// if minutes are not 0
+        if (reminderMinutes != 0) {
+        	// add the reminder
+            addReminderToEvent(eventID, reminderMinutes);
+        }
 
 		return eventID;
 	}

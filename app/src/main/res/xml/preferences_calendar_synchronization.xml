@@ -4,17 +4,20 @@
     <CheckBoxPreference
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:key="calendar_synchronization"
-        android:title="@string/pref_screen_calendar_synchronization" />
+        android:key="@string/PREF_KEY_CALENDAR_SYNCHRONIZATION"
+        android:title="@string/myschedule" />
 
     <PreferenceCategory
-        android:title="Erinngerungen">
+        android:title="Erinnerungen">
 
         <Preference
-            android:title="Erinngerung x Minuten vorher" />
+            android:key="@string/PREF_KEY_CALENDAR_REMINDER"
+            android:defaultValue="@integer/CALENDAR_REMINDER_DEFAULT_VALUE"
+            android:title="Erinnerung x Minuten vorher"
+            android:summary="@integer/CALENDAR_REMINDER_DEFAULT_VALUE"/>
 
-        <Preference
-            android:title="Erinngerung für erste Vorlesung um Uhrzeit am Tag davor" />
+        <!--<Preference
+            android:title="Erinnerung für erste Vorlesung um Uhrzeit am Tag davor" />-->
 
     </PreferenceCategory>
 
