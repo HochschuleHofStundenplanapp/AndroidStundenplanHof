@@ -17,6 +17,7 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -41,7 +42,8 @@
         android:paddingTop="3dp"
         android:text="important_text "
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColor="@android:color/holo_red_dark" />
+        android:textColor="@android:color/holo_red_dark"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -51,7 +53,8 @@
         android:id="@+id/aenderung_oldDate"
         android:textColor="@color/colorBlack"
         android:paddingTop="3dp"
-        android:paddingBottom="3dp" />
+        android:paddingBottom="3dp"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/aenderung_newDate"
@@ -60,5 +63,6 @@
         android:paddingBottom="7dp"
         android:text="NewDate"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@android:color/holo_red_dark" />
+        android:textColor="@android:color/holo_red_dark"
+        tools:ignore="HardcodedText" />
 </LinearLayout>

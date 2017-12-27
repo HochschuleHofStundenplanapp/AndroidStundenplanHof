@@ -99,7 +99,7 @@
         <CheckBoxPreference
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="changes_notifications"
             android:title="@string/changes" />
 
@@ -110,7 +110,6 @@
         android:layout_height="match_parent"
         android:key="category_experimental"
         android:title="@string/experimental">
-
         <CheckBoxPreference
             android:layout_width="match_parent"
             android:layout_height="match_parent"

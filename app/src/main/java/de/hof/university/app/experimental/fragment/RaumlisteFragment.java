@@ -17,11 +17,11 @@
 package de.hof.university.app.experimental.fragment;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,21 +35,16 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InterruptedIOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
-import de.hof.university.app.Util.Define;
-import de.hof.university.app.Util.Log;
+import de.hof.university.app.data.DataManager;
+import de.hof.university.app.util.Define;
 import de.hof.university.app.experimental.adapter.RaumlistAdapter;
 import de.hof.university.app.experimental.model.Level;
 import de.hof.university.app.experimental.model.Raum;
@@ -209,7 +204,7 @@ public class RaumlisteFragment extends Fragment {
 
         @Override
         protected final ArrayList<Level> doInBackground(String... params) {
-            Object optRaumliste = RaumlisteFragment.readObject(getActivity().getApplicationContext(), Define.raumlistFilename);
+            Object optRaumliste = DataManager.getInstance().readObject(getActivity().getApplicationContext(), Define.raumlistFilename);
             Raumliste raumliste = new Raumliste();
             Date lastCached = new Date();
 
@@ -226,7 +221,12 @@ public class RaumlisteFragment extends Fragment {
                 }
             }
 
-            boolean forceRefresh = Boolean.valueOf(params[9]);
+            boolean forceRefresh = false ;
+            
+            try {
+                forceRefresh = Boolean.valueOf(params[9]);
+            } catch (NumberFormatException e)
+            { Log.e( TAG, "NumberformatException, forceRefresh: "+params[9], e); }
 
             if (
 		            forceRefresh
@@ -241,15 +241,16 @@ public class RaumlisteFragment extends Fragment {
 
 				//TODO hier stand mal ein Kommentar, wofür...
                 System.setProperty("jsse.enableSNIExtension", "false");
-                String user = params[ 0 ];
-                String password = params[ 1 ];
-                String year = params[ 2 ];
-                String month = params[ 3 ];
-                String day = params[ 4 ];
-                String timeFrom = params[ 5 ];
-                String timeTo = params[ 6 ];
-                String raumTyp = params[ 7 ];
-                String prettyDate = params[ 8 ];
+                
+                final String user = params[ 0 ];
+				final String password = params[ 1 ];
+				final String year = params[ 2 ];
+				final String month = params[ 3 ];
+				final String day = params[ 4 ];
+				final String timeFrom = params[ 5 ];
+				final String timeTo = params[ 6 ];
+				final String raumTyp = params[ 7 ];
+				final String prettyDate = params[ 8 ];
 
                 ArrayList<Level> tmpRaumList = new ArrayList<>();
 
@@ -259,15 +260,16 @@ public class RaumlisteFragment extends Fragment {
                 Document document;
 
                 // TODO Temporäre Lösung durch gleich mehrere Versuche.
-                int loginRetry = 2;
-
+				final int RAUMSUCHE_NETWORKCONNECTION_WAITTIME = 20; // Sekunden
+                int loginRetry = 4;
                 while ( loginRetry > 0 ) {
+					// Thread beenden wenn gecancelt
+					if ( isCancelled() )
+						break;
                     try {
-                        // Thread beenden wenn gecancelt
-                        if ( isCancelled() ) break;
                         loginForm = Jsoup
                                 .connect(Define.URL_RAUMSUCHE_LOGIN)
-                                .timeout(5 * 1000) //4 Sekunden würden reichen aber 1 Sekunde zur Sicherheit
+                                .timeout(RAUMSUCHE_NETWORKCONNECTION_WAITTIME * 1000) //4 Sekunden würden reichen aber 1 Sekunde zur Sicherheit
                                 .data("user", user, "pass", password)
                                 .data("logintype", "login")
                                 .data("pid", "27")
@@ -285,6 +287,15 @@ public class RaumlisteFragment extends Fragment {
                             return null;
                         }
                     }
+                    catch ( ExceptionInInitializerError e )
+					{
+						Log.e(TAG, "Login fehlgeschlagen: ", e);
+						loginRetry--;
+						if ( loginRetry <= 0 ) {
+							errorText = getString(R.string.loginFailed);
+							return null;
+						}
+					}
                 }
 
                 // zum debuggen hilfreich
@@ -294,7 +305,7 @@ public class RaumlisteFragment extends Fragment {
                 try {
                     document = Jsoup
                             .connect(Define.URL_RAUMSUCHE + raumTyp)
-                            .timeout(10 * 1000) //5 Sekunden würden reichen aber auf älteren Geräten braucht es mehr
+                            .timeout( RAUMSUCHE_NETWORKCONNECTION_WAITTIME * 1000) //5 Sekunden würden reichen aber auf älteren Geräten braucht es mehr
                             .data("tx_raumsuche_pi1[day]", day)
                             .data("tx_raumsuche_pi1[month]", month)
                             .data("tx_raumsuche_pi1[year]", year)
@@ -341,7 +352,7 @@ public class RaumlisteFragment extends Fragment {
                 raumliste.setDate(params[8]);
 
                 raumliste.setLastSaved(new Date());
-                RaumlisteFragment.saveObject(getActivity().getApplicationContext(), raumliste, Define.raumlistFilename);
+                DataManager.getInstance().saveObject(getActivity().getApplicationContext(), raumliste, Define.raumlistFilename);
             }
 
             return raumliste.getRaumlist();
@@ -367,38 +378,5 @@ public class RaumlisteFragment extends Fragment {
 
             super.onPostExecute(result);
         }
-    }
-
-	//TODO saveObject
-    private static void saveObject(final Context context, final Object object, final String filename) {
-        try {
-            final File file = new File(context.getFilesDir(), filename);
-            final FileOutputStream fos = new FileOutputStream(file);
-            final ObjectOutputStream os = new ObjectOutputStream(fos);
-            os.writeObject(object);
-            os.close();
-            fos.close();
-        } catch (IOException e) {
-            // TODO Fehlermeldung
-            Log.e(TAG, "saveObject failed", e);
-        }
-    }
-
-    private static Object readObject(final Context context, final String filename) {
-        Object result = null;
-        try {
-            final File file = new File(context.getFilesDir(), filename);
-            if (file.exists()) {
-                final FileInputStream fis = new FileInputStream(file);
-                final ObjectInputStream is = new ObjectInputStream(fis);
-                result = is.readObject();
-                is.close();
-                fis.close();
-            }
-        } catch (final Exception e) {
-            // TODO Fehlermeldung
-            Log.e(TAG, "readObject failed", e);
-        }
-        return result;
     }
 }

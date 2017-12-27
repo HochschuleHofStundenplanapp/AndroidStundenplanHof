@@ -71,9 +71,9 @@ public class ChangesFragment extends AbstractListFragment {
 	protected final String[] setTaskParameter(boolean forceRefresh) {
 		final String[] params = new String[ 4 ];
 		final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		final String course = sharedPref.getString(getString(R.string.PREFERENCE_KEY_STUDIENGANG), "");
-		final String semester = sharedPref.getString(getString(R.string.PREFERENCE_KEY_SEMESTER), "");
-		final String termTime = sharedPref.getString(getString(R.string.PREFERENCE_KEY_TERM_TIME), "");
+		final String course = sharedPref.getString(getString(R.string.PREF_KEY_STUDIENGANG), "");
+		final String semester = sharedPref.getString(getString(R.string.PREF_KEY_SEMESTER), "");
+		final String termTime = sharedPref.getString(getString(R.string.PREF_KEY_TERM_TIME), "");
 
 		// Meldungen nur bringen wenn kein "Mein Stundenplan" angelegt ist
 		if (DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) == 0) {
@@ -101,10 +101,8 @@ public class ChangesFragment extends AbstractListFragment {
 
 	private ArrayList<Object> updateListView(ArrayList<Object> list) {
 		ArrayList<Object> tmpDataList = new ArrayList<>();
-
-		for (Object obt: list) {
-			tmpDataList.add(obt);
-		}
+		
+		tmpDataList.addAll(list);
 
 		// Wenn Daten gekommen sind das ListItem LastUpdated hinzufügen
 		if (!tmpDataList.isEmpty()) {

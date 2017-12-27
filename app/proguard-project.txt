@@ -10,7 +10,17 @@
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
+# Add any project specific remove options here:
+-assumenosideeffects class junit.framework.Assert { *; }
+-assumenosideeffects class android.util.Log { *; }
+
 # Add any project specific keep options here:
+
+# For Serializable Objects
+# https://www.guardsquare.com/en/proguard/manual/examples#serializable
+# this is needed for Update of the Play Store
+-keepnames class * implements java.io.Serializable
+-keepclassmembers class * implements java.io.Serializable { *; }
 
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
@@ -56,19 +66,14 @@
 -keep class * implements org.jivesoftware.smack.provider.IQProvider
 -keep class * implements org.jivesoftware.smack.provider.PacketExtensionProvider
 -keep class * extends org.jivesoftware.smack.packet.Packet
--keep class org.jivesoftware.smack.CustomSmackConfiguration
--keep class org.jivesoftware.smackx.disco.ServiceDiscoveryManager
--keep class org.jivesoftware.smackx.xhtmlim.XHTMLManager
--keep class org.jivesoftware.smackx.muc.MultiUserChat
--keep class org.jivesoftware.smackx.bytestreams.ibb.InBandBytestreamManager
--keep class org.jivesoftware.smackx.bytestreams.socks5.Socks5BytestreamManager
--keep class org.jivesoftware.smackx.filetransfer.FileTransferManager
--keep class org.jivesoftware.smackx.iqlast.LastActivityManager
--keep class org.jivesoftware.smackx.commands.AdHocCommandManager
--keep class org.jivesoftware.smackx.ping.PingManager
--keep class org.jivesoftware.smackx.privacy.PrivacyListManager
--keep class org.jivesoftware.smackx.time.EntityTimeManager
--keep class org.jivesoftware.smackx.vcardtemp.VCardManager
+
+-keep class org.jivesoftware.smack.** { *; }
+-keep class org.jivesoftware.smackx.** { *; }
+
+# need for Smack to work in release Version
+# (https://stackoverflow.com/questions/31157616/smack-for-android-fails-when-using-proguard)
+-keepattributes Signature
+
 
 -keepclasseswithmembers class * extends org.jivesoftware.smack.sasl.SASLMechanism {
     public <init>(org.jivesoftware.smack.SASLAuthentication);

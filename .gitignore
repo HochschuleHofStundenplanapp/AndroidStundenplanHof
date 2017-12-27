@@ -37,6 +37,7 @@ captures/
 *.iml
 .idea/workspace.xml
 .idea/libraries/
+.idea/dictionaries/
 .idea/modules.xml
 .idea/codeStyleSettings.xml
 .idea/compiler.xml
@@ -54,3 +55,5 @@ app/build.gradle_withKey
 .idea/inspectionProfiles/profiles_settings.xml
 .idea/inspectionProfiles/Project_Default.xml
 app/build.gradle__Stepping
+app/release/output.json
+.idea/dictionaries/stepping.xml

@@ -16,6 +16,7 @@
 
 package de.hof.university.app.data.parser;
 
+import android.util.Log;
 import android.util.Xml;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -29,8 +30,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import de.hof.university.app.Util.Assert;
-import de.hof.university.app.Util.Log;
 import de.hof.university.app.model.meal.Meal;
 
 /**
@@ -122,13 +121,13 @@ final public class MealParser implements Parser<Meal> {
                         case XmlPullParser.END_TAG:
                             if (xmlTag.equalsIgnoreCase("preis")) {
                                 if (tariff.equals(xmlTariff)) {
-                                    Assert.assertTrue( meal != null );
+                                    junit.framework.Assert.assertTrue( meal != null );
                                     meal.setPrice(xmlText);
                                     meal.setTariff(xmlGroup);
                                     result.add(meal);
                                 }
                             } else if (xmlTag.equalsIgnoreCase("gerichtAttribut")) {
-                                Assert.assertTrue( meal != null );
+                                junit.framework.Assert.assertTrue( meal != null );
                                 meal.addAttribute(xmlText);
                             }
                             break;

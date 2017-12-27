@@ -16,13 +16,14 @@
 
 package de.hof.university.app.data.parser;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import de.hof.university.app.Util.Log;
 import de.hof.university.app.model.schedule.LectureItem;
 
 /**
@@ -47,9 +48,12 @@ public class MyScheduleParser extends ScheduleParser {
         }
         language = params[1];
 
+        junit.framework.Assert.assertTrue( ! jsonString.isEmpty() );
+        junit.framework.Assert.assertTrue( ! language.isEmpty() );
+        
         JSONArray jsonArray = null;
         try {
-            JSONObject jsonObject = new JSONObject(jsonString);
+            final JSONObject jsonObject = new JSONObject(jsonString);
             jsonArray = jsonObject.optJSONArray("myschedule");
         } catch (final JSONException e) {
             Log.e(TAG, "readArrayList", e);

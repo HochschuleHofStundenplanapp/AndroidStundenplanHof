@@ -20,7 +20,9 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:paddingLeft="30dp"
-    android:paddingRight="@dimen/activity_horizontal_margin">
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingStart="30dp"
+    android:paddingEnd="@dimen/activity_horizontal_margin">
 
     <TextView
         android:id="@+id/list_item_level2_title"
@@ -39,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="15sp"
-        android:gravity="right"
+        android:gravity="end"
         android:text="price"
         android:paddingBottom="4dp"
         android:textStyle="bold"

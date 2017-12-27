@@ -30,6 +30,7 @@ import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
 import android.support.v4.app.ActivityCompat;
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,9 +41,7 @@ import java.util.TimeZone;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
-import de.hof.university.app.Util.Assert;
-import de.hof.university.app.Util.Define;
-import de.hof.university.app.Util.Log;
+import de.hof.university.app.util.Define;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.model.schedule.LectureChange;
 import de.hof.university.app.model.schedule.LectureItem;
@@ -134,14 +133,14 @@ class CalendarInterface {
 			CalendarContract.Instances.EVENT_ID,         // 0
 			CalendarContract.Instances.TITLE,            // 1
 			CalendarContract.Instances.DESCRIPTION,      // 2
-			CalendarContract.Instances.ORIGINAL_SYNC_ID, // 3
+			//CalendarContract.Instances.ORIGINAL_SYNC_ID, // 3
 	};
 
 	// The indices for the projection array above.
 	private static final int PROJECTION_EVENT_ID = 0;
 	private static final int PROJECTION_TITLE_INDEX = 1;
 	private static final int PROJECTION_DESCRIPTION_INDEX = 2;
-	private static final int PROJECTION_ORIGINAL_SYNC_ID_INDEX = 3;
+	//private static final int PROJECTION_ORIGINAL_SYNC_ID_INDEX = 3;
 
 	private static final String[] EVENT_PROJECTION_DATES = new String[]{
 			CalendarContract.Instances.BEGIN,        // 0
@@ -351,16 +350,16 @@ class CalendarInterface {
 	 * @return returns if the removing was successful
 	 */
 	boolean removeLocalCalendar() {
-		Context context = MainActivity.getAppContext().getApplicationContext();
+		final Context context = MainActivity.getAppContext().getApplicationContext();
 
-		Long localCalendarID = getLocalCalendar();
+		final Long localCalendarID = getLocalCalendar();
 
 		if (localCalendarID == null) {
 			return false;
 		}
 
-		Uri.Builder builder = Calendars.CONTENT_URI.buildUpon();
-		Uri calendarToRemoveUri = builder.appendPath(localCalendarID.toString())
+		final Uri.Builder builder = Calendars.CONTENT_URI.buildUpon();
+		final Uri calendarToRemoveUri = builder.appendPath(localCalendarID.toString())
 				.appendQueryParameter(android.provider.CalendarContract.CALLER_IS_SYNCADAPTER, "true")
 				.appendQueryParameter(Calendars.ACCOUNT_NAME, accountName)
 				.appendQueryParameter(Calendars.ACCOUNT_TYPE, accountType)
@@ -390,12 +389,12 @@ class CalendarInterface {
 
 		if (DEBUG_CALENDAR_INTERFACE) Log.d( TAG, "createLectureEvent in CalendarInterface" );
 
-		Assert.assertTrue( !"".equals(lectureID) );
-		Assert.assertTrue( !"".equals(title) );
+		junit.framework.Assert.assertTrue( !"".equals(lectureID) );
+		junit.framework.Assert.assertTrue( !"".equals(title) );
 //TODO		Assert.assertTrue( !"".equals(description) );
-		Assert.assertTrue( startTime != null );
-		Assert.assertTrue( endTime != null );
-		Assert.assertTrue( !"".equals(location) );
+		junit.framework.Assert.assertTrue( startTime != null );
+		junit.framework.Assert.assertTrue( endTime != null );
+		junit.framework.Assert.assertTrue( !"".equals(location) );
 
 		// checks if exists, if true than update event otherwise create event
 		ArrayList<Long> eventIDs = getEventIDs(lectureID, title, startTime, endTime );
@@ -427,14 +426,15 @@ class CalendarInterface {
 	private void createChangeEvent(final String lectureID, final String title, final String description,
 	                               final Date startTime, final Date endTime, final String location) {
 
-		final Long eventID = createEvent(title, description, startTime, endTime, location, lectureID);
+		final Long eventID = createEvent( title, description, startTime, endTime, location, lectureID );
 
 		// Wenn null dann keine Berechtigung oder keine CalendarID und returnen
-		if (eventID == null)
+		if (eventID == null) {
 			return;
+		}
 
 		// zu den IDs hinzufügen
-		addChangesEventID(lectureID, eventID);
+		addChangesEventID( lectureID, eventID );
 	}
 
 	/**
@@ -451,17 +451,22 @@ class CalendarInterface {
 	                         final Date endDate, final String location, final String lectureID) {
 		//TODO lectureID not used
 
-		if (calendarData.getCalendarID() == null) {
+		// wenn bereits vorhanden tue nichts
+		if ( getEventIDs( lectureID, title, startDate, endDate ) != null ) {
 			return null;
 		}
 
-		Assert.assertTrue( !"".equals(title) );
-//TODO		Assert.assertTrue( !"".equals(description)) ;
-		Assert.assertTrue( startDate != null ) ;  // > 2016 && < 2030
-		Assert.assertTrue( endDate != null ) ;
-		Assert.assertTrue( !"".equals( location )) ;
+		if ( calendarData.getCalendarID() == null ) {
+			return null;
+		}
 
-		ContentValues values = new ContentValues();
+		junit.framework.Assert.assertTrue( !"".equals(title) );
+//TODO		Assert.assertTrue( !"".equals(description)) ;
+		junit.framework.Assert.assertTrue( startDate != null ) ;  // > 2016 && < 2030
+		junit.framework.Assert.assertTrue( endDate != null ) ;
+		junit.framework.Assert.assertTrue( !"".equals( location )) ;
+
+		final ContentValues values = new ContentValues();
 		values.put(Events.DTSTART, startDate.getTime());
 		values.put(Events.DTEND, endDate.getTime());
 		values.put(Events.TITLE, title);
@@ -475,12 +480,13 @@ class CalendarInterface {
 		// ORIGNAL_SYNC_ID might be used for something else, but we use it for ower own ID
 		// currently ower ID is the splusname
 		// ORIGINAL_SYNC_ID
-		values.put(Events.ORIGINAL_SYNC_ID, lectureID);
+		//values.put(Events.ORIGINAL_SYNC_ID, lectureID);
 
 		//IDs are from "public static final class Events"
 		//TODO
 		//EVENT_COLOR
 		values.put(Events.EVENT_COLOR, HOF_CALENDAR_COLOR);
+
 		//ORIGINAL_ID
 		//UID_2445  ???
 
@@ -503,7 +509,11 @@ class CalendarInterface {
 		return eventID;
 	}
 
-	//TODO was für ein Long geben wir hier zurück?
+	/**
+	 * insert a event in the selected calendar
+	 * @param values the contentValues of the event
+	 * @return the eventID
+	 */
 	private Long insertEvent(ContentValues values) {
 		final Context context = MainActivity.getAppContext().getApplicationContext();
 
@@ -576,13 +586,15 @@ class CalendarInterface {
 					} else {
 						// Verschoben
 						instance.updateEvent(eventID, context.getString(R.string.changeMoved) + " " + change.getLabel(), context.getString(R.string.changeNewDate) + ": " + DataManager.getInstance().formatDate(change.getBegin_new()), null, null, "");
+
 						// TODO richtiges EndDate bekommen, weil 90 Minuten Länge nehmen
 						Calendar calendar = Calendar.getInstance();
 						calendar.setTime(change.getBegin_new());
 						calendar.add(Calendar.MINUTE, 90);
 						Date newEndDate = calendar.getTime();
+
 						// Alternativ Vorlesung erzeugen
-						createChangeEvent(lectureID, context.getString(R.string.changeNew) + " " + change.getLabel(), "", change.getBegin_new(), newEndDate, getLocation(change.getRoom_new()));
+						createChangeEvent( lectureID, context.getString( R.string.changeNew ) + " " + change.getLabel(), "", change.getBegin_new(), newEndDate, getLocation( change.getRoom_new() ) );
 					}
 				}
 				break;
@@ -652,8 +664,8 @@ class CalendarInterface {
 		}
 	}
 
-	String getLocation(String room) {
-		Context context = MainActivity.getAppContext().getApplicationContext();
+	static final String getLocation( final String room) {
+		final Context context = MainActivity.getAppContext().getApplicationContext();
 
 		if (room.length() < 4) {
 			return context.getString(R.string.noLocation);
@@ -794,11 +806,11 @@ class CalendarInterface {
 
 		while (cur.moveToNext()) {
 			// Get the field values
-			final String eventLectureID = cur.getString(PROJECTION_ORIGINAL_SYNC_ID_INDEX);
+			//final String eventLectureID = cur.getString(PROJECTION_ORIGINAL_SYNC_ID_INDEX);
 			final Long eventID = cur.getLong(PROJECTION_EVENT_ID);
 			final String eventTitle = cur.getString(PROJECTION_TITLE_INDEX);
 
-			if (DEBUG_CALENDAR_INTERFACE) Log.d(TAG, "getEventIDs: OrginalSyncID: " + eventLectureID);
+			//if (DEBUG_CALENDAR_INTERFACE) Log.d(TAG, "getEventIDs: OrginalSyncID: " + eventLectureID);
 
 			// überprpfe ob lecture ID gesetzt und gleich ist
 			/* MS

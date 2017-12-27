@@ -19,6 +19,7 @@ package de.hof.university.app.data;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,14 +38,10 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
 
-import de.hof.university.app.Communication.RegisterLectures;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
-import de.hof.university.app.Util.Assert;
-import de.hof.university.app.Util.Define;
-import de.hof.university.app.Util.Log;
-import de.hof.university.app.Util.MyString;
 import de.hof.university.app.calendar.CalendarSynchronization;
+import de.hof.university.app.communication.RegisterLectures;
 import de.hof.university.app.data.parser.Parser;
 import de.hof.university.app.data.parser.ParserFactory;
 import de.hof.university.app.data.parser.ParserFactory.EParser;
@@ -57,6 +54,8 @@ import de.hof.university.app.model.schedule.MySchedule;
 import de.hof.university.app.model.schedule.Schedule;
 import de.hof.university.app.model.settings.StudyCourse;
 import de.hof.university.app.model.settings.StudyCourses;
+import de.hof.university.app.util.Define;
+import de.hof.university.app.util.MyString;
 
 /**
  *
@@ -77,7 +76,7 @@ public class DataManager {
 
     private final SharedPreferences sharedPreferences;
 
-    public static DataManager getInstance() {
+    public final static DataManager getInstance() {
         return instance;
     }
 
@@ -113,8 +112,8 @@ public class DataManager {
             }
 
             final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-            final String[] params = {xmlString, sharedPreferences.getString("speiseplan_tarif", "1")};
-            Assert.assertTrue(parser != null);
+            final String[] params = {xmlString, sharedPreferences.getString( MainActivity.getAppContext().getString( R.string.PREF_KEY_MEAL_TARIFF ), "1")};
+            junit.framework.Assert.assertTrue(parser != null);
 
             ArrayList<Meal> tmpMeals = (ArrayList<Meal>) parser.parse(params);
 
@@ -157,7 +156,7 @@ public class DataManager {
             }
 
             final String[] params = {jsonString, language};
-            Assert.assertTrue( parser != null );
+            junit.framework.Assert.assertTrue( parser != null );
 
             ArrayList<LectureItem> tmpScheduleLectureItems = (ArrayList<LectureItem>) parser.parse(params);
 
@@ -233,7 +232,7 @@ public class DataManager {
 
             final String[] params = {jsonString, language};
 
-            Assert.assertTrue(parser != null );
+            junit.framework.Assert.assertTrue(parser != null );
             ArrayList<LectureItem> tmpMyScheduleLectureItems = (ArrayList<LectureItem>) parser.parse(params);
 
             // Wenn der Server einen unvollständigen Stundenplan (nur halb so groß oder kleiner) liefert bringe die Fehlermedlung "Aktualisierung fehlgeschlagen"
@@ -309,7 +308,7 @@ public class DataManager {
             }
 
             final String[] params = {jsonString};
-            Assert.assertTrue( parser != null );
+            junit.framework.Assert.assertTrue( parser != null );
 
             ArrayList<Object> tmpChanges = (ArrayList<Object>) parser.parse(params);
 
@@ -331,7 +330,7 @@ public class DataManager {
     // wenn es aber
     public final ArrayList<StudyCourse> getCourses(final Context context, final String language,
                                                    final String termTime, boolean forceRefresh) {
-        StudyCourses studyCourses = this.getStudyCourses(context);
+        final StudyCourses studyCourses = this.getStudyCourses(context);
 
         if (forceRefresh
                 || (studyCourses.getCourses().isEmpty())
@@ -360,7 +359,7 @@ public class DataManager {
             }
 
             final String[] params = {jsonString, language};
-            Assert.assertTrue( parser != null );
+            junit.framework.Assert.assertTrue( parser != null );
 
             ArrayList<StudyCourse> tmpCourses = (ArrayList<StudyCourse>) parser.parse(params);
 
@@ -452,10 +451,13 @@ public class DataManager {
 
     public MySchedule getMySchedule(final Context context) {
         if (this.mySchedule == null) {
+        	
             Object obtMyScheduleOpj = readObject(context, Define.myScheduleFilename);
             if ((obtMyScheduleOpj != null) && (obtMyScheduleOpj instanceof Set)) {
                 this.mySchedule = new MySchedule();
-                this.mySchedule.setIds((Set<String>) obtMyScheduleOpj);
+                ArrayList<String> result = new ArrayList<>();
+                result.addAll( (Set) obtMyScheduleOpj );
+                this.mySchedule.setIds(result);
             } else if ((obtMyScheduleOpj != null) && (obtMyScheduleOpj instanceof MySchedule)) {
                 this.mySchedule = (MySchedule) obtMyScheduleOpj;
             } else {
@@ -539,7 +541,7 @@ public class DataManager {
     }
 
     public Locale getLocale() {
-        Context context = MainActivity.getAppContext().getApplicationContext();
+        final Context context = MainActivity.getAppContext().getApplicationContext();
 
         if (context.getString(R.string.language).equals("de")) {
             return Locale.GERMANY;
@@ -557,6 +559,7 @@ public class DataManager {
     //
     public synchronized void saveObject(final Context context, Object object, final String filename) {
         try {
+            Log.d( TAG, "Write Filedir: " + context.getFilesDir() + " File: " + filename);
             final File file = new File(context.getFilesDir(), filename);
             final FileOutputStream fos = new FileOutputStream(file);
             final ObjectOutputStream os = new ObjectOutputStream(fos);
@@ -576,7 +579,11 @@ public class DataManager {
     }
 
     // this is the general method to serialize an object
-    public synchronized Object readObject(final Context context, String filename) {
+    // /data/user/0/de.hof.university.app.debug/files/mySchedule
+    public synchronized Object readObject(final Context context, final String filename) {
+	
+		Log.d( TAG, "Read Filedir: " + context.getFilesDir() + " File: " + filename );
+
         Object result = null;
         try {
             final File file = new File(context.getFilesDir(), filename);
@@ -587,6 +594,7 @@ public class DataManager {
                 is.close();
                 fis.close();
             }
+			Log.d( TAG, "Einlesen von Objekten erfolgreich ");
         } catch (Exception e) {
             Log.e(TAG, "Fehler beim lesen des Objektes", e);
         }
@@ -634,7 +642,8 @@ public class DataManager {
 
     public void registerFCMServerForce(Context context) {
         Set<String> ids = getSelectedLecturesIDs(context);
-        if (ids == null) return;
+        if (ids == null)
+        	return;
 
         new RegisterLectures().registerLectures(ids);
     }
@@ -643,7 +652,7 @@ public class DataManager {
     // ---------------------------------------------------------------------------------------------
 
     private void addLectureToCalendar(final Context context, final LectureItem lectureItem) {
-        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION), false);
+        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION), false);
 
         if (calendarSynchronization) {
             new Thread() {
@@ -660,7 +669,7 @@ public class DataManager {
     }
 
     private void addAllToCalendar(Context context, ArrayList<LectureItem> lecturesItems) {
-        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION), false);
+        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION), false);
 
         if (calendarSynchronization) {
             // falls es nicht die ersten Vorlesungen sind die hinzugefügt werden, denn dann stehen sie schon drin.
@@ -672,7 +681,7 @@ public class DataManager {
     }
 
     private void deleteLectureFromCalendar(Context context, String lectureID) {
-        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION), false);
+        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION), false);
 
         if (calendarSynchronization) {
             CalendarSynchronization.getInstance().deleteAllEvents(lectureID);
@@ -682,7 +691,7 @@ public class DataManager {
     private void updateCalendar() {
         Context context = MainActivity.getAppContext().getApplicationContext();
 
-        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION), false);
+        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION), false);
 
         if (calendarSynchronization) {
             CalendarSynchronization.getInstance().updateCalendar();
@@ -692,7 +701,7 @@ public class DataManager {
     private void updateCalendar(ArrayList<LectureItem> lectureItems) {
         Context context = MainActivity.getAppContext().getApplicationContext();
 
-        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION), false);
+        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION), false);
 
         if (calendarSynchronization) {
             CalendarSynchronization.getInstance().updateCalendar(lectureItems);
@@ -702,7 +711,7 @@ public class DataManager {
     private void updateChangesInCalendar() {
         Context context = MainActivity.getAppContext().getApplicationContext();
 
-        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION), false);
+        final boolean calendarSynchronization = sharedPreferences.getBoolean(context.getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION), false);
 
         if (calendarSynchronization) {
             CalendarSynchronization.getInstance().updateChanges();
@@ -716,7 +725,8 @@ public class DataManager {
         Set<String> ids = new HashSet<>();
 
         ArrayList<LectureItem> lectureItems = getSelectedLectures(context);
-        if (lectureItems == null) return null;
+        if (lectureItems == null)
+            return null;
 
         for (LectureItem li : lectureItems) {
             ids.add(String.valueOf(li.getId()));
@@ -742,7 +752,7 @@ public class DataManager {
      * @param newSchedule the new schedule
      * @return if there are the same elements in it
      */
-    private boolean isScheduleEqualsToNewSchedule(ArrayList<LectureItem> oldSchedule, ArrayList<LectureItem> newSchedule) {
+    private static boolean isScheduleEqualsToNewSchedule(ArrayList<LectureItem> oldSchedule, ArrayList<LectureItem> newSchedule) {
         //null checking
         if((oldSchedule == null) && (newSchedule == null)) {
             return true;
@@ -764,7 +774,7 @@ public class DataManager {
         return true;
     }
 
-    private ArrayList<LectureItem> getNewLectureItems(ArrayList<LectureItem> oldSchedule, ArrayList<LectureItem> newSchedule) {
+    private static ArrayList<LectureItem> getNewLectureItems(ArrayList<LectureItem> oldSchedule, ArrayList<LectureItem> newSchedule) {
         ArrayList<LectureItem> newLectureItems = new ArrayList<>();
 
         for (LectureItem newLecture: newSchedule) {

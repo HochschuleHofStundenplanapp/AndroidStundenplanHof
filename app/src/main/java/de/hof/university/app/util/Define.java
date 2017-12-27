@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.hof.university.app.Util;
+package de.hof.university.app.util;
 
 /**
  * For defined variables to use globally
@@ -36,7 +36,7 @@ public final class Define {
 	public static final String PARSER_SCHEDULE = "schedule"; // NON-NLS
 	public static final String PARSER_DAY = "day"; //NON-NLS
 	public static final String PARSER_TYPE = "type"; //NON-NLS
-	public static final String PARSER_STYLE = "style"; //NON-NLS
+	//public static final String PARSER_STYLE = "style"; //NON-NLS
 	public static final String PARSER_SP = "sp"; //NON-NLS
 	public static final String PARSER_STARTTIME = "starttime"; //NON-NLS
 	public static final String PARSER_ENDTIME = "endtime"; //NON-NLS
@@ -94,7 +94,7 @@ public final class Define {
 	public final static String APP_SERVER_HOF = "https://app.hof-university.de";
 
 
-	/* Communication with the Web-Services SOAP API */
+	/* communication with the Web-Services SOAP API */
 	// Produktiv-Server:
 	// user:		soapuser
 	// password:	F%98z&12
@@ -124,7 +124,7 @@ public final class Define {
 
 
 	// Additional URLS
-	public final static String ABOUTUSURL = "http://www.hof-university.de/ueber-uns.html";
+	//public final static String ABOUTUSURL = "http://www.hof-university.de/ueber-uns.html";
 	public final static String IMPRESSUMURL = "http://www.hof-university.de/impressum.html";
 	public final static String DATENSCHUTZURL = "http://www.hof-university.de/datenschutz.html";
 	public final static String PLAYSTOREURL = "https://play.google.com/store/apps/details?id=de.hof.university.app";
@@ -162,7 +162,7 @@ public final class Define {
 
 	//EMail
 	public final static String FEEDBACKEMAILADDRESS = "Feedback Stundenplan App <androidapps@hof-university.de>";
-	public final static String NOREPLYEMAILADDRESS = "Hof University <noreply@hof-university.de>";
+	//public final static String NOREPLYEMAILADDRESS = "Hof University <noreply@hof-university.de>";
 
 	public final static String CHANGES_SUBSTRING = " Vertretung";
 	public final static String ROOM_MUEB = "Mueb";
@@ -170,5 +170,9 @@ public final class Define {
 	public final static String LOCATION_MUEB = "Kulmbacher Str. 76 95213 Münchberg";
 
 	//Intents
+	public final static String NOTIFICATION_TYPE = "notification_type";
+	public final static String NOTIFICATION_TYPE_CHANGE = "change";
 	public final static String SHORTCUT_INTENT_CHANGES = "de.hof.university.app.CHANGES";
+	public final static String SHORTCUT_INTENT_MEAL = "de.hof.university.app.MEAL";
+
 }

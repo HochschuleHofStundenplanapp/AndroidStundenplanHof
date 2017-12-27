@@ -22,6 +22,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +33,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import de.hof.university.app.R;
-import de.hof.university.app.Util.Define;
-import de.hof.university.app.Util.Log;
+import de.hof.university.app.util.Define;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.fragment.schedule.ChangesFragment;
 import de.hof.university.app.fragment.schedule.MyScheduleFragment;
@@ -204,7 +204,12 @@ public abstract class AbstractListFragment extends Fragment {
 
     protected void modifyListViewAfterDataSetChanged() {
     }
-
+    
+    /**
+     *
+     * @param params
+     * @return
+     */
     protected abstract ArrayList<Object> background(String[] params);
 
 }

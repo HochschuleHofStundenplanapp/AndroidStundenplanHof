@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package de.hof.university.app.Communication;
+package de.hof.university.app.communication;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -22,14 +22,14 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
-import de.hof.university.app.Util.Assert;
-import de.hof.university.app.Util.Log;
+import de.hof.university.app.util.Define;
 
 /*
 If you wish to do any message handling beyond receiving notifications on apps
@@ -77,7 +77,7 @@ public final class FcmMessagingService extends FirebaseMessagingService {
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
 
         // damit später geprüft werden kann welcher intent gestartet wurde
-        intent.putExtra("notification_type", "change");
+        intent.putExtra( Define.NOTIFICATION_TYPE, Define.NOTIFICATION_TYPE_CHANGE);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
@@ -91,7 +91,7 @@ public final class FcmMessagingService extends FirebaseMessagingService {
         notificationBuilder.setDefaults(Notification.DEFAULT_SOUND);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        Assert.assertTrue( notificationManager != null ) ;
+        junit.framework.Assert.assertTrue( notificationManager != null ) ;
         notificationManager.notify(0, notificationBuilder.build());
     }
 }

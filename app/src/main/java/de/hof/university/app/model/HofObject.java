@@ -19,7 +19,7 @@ package de.hof.university.app.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import de.hof.university.app.Util.Define;
+import de.hof.university.app.util.Define;
 
 /**
  * Created by Daniel on 01.12.2016.

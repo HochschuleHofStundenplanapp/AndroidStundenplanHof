@@ -16,10 +16,9 @@
 
 package de.hof.university.app.model.schedule;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
 
-import de.hof.university.app.Util.Define;
+import de.hof.university.app.util.Define;
 
 /**
  * Created by danie on 30.11.2016.
@@ -28,18 +27,34 @@ import de.hof.university.app.Util.Define;
 public class MySchedule extends Schedule {
 	private static final long serialVersionUID = Define.serialVersionUIDv1;
 
-	private Set<String> ids;
+	private ArrayList<String> ids;
 
 	public MySchedule() {
 		super();
-		this.ids = new HashSet<>();
+		this.ids = new ArrayList<>();
 	}
 
-	public Set<String> getIds() {
-		return ids;
-	}
-
-	public void setIds(Set<String> ids) {
+	public void setIds(final ArrayList<String> ids) {
+		
 		this.ids = ids;
+	}
+
+	/**
+	 * returns the IDs if not null, if null get the IDs from the lectures and set it
+	 * @return the IDs
+	 */
+	public ArrayList<String> getIds() {
+		// wenn IDs vorhanden
+		if (ids != null) {
+			return ids;
+		} else {
+			// falls nicht, dann hole die IDs aus den lectures
+			ArrayList<String> result = new ArrayList<>();
+			for ( LectureItem lectureItem : getLectures() ) {
+				result.add( lectureItem.getId() );
+			}
+			setIds(result);
+			return result;
+		}
 	}
 }

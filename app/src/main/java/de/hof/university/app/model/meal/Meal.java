@@ -16,12 +16,16 @@
 
 package de.hof.university.app.model.meal;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import de.hof.university.app.Util.Define;
+import de.hof.university.app.MainActivity;
+import de.hof.university.app.R;
+import de.hof.university.app.util.Define;
 
 /**
  * Created by Lukas on 25.11.2015.
@@ -29,6 +33,8 @@ import de.hof.university.app.Util.Define;
 public class Meal implements Serializable {
 	private static final long serialVersionUID = Define.serialVersionUIDv1;
 
+	final static String TAG = "Meal";
+	
 	private String name;
 	private String price;
 	private final String weekDay;
@@ -40,9 +46,14 @@ public class Meal implements Serializable {
 	final private ArrayList<Integer> attributes;
 
 
-	public Meal(final Date tag, final String weeekDay, final String category, final String name) {
+	public Meal(final Date tag, final String weekDay, final String category, final String name) {
 		super();
-		this.weekDay = weeekDay;
+		
+		junit.framework.Assert.assertTrue( !weekDay.isEmpty() );
+		junit.framework.Assert.assertTrue( !category.isEmpty() );
+		junit.framework.Assert.assertTrue( !name.isEmpty() );
+		
+		this.weekDay = weekDay;
 		this.day = tag;
 		this.category = category;
 		this.name = name.replace("\\", "");
@@ -75,6 +86,7 @@ public class Meal implements Serializable {
 	}
 
 	public final String getName() {
+	
 		String result = this.name;
 		String tmpAttributes = "";
 
@@ -83,38 +95,54 @@ public class Meal implements Serializable {
 			if ( !tmpAttributes.isEmpty() ) {
 				tmpAttributes += ", ";
 			}
-
-
-			if ( a == 1 ) {
-				tmpAttributes += "hausgemacht";
-			} else if ( a == 2 ) {
-				tmpAttributes += "Wild";
-			} else if ( a == 3 ) {
-				tmpAttributes += "Geflügel";
-			} else if ( a == 4 ) {
-				tmpAttributes += "regional";
-			} else if ( a == 5 ) {
-				tmpAttributes += "Schwein";
-			} else if ( a == 6 ) {
-				tmpAttributes += "Fisch";
-			} else if ( a == 7 ) {
-				tmpAttributes += "vegetarisch";
-			} else if ( a == 8 ) {
-				tmpAttributes += "Rind";
-			} else if ( a == 9 ) {
-				tmpAttributes += "nachhaltiger Fang";
-			} else if ( a == 10 ) {
-				tmpAttributes += "vegan";
-			} else if ( a == 11 ) {
-				tmpAttributes += "Lamm";
-			} else if ( a == 12 ) {
-				tmpAttributes += "Meeresfrüchte";
-			} else if ( a == 13 ) {
-				tmpAttributes += "Mensa Vital";
-			} else if ( a == 14 ) {
-				tmpAttributes += "nicht vegetarisch";
-			} else if ( a == 15 ) {
-				tmpAttributes += "Kräuterküche";
+			
+			
+			switch (a) {
+				case 1:
+					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_hausgemacht);
+					break;
+				case 2:
+					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_Wild);
+					break;
+				case 3:
+					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_Geflügel);
+					break;
+				case 4:
+					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_regional);
+					break;
+				case 5:
+					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_Schwein);
+					break;
+				case 6:
+					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_Fisch);
+					break;
+				case 7:
+					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_vegetarisch);
+					break;
+				case 8:
+					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_Rind);
+					break;
+				case 9:
+					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_nachhaltigerFang);
+					break;
+				case 10:
+					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_vegan);
+					break;
+				case 11:
+					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_Lamm);
+					break;
+				case 12:
+					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_Meeresfruechte);
+					break;
+				case 13:
+					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_MensaVital);
+					break;
+				case 14:
+					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_nichtvegetarisch);
+					break;
+				case 15:
+					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_Kraueterkueche);
+					break;
 			}
 		}
 		if ( !tmpAttributes.isEmpty() ) {
@@ -135,7 +163,15 @@ public class Meal implements Serializable {
 	}
 
 	public void addAttribute(final String xmlText) {
-
-		attributes.add(Integer.parseInt(xmlText));
+		
+		int aNumber = 0;
+		try {
+			aNumber = Integer.parseInt(xmlText);
+		} catch ( final NumberFormatException e )
+		{
+			Log.e( TAG, "addAttibute: kein Integer: "+xmlText, e ) ;
+		}
+		
+		attributes.add( aNumber );
 	}
 }

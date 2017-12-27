@@ -19,6 +19,7 @@ package de.hof.university.app.calendar;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -32,7 +33,6 @@ import java.util.concurrent.ExecutionException;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
-import de.hof.university.app.Util.Log;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.model.schedule.LectureChange;
 import de.hof.university.app.model.schedule.LectureItem;
@@ -47,8 +47,8 @@ public class CalendarSynchronization {
 
     private static final CalendarSynchronization instance = new CalendarSynchronization();
 
-    private final CalendarInterface calendarInterface;
-    private HashMap<String, Long> calendars = new HashMap<>();
+    private static CalendarInterface calendarInterface;
+    private static HashMap<String, Long> calendars = new HashMap<>();
 
     public static CalendarSynchronization getInstance() {
         return instance;
@@ -110,7 +110,7 @@ public class CalendarSynchronization {
      * creates the events for a lecture
      * @param lectureItem the lecture
      */
-    private void createEventsForLecture(LectureItem lectureItem) {
+    private static void createEventsForLecture(LectureItem lectureItem) {
         if (DEBUG_CALENDAR_SYNCHRONIZATION) Log.d(TAG, "createEventsForLecture | lectureItem: " + lectureItem);
 
     	Date tmpStartDate = lectureItem.getStartDate();
@@ -125,7 +125,9 @@ public class CalendarSynchronization {
             newEndDateCalendar.set(Calendar.HOUR_OF_DAY, endDateCalendar.get(Calendar.HOUR_OF_DAY));
             newEndDateCalendar.set(Calendar.MINUTE, endDateCalendar.get(Calendar.MINUTE));
 
-            calendarInterface.createLectureEvent(lectureItem.getId(), lectureItem.getLabel(), "", tmpStartDate, newEndDateCalendar.getTime(), calendarInterface.getLocation(lectureItem.getRoom()));
+            junit.framework.Assert.assertTrue( calendarInterface != null );
+            calendarInterface.createLectureEvent(lectureItem.getId(), lectureItem.getLabel(), "",
+                    tmpStartDate, newEndDateCalendar.getTime(), calendarInterface.getLocation(lectureItem.getRoom()));
 
 			// Ausgabe, was wir anlegen
             Log.i( TAG, "createLectureEvent: " + lectureItem.getLabel() + " " + tmpStartDate.toString() );
@@ -148,7 +150,7 @@ public class CalendarSynchronization {
         ArrayList<Object> changes = DataManager.getInstance().getChanges(context).getChanges();
 
         UpdateChangesTask task = new UpdateChangesTask();
-        task.execute(changes);
+        AsyncTask<ArrayList<Object>, Void, Boolean> execute = task.execute(changes);
     }
 
     /**
@@ -204,7 +206,7 @@ public class CalendarSynchronization {
     // TODO maybe synchronized?
     public void updateCalendar(final ArrayList<LectureItem> lectureItems) {
         UpdateAllEventsTask task = new UpdateAllEventsTask();
-        task.execute(lectureItems);
+        AsyncTask<ArrayList<LectureItem>, Void, Boolean> execute = task.execute(lectureItems);
     }
 
     /**
@@ -281,7 +283,7 @@ public class CalendarSynchronization {
         }
     }
 
-    private class CreateAllEventsTask extends AsyncTask<ArrayList<LectureItem>, Void, Boolean> {
+    private static class CreateAllEventsTask extends AsyncTask<ArrayList<LectureItem>, Void, Boolean> {
         final Context context = MainActivity.getAppContext().getApplicationContext();
 
         protected final Boolean doInBackground(final ArrayList<LectureItem>... p_lectureItems) {
@@ -300,11 +302,11 @@ public class CalendarSynchronization {
         }
     }
 
-    private class UpdateAllEventsTask extends AsyncTask<ArrayList<LectureItem>, Void, Boolean> {
+    private static class UpdateAllEventsTask extends AsyncTask<ArrayList<LectureItem>, Void, Boolean> {
         final Context context = MainActivity.getAppContext().getApplicationContext();
 
         @Override
-        protected Boolean doInBackground(ArrayList<LectureItem>... p_lectureItems) {
+        protected final Boolean doInBackground(ArrayList<LectureItem>... p_lectureItems) {
             for (LectureItem lecture: p_lectureItems[0]) {
                 calendarInterface.updateLecture(lecture);
             }
@@ -318,11 +320,11 @@ public class CalendarSynchronization {
         }
     }
 
-    private class UpdateChangesTask extends AsyncTask<ArrayList<Object>, Void, Boolean> {
+    private static class UpdateChangesTask extends AsyncTask<ArrayList<Object>, Void, Boolean> {
         final Context context = MainActivity.getAppContext().getApplicationContext();
 
         @Override
-        protected Boolean doInBackground(ArrayList<Object>... p_changes) {
+        protected final Boolean doInBackground(ArrayList<Object>... p_changes) {
             for (Object changeObject : p_changes[0]) {
                 if (changeObject instanceof LectureChange) {
                     LectureChange change = (LectureChange) changeObject;
@@ -340,7 +342,7 @@ public class CalendarSynchronization {
         }
     }
 
-    private class DeleteAllEventsTask extends AsyncTask<String, Void, Boolean> {
+    private static class DeleteAllEventsTask extends AsyncTask<String, Void, Boolean> {
         final Context context = MainActivity.getAppContext().getApplicationContext();
 
         protected Boolean doInBackground(final String... p_lectureItems) {

@@ -22,6 +22,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,8 +41,7 @@ import java.io.InterruptedIOException;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
-import de.hof.university.app.Util.Define;
-import de.hof.university.app.Util.Log;
+import de.hof.university.app.util.Define;
 import de.hof.university.app.experimental.LoginController;
 
 
