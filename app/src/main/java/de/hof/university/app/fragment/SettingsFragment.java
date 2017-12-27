@@ -145,7 +145,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
 
 		// Calendar synchronization
-		final Preference calendar_synchronzation_screen = findPreference( getString( R.string.PREFERENCE_KEY_SCREEN_CALENDAR_SYNCHRONIZATION ) );
+		final Preference calendar_synchronzation_screen = findPreference( getString( R.string.PREF_KEY_SCREEN_CALENDAR_SYNCHRONIZATION ) );
 
 		calendar_synchronzation_screen.setOnPreferenceClickListener( new Preference.OnPreferenceClickListener() {
 			@Override
@@ -191,7 +191,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		experimentalFeatures.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				final Preference edtLogin = findPreference( getString( R.string.PREFERENCE_KEY_LOGIN ) );
+				final Preference edtLogin = findPreference( getString( R.string.PREF_KEY_LOGIN) );
 //				final CheckBoxPreference changes_notifications = (CheckBoxPreference) findPreference("changes_notifications");
 				final MainActivity activity = (MainActivity) getActivity();
 				if ( (Boolean) newValue ) {

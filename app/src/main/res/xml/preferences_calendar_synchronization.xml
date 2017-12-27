@@ -5,7 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:key="calendar_synchronization"
-        android:title="@string/pref_calendar_synchronization" />
+        android:title="@string/pref_screen_calendar_synchronization" />
 
     <PreferenceCategory
         android:title="Erinngerungen">

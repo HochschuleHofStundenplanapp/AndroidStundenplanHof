@@ -15,9 +15,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.text.method.LinkMovementMethod;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +47,7 @@ public class SettingsCalendarSynchronizationFragment extends PreferenceFragment 
 		addPreferencesFromResource(R.xml.preferences_calendar_synchronization);
 
 		// Calendar synchronization
-		final CheckBoxPreference calendar_syncronization = (CheckBoxPreference) findPreference(getString( R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION));
+		final CheckBoxPreference calendar_syncronization = (CheckBoxPreference) findPreference(getString( R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION));
 
 		calendar_syncronization.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
@@ -106,10 +103,10 @@ public class SettingsCalendarSynchronizationFragment extends PreferenceFragment 
 		navigationView.getMenu().findItem(R.id.nav_einstellungen).setChecked(true);
 
 
-		final CheckBoxPreference calendar_syncronization = (CheckBoxPreference) findPreference(getString( R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION));
+		final CheckBoxPreference calendar_syncronization = (CheckBoxPreference) findPreference(getString( R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION));
 
 		// aktiviere oder deaktiviere die Kalender Synchronisation je nachdem ob die experimentellen Funktionen aktiviert sind oder nicht
-		boolean exerimentalFeaturesEnabled = PreferenceManager.getDefaultSharedPreferences(getView().getContext()).getBoolean(getString(R.string.PREFERENCE_KEY_EXPERIMENTAL_FEATURES_ENABLED), false);
+		boolean exerimentalFeaturesEnabled = PreferenceManager.getDefaultSharedPreferences(getView().getContext()).getBoolean(getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION), false);
 
 		calendar_syncronization.setEnabled( exerimentalFeaturesEnabled );
 	}
@@ -137,7 +134,7 @@ public class SettingsCalendarSynchronizationFragment extends PreferenceFragment 
 					Toast.makeText(getActivity(), R.string.calendar_synchronization_permissionNotGranted, Toast.LENGTH_SHORT)
 							.show();
 					// Calendar Sync aus schalten
-					((CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
+					((CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
 				}
 				break;
 			case REQUEST_CODE_CALENDAR_TURN_OFF_PERMISSION:
@@ -149,7 +146,7 @@ public class SettingsCalendarSynchronizationFragment extends PreferenceFragment 
 					Toast.makeText(getActivity(), R.string.calendar_synchronization_permissionNotGranted, Toast.LENGTH_SHORT)
 							.show();
 					// Calendar Sync ein schalten
-					((CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(true);
+					((CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(true);
 				}
 			default:
 				super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -200,14 +197,14 @@ public class SettingsCalendarSynchronizationFragment extends PreferenceFragment 
 									@Override
 									public void onClick(DialogInterface dialog, int which) {
 										// Kalender Synchronisation ausschalten
-										((CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
+										((CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
 									}
 								})
 								.setOnCancelListener(new DialogInterface.OnCancelListener() {
 									@Override
 									public void onCancel(DialogInterface dialog) {
 										// Kalender Synchronisation ausschalten
-										((CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
+										((CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
 									}
 								})
 								.setIcon(android.R.drawable.ic_dialog_alert)
@@ -218,7 +215,7 @@ public class SettingsCalendarSynchronizationFragment extends PreferenceFragment 
 					@Override
 					public void onCancel(DialogInterface dialog) {
 						// Kalender Synchronisation ausschalten
-						((CheckBoxPreference) findPreference(getString(R.string.PREFERENCE_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
+						((CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION))).setChecked(false);
 					}
 				})
 				.setIcon(android.R.drawable.ic_dialog_alert)
