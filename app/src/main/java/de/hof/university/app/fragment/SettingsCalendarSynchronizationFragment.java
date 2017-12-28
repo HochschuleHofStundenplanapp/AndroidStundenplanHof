@@ -65,35 +65,7 @@ public class SettingsCalendarSynchronizationFragment extends PreferenceFragment 
 					turnCalendarSyncOn();
 				} else {
 					// aus schalten
-
-					// mit einem Dialog nachfragen ob der Nutzer die Kalendereinträge behalten möchte
-					final AlertDialog d = new AlertDialog.Builder(getView().getContext())
-							.setTitle(R.string.calendar_syncronization_keep_events_title)
-							.setMessage(R.string.calendar_syncronization_keep_events_message)
-							.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									// behalten, mache nichts
-								}
-							})
-							.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									// löschen
-									if (( ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED)
-											|| (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED)) {
-										// keine Berechtigung, hole erst Berechtigung
-										requestCalendarPermission(REQUEST_CODE_CALENDAR_TURN_OFF_PERMISSION);
-									} else {
-										// lösche die Kalendereinträge oder den lokalen Kalender
-										calendarSynchronization.stopCalendarSynchronization();
-									}
-								}
-							})
-							.setCancelable(false)
-							.setIcon(android.R.drawable.ic_dialog_alert)
-							.create();
-					d.show();
+					turnCalendarSyncOff();
 				}
 				return true;
 			}
@@ -167,7 +139,11 @@ public class SettingsCalendarSynchronizationFragment extends PreferenceFragment 
 		super.onResume();
 
 		final MainActivity mainActivity = (MainActivity) getActivity();
-		mainActivity.getSupportActionBar().setTitle(R.string.calendar_synchronization);
+		try {
+			mainActivity.getSupportActionBar().setTitle(R.string.calendar_synchronization);
+		} catch (NullPointerException e) {
+			Log.e(TAG, "NullPointerException bei setTitle abgefangen:", e);
+		}
 
 		final NavigationView navigationView = mainActivity.findViewById(R.id.nav_view);
 		navigationView.getMenu().findItem(R.id.nav_einstellungen).setChecked(true);
@@ -311,5 +287,34 @@ public class SettingsCalendarSynchronizationFragment extends PreferenceFragment 
 		((TextView)d.findViewById(android.R.id.message)).setMovementMethod( LinkMovementMethod.getInstance());
 	}
 
-
+	private void turnCalendarSyncOff() {
+		// mit einem Dialog nachfragen ob der Nutzer die Kalendereinträge behalten möchte
+		final AlertDialog d = new AlertDialog.Builder(getActivity())
+				.setTitle(R.string.calendar_syncronization_keep_events_title)
+				.setMessage(R.string.calendar_syncronization_keep_events_message)
+				.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// behalten, mache nichts
+					}
+				})
+				.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// löschen
+						if (( ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED)
+								|| (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED)) {
+							// keine Berechtigung, hole erst Berechtigung
+							requestCalendarPermission(REQUEST_CODE_CALENDAR_TURN_OFF_PERMISSION);
+						} else {
+							// lösche die Kalendereinträge oder den lokalen Kalender
+							calendarSynchronization.stopCalendarSynchronization();
+						}
+					}
+				})
+				.setCancelable(false)
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.create();
+		d.show();
+	}
 }
