@@ -132,7 +132,7 @@ public class SettingsCalendarSynchronizationFragment extends PreferenceFragment 
 										.putInt(getString(R.string.PREF_KEY_CALENDAR_REMINDER), minutes)
 										.apply();
 
-								calendarReminderPref.setSummary("" + minutes);
+								updateSummary();
 							}
 						})
 						.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -181,8 +181,19 @@ public class SettingsCalendarSynchronizationFragment extends PreferenceFragment 
 		calendar_synchronization.setEnabled( experimentalFeaturesEnabled );
 
 		// update summary
+		updateSummary();
+	}
+
+	private void updateSummary() {
 		final Preference calendarReminderPref = findPreference(getString(R.string.PREF_KEY_CALENDAR_REMINDER));
-		calendarReminderPref.setSummary("" + sharedPreferences.getInt(getString(R.string.PREF_KEY_CALENDAR_REMINDER), R.integer.CALENDAR_REMINDER_DEFAULT_VALUE));
+		int minutes = sharedPreferences.getInt(getString(R.string.PREF_KEY_CALENDAR_REMINDER), R.integer.CALENDAR_REMINDER_DEFAULT_VALUE);
+		if (minutes == 1) {
+			// Einzahl
+			calendarReminderPref.setSummary("" + minutes + " " + getString(R.string.minute));
+		} else {
+			// Mehrzahl
+			calendarReminderPref.setSummary("" + minutes + " " + getString(R.string.minutes));
+		}
 	}
 
 	private void requestCalendarPermission( int requestCode) {

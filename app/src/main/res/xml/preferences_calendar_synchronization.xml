@@ -13,8 +13,7 @@
         <Preference
             android:key="@string/PREF_KEY_CALENDAR_REMINDER"
             android:defaultValue="@integer/CALENDAR_REMINDER_DEFAULT_VALUE"
-            android:title="Erinnerung x Minuten vorher"
-            android:summary="@integer/CALENDAR_REMINDER_DEFAULT_VALUE"/>
+            android:title="@string/pref_calendar_reminder_text" />
 
         <!--<Preference
             android:title="Erinnerung für erste Vorlesung um Uhrzeit am Tag davor" />-->
