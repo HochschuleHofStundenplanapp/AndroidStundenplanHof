@@ -8,11 +8,13 @@
         android:title="@string/myschedule" />
 
     <PreferenceCategory
-        android:title="Erinnerungen">
+        android:title="@string/schedule_reminder">
 
-        <Preference
+        <EditTextPreference
             android:key="@string/PREF_KEY_CALENDAR_REMINDER"
             android:defaultValue="@integer/CALENDAR_REMINDER_DEFAULT_VALUE"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
             android:title="@string/pref_calendar_reminder_text" />
 
         <!--<Preference
