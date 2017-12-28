@@ -256,14 +256,14 @@ public class SettingsCalendarSynchronizationFragment extends PreferenceFragment 
 		// Die weiteren Kalender danach
 		calendars.addAll(calendarSynchronization.getCalendarsNames());
 
-		final AlertDialog d = new AlertDialog.Builder(getView().getContext())
+		final AlertDialog d = new AlertDialog.Builder(getActivity())
 				.setTitle(R.string.calendar_synchronization)
 				.setMessage(R.string.calendar_synchronization_infoText)
 				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.dismiss();
-						new AlertDialog.Builder(getView().getContext())
+						new AlertDialog.Builder(getActivity())
 								.setTitle(R.string.calendar_synchronization_chooseCalendar)
 								.setItems(calendars.toArray(new String[calendars.size()]), new DialogInterface.OnClickListener() {
 									@Override
