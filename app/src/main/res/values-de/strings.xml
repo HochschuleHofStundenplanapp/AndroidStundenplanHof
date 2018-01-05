@@ -159,4 +159,20 @@
     <string name="MEAL_Fisch">Fisch</string>
     <string name="MEAL_vegetarisch">vegetarisch</string>
     <string name="MEAL_vegan">vegan</string>
+
+    <!-- Onboarding -->
+    <string name="continue_onboarding">Weiter</string>
+    <string name="finish_onboarding">Beenden</string>
+    <string name="onboarding_study">Einrichtung - Studium</string>
+    <string name="onboarding_menu_plan">Einrichtung - Speiseplan</string>
+    <string name="onboarding_notifications">Einrichtung - Benachrichtigungen</string>
+    <string name="onboarding_experimental">Einrichtung - Experimentell</string>
+
+    <string name="onboarding_study_info">Wähle dein Semester und Studiengang</string>
+    <string name="onboarding_menu_plan_info">Wähle deinen Speiseplan</string>
+    <string name="onboarding_notifications_info">Schalte Benachrichtigungen ein</string>
+    <string name="onboarding_experimental_info">Schalte experimentelle Features ein</string>
+
+    <string name="onboarding_error_not_selected_message">Es muss alles ausgewählt sein</string>
+
 </resources>

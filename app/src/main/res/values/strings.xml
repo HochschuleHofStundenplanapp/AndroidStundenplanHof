@@ -137,18 +137,18 @@
     <string name="raum" translatable="false">Room</string>
     <string name="zeit" translatable="false">Time</string>
     <string name="fach_dozent" translatable="false">Fach Dozent</string>
-    <string translatable="false" name="PREF_KEY_CALENDAR_SYNCHRONIZATION">calendar_synchronization</string>
-    <string translatable="false" name="PREF_KEY_CATEGORY_NOTIFICATION">category_notification</string>
-    <string translatable="false" name="PREF_KEY_STUDIENGANG">studiengang</string>
-    <string translatable="false" name="PREF_KEY_CHANGES_NOTIFICATION">changes_notifications</string>
-    <string translatable="false" name="PREF_KEY_SEMESTER">semester</string>
-    <string translatable="false" name="PREF_KEY_LOGIN">login</string>
-    <string translatable="false" name="PREF_KEY_EXPERIMENTAL_FEATURES">experimental_features</string>
-    <string translatable="false" name="PREF_KEY_TERM_TIME">term_time</string>
-    <string translatable="false" name="PREF_KEY_EXPERIMENTAL_FEATURES_ENABLED">experimental_features</string>
-    <string translatable="false" name="PREF_KEY_MEAL_TARIFF">speiseplan_tarif</string>
-    <string translatable="false" name="PREF_KEY_SHOW_PUSH_DIALOG">show_push_notifications_dialog</string>
-    <string translatable="false" name="PREF_KEY_SHOW_EXPERIMENTAL_FEATURES_INFO">show_experimental_features_info</string>
+    <string name="PREF_KEY_CALENDAR_SYNCHRONIZATION" translatable="false">calendar_synchronization</string>
+    <string name="PREF_KEY_CATEGORY_NOTIFICATION" translatable="false">category_notification</string>
+    <string name="PREF_KEY_STUDIENGANG" translatable="false">studiengang</string>
+    <string name="PREF_KEY_CHANGES_NOTIFICATION" translatable="false">changes_notifications</string>
+    <string name="PREF_KEY_SEMESTER" translatable="false">semester</string>
+    <string name="PREF_KEY_LOGIN" translatable="false">login</string>
+    <string name="PREF_KEY_EXPERIMENTAL_FEATURES" translatable="false">experimental_features</string>
+    <string name="PREF_KEY_TERM_TIME" translatable="false">term_time</string>
+    <string name="PREF_KEY_EXPERIMENTAL_FEATURES_ENABLED" translatable="false">experimental_features</string>
+    <string name="PREF_KEY_MEAL_TARIFF" translatable="false">speiseplan_tarif</string>
+    <string name="PREF_KEY_SHOW_PUSH_DIALOG" translatable="false">show_push_notifications_dialog</string>
+    <string name="PREF_KEY_SHOW_EXPERIMENTAL_FEATURES_INFO" translatable="false">show_experimental_features_info</string>
     <string name="calendar_synchronization_successful">Schedule successfully synchronized with the calendar!</string>
     <string name="pref_screen_calendar_synchronization">My schedule calendar synchronization</string>
     <string name="calendar_syncronization_keep_events_title">Keep Events?</string>
@@ -169,5 +169,20 @@
     <string name="MEAL_Geflügel">Geflügel</string>
     <string name="MEAL_vegetarisch">vegatarian</string>
     <string name="MEAL_Schwein">Pork</string>
+
+    <!-- Onboarding -->
+    <string name="continue_onboarding">Continue</string>
+    <string name="finish_onboarding">Finish</string>
+    <string name="onboarding_study">Assistant - Study</string>
+    <string name="onboarding_menu_plan">Assistant - Menu Plan</string>
+    <string name="onboarding_notifications">Assistant - Notifications</string>
+    <string name="onboarding_experimental">Assistant - Experimental</string>
+
+    <string name="onboarding_study_info">Choose your semester and degree program</string>
+    <string name="onboarding_menu_plan_info">Choose your menu plan</string>
+    <string name="onboarding_notifications_info">Turn on notifications</string>
+    <string name="onboarding_experimental_info">Turn on experimental features</string>
+
+    <string name="onboarding_error_not_selected_message">Everything has to be selected</string>
 
 </resources>

@@ -42,6 +42,9 @@ import android.widget.Toast;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 
+import de.hof.university.app.onboarding.Fragments.OnboardingMenuPlanFragment;
+import de.hof.university.app.onboarding.Fragments.OnboardingStudyFragment;
+import de.hof.university.app.onboarding.OnboardingController;
 import de.hof.university.app.util.Define;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.fragment.NotenbekanntgabeFragment;
@@ -82,6 +85,8 @@ public class MainActivity extends AppCompatActivity
 	private NavigationView navigationView;
 	// für Navigation
 	private boolean backButtonPressedOnce = false;
+
+	private SharedPreferences sharedPreferences;
 
 	public static Context getAppContext() {
 		return appContext;
@@ -137,7 +142,7 @@ public class MainActivity extends AppCompatActivity
 		navigationView.setNavigationItemSelectedListener(this);
 
 		// Experimentelle Features anzeigen?
-		final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		final boolean showExperimentalFeatures = sharedPreferences.getBoolean(getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES_ENABLED), false);
 		displayExperimentalFeaturesMenuEntries(showExperimentalFeatures);
 
@@ -146,24 +151,7 @@ public class MainActivity extends AppCompatActivity
 		if (savedInstanceState == null) {
 			// ja die App wurde neu gestartet
 
-			// Ist ein "Mein Stundenplan" vorhanden?
-			if (DataManager.getInstance().getMyScheduleSize(getApplicationContext()) > 0) {
-				// Es gibt einen "Mein Studnenplan". Also gehen wir zu ihm.
-				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_mySchedule));
-			}
-			// Sind die Einstellungen vorhanden?
-			else if (!sharedPreferences.getString(getString(R.string.PREF_KEY_TERM_TIME), "").isEmpty()
-					&& !sharedPreferences.getString(getString(R.string.PREF_KEY_STUDIENGANG), "").isEmpty()
-					&& !sharedPreferences.getString(getString(R.string.PREF_KEY_SEMESTER), "").isEmpty()) {
-				// ja, also gehen wir zum Stundenplan
-				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_stundenplan));
-			} else {
-				// In allen anderen Fällen gehen wir zu den Einstellungen
-				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_einstellungen));
-
-				// returnen damit keine Intents gehandelt werden und keine Dialoge kommen.
-				return;
-			}
+			checkStartingScreen();
 		}
 
 		// wurde die Activity durch ein Intent gestartet, vermutlich durch klicken auf eine Benachrichtigung?
@@ -174,6 +162,36 @@ public class MainActivity extends AppCompatActivity
 
 		// Um den geänderten Beamten Tarif zu fixen
 		fixMealTariff();
+	}
+
+	public void checkStartingScreen() {
+
+		//Soll das Onboarding gestartet werden
+		if (new OnboardingController().shouldStartOnboaringIfNeeded(this)) {
+			FragmentManager manager = getFragmentManager();
+			FragmentTransaction trans = manager.beginTransaction();
+			trans.replace(android.R.id.content, new OnboardingStudyFragment());
+			trans.commit();
+		}
+
+		// Ist ein "Mein Stundenplan" vorhanden?
+		else if (DataManager.getInstance().getMyScheduleSize(getApplicationContext()) > 0) {
+			// Es gibt einen "Mein Studnenplan". Also gehen wir zu ihm.
+			onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_mySchedule));
+		}
+		// Sind die Einstellungen vorhanden?
+		else if (!sharedPreferences.getString(getString(R.string.PREF_KEY_TERM_TIME), "").isEmpty()
+				&& !sharedPreferences.getString(getString(R.string.PREF_KEY_STUDIENGANG), "").isEmpty()
+				&& !sharedPreferences.getString(getString(R.string.PREF_KEY_SEMESTER), "").isEmpty()) {
+			// ja, also gehen wir zum Stundenplan
+			onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_stundenplan));
+		} else {
+			// In allen anderen Fällen gehen wir zu den Einstellungen
+			onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_einstellungen));
+
+			// returnen damit keine Intents gehandelt werden und keine Dialoge kommen.
+			return;
+		}
 	}
 
 	/**
