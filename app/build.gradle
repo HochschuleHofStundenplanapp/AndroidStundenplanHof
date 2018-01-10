@@ -18,7 +18,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '27.0.1'
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId 'de.hof.university.app'
         minSdkVersion 16
@@ -88,8 +88,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:+'
     //compile 'com.android.support:design:25.2.0'
     compile 'com.android.support:design:+'
-    //compile 'com.android.support:support-v4:25.2.0'
-    compile 'com.android.support:support-v4:+'
+    compile 'com.android.support:support-v4:26.1.0'
     //compile 'com.android.support:recyclerview-v7:25.2.0'
     compile 'com.android.support:recyclerview-v7:+'
     compile 'org.jsoup:jsoup:1.10.3'
@@ -104,10 +103,6 @@ dependencies {
     testCompile 'junit:junit:4.12'
     //compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support.constraint:constraint-layout:+'
-    // Libarays for Shibboleth Auth
-    //compile 'de.tudarmstadt.ukp.shibhttpclient:shib-http-client:1.0.0'
-    //compile 'org.jasig.service:delegated-saml-authentication:1.1.2'
-    //compile 'org.springframework.security.extensions:spring-security-saml2-core:1.0.2.RELEASE'
 }
 
 apply plugin: 'com.google.gms.google-services'
