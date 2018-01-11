@@ -97,7 +97,7 @@ public class OnboardingNotificationsFragment extends Fragment {
         FragmentManager manager = getFragmentManager();
         FragmentTransaction trans = manager.beginTransaction();
         trans.addToBackStack(OnboardingExperimentalFragment.class.getName());
-        trans.replace(android.R.id.content, new OnboardingExperimentalFragment());
+        trans.replace(R.id.content_main, new OnboardingExperimentalFragment());
         trans.commit();
     }
 }

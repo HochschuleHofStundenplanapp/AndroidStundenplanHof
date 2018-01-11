@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity
 		if (new OnboardingController().shouldStartOnboaringIfNeeded(this)) {
 			FragmentManager manager = getFragmentManager();
 			FragmentTransaction trans = manager.beginTransaction();
-			trans.replace(android.R.id.content, new OnboardingStudyFragment());
+			trans.replace(R.id.content_main, new OnboardingStudyFragment());
 			trans.commit();
 		}
 

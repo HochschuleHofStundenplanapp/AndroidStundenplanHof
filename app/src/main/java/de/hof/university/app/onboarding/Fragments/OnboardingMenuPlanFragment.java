@@ -143,7 +143,7 @@ public class OnboardingMenuPlanFragment extends Fragment {
         FragmentManager manager = getFragmentManager();
         FragmentTransaction trans = manager.beginTransaction();
         trans.addToBackStack(OnboardingNotificationsFragment.class.getName());
-        trans.replace(android.R.id.content, new OnboardingNotificationsFragment());
+        trans.replace(R.id.content_main, new OnboardingNotificationsFragment());
         trans.commit();
     }
 }

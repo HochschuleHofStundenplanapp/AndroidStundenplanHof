@@ -142,7 +142,7 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
         FragmentManager manager = getFragmentManager();
         FragmentTransaction trans = manager.beginTransaction();
         trans.addToBackStack(OnboardingMenuPlanFragment.class.getName());
-        trans.replace(android.R.id.content, new OnboardingMenuPlanFragment());
+        trans.replace(R.id.content_main, new OnboardingMenuPlanFragment());
         trans.commit();
     }
 
