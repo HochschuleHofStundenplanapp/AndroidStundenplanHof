@@ -13,6 +13,9 @@ import android.preference.ListPreference;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -39,7 +42,7 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
     private List<StudyCourse> studyCourseList;
 
     //ArrayAdapter for dialogs
-    private ArrayList<String> termList, degreeProgramList, semesterList;
+    private ArrayList<String> termList, degreeProgramList, degreeProgramListTags, semesterList;
     private String selectedTerm, selectedDegreeProgram, selectedSemester;
 
 
@@ -53,12 +56,13 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        setupLayout();
-        setupClickListener();
-
         termList = new ArrayList<>();
         degreeProgramList = new ArrayList<>();
+        degreeProgramListTags = new ArrayList<>();
         semesterList = new ArrayList<>();
+
+        setupLayout();
+        setupClickListener();
 
         selectedTerm = selectedDegreeProgram = selectedSemester = "";
     }
@@ -81,13 +85,13 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
     }
 
     private void setupClickListener() {
+        termList.add("WS");
+        termList.add("SS");
+        //termList.addAll(new ArrayList<String>(R.array.term_time_values));
 
         studyTermBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                termList.add("WS");
-                termList.add("SS");
-                //termList.addAll(new ArrayList<String>(R.array.term_time_values));
                 createDialog("term");
             }
         });
@@ -98,7 +102,7 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
                 final OnboardingStudyFragment.GetSemesterTask getSemesterTask = new OnboardingStudyFragment.GetSemesterTask();
 
                 final String[] params = new String[ 2 ];
-                params[ 0 ] = selectedSemester;
+                params[ 0 ] = selectedTerm;
                 params[ 1 ] = String.valueOf(false);
                 getSemesterTask.execute(params);
             }
@@ -107,7 +111,7 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
         semesterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createDialog("term");
+                createDialog("semester");
             }
         });
 
@@ -132,6 +136,8 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
                 else {
                     startOnboardingMenuPlan();
                 }
+                startOnboardingMenuPlan();
+
 
             }
         });
@@ -180,10 +186,12 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
             if (studyCourseList != null) {
                 entries = new ArrayList<>();
                 entryValues = new ArrayList<>();
-
+                Log.v("###########1", "IM IF IF FIF FI FIF IF IF" + studyCourseList);
                 StudyCourse studyCourse;
                 for (int i = 0; i < studyCourseList.size(); ++i) {
+                    Log.v("###########1", "FORFORFOROFOOFOROR");
                     if (studyCourseList.get(i) instanceof StudyCourse) {
+                        Log.v("###########1", "IM IF IF FIF FI FIF IF IF2");
                         studyCourse = studyCourseList.get(i);
                         entries.add(studyCourse.getName());
                         entryValues.add(studyCourse.getTag());
@@ -203,12 +211,16 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
                     //lpCourse.setEntryValues(entryValues);
                     //lpCourse.setEnabled(true);
                     degreeProgramBtn.setEnabled(true);
-                    degreeProgramList.addAll(entryValues);
+                    degreeProgramList.clear();
+                    degreeProgramList.addAll(entries);
+                    degreeProgramListTags.clear();
+                    degreeProgramListTags.addAll(entryValues);
+                    progressDialog.dismiss();
                     createDialog("degreeProgram");
-                    Log.v("OLALALLLLLALALALAL", "asdddasdaskdashdaskdghasökdjfaskjdfhaöskdfhaskdjfhasödkhfaöksjdhfaöskdhföaskdjhföasjkdhfökjhföasdfsd");
+                    return;
                 }
             }
-
+            Log.d("###############", "" + entries + "entriesEnde" + entryValues);
             progressDialog.dismiss();
         }
     }
@@ -218,26 +230,35 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
      *
      *
      */
-    private void updateSemesterData() {
-
-        if ( (studyCourseList == null) || selectedDegreeProgram.isEmpty() ) {
-            //Leave list empty
-            return;
-        }
-
+    private void updateSemesterData(String selectedTag) {
+        Log.d("###############UPDATE", "" + studyCourseList + ", " + selectedDegreeProgram);
+        //if ( (studyCourseList == null) || selectedDegreeProgram.isEmpty() ) {
+        //    //Leave list empty
+        //    Log.d("###############UPDATE2", "" + studyCourseList + ", " + selectedDegreeProgram);
+        //    //return;
+        //}
+        Log.d("###############NACHIF1", "1234");
         for ( final StudyCourse studyCourse : studyCourseList ) {
-            if ( studyCourse.getTag().equals(selectedDegreeProgram) ) {
+            Log.d("###############FOR", "234");
+            Log.d("###############FORStudy", "" + studyCourse.getTag() + ", degree: " + selectedDegreeProgram);
+            if ( studyCourse.getTag().equals(selectedTag) ) {
+                Log.d("###############IF1", "234");
                 //final CharSequence[] entries = new CharSequence[ studyCourse.getTerms().size() ];
                 final ArrayList<String> entryValues = new ArrayList<>();
-
+                semesterList.clear();
                 for ( int j = 0; j < studyCourse.getTerms().size(); ++j ) {
+                    Log.d("###############FOR2", "234");
                     //entries[ j ] = studyCourse.getTerms().get(j);
                     //entryValues[ j ] = studyCourse.getTerms().get(j);
-                    entryValues.add(studyCourse.getTerms().get(j));
+                    //entryValues.add(studyCourse.getTerms().get(j));
+
+                    semesterList.add(studyCourse.getTerms().get(j));
                 }
 
                 if ( semesterList != null ) {
+                    Log.d("###############IF2", "234");
                     if ( semesterList.size() > 0 ) {
+                        Log.d("###############IF3", "234");
                         //lpSemester.setEntries(entries);
                         //lpSemester.setEntryValues(entryValues);
                         //lpSemester.setEnabled(true);
@@ -262,7 +283,7 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
             valueAdapter.addAll(termList);
         }
         if(valueKey.equals("degreeProgram")) {
-
+            valueAdapter.addAll(degreeProgramList);
         }
         if(valueKey.equals("semester")) {
             valueAdapter.addAll(semesterList);
@@ -285,7 +306,9 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
                 }
                 if(valueKey.equals("degreeProgram")) {
                     selectedDegreeProgram = valueAdapter.getItem(which);
-                    updateSemesterData();
+                    String selectedDegreeProgramList = degreeProgramListTags.get(which);
+                    semesterBtn.setEnabled(true);
+                    updateSemesterData(selectedDegreeProgramList);
                 }
                 if(valueKey.equals("semester")) {
                     selectedSemester = valueAdapter.getItem(which);
