@@ -82,16 +82,16 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
 
         degreeProgramBtn.setEnabled(false);
         semesterBtn.setEnabled(false);
+
+        fillTermList();
     }
 
     private void setupClickListener() {
-        termList.add("WS");
-        termList.add("SS");
-        //termList.addAll(new ArrayList<String>(R.array.term_time_values));
 
         studyTermBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                resetButtons();
                 createDialog("term");
             }
         });
@@ -152,6 +152,13 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
         trans.commit();
     }
 
+    private void fillTermList() {
+        String[] termArray = MainActivity.getAppContext().getResources().getStringArray(R.array.term_time);
+        for (String t : termArray) {
+            termList.add(t);
+        }
+    }
+
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
 
@@ -186,12 +193,9 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
             if (studyCourseList != null) {
                 entries = new ArrayList<>();
                 entryValues = new ArrayList<>();
-                Log.v("###########1", "IM IF IF FIF FI FIF IF IF" + studyCourseList);
                 StudyCourse studyCourse;
                 for (int i = 0; i < studyCourseList.size(); ++i) {
-                    Log.v("###########1", "FORFORFOROFOOFOROR");
                     if (studyCourseList.get(i) instanceof StudyCourse) {
-                        Log.v("###########1", "IM IF IF FIF FI FIF IF IF2");
                         studyCourse = studyCourseList.get(i);
                         entries.add(studyCourse.getName());
                         entryValues.add(studyCourse.getTag());
@@ -220,7 +224,6 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
                     return;
                 }
             }
-            Log.d("###############", "" + entries + "entriesEnde" + entryValues);
             progressDialog.dismiss();
         }
     }
@@ -231,23 +234,20 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
      *
      */
     private void updateSemesterData(String selectedTag) {
-        Log.d("###############UPDATE", "" + studyCourseList + ", " + selectedDegreeProgram);
-        //if ( (studyCourseList == null) || selectedDegreeProgram.isEmpty() ) {
-        //    //Leave list empty
-        //    Log.d("###############UPDATE2", "" + studyCourseList + ", " + selectedDegreeProgram);
-        //    //return;
-        //}
-        Log.d("###############NACHIF1", "1234");
+        if ( (studyCourseList == null) || selectedDegreeProgram.isEmpty() ) {
+            //Leave list empty
+            //return;
+        }
+
         for ( final StudyCourse studyCourse : studyCourseList ) {
-            Log.d("###############FOR", "234");
-            Log.d("###############FORStudy", "" + studyCourse.getTag() + ", degree: " + selectedDegreeProgram);
+
             if ( studyCourse.getTag().equals(selectedTag) ) {
-                Log.d("###############IF1", "234");
+
                 //final CharSequence[] entries = new CharSequence[ studyCourse.getTerms().size() ];
                 final ArrayList<String> entryValues = new ArrayList<>();
                 semesterList.clear();
                 for ( int j = 0; j < studyCourse.getTerms().size(); ++j ) {
-                    Log.d("###############FOR2", "234");
+
                     //entries[ j ] = studyCourse.getTerms().get(j);
                     //entryValues[ j ] = studyCourse.getTerms().get(j);
                     //entryValues.add(studyCourse.getTerms().get(j));
@@ -256,9 +256,7 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
                 }
 
                 if ( semesterList != null ) {
-                    Log.d("###############IF2", "234");
                     if ( semesterList.size() > 0 ) {
-                        Log.d("###############IF3", "234");
                         //lpSemester.setEntries(entries);
                         //lpSemester.setEntryValues(entryValues);
                         //lpSemester.setEnabled(true);
@@ -302,32 +300,30 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
 
                 if(valueKey.equals("term")) {
                     selectedTerm = valueAdapter.getItem(which);
+                    studyTermBtn.setText(selectedTerm);
                     degreeProgramBtn.setEnabled(true);
                 }
                 if(valueKey.equals("degreeProgram")) {
                     selectedDegreeProgram = valueAdapter.getItem(which);
                     String selectedDegreeProgramList = degreeProgramListTags.get(which);
+                    degreeProgramBtn.setText(selectedDegreeProgram);
                     semesterBtn.setEnabled(true);
                     updateSemesterData(selectedDegreeProgramList);
                 }
                 if(valueKey.equals("semester")) {
                     selectedSemester = valueAdapter.getItem(which);
+                    semesterBtn.setText(selectedSemester);
                 }
-
-
-                String strName = valueAdapter.getItem(which);
-                AlertDialog.Builder builderInner = new AlertDialog.Builder(getActivity());
-                builderInner.setMessage(strName);
-                builderInner.setTitle("Your Selected Item is");
-                builderInner.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog,int which) {
-                        dialog.dismiss();
-                    }
-                });
-                builderInner.show();
             }
         });
         builderSingle.show();
+    }
+
+    private void resetButtons() {
+        degreeProgramBtn.setText(R.string.studiengang);
+        degreeProgramBtn.setEnabled(false);
+
+        semesterBtn.setText(R.string.semester);
+        semesterBtn.setEnabled(false);
     }
 }

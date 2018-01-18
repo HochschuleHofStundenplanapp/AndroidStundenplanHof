@@ -1,17 +1,23 @@
 package de.hof.university.app.onboarding.Fragments;
 
 
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
@@ -21,6 +27,8 @@ public class OnboardingMenuPlanFragment extends Fragment {
 
     private Button continueBtn, tariffBtn;
     private CheckBox mainCourseCb, sideDishesCb, pastaCb, dessertsCb, saladCb;
+    private ArrayList<String> tariffList;
+    private String selectedTariff = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,6 +41,8 @@ public class OnboardingMenuPlanFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        tariffList = new ArrayList<>();
 
         setupLayout();
         setupClickListener();
@@ -54,6 +64,8 @@ public class OnboardingMenuPlanFragment extends Fragment {
         pastaCb = getActivity().findViewById(R.id.onboarding_menu_plan_pasta_checkbox);
         dessertsCb = getActivity().findViewById(R.id.onboarding_menu_plan_desserts_checkbox);
         saladCb = getActivity().findViewById(R.id.onboarding_menu_plan_salad_checkbox);
+
+        fillTariffList();
     }
 
     private void setupClickListener() {
@@ -61,6 +73,24 @@ public class OnboardingMenuPlanFragment extends Fragment {
         continueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                //Tariff must be selected to continue
+                if (selectedTariff.isEmpty()) {
+                    new AlertDialog.Builder(getView().getContext())
+                            .setTitle("Error")
+                            .setMessage(R.string.onboarding_error_not_selected_message)
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //nothing to do here. Just close the message
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                }
+                else {
+                    startOnboardingNotifications();
+                }
                 startOnboardingNotifications();
             }
         });
@@ -68,7 +98,7 @@ public class OnboardingMenuPlanFragment extends Fragment {
         tariffBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                createDialog();
             }
         });
 
@@ -136,6 +166,40 @@ public class OnboardingMenuPlanFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void fillTariffList() {
+        String[] tariffArray = MainActivity.getAppContext().getResources().getStringArray(R.array.speiseplan_tarife);
+        for (String t : tariffArray) {
+            tariffList.add(t);
+        }
+    }
+
+    private void createDialog() {
+
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
+
+        final ArrayAdapter<String> valueAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.select_dialog_item);
+
+        valueAdapter.addAll(tariffList);
+
+        builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        builderSingle.setAdapter(valueAdapter, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+
+                selectedTariff = valueAdapter.getItem(which);
+                tariffBtn.setText(selectedTariff);
+            }
+        });
+        builderSingle.show();
     }
 
     private void startOnboardingNotifications() {
