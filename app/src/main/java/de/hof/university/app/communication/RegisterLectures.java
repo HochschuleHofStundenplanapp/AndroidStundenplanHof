@@ -110,7 +110,14 @@ public class RegisterLectures {
                 data += "&" + URLEncoder.encode("vorlesung_id", "UTF-8") + "="
                         + URLEncoder.encode(makeJSONString(lectures), "UTF-8");
 
-                //Für die Schnittstelle der Hochschule wird Authentifizerung benötigt
+
+                // language is a varchar(2) field for de, en,...
+                // can be disabled. server doesn't expect it.
+                if(false) {
+                    data += "&" + URLEncoder.encode("language", "UTF-8") + "=" + URLEncoder.encode("de", "UTF-8");
+                }
+
+                //Für die Schnittstelle der Hochschule wird Authentifizerung benötigt (.htaccess)
                 final String userPassword = Define.sAuthSoapUserName + ':' + Define.sAuthSoapPassword;
                 final String encoding = Base64.encodeToString(userPassword.getBytes(), Base64.DEFAULT);
                 client.setRequestProperty("Authorization", "Basic " + encoding);
