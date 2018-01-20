@@ -19,6 +19,8 @@ package de.hof.university.app.fragment;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -53,6 +55,8 @@ import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.data.SettingsController;
 import de.hof.university.app.data.TaskComplete;
+import de.hof.university.app.onboarding.Fragments.OnboardingStudyFragment;
+import de.hof.university.app.onboarding.OnboardingController;
 import de.hof.university.app.util.Define;
 import de.hof.university.app.calendar.CalendarSynchronization;
 import de.hof.university.app.data.DataManager;
@@ -135,7 +139,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
 					} else {
-						settingsCtrl.cancelPushNotifications();
+						settingsCtrl.deregisterPushNotifications();
 					}
 					return true;
 				}
@@ -254,6 +258,20 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 					}*/
 					activity.displayExperimentalFeaturesMenuEntries(false);
 				}
+				return true;
+			}
+		});
+
+		//Login für die experimentellen Funktionen
+		final Preference restartOnboarding = findPreference(getString(R.string.PREF_KEY_RESTART_ONBOARDING));
+		restartOnboarding.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				new OnboardingController().resetOnboarding(getActivity().getApplicationContext());
+				FragmentManager manager = getFragmentManager();
+				FragmentTransaction trans = manager.beginTransaction();
+				trans.replace(R.id.content_main, new OnboardingStudyFragment());
+				trans.commit();
 				return true;
 			}
 		});

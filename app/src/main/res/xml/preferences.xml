@@ -138,4 +138,17 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:key="category_onboarding"
+        android:title="@string/onboarding_study">
+        <Preference
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:key="onboarding_restart"
+            android:title="@string/onboarding_restart" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

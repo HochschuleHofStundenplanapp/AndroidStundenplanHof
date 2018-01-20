@@ -184,5 +184,7 @@
     <string name="onboarding_experimental_info">Turn on experimental features</string>
 
     <string name="onboarding_error_not_selected_message">Everything has to be selected</string>
+    <string name="onboarding_restart">Restart Assistant</string>
+    <string name="PREF_KEY_RESTART_ONBOARDING" translatable="false">onboarding_restart</string>
 
 </resources>

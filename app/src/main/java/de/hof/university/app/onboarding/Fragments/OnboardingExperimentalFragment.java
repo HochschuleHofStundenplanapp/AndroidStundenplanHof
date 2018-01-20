@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.calendar.CalendarSynchronization;
+import de.hof.university.app.data.SettingsController;
 import de.hof.university.app.experimental.LoginController;
 import de.hof.university.app.onboarding.OnboardingController;
 
@@ -37,11 +38,16 @@ public class OnboardingExperimentalFragment extends Fragment {
     private Button finishOnboardingBtn, loginBtn;
     private CheckBox featuresCb, synchronizationCb;
 
-    private LoginController loginController = null;
-    private CalendarSynchronization calendarSynchronization = null;
-
     private final int REQUEST_CODE_CALENDAR_TURN_ON_PERMISSION =  2;
     private final int REQUEST_CODE_CALENDAR_TURN_OFF_PERMISSION =  3;
+
+    private SettingsController settingsCtrl;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        settingsCtrl = new SettingsController(getActivity(), this);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,9 +63,6 @@ public class OnboardingExperimentalFragment extends Fragment {
 
         setupLayout();
         setupClickListener();
-
-        this.loginController = LoginController.getInstance(getActivity());
-        this.calendarSynchronization = CalendarSynchronization.getInstance();
     }
 
     @Override
@@ -133,14 +136,7 @@ public class OnboardingExperimentalFragment extends Fragment {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     // löschen
-                                    if ((ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED)
-                                            || (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED)) {
-                                        // keine Berechtigung, hole erst Berechtigung
-                                        requestCalendarPermission(REQUEST_CODE_CALENDAR_TURN_OFF_PERMISSION);
-                                    } else {
-                                        // lösche die Kalendereinträge oder den lokalen Kalender
-                                        calendarSynchronization.stopCalendarSynchronization();
-                                    }
+                                    settingsCtrl.turnCalendarSyncOff();
                                 }
                             })
                             .setCancelable(false)
@@ -163,22 +159,12 @@ public class OnboardingExperimentalFragment extends Fragment {
     }
 
     private void turnCalendarSyncOn() {
-        // check for permission
-        // wenn keine Berechtigung dann requeste sie und falls erfolgreich komme hier her zurück
-        if ((ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED)
-                || (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED)) {
-            // keine Berechtigung
-            requestCalendarPermission(REQUEST_CODE_CALENDAR_TURN_ON_PERMISSION);
+        final ArrayList<String> calendars = settingsCtrl.turnCalendarSyncOn();
+        final CalendarSynchronization calendarSync = settingsCtrl.getCalendarSynchronization();
+
+        if (calendars == null) {
             return;
         }
-
-        final ArrayList<String> calendars = new ArrayList<>();
-
-        // Den localen Kalender als erstes
-        calendars.add(getString(R.string.calendar_synchronitation_ownLocalCalendar));
-
-        // Die weiteren Kalender danach
-        calendars.addAll(calendarSynchronization.getCalendarsNames());
 
         final AlertDialog d = new AlertDialog.Builder(getView().getContext())
                 .setTitle(R.string.calendar_synchronization)
@@ -195,11 +181,11 @@ public class OnboardingExperimentalFragment extends Fragment {
                                         String calendarName = calendars.get(which);
                                         if (calendarName.equals(getString(R.string.calendar_synchronitation_ownLocalCalendar))) {
                                             // lokaler Kalender
-                                            calendarSynchronization.setCalendar(null);
+                                            calendarSync.setCalendar(null);
                                         } else {
-                                            calendarSynchronization.setCalendar(calendarName);
+                                            calendarSync.setCalendar(calendarName);
                                         }
-                                        calendarSynchronization.createAllEvents();
+                                        calendarSync.createAllEvents();
                                     }
                                 })
                                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -257,7 +243,7 @@ public class OnboardingExperimentalFragment extends Fragment {
             case REQUEST_CODE_CALENDAR_TURN_OFF_PERMISSION:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission granted
-                    calendarSynchronization.stopCalendarSynchronization();
+                    settingsCtrl.getCalendarSynchronization().stopCalendarSynchronization();
                 } else {
                     // Permission Denied
                     Toast.makeText(getActivity(), R.string.calendar_synchronization_permissionNotGranted, Toast.LENGTH_SHORT)
@@ -273,7 +259,7 @@ public class OnboardingExperimentalFragment extends Fragment {
 
     private void finishOnboarding() {
 
-        //new OnboardingController().onboardingFinished(getActivity());
+        new OnboardingController().onboardingFinished(getActivity());
 
         MainActivity mainActivity = (MainActivity) getActivity();
         Log.v("MainActivity", "" + mainActivity);

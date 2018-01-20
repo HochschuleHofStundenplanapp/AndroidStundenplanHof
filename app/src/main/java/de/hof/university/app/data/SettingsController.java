@@ -67,7 +67,7 @@ public class SettingsController  {
     /**
      * Von Push-Notifications abmelden
      */
-    public void cancelPushNotifications() {
+    public void deregisterPushNotifications() {
         new RegisterLectures().deRegisterLectures();
     }
 

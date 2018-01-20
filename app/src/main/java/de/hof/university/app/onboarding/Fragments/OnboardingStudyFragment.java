@@ -22,11 +22,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.data.DataManager;
+import de.hof.university.app.data.SettingsController;
+import de.hof.university.app.data.TaskComplete;
 import de.hof.university.app.fragment.SettingsFragment;
 import de.hof.university.app.model.settings.StudyCourse;
 
@@ -34,17 +37,27 @@ import de.hof.university.app.model.settings.StudyCourse;
  * Created by patrickniepel on 03.01.18.
  */
 
-public class OnboardingStudyFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class OnboardingStudyFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener, TaskComplete {
 
     private Button studyTermBtn, degreeProgramBtn, semesterBtn, continueBtn;
-
-    private ProgressDialog progressDialog;
-    private List<StudyCourse> studyCourseList;
+    private SettingsController settingsCtrl;
 
     //ArrayAdapter for dialogs
     private ArrayList<String> termList, degreeProgramList, degreeProgramListTags, semesterList;
     private String selectedTerm, selectedDegreeProgram, selectedSemester;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        termList = new ArrayList<>();
+        degreeProgramList = new ArrayList<>();
+        degreeProgramListTags = new ArrayList<>();
+        semesterList = new ArrayList<>();
+        selectedTerm = selectedDegreeProgram = selectedSemester = "";
+
+        settingsCtrl = new SettingsController(getActivity(), this);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -56,15 +69,9 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        termList = new ArrayList<>();
-        degreeProgramList = new ArrayList<>();
-        degreeProgramListTags = new ArrayList<>();
-        semesterList = new ArrayList<>();
-
         setupLayout();
         setupClickListener();
-
-        selectedTerm = selectedDegreeProgram = selectedSemester = "";
+        fillLayoutIfPossible();
     }
 
     @Override
@@ -99,12 +106,7 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
         degreeProgramBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final OnboardingStudyFragment.GetSemesterTask getSemesterTask = new OnboardingStudyFragment.GetSemesterTask();
-
-                final String[] params = new String[ 2 ];
-                params[ 0 ] = selectedTerm;
-                params[ 1 ] = String.valueOf(false);
-                getSemesterTask.execute(params);
+                downloadDegreeProgramList();
             }
         });
 
@@ -143,8 +145,49 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
         });
     }
 
-    private void startOnboardingMenuPlan() {
+    private void fillLayoutIfPossible() {
+        if (!selectedTerm.isEmpty()) {
+            studyTermBtn.setText(selectedTerm);
+            degreeProgramBtn.setEnabled(true);
+        }
+        if (!selectedDegreeProgram.isEmpty()) {
+            degreeProgramBtn.setText(selectedDegreeProgram);
+            semesterBtn.setEnabled(true);
+        }
+        if (!selectedSemester.isEmpty()) {
+            semesterBtn.setText(selectedSemester);
+        }
+    }
 
+    @Override
+    public void onTaskComplete(HashMap<String, CharSequence[]> data) {
+        CharSequence[] entries = data.get("entries");
+        CharSequence[] entryValues = data.get("entryValues");
+
+        if (entries != null) {
+            if (entries.length > 0) {
+
+                degreeProgramBtn.setEnabled(true);
+                degreeProgramList.clear();
+                degreeProgramListTags.clear();
+                fillDegreeProgramList(entries, entryValues);
+                createDialog("degreeProgram");
+            }
+        }
+    }
+
+    private void fillDegreeProgramList(CharSequence[] entries, CharSequence[] entryValues) {
+
+        for(CharSequence entry : entries) {
+            degreeProgramList.add((String) entry);
+        }
+
+        for(CharSequence value : entryValues) {
+            degreeProgramListTags.add((String) value);
+        }
+    }
+
+    private void startOnboardingMenuPlan() {
         FragmentManager manager = getFragmentManager();
         FragmentTransaction trans = manager.beginTransaction();
         trans.addToBackStack(OnboardingMenuPlanFragment.class.getName());
@@ -164,107 +207,28 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
 
     }
 
-    private class GetSemesterTask extends AsyncTask<String, Void, Void> {
-
-        ArrayList<String> entries = null;
-        ArrayList<String> entryValues = null;
-
-        @Override
-        protected final void onPreExecute() {
-            super.onPreExecute();
-
-            progressDialog = new ProgressDialog(getActivity());
-            progressDialog.setCancelable(true);
-            progressDialog.setMessage(getString(R.string.onclick_refresh));
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progressDialog.setIndeterminate(false);
-            progressDialog.show();
-
-        }
-
-        @Override
-        protected final Void doInBackground(String... params) {
-            final String termTime = params[ 0 ];
-            final boolean pForceRefresh = Boolean.valueOf(params[ 1 ]);
-
-            studyCourseList = DataManager.getInstance().getCourses(getActivity().getApplicationContext(),
-                    getString(R.string.language), termTime, pForceRefresh);
-
-            if (studyCourseList != null) {
-                entries = new ArrayList<>();
-                entryValues = new ArrayList<>();
-                StudyCourse studyCourse;
-                for (int i = 0; i < studyCourseList.size(); ++i) {
-                    if (studyCourseList.get(i) instanceof StudyCourse) {
-                        studyCourse = studyCourseList.get(i);
-                        entries.add(studyCourse.getName());
-                        entryValues.add(studyCourse.getTag());
-                    }
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected final void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-
-            if (entries != null) {
-                if (entries.size() > 0) {
-                    //lpCourse.setEntries(entries);
-                    //lpCourse.setEntryValues(entryValues);
-                    //lpCourse.setEnabled(true);
-                    degreeProgramBtn.setEnabled(true);
-                    degreeProgramList.clear();
-                    degreeProgramList.addAll(entries);
-                    degreeProgramListTags.clear();
-                    degreeProgramListTags.addAll(entryValues);
-                    progressDialog.dismiss();
-                    createDialog("degreeProgram");
-                    return;
-                }
-            }
-            progressDialog.dismiss();
-        }
-    }
-
-    /**
-     * Öffnet Prozessdialog und aktualisiert die Semester zu dem zuvor ausgewählten Studiengang
-     *
-     *
-     */
     private void updateSemesterData(String selectedTag) {
-        if ( (studyCourseList == null) || selectedDegreeProgram.isEmpty() ) {
+        if ( (settingsCtrl.getStudyCourseList() == null) || selectedDegreeProgram.isEmpty() ) {
             //Leave list empty
             //return;
         }
 
-        for ( final StudyCourse studyCourse : studyCourseList ) {
+        for ( final StudyCourse studyCourse : settingsCtrl.getStudyCourseList() ) {
 
             if ( studyCourse.getTag().equals(selectedTag) ) {
 
-                //final CharSequence[] entries = new CharSequence[ studyCourse.getTerms().size() ];
                 final ArrayList<String> entryValues = new ArrayList<>();
                 semesterList.clear();
                 for ( int j = 0; j < studyCourse.getTerms().size(); ++j ) {
-
-                    //entries[ j ] = studyCourse.getTerms().get(j);
-                    //entryValues[ j ] = studyCourse.getTerms().get(j);
-                    //entryValues.add(studyCourse.getTerms().get(j));
-
                     semesterList.add(studyCourse.getTerms().get(j));
                 }
 
                 if ( semesterList != null ) {
                     if ( semesterList.size() > 0 ) {
-                        //lpSemester.setEntries(entries);
-                        //lpSemester.setEntryValues(entryValues);
-                        //lpSemester.setEnabled(true);
                         semesterBtn.setEnabled(true);
                         semesterList.addAll(entryValues);
                     } else {
                         semesterBtn.setEnabled(false);
-                        //lpSemester.setEnabled(false);
                     }
                 }
             }
@@ -275,7 +239,7 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
 
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
 
-        final ArrayAdapter<String> valueAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.select_dialog_singlechoice);
+        final ArrayAdapter<String> valueAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.select_dialog_item);
 
         if(valueKey.equals("term")) {
             valueAdapter.addAll(termList);
@@ -302,6 +266,7 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
                     selectedTerm = valueAdapter.getItem(which);
                     studyTermBtn.setText(selectedTerm);
                     degreeProgramBtn.setEnabled(true);
+
                 }
                 if(valueKey.equals("degreeProgram")) {
                     selectedDegreeProgram = valueAdapter.getItem(which);
@@ -317,6 +282,13 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
             }
         });
         builderSingle.show();
+    }
+
+    private void downloadDegreeProgramList() {
+        final String[] params = new String[2];
+        params[0] = selectedTerm;
+        params[1] = String.valueOf(false);
+        settingsCtrl.executeSemesterTask(this, params);
     }
 
     private void resetButtons() {

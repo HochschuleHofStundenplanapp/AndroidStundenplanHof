@@ -20,12 +20,20 @@ import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.communication.RegisterLectures;
 import de.hof.university.app.data.DataManager;
+import de.hof.university.app.data.SettingsController;
 import de.hof.university.app.util.Define;
 
 public class OnboardingNotificationsFragment extends Fragment {
 
     private Button continueBtn;
     private CheckBox changesCb;
+    private SettingsController settingsCtrl;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        settingsCtrl = new SettingsController(getActivity(), this);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,7 +78,7 @@ public class OnboardingNotificationsFragment extends Fragment {
 
                     if (Define.PUSH_NOTIFICATIONS_ENABLED) {
 
-                        DataManager.getInstance().registerFCMServerForce(getActivity().getApplicationContext());
+                        settingsCtrl.registerFCMServerForce(getActivity().getApplicationContext());
                         new AlertDialog.Builder(getView().getContext())
                                 .setTitle(R.string.notifications)
                                 .setMessage(R.string.notifications_infotext)
@@ -86,7 +94,7 @@ public class OnboardingNotificationsFragment extends Fragment {
                 }
                 else {
                     // von Push-Notifications abmelden
-                    new RegisterLectures().deRegisterLectures();
+                    settingsCtrl.deregisterPushNotifications();
                 }
             }
         });

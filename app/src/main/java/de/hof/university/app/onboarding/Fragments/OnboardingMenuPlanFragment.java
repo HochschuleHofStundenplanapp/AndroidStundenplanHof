@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
+import de.hof.university.app.data.SettingsController;
 
 
 public class OnboardingMenuPlanFragment extends Fragment {
@@ -29,6 +30,12 @@ public class OnboardingMenuPlanFragment extends Fragment {
     private CheckBox mainCourseCb, sideDishesCb, pastaCb, dessertsCb, saladCb;
     private ArrayList<String> tariffList;
     private String selectedTariff = "";
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        tariffList = new ArrayList<>();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,10 +49,9 @@ public class OnboardingMenuPlanFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        tariffList = new ArrayList<>();
-
         setupLayout();
         setupClickListener();
+        fillLayoutIfPossible();
     }
 
     @Override
@@ -168,6 +174,12 @@ public class OnboardingMenuPlanFragment extends Fragment {
         });
     }
 
+    private void fillLayoutIfPossible() {
+        if (!selectedTariff.isEmpty()) {
+            tariffBtn.setText(selectedTariff);
+        }
+    }
+
     private void fillTariffList() {
         String[] tariffArray = MainActivity.getAppContext().getResources().getStringArray(R.array.speiseplan_tarife);
         for (String t : tariffArray) {
@@ -193,8 +205,6 @@ public class OnboardingMenuPlanFragment extends Fragment {
         builderSingle.setAdapter(valueAdapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
-
                 selectedTariff = valueAdapter.getItem(which);
                 tariffBtn.setText(selectedTariff);
             }
