@@ -45,11 +45,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import de.hof.university.app.communication.RegisterLectures;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
+import de.hof.university.app.data.SettingsController;
+import de.hof.university.app.data.TaskComplete;
 import de.hof.university.app.util.Define;
 import de.hof.university.app.calendar.CalendarSynchronization;
 import de.hof.university.app.data.DataManager;
@@ -61,17 +64,18 @@ import static android.os.Build.VERSION_CODES;
 /**
  * Created by Lukas on 24.11.2015.
  */
-public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener, TaskComplete {
 
 	public final static String TAG = "SettingsFragment";
 
 	private ProgressDialog progressDialog;
-	private List<StudyCourse> studyCourseList;
-	private LoginController loginController = null;
-	private CalendarSynchronization calendarSynchronization = null;
+	//private LoginController loginController = null;
+	//private CalendarSynchronization calendarSynchronization = null;
 
     private final int REQUEST_CODE_CALENDAR_TURN_ON_PERMISSION =  2;
     private final int REQUEST_CODE_CALENDAR_TURN_OFF_PERMISSION =  3;
+
+    private SettingsController settingsCtrl;
 
 	/**
 	 * @param savedInstanceState
@@ -82,8 +86,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		Log.i(TAG, "onCreate");
 		setHasOptionsMenu(true);
 
-		this.loginController = LoginController.getInstance(getActivity());
-		this.calendarSynchronization = CalendarSynchronization.getInstance();
+		this.settingsCtrl = new SettingsController(getActivity(), this);
+		//this.loginController = LoginController.getInstance(getActivity());
+		//this.calendarSynchronization = CalendarSynchronization.getInstance();
 
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.preferences);
@@ -116,7 +121,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 					if ( (Boolean) newValue ) {
 						// für Push-Notifications registrieren,
 						// falls schon ein Stundenplan angelegt wurde
-						DataManager.getInstance().registerFCMServerForce(getActivity().getApplicationContext());
+						//DataManager.getInstance().registerFCMServerForce(getActivity().getApplicationContext());
+						settingsCtrl.registerFCMServerForce(getActivity().getApplicationContext());
                         new AlertDialog.Builder(getView().getContext())
                                 .setTitle(R.string.notifications)
                                 .setMessage(R.string.notifications_infotext)
@@ -129,8 +135,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
 					} else {
-						// von Push-Notifications abmelden
-						new RegisterLectures().deRegisterLectures();
+						settingsCtrl.cancelPushNotifications();
 					}
 					return true;
 				}
@@ -169,14 +174,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
 									// löschen
-									if ((ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED)
-											|| (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED)) {
-										// keine Berechtigung, hole erst Berechtigung
-										requestCalendarPermission(REQUEST_CODE_CALENDAR_TURN_OFF_PERMISSION);
-									} else {
-										// lösche die Kalendereinträge oder den lokalen Kalender
-										calendarSynchronization.stopCalendarSynchronization();
-									}
+									settingsCtrl.turnCalendarSyncOff();
 								}
 							})
 							.setCancelable(false)
@@ -194,7 +192,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				if (isVisible()) { //nur wenn die Activity sichtbar ist den Dialog anzeigen
-					loginController.showLoginDialog();
+					settingsCtrl.getLoginController().showLoginDialog();
 					return true;
 				} else {
 					return false;
@@ -261,7 +259,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		});
 
 		enableSettingsSummary();
-
 		getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 	}
 
@@ -279,7 +276,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
 		navigationView.getMenu().findItem(R.id.nav_einstellungen).setChecked(true);
 
-		if ( studyCourseList == null ) {
+		if ( settingsCtrl.getStudyCourseList() == null ) {
 			updateCourseListPreference("", false);
 		}
 
@@ -411,9 +408,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		params[ 0 ] = term;
 		params[ 1 ] = String.valueOf(forceRefresh);
 
-		final SettingsFragment.GetSemesterTask getSemesterTask = new SettingsFragment.GetSemesterTask();
-		getSemesterTask.execute(params);
-
+		settingsCtrl.executeSemesterTask(this, params);
+		//final SettingsFragment.GetSemesterTask getSemesterTask = new SettingsFragment.GetSemesterTask();
+		//getSemesterTask.execute(params);
 	}
 
 	/**
@@ -450,13 +447,13 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 	private void updateSemesterData(final String courseStr) {
 
 		final ListPreference lpSemester = (ListPreference) findPreference(getString(R.string.PREF_KEY_SEMESTER));
-		if ( (studyCourseList == null) || courseStr.isEmpty() ) {
+		if ( (settingsCtrl.getStudyCourseList() == null) || courseStr.isEmpty() ) {
 			lpSemester.setEntries(new CharSequence[]{});
 			lpSemester.setEntryValues(new CharSequence[]{});
 			return;
 		}
 
-		for ( final StudyCourse studyCourse : studyCourseList ) {
+		for ( final StudyCourse studyCourse : settingsCtrl.getStudyCourseList() ) {
 			if ( studyCourse.getTag().equals(courseStr) ) {
 				final CharSequence[] entries = new CharSequence[ studyCourse.getTerms().size() ];
 				final CharSequence[] entryValues = new CharSequence[ studyCourse.getTerms().size() ];
@@ -490,8 +487,23 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		}
 	}
 
+	@Override
+	public void onTaskComplete(HashMap<String, CharSequence[]> data) {
+		CharSequence[] entries = data.get("entries");
+		CharSequence[] entryValues = data.get("entryValues");
 
-	private class GetSemesterTask extends AsyncTask<String, Void, Void> {
+		ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREF_KEY_STUDIENGANG));
+		if (entries != null) {
+			if (entries.length > 0) {
+				lpCourse.setEntries(entries);
+				lpCourse.setEntryValues(entryValues);
+				lpCourse.setEnabled(true);
+				updateSemesterData(lpCourse.getValue());
+			}
+		}
+	}
+
+	/*private class GetSemesterTask extends AsyncTask<String, Void, Void> {
 
 		CharSequence[] entries = null;
 		CharSequence[] entryValues = null;
@@ -549,8 +561,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
 			progressDialog.dismiss();
 		}
-	}
-
+	}*/
+	/*
 	private void requestCalendarPermission(int requestCode) {
 
 		// From MARSHMELLOW (OS 6) on
@@ -560,7 +572,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 							Manifest.permission.WRITE_CALENDAR},
 					requestCode);
 		}
-    }
+    }*/
 
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -580,7 +592,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 			case REQUEST_CODE_CALENDAR_TURN_OFF_PERMISSION:
 				if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 					// Permission granted
-					calendarSynchronization.stopCalendarSynchronization();
+					settingsCtrl.getCalendarSynchronization().stopCalendarSynchronization();
 				} else {
 					// Permission Denied
 					Toast.makeText(getActivity(), R.string.calendar_synchronization_permissionNotGranted, Toast.LENGTH_SHORT)
@@ -594,22 +606,12 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 	}
 
 	private void turnCalendarSyncOn() {
-		// check for permission
-		// wenn keine Berechtigung dann requeste sie und falls erfolgreich komme hier her zurück
-		if ((ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED)
-				|| (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED)) {
-			// keine Berechtigung
-			requestCalendarPermission(REQUEST_CODE_CALENDAR_TURN_ON_PERMISSION);
+		final ArrayList<String> calendars = settingsCtrl.turnCalendarSyncOn();
+		final CalendarSynchronization calendarSync = settingsCtrl.getCalendarSynchronization();
+
+		if (calendars == null) {
 			return;
 		}
-
-		final ArrayList<String> calendars = new ArrayList<>();
-
-		// Den localen Kalender als erstes
-		calendars.add(getString(R.string.calendar_synchronitation_ownLocalCalendar));
-
-		// Die weiteren Kalender danach
-		calendars.addAll(calendarSynchronization.getCalendarsNames());
 
 		final AlertDialog d = new AlertDialog.Builder(getView().getContext())
 				.setTitle(R.string.calendar_synchronization)
@@ -626,11 +628,11 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 										String calendarName = calendars.get(which);
 										if (calendarName.equals(getString(R.string.calendar_synchronitation_ownLocalCalendar))) {
 											// lokaler Kalender
-											calendarSynchronization.setCalendar(null);
+											calendarSync.setCalendar(null);
 										} else {
-											calendarSynchronization.setCalendar(calendarName);
+											calendarSync.setCalendar(calendarName);
 										}
-										calendarSynchronization.createAllEvents();
+										calendarSync.createAllEvents();
 									}
 								})
 								.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
