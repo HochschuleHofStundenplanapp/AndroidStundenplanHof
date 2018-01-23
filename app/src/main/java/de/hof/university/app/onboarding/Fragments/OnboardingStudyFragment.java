@@ -75,6 +75,12 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        fillTermList();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         final MainActivity mainActivity = (MainActivity) getActivity();
@@ -90,7 +96,7 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
         degreeProgramBtn.setEnabled(false);
         semesterBtn.setEnabled(false);
 
-        fillTermList();
+
     }
 
     private void setupClickListener() {
@@ -99,6 +105,7 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
             @Override
             public void onClick(View view) {
                 resetButtons();
+
                 createDialog("term");
             }
         });
@@ -138,9 +145,6 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
                 else {
                     startOnboardingMenuPlan();
                 }
-                startOnboardingMenuPlan();
-
-
             }
         });
     }
@@ -200,6 +204,8 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
         for (String t : termArray) {
             termList.add(t);
         }
+        //termList.add("WS");
+        //termList.add("SS");
     }
 
     @Override
@@ -210,7 +216,7 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
     private void updateSemesterData(String selectedTag) {
         if ( (settingsCtrl.getStudyCourseList() == null) || selectedDegreeProgram.isEmpty() ) {
             //Leave list empty
-            //return;
+            return;
         }
 
         for ( final StudyCourse studyCourse : settingsCtrl.getStudyCourseList() ) {
@@ -285,8 +291,12 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
     }
 
     private void downloadDegreeProgramList() {
+        String termValue = "";
+
+        termValue = selectedTerm.toLowerCase().startsWith("w") ? "WS" : "SS";
+
         final String[] params = new String[2];
-        params[0] = selectedTerm;
+        params[0] = termValue;
         params[1] = String.valueOf(false);
         settingsCtrl.executeSemesterTask(this, params);
     }

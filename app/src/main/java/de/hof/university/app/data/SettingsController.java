@@ -31,14 +31,14 @@ public class SettingsController  {
     private final int REQUEST_CODE_CALENDAR_TURN_OFF_PERMISSION =  3;
     private LoginController loginController = null;
     private CalendarSynchronization calendarSynchronization = null;
-    private MainActivity mActivity;
+    private Activity mActivity;
     private Fragment mFragment;
     private ProgressDialog progressDialog;
     private List<StudyCourse> studyCourseList;
 
 
     public SettingsController(Activity activity, Fragment fragment) {
-        this.mActivity = (MainActivity) activity;
+        this.mActivity = activity;
         this.mFragment = fragment;
         this.loginController = LoginController.getInstance(mActivity);
         this.calendarSynchronization = CalendarSynchronization.getInstance();
@@ -148,7 +148,7 @@ public class SettingsController  {
             final boolean pForceRefresh = Boolean.valueOf(params[ 1 ]);
 
             studyCourseList = DataManager.getInstance().getCourses(mActivity.getApplicationContext(),
-                    mActivity.getString(R.string.language), termTime, pForceRefresh);
+                    mFragment.getString(R.string.language), termTime, pForceRefresh);
 
             if (studyCourseList != null) {
                 entries = new CharSequence[studyCourseList.size()];

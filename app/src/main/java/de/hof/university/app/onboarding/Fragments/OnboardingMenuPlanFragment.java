@@ -97,7 +97,6 @@ public class OnboardingMenuPlanFragment extends Fragment {
                 else {
                     startOnboardingNotifications();
                 }
-                startOnboardingNotifications();
             }
         });
 
