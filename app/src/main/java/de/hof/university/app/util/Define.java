@@ -120,7 +120,12 @@ public final class Define {
 	// publish notification FMC von Google verwenden
 	// Push-Notifications
 	public final static boolean PUSH_NOTIFICATIONS_ENABLED = true;
-	public final static String URL_REGISTER_PUSH_NOTIFICATIONS_HOF = APP_SERVER_HOF + "/soap/fcm_register_user.php";
+
+	// #todo ...user.php?os=0 (0 = Android, 1 = iOS) für die Schnittstelle (vermutlich Vorlesungsfreie Zeit zu Beginn 2018 ratsam.). Geht auch ohne (ist abwärtskompatibel)
+	public final static String URL_REGISTER_PUSH_NOTIFICATIONS_HOF = APP_SERVER_HOF + "/soap/fcm_register_user.php"; // ...user.php?os=0
+
+	// url for testserver
+	// public final static String URL_REGISTER_PUSH_NOTIFICATIONS_HOF = "https://apptest.hof-university.de/soap/fcm_register_user.php?os=0"; // for testing
 
 
 	// Additional URLS
