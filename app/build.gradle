@@ -88,7 +88,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:+'
     //compile 'com.android.support:design:25.2.0'
     compile 'com.android.support:design:+'
-    compile 'com.android.support:support-v4:26.1.0'
+    compile 'com.android.support:support-v4:+'
     //compile 'com.android.support:recyclerview-v7:25.2.0'
     compile 'com.android.support:recyclerview-v7:+'
     compile 'org.jsoup:jsoup:1.10.3'
@@ -100,7 +100,7 @@ dependencies {
     //compile 'com.google.firebase:firebase-messaging:10.2.0'
     compile 'com.google.firebase:firebase-messaging:10.+'
     compile 'org.osmdroid:osmdroid-android:5.6.5'
-    testCompile 'junit:junit:4.12'
+    testCompile 'junit:junit:4.+'
     //compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support.constraint:constraint-layout:+'
 }
