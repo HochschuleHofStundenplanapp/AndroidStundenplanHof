@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.support.annotation.NonNull;
@@ -51,19 +52,23 @@ public class SettingsCalendarSynchronizationFragment extends PreferenceFragment 
 
 		this.calendarSynchronization = CalendarSynchronization.getInstance();
 
-		// Load the preferences from an XML resource
+		// Load the Calendar preferences from an XML resource
 		addPreferencesFromResource(R.xml.preferences_calendar_synchronization);
-
-		// Calendar synchronization
+		
+		// Calendar synchronization, switch on or off, in general
 		final CheckBoxPreference calendar_syncronization = (CheckBoxPreference) findPreference(getString( R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION));
-
 		calendar_syncronization.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				
+				// TODO switch
 				if ( (Boolean) newValue ) {
 					// an schalten
 					turnCalendarSyncOn();
 				} else {
+					
+					// check, if accidentally switsched off.
+					
 					// aus schalten
 					turnCalendarSyncOff();
 				}
@@ -71,67 +76,32 @@ public class SettingsCalendarSynchronizationFragment extends PreferenceFragment 
 			}
 		});
 
-		final Preference calendarReminderPref = findPreference(getString(R.string.PREF_KEY_CALENDAR_REMINDER));
-
-		calendarReminderPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+		
+		final EditTextPreference calendarReminderEditText = (EditTextPreference) findPreference(getString(R.string.PREF_KEY_CALENDAR_REMINDER));
+		calendarReminderEditText.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 
-				// Get the layout inflater
-				LayoutInflater inflater = getActivity().getLayoutInflater();
+				String minutesString = calendarReminderEditText.getText().toString();
 
-				View view = inflater.inflate(R.layout.dialog_calendar_reminder, null);
+				int minutes;
 
-				final EditText calendarReminderEditText = view.findViewById(R.id.calendarReminderEditText);
+				try {
+					minutes = Integer.parseInt(minutesString);
+				} catch (NumberFormatException e) {
+					Log.e(TAG, "NumberFormatException", e);
+					return true;
+				}
 
-				AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-				dialogBuilder.setView(view)
-						.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								String minutesString = calendarReminderEditText.getText().toString();
+				sharedPreferences.edit()
+						.putInt(getString(R.string.PREF_KEY_CALENDAR_REMINDER), minutes)
+						.apply();
 
-								int minutes;
-
-								try {
-									minutes = Integer.parseInt(minutesString);
-								} catch (NumberFormatException e) {
-									Log.e(TAG, "NumberFormatException", e);
-									return;
-								}
-
-								sharedPreferences.edit()
-										.putInt(getString(R.string.PREF_KEY_CALENDAR_REMINDER), minutes)
-										.apply();
-
-								updateSummary();
-							}
-						})
-						.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								// cancel the dialog
-							}
-						});
-
-				dialogBuilder.create().show();
-
-				// andere Methode mit TimerPickerDialog, aber dort geht nur bis 24 Stunden
-				/*TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
-					@Override
-					public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-						Log.d(TAG, "TimerSet: Hours: " + hourOfDay + " Minutes: " + minute);
-					}
-				};
-
-				TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(), AlertDialog.THEME_HOLO_LIGHT, onTimeSetListener, 0, 0, true);
-
-				timePickerDialog.show();*/
-
-
+				updateSummary();
 				return true;
 			}
 		});
+
 	}
 
 	@Override
@@ -162,7 +132,7 @@ public class SettingsCalendarSynchronizationFragment extends PreferenceFragment 
 
 	private void updateSummary() {
 		final Preference calendarReminderPref = findPreference(getString(R.string.PREF_KEY_CALENDAR_REMINDER));
-		int minutes = sharedPreferences.getInt(getString(R.string.PREF_KEY_CALENDAR_REMINDER), R.integer.CALENDAR_REMINDER_DEFAULT_VALUE);
+		final int minutes = sharedPreferences.getInt(getString(R.string.PREF_KEY_CALENDAR_REMINDER), R.integer.CALENDAR_REMINDER_DEFAULT_VALUE);
 		if (minutes == 1) {
 			// Einzahl
 			calendarReminderPref.setSummary("" + minutes + " " + getString(R.string.minute));

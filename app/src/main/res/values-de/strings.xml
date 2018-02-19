@@ -127,13 +127,13 @@
     <string name="noEmailApp">Keine E-Mail App installiert</string>
     <string name="noBrowserApp">Keine Browser App installiert</string>
     <string name="rateThisAppBtn">Bewerte diese App</string>
-    <string name="experimental_features_infotext">Es gibt experimentelle Funktionen, die in den Einstellungen aktiviert werden können</string>
-    <string name="notifications_infotext">Sie erhalten nun Benachrichtigungen für neue Änderungen.</string>
+    <string name="experimental_features_infotext">Experimentelle Funktionen können in den Einstellungen aktiviert werden.</string>
+    <string name="notifications_infotext">Sie erhalten nun Benachrichtigungen über Änderungen.</string>
 
     <string name="disabled_shortcut">Der Shortcut wurde deaktiviert</string>
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
-    <string name="notifications_question">Möchten Sie grundsätzlich über ihre Änderungen benachrichtigt werden?</string>
+    <string name="notifications_question">Möchten Sie generell über Änderungen benachrichtigt werden?</string>
     <string name="lastUpdated">Zuletzt aktualisiert</string>
     <string name="calendar_synchronization">Kalender Synchronisation</string>
     <string name="changeCancelled">[Entfällt]</string>
@@ -143,7 +143,7 @@
     <string name="changeNewDate">Neuer Termin</string>
     <string name="noLocation">Kein Ort</string>
     <string name="calendar_synchronitation_ownLocalCalendar">Eigenen lokalen Kalender</string>
-    <string name="calendar_synchronization_infoText">Sie haben die Kalender Synchronisation eingeschaltet.\n\nIm nächsten Dialog können Sie den Kalender auswählen, mit dem die Vorlesungen und Änderungen synchronisiert werden oder einen eigenen lokalen Kalender dafür nutzen.\n\n(Empfohlen: Einen neuen Kalender auf der <a href="https://calendar.google.com/calendar/render?hl=de#main_7">Google Kalender Webseite</a> anlegen und diesen im nächsten Dialog auswählen.)\n\nBitte beachten Sie Folgendes:\n- Termine bleiben beim Löschen der App bestehen (wenn Sie sie löschen möchten, vorher die Synchronisation ausschalten)\n- Termine mit Notizen werden nicht gelöscht\n- Ferien und Feiertage werden noch nicht berücksichtigt</string>
+    <string name="calendar_synchronization_infoText">Sie haben die Kalender-Synchronisation eingeschaltet.\n\nIm nächsten Dialog wählen Sie den Kalender aus, mit dem die Vorlesungen und Änderungen synchronisiert werden oder einen eigenen lokalen Kalender dafür nutzen.\n\n(Empfohlen: Einen neuen Kalender auf der <a href="https://calendar.google.com/calendar/render?hl=de#main_7">Google Kalender Webseite</a> anlegen und diesen im nächsten Dialog auswählen.)\n\nBitte beachten Sie Folgendes:\n- Termine bleiben beim Löschen der App bestehen (wenn Sie sie löschen möchten, vorher die Synchronisation ausschalten)\n- Termine mit Notizen werden nicht gelöscht\n- Ferien und Feiertage werden noch nicht berücksichtigt</string>
     <string name="calendar_synchronization_chooseCalendar">Bitte wählen Sie einen Kalender</string>
     <string name="calendar_synchronization_permissionNotGranted">Berechtigung für den Kalender verweigert</string>
     <string name="navigation">Bus &amp; Bahn Fahrplan</string>
@@ -166,9 +166,9 @@
     <string name="MEAL_Fisch">Fisch</string>
     <string name="MEAL_vegetarisch">vegetarisch</string>
     <string name="MEAL_vegan">vegan</string>
-    <string name="pref_calendar_reminder_text">Erinnerung x Minuten vorher</string>
-    <string name="calendar_reminder_dialog_text">Minuten bevor die Erinnerung kommen soll:</string>
+    <string name="pref_calendar_reminder_text">Standard-Erinnerung (Minuten)</string>
     <string name="minute">Minute</string>
     <string name="minutes">Minuten</string>
+    <string name="schedule_reminder">Erinnerung anzeigen</string>
 
 </resources>
