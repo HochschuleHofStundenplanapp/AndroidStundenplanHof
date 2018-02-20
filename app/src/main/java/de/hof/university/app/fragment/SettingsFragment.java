@@ -463,11 +463,13 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 					getString(R.string.language), termTime, pForceRefresh);
 
 			if (studyCourseList != null) {
-				entries = new CharSequence[studyCourseList.size()];
-				entryValues = new CharSequence[studyCourseList.size()];
+				final int length = studyCourseList.size();
+				
+				entries = new CharSequence[length];
+				entryValues = new CharSequence[length];
 
-				StudyCourse studyCourse;
-				for (int i = 0; i < studyCourseList.size(); ++i) {
+				for (int i = 0; i < length; ++i) {
+					StudyCourse studyCourse;
 					if (studyCourseList.get(i) instanceof StudyCourse) {
 						studyCourse = studyCourseList.get(i);
 						entries[i] = studyCourse.getName();
@@ -482,7 +484,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		@Override
 		protected final void onPostExecute(Void aVoid) {
 			super.onPostExecute(aVoid);
-			ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREF_KEY_STUDIENGANG));
+			final ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREF_KEY_STUDIENGANG));
 			if (entries != null) {
 				if (entries.length > 0) {
 					lpCourse.setEntries(entries);
