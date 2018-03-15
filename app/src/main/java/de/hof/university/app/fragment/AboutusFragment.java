@@ -36,7 +36,7 @@ import de.hof.university.app.util.Define;
 /**
  * Created by larsg on 28.06.2016.
  */
-public class AboutusFragment extends Fragment {
+public class AboutusFragment extends android.support.v4.app.Fragment {
 
 	private final static String TAG = "AboutusFragment";
 

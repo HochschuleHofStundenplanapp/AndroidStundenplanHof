@@ -73,6 +73,7 @@ public class DataManager {
     private Changes changes;
     private Meals meals;
     private StudyCourses studyCourses;
+    private boolean [] weekreloaded = {false,false,false};
 
     private final SharedPreferences sharedPreferences;
 
@@ -87,17 +88,41 @@ public class DataManager {
 	    this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public final ArrayList<Meal> getMeals(final Context context, boolean forceRefresh) {
+    public void setMeals(ArrayList<Meal> newMeals){
+        meals.setMeals(newMeals);
+    }
+
+    public final ArrayList<Meal> getMeals(final Context context, boolean forceRefresh, int forWeek) {
         final Meals meals = this.getMeals(context);
 
         if (forceRefresh
                 || (meals.getMeals().isEmpty())
                 || (meals.getLastSaved() == null)
-                || !cacheStillValid(meals, Define.MEAL_CACHE_TIME)) {
+                || !cacheStillValid(meals, Define.MEAL_CACHE_TIME)
+                || Define.mensa_changed) {
             final Parser parser = ParserFactory.create(EParser.MENU);
             final Calendar calendar = Calendar.getInstance();
-            final String url = Define.URL_MEAL + calendar.get(Calendar.YEAR) + '-' + (calendar.get(Calendar.MONTH) + 1) + '-' + calendar.get(Calendar.DAY_OF_MONTH);
-            final String xmlString = dataConnector.readStringFromUrl(url);
+            SharedPreferences sharedPref = MainActivity.getSharedPreferences();
+            String selectedMensa = sharedPref.getString("selected_canteen", "340");
+            String [] urls = new String[3];
+            urls[0] = Define.URL_MEAL1 + selectedMensa + Define.URL_MEAL2 + calendar.get(Calendar.YEAR) + '-' + (calendar.get(Calendar.MONTH) + 1) + '-' + calendar.get(Calendar.DAY_OF_MONTH);
+            calendar.add(Calendar.DAY_OF_MONTH,7);
+            urls[1] = Define.URL_MEAL1 + selectedMensa + Define.URL_MEAL2 + calendar.get(Calendar.YEAR) + '-' + (calendar.get(Calendar.MONTH) + 1) + '-' + calendar.get(Calendar.DAY_OF_MONTH);
+            calendar.add(Calendar.DAY_OF_MONTH,7);
+            urls[2] = Define.URL_MEAL1 + selectedMensa + Define.URL_MEAL2 + calendar.get(Calendar.YEAR) + '-' + (calendar.get(Calendar.MONTH) + 1) + '-' + calendar.get(Calendar.DAY_OF_MONTH);
+
+            String xmlString = "";
+
+            switch (forWeek){
+                case 0:
+                    xmlString = dataConnector.readStringFromUrl(urls[0]);
+                    break;
+                case 1:
+                    xmlString = dataConnector.readStringFromUrl(urls[1]);
+                    break;
+                case 2:
+                    xmlString = dataConnector.readStringFromUrl(urls[2]);
+            }
 
 
             // falls der String leer ist war ein Problem mit dem Internet
@@ -112,17 +137,43 @@ public class DataManager {
             }
 
             final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
             final String[] params = {xmlString, sharedPreferences.getString( MainActivity.getAppContext().getString( R.string.PREF_KEY_MEAL_TARIFF ), "1")};
             junit.framework.Assert.assertTrue(parser != null);
 
-            ArrayList<Meal> tmpMeals = (ArrayList<Meal>) parser.parse(params);
 
-            this.getMeals(context).setMeals(tmpMeals);
+
+            switch (forWeek){
+                case 0:
+                    this.getMeals(context).setMeals((ArrayList<Meal>) parser.parse(params));
+                    this.weekreloaded[0] = true;
+                    break;
+                case 1:
+                    this.getMeals(context).setNextWeekMeals((ArrayList<Meal>) parser.parse(params));
+                    this.weekreloaded[1] = true;
+                    break;
+                case 2:
+                    this.getMeals(context).setIn3Weekmeal((ArrayList<Meal>) parser.parse(params));
+                    this.weekreloaded[2] = true;
+
+            }
+
+            if (weekreloaded[0] && weekreloaded[1] && weekreloaded [2]){
+                Define.mensa_changed = false;
+            }
 
             this.getMeals(context).setLastSaved(new Date());
             saveObject(context, this.getMeals(context), Define.mealsFilename);
         }
 
+        switch (forWeek) {
+            case 0:
+                return this.getMeals(context).getMeals();
+            case 1:
+                return this.getMeals(context).getNextWeekMeals();
+            case 2:
+                return this.getMeals(context).getIn3Weekmeal();
+        }
         return this.getMeals(context).getMeals();
     }
 
@@ -261,6 +312,7 @@ public class DataManager {
 
         return this.getMySchedule(context).getLectures();
     }
+
 
     public final ArrayList<Object> getChanges(
     		final Context context, final String course, final String semester,

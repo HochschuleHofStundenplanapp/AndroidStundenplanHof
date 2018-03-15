@@ -1,1 +1,2 @@
 include ':app'
+include 'MyApp', ':subProject:android-support-v4-preferencefragment'

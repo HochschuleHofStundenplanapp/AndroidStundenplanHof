@@ -32,6 +32,7 @@
     <string name="date">Date:</string>
     <string name="edvraum">Computer room</string>
     <string name="search">Search</string>
+    <string name="mensa">Canteen</string>
     <string name="hauptgerichte">Main course</string>
     <string name="beilagen">Side dishes</string>
     <string name="desserts">Desserts</string>
@@ -154,6 +155,7 @@
     <string translatable="false" name="PREF_KEY_EXPERIMENTAL_FEATURES">experimental_features</string>
     <string translatable="false" name="PREF_KEY_TERM_TIME">term_time</string>
     <string translatable="false" name="PREF_KEY_EXPERIMENTAL_FEATURES_ENABLED">experimental_features</string>
+    <string translatable="false" name="PREF_KEY_SELECTED_CANTEEN">selected_canteen</string>
     <string translatable="false" name="PREF_KEY_MEAL_TARIFF">speiseplan_tarif</string>
     <string translatable="false" name="PREF_KEY_SHOW_PUSH_DIALOG">show_push_notifications_dialog</string>
     <string translatable="false" name="PREF_KEY_SHOW_EXPERIMENTAL_FEATURES_INFO">show_experimental_features_info</string>
@@ -176,7 +178,7 @@
     <string name="MEAL_nichtvegetarisch">non vegetarian</string>
     <string name="MEAL_Kraueterkueche">Herbs</string>
     <string name="MEAL_Geflügel">Geflügel</string>
-    <string name="MEAL_vegetarisch">vegatarian</string>
+    <string name="MEAL_vegetarisch">vegetarian</string>
     <string name="MEAL_Schwein">Pork</string>
     <string name="pref_calendar_reminder_text">Default reminder (Minutes)</string>
     <string name="minute">Minute</string>

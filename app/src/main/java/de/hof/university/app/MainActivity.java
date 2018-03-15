@@ -17,8 +17,9 @@
 package de.hof.university.app;
 
 import android.app.AlertDialog;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.os.StrictMode;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -42,6 +43,7 @@ import android.widget.Toast;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 
+import de.hof.university.app.fragment.meal_plan.MealPagerFragment;
 import de.hof.university.app.util.Define;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.fragment.NotenbekanntgabeFragment;
@@ -68,7 +70,7 @@ public class MainActivity extends AppCompatActivity
 
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
-	private MealFragment mealFragment;
+	private MealPagerFragment mealPagerFragment;
 	private ScheduleFragment scheduleFragment;
 	private ChangesFragment changesFragment;
 	private MyScheduleFragment myScheduleFragment;
@@ -170,6 +172,10 @@ public class MainActivity extends AppCompatActivity
 				return;
 			}
 		}
+
+		//Downloads die von Fragmenten (wie dem neuem MealFragment) gestartet wurden erlauben
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy);
 
 		// wurde die Activity durch ein Intent gestartet, vermutlich durch klicken auf eine Benachrichtigung?
 		handleIntent();
@@ -374,17 +380,18 @@ public class MainActivity extends AppCompatActivity
 	public final boolean onNavigationItemSelected(@NonNull final MenuItem item) {
 		final int id = item.getItemId();
 
-		FragmentManager manager = getFragmentManager();
+		FragmentManager manager = getSupportFragmentManager();
+		//FragmentManager manager = getFragmentManager();
 
 
 		switch (id) {
 			case R.id.nav_speiseplan:
 				if (!manager.popBackStackImmediate(MealFragment.class.getName(), 0)) {
-					if (mealFragment == null) {
-						mealFragment = new MealFragment();
+					if (mealPagerFragment == null) {
+						mealPagerFragment = new MealPagerFragment();
 					}
 					FragmentTransaction trans = manager.beginTransaction();
-					trans.replace(R.id.content_main, mealFragment, Define.mealsFragmentName);
+					trans.replace(R.id.content_main, mealPagerFragment, Define.mealplanFragmentName);
 					trans.commit();
 				}
 				break;

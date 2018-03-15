@@ -51,7 +51,7 @@ import de.hof.university.app.experimental.LoginController;
  * Use the {@link RaumsucheFragment#} factory method to
  * create an instance of this fragment.
  */
-public class RaumsucheFragment extends Fragment {
+public class RaumsucheFragment extends android.support.v4.app.Fragment {
 
     public final static String TAG = "RaumsucheFragment";
 

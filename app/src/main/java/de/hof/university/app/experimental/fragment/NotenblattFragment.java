@@ -45,7 +45,7 @@ import de.hof.university.app.util.Define;
 import de.hof.university.app.experimental.LoginController;
 
 
-public class NotenblattFragment extends Fragment {
+public class NotenblattFragment extends android.support.v4.app.Fragment {
 
     private final static String TAG = "NotenblattFragment";
 

@@ -17,12 +17,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
     buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId 'de.hof.university.app'
         minSdkVersion 16
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 33
         versionName '4.4'
     }
@@ -85,12 +85,12 @@ dependencies {
     // jsoup HTML parser library @ http://jsoup.org/
     // Die Versionsnummer sollte die gleiche sein
     //compile 'com.android.support:appcompat-v7:25.2.0'
-    compile 'com.android.support:appcompat-v7:+'
+    compile 'com.android.support:appcompat-v7:27.+'
     //compile 'com.android.support:design:25.2.0'
-    compile 'com.android.support:design:+'
-    compile 'com.android.support:support-v4:+'
+    compile 'com.android.support:design:27.+'
+    compile 'com.android.support:support-v4:27.+'
     //compile 'com.android.support:recyclerview-v7:25.2.0'
-    compile 'com.android.support:recyclerview-v7:+'
+    compile 'com.android.support:recyclerview-v7:27.+'
     compile 'org.jsoup:jsoup:1.10.3'
     //compile 'org.jsoup:jsoup:1.9.2'
     //compile 'org.jsoup:jsoup:1.9.+'
@@ -103,6 +103,7 @@ dependencies {
     testCompile 'junit:junit:4.+'
     //compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support.constraint:constraint-layout:+'
+    compile project(':subProject:android-support-v4-preferencefragment')
 }
 
 apply plugin: 'com.google.gms.google-services'

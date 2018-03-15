@@ -90,65 +90,70 @@ public class Meal implements Serializable {
 		String result = this.name;
 		String tmpAttributes = "";
 
-		for ( int a : attributes ) {
 
-			if ( !tmpAttributes.isEmpty() ) {
-				tmpAttributes += ", ";
-			}
-			
-			
-			switch (a) {
-				case 1:
-					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_hausgemacht);
-					break;
-				case 2:
-					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_Wild);
-					break;
-				case 3:
-					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_Geflügel);
-					break;
-				case 4:
-					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_regional);
-					break;
-				case 5:
-					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_Schwein);
-					break;
-				case 6:
-					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_Fisch);
-					break;
-				case 7:
-					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_vegetarisch);
-					break;
-				case 8:
-					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_Rind);
-					break;
-				case 9:
-					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_nachhaltigerFang);
-					break;
-				case 10:
-					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_vegan);
-					break;
-				case 11:
-					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_Lamm);
-					break;
-				case 12:
-					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_Meeresfruechte);
-					break;
-				case 13:
-					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_MensaVital);
-					break;
-				case 14:
-					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_nichtvegetarisch);
-					break;
-				case 15:
-					tmpAttributes += MainActivity.getAppContext().getResources().getString(R.string.MEAL_Kraueterkueche);
-					break;
-			}
-		}
 		if ( !tmpAttributes.isEmpty() ) {
 			result += " (" + tmpAttributes + ")";
 		}
 		return result;
+	}
+
+	public ArrayList<Integer> getAttributes(){
+		return attributes;
+	}
+
+	public ArrayList<String> getParsedAttributes() {
+		ArrayList<String> myAttributes = new ArrayList<>();
+
+        for ( int a : attributes ) {
+            switch (a) {
+                case 1:
+                    myAttributes.add(MainActivity.getAppContext().getResources().getString(R.string.MEAL_hausgemacht));
+                    break;
+                case 2:
+                    myAttributes.add(MainActivity.getAppContext().getResources().getString(R.string.MEAL_Wild));
+                    break;
+                case 3:
+                    myAttributes.add(MainActivity.getAppContext().getResources().getString(R.string.MEAL_Geflügel));
+                    break;
+                case 4:
+                    myAttributes.add(MainActivity.getAppContext().getResources().getString(R.string.MEAL_regional));
+                    break;
+                case 5:
+                    myAttributes.add(MainActivity.getAppContext().getResources().getString(R.string.MEAL_Schwein));
+                    break;
+                case 6:
+                    myAttributes.add(MainActivity.getAppContext().getResources().getString(R.string.MEAL_Fisch));
+                    break;
+                case 7:
+                    myAttributes.add(MainActivity.getAppContext().getResources().getString(R.string.MEAL_vegetarisch));
+                    break;
+                case 8:
+                    myAttributes.add(MainActivity.getAppContext().getResources().getString(R.string.MEAL_Rind));
+                    break;
+                case 9:
+                    myAttributes.add(MainActivity.getAppContext().getResources().getString(R.string.MEAL_nachhaltigerFang));
+                    break;
+                case 10:
+                    myAttributes.add(MainActivity.getAppContext().getResources().getString(R.string.MEAL_vegan));
+                    break;
+                case 11:
+                    myAttributes.add(MainActivity.getAppContext().getResources().getString(R.string.MEAL_Lamm));
+                    break;
+                case 12:
+                    myAttributes.add(MainActivity.getAppContext().getResources().getString(R.string.MEAL_Meeresfruechte));
+                    break;
+                case 13:
+                    myAttributes.add(MainActivity.getAppContext().getResources().getString(R.string.MEAL_MensaVital));
+                    break;
+                case 14:
+                    myAttributes.add(MainActivity.getAppContext().getResources().getString(R.string.MEAL_nichtvegetarisch));
+                    break;
+                case 15:
+                    myAttributes.add(MainActivity.getAppContext().getResources().getString(R.string.MEAL_Kraueterkueche));
+                    break;
+            }
+        }
+		return myAttributes;
 	}
 
 	//TODO stimmt das? Kann man doch weglassen?
