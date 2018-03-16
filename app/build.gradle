@@ -96,9 +96,9 @@ dependencies {
     //compile 'org.jsoup:jsoup:1.9.+'
     // Die Versionsnummer sollte die gleiche sein
     //compile 'com.google.android.gms:play-services-gcm:10.2.0'
-    compile 'com.google.android.gms:play-services-gcm:10.+'
+    compile 'com.google.android.gms:play-services-gcm:11.+'
     //compile 'com.google.firebase:firebase-messaging:10.2.0'
-    compile 'com.google.firebase:firebase-messaging:10.+'
+    compile 'com.google.firebase:firebase-messaging:11.+'
     compile 'org.osmdroid:osmdroid-android:5.6.5'
     testCompile 'junit:junit:4.+'
     //compile 'com.android.support.constraint:constraint-layout:1.0.2'
