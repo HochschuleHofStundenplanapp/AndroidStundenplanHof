@@ -40,58 +40,59 @@ upstream messages, and so on.
 */
 
 public final class FcmMessagingService extends FirebaseMessagingService {
-    private final static String TAG = "FcmMessagingService";
+	private final static String TAG = "FcmMessagingService";
 
-    public FcmMessagingService() {
-        super();
-    }
+	public FcmMessagingService() {
+		super();
+	}
 
-    /*
-    In this service create an onMessageReceived method to handle incoming messages.
-     */
-    @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
-        // If the application is in the foreground handle both data and notification messages here.
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
+	/*
+	In this service create an onMessageReceived method to handle incoming messages.
+	 */
+	@Override
+	public void onMessageReceived(RemoteMessage remoteMessage) {
+		// If the application is in the foreground handle both data and notification messages here.
+		// Also if you intend on generating your own notifications as a result of a received FCM
+		// message, here is where that should be initiated. See sendNotification method below.
 
-        final String title = remoteMessage.getNotification().getTitle();
-        final String message = remoteMessage.getNotification().getBody();
+		final String title = remoteMessage.getNotification().getTitle();
+		final String message = remoteMessage.getNotification().getBody();
 
-        showNotification(title, message);
+		showNotification(title, message);
 
-        super.onMessageReceived(remoteMessage);
+		super.onMessageReceived(remoteMessage);
 
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
-        Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
-    }
+		Log.d(TAG, "From: " + remoteMessage.getFrom());
+		Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
+	}
 
-    //Zeigt die Notification
-    private void showNotification(String title, String message) {
-        Intent intent = new Intent(this, MainActivity.class);
+	//Zeigt die Notification, falls der Nutzer gerade in der App ist wenn die Notification eintrifft
+	private void showNotification(String title, String message) {
+		Intent intent = new Intent(this, MainActivity.class);
 
-        // Activity wird über die aktuelle Activity gelegt, damit der zurück weg normal ist.
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		// Activity wird über die aktuelle Activity gelegt, damit der zurück weg normal ist.
+		intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-        intent.setAction(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+		intent.setAction(Intent.ACTION_MAIN);
+		intent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-        // damit später geprüft werden kann welcher intent gestartet wurde
-        intent.putExtra( Define.NOTIFICATION_TYPE, Define.NOTIFICATION_TYPE_CHANGE);
+		// damit später geprüft werden kann welcher intent gestartet wurde
+		intent.putExtra(Define.NOTIFICATION_TYPE, Define.NOTIFICATION_TYPE_CHANGE);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+		PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
-        notificationBuilder.setContentTitle(title);
-        notificationBuilder.setContentText(message);
-        notificationBuilder.setSmallIcon(R.mipmap.ic_launcher);
-        notificationBuilder.setAutoCancel(true);
-        notificationBuilder.setContentIntent(pendingIntent);
+		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(
+				this, Define.NOTIFICATION_CHANNEL_SCHEDULE_CHANGES_ID);
+		notificationBuilder.setContentTitle(title);
+		notificationBuilder.setContentText(message);
+		notificationBuilder.setSmallIcon(R.mipmap.ic_launcher);
+		notificationBuilder.setAutoCancel(true);
+		notificationBuilder.setContentIntent(pendingIntent);
 		// damit bei der Benachrichtigung den Standard Sound wiedergegeben wird
-        notificationBuilder.setDefaults(Notification.DEFAULT_SOUND);
+		notificationBuilder.setDefaults(Notification.DEFAULT_SOUND);
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        junit.framework.Assert.assertTrue( notificationManager != null ) ;
-        notificationManager.notify(0, notificationBuilder.build());
-    }
+		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		junit.framework.Assert.assertTrue(notificationManager != null);
+		notificationManager.notify(0, notificationBuilder.build());
+	}
 }
