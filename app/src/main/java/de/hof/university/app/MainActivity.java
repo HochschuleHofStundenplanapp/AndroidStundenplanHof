@@ -356,6 +356,8 @@ public class MainActivity extends AppCompatActivity
 			// aber in der Haupt-Activity wollen wir ja eben noch mal nachfragen.
 			if (getFragmentManager().getBackStackEntryCount() >= 1) {
 				getFragmentManager().popBackStack();
+			} else if (getSupportFragmentManager().getBackStackEntryCount() >= 1) {
+				getSupportFragmentManager().popBackStack();
 			} else {
 				// Wurde der Zurück-Button zwei Mal gedrückt? Dann verlassen wir erst die App
 				if (!backButtonPressedOnce) {
