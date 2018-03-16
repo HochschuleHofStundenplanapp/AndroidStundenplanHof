@@ -504,8 +504,15 @@ class CalendarInterface {
 		Context context = MainActivity.getAppContext();
 		SharedPreferences sharedPreferences = MainActivity.getSharedPreferences();
 		// get the minutes
-		int reminderMinutes = sharedPreferences.getInt(context.getString(R.string.PREF_KEY_CALENDAR_REMINDER),
-				R.integer.CALENDAR_REMINDER_DEFAULT_VALUE);
+		int reminderMinutes;
+		try {
+			reminderMinutes = Integer.parseInt(sharedPreferences.getString(context.getString(R.string.PREF_KEY_CALENDAR_REMINDER),
+					"" + context.getResources().getInteger(R.integer.CALENDAR_REMINDER_DEFAULT_VALUE)));
+		} catch (NumberFormatException e) {
+			reminderMinutes = context.getResources().getInteger(R.integer.CALENDAR_REMINDER_DEFAULT_VALUE);
+			Log.e(TAG, "reminderMinutes was set to default value", e);
+		}
+
 		// if minutes are not 0
         if (reminderMinutes != 0) {
         	// add the reminder
