@@ -53,7 +53,6 @@
         <ListPreference
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:defaultValue="Hof"
             android:key="selected_canteen"
             android:title="@string/mensa" />
         <CheckBoxPreference

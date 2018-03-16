@@ -95,17 +95,19 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		final CharSequence[] entryValues = {"310", "320", "330", "340", "350","370"};
 		//"310", "320", "330", "340", "350","370"
 		if (lpCanteen != null){
-				lpCanteen.setEntries(entries);
-				lpCanteen.setDefaultValue(entries[3]);
-				lpCanteen.setEntryValues(entryValues);
-				lpCanteen.setEnabled(true);
+			lpCanteen.setEntries(entries);
+			lpCanteen.setEntryValues(entryValues);
+			if (lpCanteen.getValue() == null) {
+				lpCanteen.setValue("" + entryValues[3]);
+			}
+			lpCanteen.setEnabled(true);
 
-				lpCanteen.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+			lpCanteen.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 				@Override
 				public boolean onPreferenceChange(Preference preference, Object newValue) {
 					Define.mensa_changed = true;
 					Log.d("Settings: ", "new Canteen selected! Invalidating Cache!");
-					refreshCanteenSummary( (String) newValue);
+					refreshCanteenSummary((String) newValue);
 					return true;
 				}
 			});
