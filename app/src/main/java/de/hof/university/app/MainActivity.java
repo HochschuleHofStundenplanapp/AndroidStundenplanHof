@@ -17,6 +17,7 @@
 package de.hof.university.app;
 
 import android.app.AlertDialog;
+import android.app.NotificationChannel;
 import android.os.StrictMode;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -177,14 +178,35 @@ public class MainActivity extends AppCompatActivity
 		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 
+		// Um den geänderten Beamten Tarif zu fixen
+		fixMealTariff();
+
+		// create notifications channels for Android 8 (Oreo)
+		createNotificationChannels();
+
 		// wurde die Activity durch ein Intent gestartet, vermutlich durch klicken auf eine Benachrichtigung?
 		handleIntent();
 
 		// beim ersten Start einen Hinweis auf die experimentellen Funktionen geben
 		showExperimentalFeaturesInfoDialog(sharedPreferences);
+	}
 
-		// Um den geänderten Beamten Tarif zu fixen
-		fixMealTariff();
+	private void createNotificationChannels() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			// Create the NotificationChannel
+			CharSequence name = getString(R.string.notification_channel_schedule_changes_name);
+			String description = getString(R.string.notification_channel_schedule_changes_description);
+			int importance = NotificationManager.IMPORTANCE_HIGH;
+
+			NotificationChannel scheduleNotificationsChannel = new NotificationChannel(Define.NOTIFICATION_CHANNEL_SCHEDULE_CHANGES_ID, name, importance);
+			scheduleNotificationsChannel.setDescription(description);
+
+			// Register the channel with the system; you can't change the importance
+			// or other notification behaviors after this
+			NotificationManager notificationManager = (NotificationManager) getSystemService(
+					NOTIFICATION_SERVICE);
+			notificationManager.createNotificationChannel(scheduleNotificationsChannel);
+		}
 	}
 
 	/**

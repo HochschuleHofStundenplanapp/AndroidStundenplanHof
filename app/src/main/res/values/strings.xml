@@ -17,6 +17,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="">
     <string name="app_name">Hof University</string>
 
+    <string name="DEFAULT_NOTIFICATION_CHANNEL_ID" translatable="false">notification_channel_schedule_changes</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -184,5 +186,7 @@
     <string name="minute">Minute</string>
     <string name="minutes">Minutes</string>
     <string name="schedule_reminder">Reminder</string>
+    <string name="notification_channel_schedule_changes_name">Schedule changes</string>
+    <string name="notification_channel_schedule_changes_description">Get notifications about schedule changes</string>
 
 </resources>

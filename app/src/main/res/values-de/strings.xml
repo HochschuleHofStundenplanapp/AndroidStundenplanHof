@@ -171,5 +171,7 @@
     <string name="minute">Minute</string>
     <string name="minutes">Minuten</string>
     <string name="schedule_reminder">Erinnerung anzeigen</string>
+    <string name="notification_channel_schedule_changes_name">Stundenplan Änderungen</string>
+    <string name="notification_channel_schedule_changes_description">Bekomme Benachrichtigungen über Stundenplan Änderungen</string>
 
 </resources>
