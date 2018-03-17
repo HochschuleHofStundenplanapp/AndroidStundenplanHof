@@ -22,9 +22,9 @@ android {
     defaultConfig {
         applicationId 'de.hof.university.app'
         minSdkVersion 16
-        targetSdkVersion 26
-        versionCode 33
-        versionName '4.4'
+        targetSdkVersion 27
+        versionCode 34
+        versionName '4.5'
     }
 
     signingConfigs {
@@ -75,7 +75,7 @@ android {
         // but continue the build even when errors are found:
         abortOnError false
 
-        disable 'MissingTranslation'
+        //disable 'MissingTranslation'
     }
 }
 
@@ -91,9 +91,9 @@ dependencies {
     compile 'com.android.support:support-v4:+'
     //compile 'com.android.support:recyclerview-v7:25.2.0'
     compile 'com.android.support:recyclerview-v7:+'
-    compile 'org.jsoup:jsoup:1.10.3'
     //compile 'org.jsoup:jsoup:1.9.2'
     //compile 'org.jsoup:jsoup:1.9.+'
+    compile 'org.jsoup:jsoup:+'
     // Die Versionsnummer sollte die gleiche sein
     //compile 'com.google.android.gms:play-services-gcm:10.2.0'
     compile 'com.google.android.gms:play-services-gcm:10.+'
