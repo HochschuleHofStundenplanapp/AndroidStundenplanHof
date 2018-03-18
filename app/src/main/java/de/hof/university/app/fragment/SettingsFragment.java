@@ -97,6 +97,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		if (lpCanteen != null){
 			lpCanteen.setEntries(entries);
 			lpCanteen.setEntryValues(entryValues);
+			// Set default value (setDefaultValue-Method not function!)
 			if (lpCanteen.getValue() == null) {
 				lpCanteen.setValue("" + entryValues[3]);
 			}
