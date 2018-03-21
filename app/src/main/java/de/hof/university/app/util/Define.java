@@ -180,4 +180,7 @@ public final class Define {
 	public final static String SHORTCUT_INTENT_CHANGES = "de.hof.university.app.CHANGES";
 	public final static String SHORTCUT_INTENT_MEAL = "de.hof.university.app.MEAL";
 
+	// Notifications Channels
+	public final static String NOTIFICATION_CHANNEL_SCHEDULE_CHANGES_ID = "notification_channel_schedule_changes";
+
 }
