@@ -16,6 +16,9 @@
 
 package de.hof.university.app.data;
 
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
 
@@ -28,15 +31,23 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
+import de.hof.university.app.MainActivity;
+import de.hof.university.app.R;
+import de.hof.university.app.data.parser.Parser;
+import de.hof.university.app.data.parser.ParserFactory;
+import de.hof.university.app.model.meal.Meal;
 import de.hof.university.app.util.Define;
 
 /**
  * Created by Lukas on 14.06.2016.
  */
-public class DataConnector {
+public class DataConnector extends AsyncTask<String, Void, String> {
 
     private static final String TAG = "DataConnector";
+    private DataManager myDataManager = DataManager.getInstance();
+    private final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.getAppContext().getApplicationContext());
 
     final String readStringFromUrl(final String strUrl) {
         InputStream inputStream;
@@ -75,4 +86,54 @@ public class DataConnector {
         return "";
 
     }
+
+    @Override
+    protected String doInBackground(String... urls) {
+        InputStream inputStream;
+
+        HttpURLConnection urlConnection;
+
+        final URL url;
+        try {
+            url = new URL(urls[0]);
+            urlConnection = (HttpURLConnection) url.openConnection();
+
+            //Für die Schnittstelle der Hochschule wird Authentifizerung benötigt
+            final String userPassword = Define.sAuthSoapUserName + ':' + Define.sAuthSoapPassword;
+            final String encoding = Base64.encodeToString(userPassword.getBytes(), Base64.DEFAULT);
+            urlConnection.setRequestProperty("Authorization", "Basic " + encoding);
+
+            urlConnection.setConnectTimeout(Define.connectTimeout);
+            urlConnection.setReadTimeout(Define.readTimeout);
+            inputStream = new BufferedInputStream(urlConnection.getInputStream());
+
+            final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
+            final StringBuilder sb = new StringBuilder();
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append('\n');
+            }
+            return sb.toString();
+
+        } catch (final MalformedURLException | UnsupportedEncodingException exception) {
+            Log.e(TAG, "readStringFromUrl: MalformedURLException | UnsupportedEncodingException: ", exception);
+        } catch (final IOException exception) {
+            Log.e(TAG, "readStringFromUrl: IOExcepton: ", exception);
+        }
+
+        return null;
+    }
+
+    @Override
+    protected void onPostExecute(String result){
+        final Parser parser = ParserFactory.create(ParserFactory.EParser.MENU);
+        final String[] params = {result, sharedPreferences.getString( MainActivity.getAppContext().getString( R.string.PREF_KEY_MEAL_TARIFF ), "1")};
+
+        ArrayList<Meal> tmpMeals = (ArrayList<Meal>) parser.parse(params);
+
+
+    }
+
+
 }

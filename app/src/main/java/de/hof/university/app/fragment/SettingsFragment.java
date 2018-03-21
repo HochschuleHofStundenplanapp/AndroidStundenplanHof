@@ -27,7 +27,7 @@ import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
-import android.preference.PreferenceFragment;
+import android.support.v4.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import android.support.design.widget.NavigationView;
@@ -89,6 +89,34 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		if ( lpCourse != null ) {
 			lpCourse.setEnabled(false);
 		}
+
+		final ListPreference lpCanteen = (ListPreference) findPreference(getString(R.string.PREF_KEY_SELECTED_CANTEEN));
+		final CharSequence[] entries = {"Bayreuth","Coburg","Amberg", "Hof", "Weiden", "Münchberg"};
+		final CharSequence[] entryValues = {"310", "320", "330", "340", "350","370"};
+		//"310", "320", "330", "340", "350","370"
+		if (lpCanteen != null){
+			lpCanteen.setEntries(entries);
+			lpCanteen.setEntryValues(entryValues);
+			if (lpCanteen.getValue() == null) {
+				lpCanteen.setValue("" + entryValues[3]);
+			}
+			lpCanteen.setEnabled(true);
+
+			lpCanteen.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+				@Override
+				public boolean onPreferenceChange(Preference preference, Object newValue) {
+					Define.mensa_changed = true;
+					Log.d("Settings: ", "new Canteen selected! Invalidating Cache!");
+					refreshCanteenSummary((String) newValue);
+					return true;
+				}
+			});
+		}
+		else {
+			lpCanteen.setEnabled(false);
+		}
+
+
 
 		// Benachrichtigungen
 		final CheckBoxPreference changes_notifications = (CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_CHANGES_NOTIFICATION));
@@ -223,6 +251,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 			updateCourseListPreference("", false);
 		}
 
+
 		updateSemesterData(PreferenceManager.getDefaultSharedPreferences(getView().getContext()).getString(getString(R.string.PREF_KEY_STUDIENGANG), ""));
 //        updateSemesterListPreference();
 		refreshSummaries();
@@ -252,19 +281,76 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
 	}
 
+	private void refreshCanteenSummary(String newCanteen){
+		String selectedMensa;
+		switch (newCanteen){
+			case "310":
+				selectedMensa = "Bayreuth";
+				break;
+			case "320":
+				selectedMensa = "Coburg";
+				break;
+			case "330":
+				selectedMensa = "Amberg";
+				break;
+			case "340":
+				selectedMensa = "Hof";
+				break;
+			case "350":
+				selectedMensa = "Weiden";
+				break;
+			case "370":
+				selectedMensa = "Münchberg";
+				break;
+			default:
+				selectedMensa = "Hof";
+		}
+
+		final ListPreference lpCanteen = (ListPreference) findPreference(getString(R.string.PREF_KEY_SELECTED_CANTEEN));
+		lpCanteen.setSummary(selectedMensa);
+
+	}
+
 	private void refreshSummaries() {
 	    /*
         EditTextPreference edtName = (EditTextPreference) findPreference("primuss_user");
         edtName.setSummary(edtName.getText());
         */
-
 		final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getView().getContext());
+	    String selectedMensa;
+
+	    switch (sharedPreferences.getString("selected_canteen", "340")){
+			case "310":
+				selectedMensa = "Bayreuth";
+				break;
+			case "320":
+				selectedMensa = "Coburg";
+				break;
+			case "330":
+				selectedMensa = "Amberg";
+				break;
+			case "340":
+				selectedMensa = "Hof";
+				break;
+			case "350":
+				selectedMensa = "Weiden";
+				break;
+			case "370":
+				selectedMensa = "Münchberg";
+				break;
+			default:
+				selectedMensa = "Hof";
+		}
+
 
 		final ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREF_KEY_STUDIENGANG));
 		lpCourse.setSummary(sharedPreferences.getString(getString(R.string.PREF_KEY_STUDIENGANG), ""));
 
 		final ListPreference lpSemester = (ListPreference) findPreference(getString(R.string.PREF_KEY_SEMESTER));
 		lpSemester.setSummary(sharedPreferences.getString(getString(R.string.PREF_KEY_SEMESTER), ""));
+
+		final ListPreference lpCanteen = (ListPreference) findPreference(getString(R.string.PREF_KEY_SELECTED_CANTEEN));
+		lpCanteen.setSummary(selectedMensa);
 
 		final ListPreference lpTarif = (ListPreference) findPreference(getString(R.string.PREF_KEY_MEAL_TARIFF));
 		lpTarif.setSummary(lpTarif.getEntry());
@@ -386,6 +472,24 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		}
 	}
 
+	private void updateCanteenData(){
+		final  ListPreference lpCanteen = (ListPreference) findPreference(getString((R.string.PREF_KEY_SELECTED_CANTEEN)));
+		final CharSequence[] entries = {"Bayreuth","Coburg","Amberg", "Hof", "Weiden", "Münchberg"};
+		final CharSequence[] entryValues = {"310", "320", "330", "340", "350","370"};
+		//"310", "320", "330", "340", "350","370"
+
+		if ( lpCanteen != null ) {
+			if ( entries.length > 0 ) {
+				lpCanteen.setEntries(entries);
+				lpCanteen.setEntryValues(entryValues);
+				lpCanteen.setEnabled(true);
+			} else {
+				lpCanteen.setEnabled(false);
+			}
+		}
+
+
+	}
 
 	/**
 	 * Öffnet Prozessdialog und aktualisiert die Semester zu dem zuvor ausgewählten Studiengang

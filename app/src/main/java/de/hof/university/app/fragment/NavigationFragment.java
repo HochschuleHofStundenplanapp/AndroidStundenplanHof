@@ -37,7 +37,7 @@ import de.hof.university.app.util.Define;
  * Created by Daniel on 02.08.2017.
  */
 
-public class NavigationFragment extends Fragment {
+public class NavigationFragment extends android.support.v4.app.Fragment {
 
     public final static String TAG = "NavigationFragment";
     private SwipeRefreshLayout swipeContainer;

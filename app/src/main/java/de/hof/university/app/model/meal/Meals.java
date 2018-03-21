@@ -29,18 +29,30 @@ public class Meals extends HofObject {
 	private static final long serialVersionUID = Define.serialVersionUIDv1;
 
 	private ArrayList<Meal> meals;
+	private ArrayList<Meal> nextWeekMeals;
+	private ArrayList<Meal> in3Weekmeal;
 
 	public Meals() {
 		super();
 		this.meals = new ArrayList<>();
+		this.nextWeekMeals = new ArrayList<>();
+		this.in3Weekmeal = new ArrayList<>();
 	}
 
 	public ArrayList<Meal> getMeals() {
 		return meals;
 	}
 
+	public ArrayList<Meal> getNextWeekMeals() {return nextWeekMeals;}
+
+	public ArrayList<Meal> getIn3Weekmeal() {return in3Weekmeal;}
+
 	public void setMeals(ArrayList<Meal> meals) {
 		this.meals = meals;
 	}
+
+	public void setNextWeekMeals(ArrayList<Meal> meals){this.nextWeekMeals = meals;}
+
+	public void setIn3Weekmeal(ArrayList<Meal> meals){this.in3Weekmeal = meals;}
 
 }

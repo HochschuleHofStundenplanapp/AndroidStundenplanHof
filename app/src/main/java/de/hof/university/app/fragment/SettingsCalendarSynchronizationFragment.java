@@ -10,16 +10,13 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.preference.PreferenceFragment;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,21 +51,21 @@ public class SettingsCalendarSynchronizationFragment extends PreferenceFragment 
 
 		// Load the Calendar preferences from an XML resource
 		addPreferencesFromResource(R.xml.preferences_calendar_synchronization);
-		
+
 		// Calendar synchronization, switch on or off, in general
-		final CheckBoxPreference calendar_syncronization = (CheckBoxPreference) findPreference(getString( R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION));
-		calendar_syncronization.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+		final CheckBoxPreference calendar_synchronization = (CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION));
+		calendar_synchronization.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				
+
 				// TODO switch
 				if ( (Boolean) newValue ) {
 					// an schalten
 					turnCalendarSyncOn();
 				} else {
-					
+
 					// check, if accidentally switsched off.
-					
+
 					// aus schalten
 					turnCalendarSyncOff();
 				}
@@ -76,29 +73,19 @@ public class SettingsCalendarSynchronizationFragment extends PreferenceFragment 
 			}
 		});
 
-		
+
 		final EditTextPreference calendarReminderEditText = (EditTextPreference) findPreference(getString(R.string.PREF_KEY_CALENDAR_REMINDER));
-		calendarReminderEditText.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+		calendarReminderEditText.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
-			public boolean onPreferenceClick(Preference preference) {
-
-				String minutesString = calendarReminderEditText.getText().toString();
-
-				int minutes;
-
-				try {
-					minutes = Integer.parseInt(minutesString);
-				} catch (NumberFormatException e) {
-					Log.e(TAG, "NumberFormatException", e);
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				if (newValue instanceof String) {
+					updateSummary((String) newValue);
+					calendarSynchronization.updateCalendar();
 					return true;
+				} else {
+					return false;
 				}
-
-				sharedPreferences.edit()
-						.putInt(getString(R.string.PREF_KEY_CALENDAR_REMINDER), minutes)
-						.apply();
-
-				updateSummary();
-				return true;
 			}
 		});
 
@@ -120,19 +107,32 @@ public class SettingsCalendarSynchronizationFragment extends PreferenceFragment 
 
 
 		final CheckBoxPreference calendar_synchronization = (CheckBoxPreference) findPreference(getString( R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION));
+		final EditTextPreference calendarReminderEditText = (EditTextPreference) findPreference(getString(R.string.PREF_KEY_CALENDAR_REMINDER));
 
 		// aktiviere oder deaktiviere die Kalender Synchronisation je nachdem ob die experimentellen Funktionen aktiviert sind oder nicht
 		boolean experimentalFeaturesEnabled = sharedPreferences.getBoolean(getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES_ENABLED), false);
 
-		calendar_synchronization.setEnabled( experimentalFeaturesEnabled );
+		calendar_synchronization.setEnabled(experimentalFeaturesEnabled);
+		calendarReminderEditText.setEnabled(experimentalFeaturesEnabled);
 
 		// update summary
-		updateSummary();
+		updateSummary(null);
 	}
 
-	private void updateSummary() {
+	private void updateSummary(String newValue) {
 		final Preference calendarReminderPref = findPreference(getString(R.string.PREF_KEY_CALENDAR_REMINDER));
-		final int minutes = sharedPreferences.getInt(getString(R.string.PREF_KEY_CALENDAR_REMINDER), R.integer.CALENDAR_REMINDER_DEFAULT_VALUE);
+		int minutes;
+		try {
+			if (newValue == null) {
+				minutes = Integer.parseInt(sharedPreferences.getString(getString(R.string.PREF_KEY_CALENDAR_REMINDER), "" + getResources().getInteger(R.integer.CALENDAR_REMINDER_DEFAULT_VALUE)));
+			} else {
+				minutes = Integer.parseInt(newValue);
+			}
+		} catch (NumberFormatException e) {
+			minutes = getResources().getInteger(R.integer.CALENDAR_REMINDER_DEFAULT_VALUE);
+			Log.e(TAG, "reminderMinutes was set to default value", e);
+		}
+
 		if (minutes == 1) {
 			// Einzahl
 			calendarReminderPref.setSummary("" + minutes + " " + getString(R.string.minute));

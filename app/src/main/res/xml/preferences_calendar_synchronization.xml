@@ -11,8 +11,9 @@
         android:title="@string/schedule_reminder">
 
         <EditTextPreference
-            android:key="@string/PREF_KEY_CALENDAR_REMINDER"
             android:defaultValue="@integer/CALENDAR_REMINDER_DEFAULT_VALUE"
+            android:inputType="number"
+            android:key="@string/PREF_KEY_CALENDAR_REMINDER"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="@string/pref_calendar_reminder_text" />

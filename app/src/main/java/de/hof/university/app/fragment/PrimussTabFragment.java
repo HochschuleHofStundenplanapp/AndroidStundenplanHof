@@ -38,7 +38,7 @@ import de.hof.university.app.experimental.LoginController;
  * Created by Christian Pfeiffer on 14.12.16.
  */
 
-public class PrimussTabFragment extends Fragment {
+public class PrimussTabFragment extends android.support.v4.app.Fragment {
 	public final static String TAG = "PrimussFragment";
 	private SwipeRefreshLayout swipeContainer;
 

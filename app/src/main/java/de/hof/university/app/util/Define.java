@@ -66,15 +66,14 @@ public final class Define {
 	public static final String myScheduleFragmentName = "MYSCHEDULE_FRAGMENT";
 	public static final String scheduleFragmentName = "SCHEDULE_FRAGMENT";
 	public static final String changesFragmentName = "CHANGES_FRAGMENT";
-	public static final String mealsFragmentName = "MEALS_FRAGMENT";
+	public static final String mealsFragmentName = "MEAL_FRAGMENT";
+	public static final String mealplanFragmentName = "MEALPLAN_FRAGMENT";
 
 
 	public static final long serialVersionUIDv1 = 1L;
 	// SerialVersionUID falls etwas geändert wird, das dazu führt das das alte nicht mehr geladen werden kann:
 	public static final long serialVersionUIDv2 = 2L;
 
-	// Essensplan
-	public final static String URL_STUDENTENWERK = "https://www.studentenwerk-oberfranken.de/?eID=bwrkSpeiseplanRss&tx_bwrkspeiseplan_pi2%5Bbar%5D=340&tx_bwrkspeiseplan_pi2%5Bdate%5D=";
 
 
 	// Server Web-Services
@@ -110,8 +109,10 @@ public final class Define {
 	public final static String URL_CHANGES 		= (URL_WEBSERVICE_HOF+"?f=Changes");
 	public final static String URL_MYSCHEDULE 	= (URL_WEBSERVICE_HOF+"?f=MySchedule");
 
-	public final static String URL_MEAL 		= URL_STUDENTENWERK;
-
+	//Essensplan
+	public final static String URL_MEAL1 		= "https://www.studentenwerk-oberfranken.de/?eID=bwrkSpeiseplanRss&tx_bwrkspeiseplan_pi2%5Bbar%5D=";
+	public final static String URL_MEAL2		= "&tx_bwrkspeiseplan_pi2%5Bdate%5D=";
+	public static boolean mensa_changed = false;
 
 	// show the fragments dealing with the location of the user
 	//not used: public static final boolean SHOW_LOCATION_FRAGMENT = true;

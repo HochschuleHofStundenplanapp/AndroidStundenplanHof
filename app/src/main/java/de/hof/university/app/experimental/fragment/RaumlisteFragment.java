@@ -56,7 +56,7 @@ import de.hof.university.app.experimental.model.Suchdetails;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RaumlisteFragment extends Fragment {
+public class RaumlisteFragment extends android.support.v4.app.Fragment {
 
     private final static String TAG = "RaumlisteFragment";
 
