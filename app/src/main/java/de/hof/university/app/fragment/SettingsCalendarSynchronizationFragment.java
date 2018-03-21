@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -45,7 +46,7 @@ public class SettingsCalendarSynchronizationFragment extends PreferenceFragment 
 	public void onCreate( @Nullable Bundle savedInstanceState ) {
 		super.onCreate( savedInstanceState );
 
-		sharedPreferences = MainActivity.getSharedPreferences();
+		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.getAppContext());
 
 		this.calendarSynchronization = CalendarSynchronization.getInstance();
 

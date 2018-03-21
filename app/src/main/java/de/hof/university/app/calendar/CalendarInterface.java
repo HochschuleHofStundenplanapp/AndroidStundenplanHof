@@ -26,6 +26,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
@@ -502,7 +503,7 @@ class CalendarInterface {
 		// set a reminder
 		// get the context and the sharedPreferences
 		Context context = MainActivity.getAppContext();
-		SharedPreferences sharedPreferences = MainActivity.getSharedPreferences();
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 		// get the minutes
 		int reminderMinutes;
 		try {
