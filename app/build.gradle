@@ -87,7 +87,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:27.+'
     compile 'com.android.support:design:27.+'
     compile 'com.android.support:support-v4:27.+'
-    compile 'com.android.support:recyclerview-v7:+'
+    compile 'com.android.support:recyclerview-v7:27.+'
     //compile 'org.jsoup:jsoup:1.9.2'
     //compile 'org.jsoup:jsoup:1.9.+'
     compile 'org.jsoup:jsoup:+'
