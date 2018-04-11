@@ -47,7 +47,7 @@ captures/
 # Keystore files
 *.jks
 
-gradlew
+gradlew.*
 
 gradlew.bat
 .idea/misc.xml
@@ -57,3 +57,4 @@ app/build.gradle_withKey
 app/build.gradle__Stepping
 app/release/output.json
 .idea/dictionaries/stepping.xml
+gradlew
