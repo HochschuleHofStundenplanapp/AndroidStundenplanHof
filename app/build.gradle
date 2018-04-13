@@ -21,10 +21,10 @@ android {
     buildToolsVersion '28.0.0 rc1'
     defaultConfig {
         applicationId 'de.hof.university.app'
-        minSdkVersion 16
         targetSdkVersion 27
         versionCode 34
         versionName '4.5'
+        minSdkVersion 16
     }
 
     signingConfigs {
@@ -81,26 +81,26 @@ android {
 
 //NOTICE: Die Versionsnummer sollte pro Block gleich sein
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     // jsoup HTML parser library @ http://jsoup.org/
     // Die Versionsnummer sollte die gleiche sein
-    compile 'com.android.support:appcompat-v7:27.+'
-    compile 'com.android.support:design:27.+'
-    compile 'com.android.support:support-v4:27.+'
-    compile 'com.android.support:recyclerview-v7:27.+'
-    //compile 'org.jsoup:jsoup:1.9.2'
-    //compile 'org.jsoup:jsoup:1.9.+'
-    compile 'org.jsoup:jsoup:+'
+    implementation 'com.android.support:appcompat-v7:27.+'
+    implementation 'com.android.support:design:27.+'
+    implementation 'com.android.support:support-v4:27.+'
+    implementation 'com.android.support:recyclerview-v7:27.+'
+    //implementation 'org.jsoup:jsoup:1.9.2'
+    //implementation 'org.jsoup:jsoup:1.9.+'
+    implementation 'org.jsoup:jsoup:+'
     // Die Versionsnummer sollte die gleiche sein
-    //compile 'com.google.android.gms:play-services-gcm:10.2.0'
-    compile 'com.google.android.gms:play-services-gcm:11.+'
-    //compile 'com.google.firebase:firebase-messaging:10.2.0'
-    compile 'com.google.firebase:firebase-messaging:11.+'
-    compile 'org.osmdroid:osmdroid-android:5.6.5'
-    testCompile 'junit:junit:4.+'
+    //implementation 'com.google.android.gms:play-services-gcm:10.2.0'
+    implementation 'com.google.android.gms:play-services-gcm:11.+'
+    //implementation 'com.google.firebase:firebase-messaging:10.2.0'
+    implementation 'com.google.firebase:firebase-messaging:11.+'
+    implementation 'org.osmdroid:osmdroid-android:5.6.5'
+    testImplementation 'junit:junit:4.+'
     //compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support.constraint:constraint-layout:+'
-    compile project(':subProject:android-support-v4-preferencefragment')
+    implementation 'com.android.support.constraint:constraint-layout:+'
+    implementation project(':subProject:android-support-v4-preferencefragment')
 }
 
 apply plugin: 'com.google.gms.google-services'
