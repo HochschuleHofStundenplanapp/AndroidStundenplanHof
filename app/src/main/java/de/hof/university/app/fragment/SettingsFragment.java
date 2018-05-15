@@ -50,7 +50,7 @@ import de.hof.university.app.util.Define;
 /**
  * Created by Lukas on 24.11.2015.
  */
-public class SettingsFragment extends PreferenceFragmentCombat implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 	public final static String TAG = "SettingsFragment";
 
