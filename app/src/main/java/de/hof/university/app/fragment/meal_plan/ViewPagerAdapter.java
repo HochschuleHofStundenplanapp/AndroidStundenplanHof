@@ -6,10 +6,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -25,15 +23,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     private final ArrayList<Fragment> mFragmentList = new ArrayList<>();
     private final ArrayList<String> mFragmentTitleList = new ArrayList<>();
     Context context;
-    ViewPager viewPager;
-    TabLayout tabLayout;
 
     public ViewPagerAdapter(FragmentManager manager, Context context, ViewPager viewPager,
                             TabLayout tabLayout) {
         super(manager);
         this.context = context;
-        this.viewPager = viewPager;
-        this.tabLayout = tabLayout;
     }
 
     @Override

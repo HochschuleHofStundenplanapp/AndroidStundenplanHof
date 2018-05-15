@@ -15,5 +15,6 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="android.support.v4.preferencefragment">
-    <application></application>
+
+    <application />
 </manifest>

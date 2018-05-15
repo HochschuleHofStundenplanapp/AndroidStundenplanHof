@@ -20,7 +20,6 @@ package de.hof.university.app.fragment;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -75,7 +74,7 @@ public class MapFragment extends android.support.v4.app.Fragment {
     private Marker marker;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Speicherort für OSMDroid auf persönlichen Ordner der App setzen
         Configuration.getInstance().setOsmdroidBasePath(new File(getActivity().getFilesDir(), "OSMDroidBase"));
         Configuration.getInstance().setOsmdroidTileCache(new File(getActivity().getFilesDir(), "OSMDroidTileCache"));
@@ -85,7 +84,7 @@ public class MapFragment extends android.support.v4.app.Fragment {
 
     @SuppressLint("MissingPermission")
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         myOpenMapView = (MapView) view.findViewById(R.id.mapView);

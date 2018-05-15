@@ -16,11 +16,11 @@
 
 package de.hof.university.app.fragment;
 
-import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,11 +33,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import de.hof.university.app.R;
-import de.hof.university.app.util.Define;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.fragment.schedule.ChangesFragment;
 import de.hof.university.app.fragment.schedule.MyScheduleFragment;
 import de.hof.university.app.fragment.schedule.ScheduleFragment;
+import de.hof.university.app.util.Define;
 
 
 /**
@@ -65,7 +65,7 @@ public abstract class AbstractListFragment extends android.support.v4.app.Fragme
     protected abstract ArrayAdapter setArrayAdapter();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_list, container, false);
 

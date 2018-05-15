@@ -1,8 +1,8 @@
 package de.hof.university.app.fragment.meal_plan;
 
 
-import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -12,13 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
-import de.hof.university.app.data.DataManager;
 import de.hof.university.app.fragment.MealFragment;
-import de.hof.university.app.model.meal.Meal;
 
 /**
  * Created and © by Christian G. Pfeiffer on 21.12.17.
@@ -44,7 +40,7 @@ public class MealPagerFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_menu, container, false);
 
@@ -109,6 +105,7 @@ public class MealPagerFragment extends Fragment {
     }
 
     public void setupTabLayout() {
+
         selectedTabPosition = viewPager.getCurrentItem();
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             tabLayout.getTabAt(i).setCustomView(adapter.getTabView(i));

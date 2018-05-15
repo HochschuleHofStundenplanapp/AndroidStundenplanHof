@@ -91,19 +91,29 @@ dependencies {
     implementation 'com.android.support:support-v4:27.+'
     //compile 'co m.android.support:recyclerview-v7:25.2.0'
     implementation 'com.android.support:recyclerview-v7:27.+'
-    implementation 'org.jsoup:jsoup:1.10.3'
+    implementation 'org.jsoup:jsoup:1.11.3'
     //compile 'org.jsoup:jsoup:1.9.2'
     //compile 'org.jsoup:jsoup:1.9.+'
     // Die Versionsnummer sollte die gleiche sein
     //implementation 'com.google.android.gms:play-services-gcm:10.2.0'
-    implementation 'com.google.android.gms:play-services-gcm:11.+'
+    implementation 'com.google.android.gms:play-services-gcm:12.+'
     //implementation 'com.google.firebase:firebase-messaging:10.2.0'
-    implementation 'com.google.firebase:firebase-messaging:11.+'
-    implementation 'org.osmdroid:osmdroid-android:5.6.5'
+    implementation 'com.google.firebase:firebase-messaging:12.+'
+
+    implementation 'org.osmdroid:osmdroid-android:5.+'
+
     testImplementation 'junit:junit:4.+'
     //compile 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.android.support.constraint:constraint-layout:+'
     implementation project(':subProject:android-support-v4-preferencefragment')
 }
+
+allprojects {
+    repositories {
+        mavenCentral()
+        mavenLocal()    //add this if it's missing
+    }
+}
+
 
 apply plugin: 'com.google.gms.google-services'

@@ -67,21 +67,20 @@ public class MealFragment extends AbstractListFragment {
 	@Override
 	public final void onResume() {
 		super.onResume();
-		MainActivity mainActivity = (MainActivity) getActivity();
+		final MainActivity mainActivity = (MainActivity) getActivity();
 		mainActivity.getSupportActionBar().setTitle(R.string.speiseplan);
 
 		Log.d("MealFragment", "onResume");
 
-		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+		final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
 		navigationView.getMenu().findItem(R.id.nav_speiseplan).setChecked(true);
-
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		MainActivity mainActivity = (MainActivity) getActivity();
-		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+		final MainActivity mainActivity = (MainActivity) getActivity();
+		final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
 		navigationView.getMenu().findItem(R.id.nav_speiseplan).setChecked(false);
 	}
 

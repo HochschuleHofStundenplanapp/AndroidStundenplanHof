@@ -31,13 +31,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 
 import de.hof.university.app.MainActivity;
-import de.hof.university.app.R;
-import de.hof.university.app.data.parser.Parser;
-import de.hof.university.app.data.parser.ParserFactory;
-import de.hof.university.app.model.meal.Meal;
 import de.hof.university.app.util.Define;
 
 /**
@@ -46,12 +41,10 @@ import de.hof.university.app.util.Define;
 public class DataConnector extends AsyncTask<String, Void, String> {
 
     private static final String TAG = "DataConnector";
-    private DataManager myDataManager = DataManager.getInstance();
     private final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.getAppContext().getApplicationContext());
 
     final String readStringFromUrl(final String strUrl) {
         InputStream inputStream;
-
         HttpURLConnection urlConnection;
 
         final URL url;
@@ -84,7 +77,6 @@ public class DataConnector extends AsyncTask<String, Void, String> {
         }
 
         return "";
-
     }
 
     @Override
@@ -127,12 +119,13 @@ public class DataConnector extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result){
-        final Parser parser = ParserFactory.create(ParserFactory.EParser.MENU);
-        final String[] params = {result, sharedPreferences.getString( MainActivity.getAppContext().getString( R.string.PREF_KEY_MEAL_TARIFF ), "1")};
+        
+        // alles nicht benötigt
+		
+        //final Parser parser = ParserFactory.create(ParserFactory.EParser.MENU);
+        //final String[] params = {result, sharedPreferences.getString( MainActivity.getAppContext().getString( R.string.PREF_KEY_MEAL_TARIFF ), "1")};
 
-        ArrayList<Meal> tmpMeals = (ArrayList<Meal>) parser.parse(params);
-
-
+        //nicht benötigt: ArrayList<Meal> tmpMeals = (ArrayList<Meal>) parser.parse(params);
     }
 
 

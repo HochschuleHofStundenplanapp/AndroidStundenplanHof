@@ -113,9 +113,9 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 				}
 			});
 		}
-		else {
-			lpCanteen.setEnabled(false);
-		}
+//		else {
+//			lpCanteen.setEnabled(false);
+//		}
 
 
 
@@ -471,25 +471,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		} else {
 			return super.onOptionsItemSelected(item);
 		}
-	}
-
-	private void updateCanteenData(){
-		final  ListPreference lpCanteen = (ListPreference) findPreference(getString((R.string.PREF_KEY_SELECTED_CANTEEN)));
-		final CharSequence[] entries = {"Bayreuth","Coburg","Amberg", "Hof", "Weiden", "Münchberg"};
-		final CharSequence[] entryValues = {"310", "320", "330", "340", "350","370"};
-		//"310", "320", "330", "340", "350","370"
-
-		if ( lpCanteen != null ) {
-			if ( entries.length > 0 ) {
-				lpCanteen.setEntries(entries);
-				lpCanteen.setEntryValues(entryValues);
-				lpCanteen.setEnabled(true);
-			} else {
-				lpCanteen.setEnabled(false);
-			}
-		}
-
-
 	}
 
 	/**

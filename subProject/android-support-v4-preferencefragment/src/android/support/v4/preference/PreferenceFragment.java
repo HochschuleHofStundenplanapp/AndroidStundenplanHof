@@ -25,6 +25,7 @@ import android.preference.Preference;
 import android.preference.PreferenceGroup;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.preferencefragment.R;
 import android.view.KeyEvent;
@@ -38,6 +39,7 @@ import android.widget.ListView;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+@SuppressWarnings("SimplifiableIfStatement")
 public abstract class PreferenceFragment extends Fragment implements
 		PreferenceManagerCompat.OnPreferenceTreeClickListener {
     
@@ -95,8 +97,8 @@ public abstract class PreferenceFragment extends Fragment implements
 	}
 	
     @Override
-	public View onCreateView(LayoutInflater paramLayoutInflater, ViewGroup paramViewGroup,
-			Bundle paramBundle) {
+	public View onCreateView(@NonNull LayoutInflater paramLayoutInflater, ViewGroup paramViewGroup,
+							 Bundle paramBundle) {
 		return paramLayoutInflater.inflate(R.layout.preference_list_fragment, paramViewGroup,
 				false);
 	}
@@ -150,7 +152,7 @@ public abstract class PreferenceFragment extends Fragment implements
 	}
     
     @Override
-    public void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         final PreferenceScreen preferenceScreen = getPreferenceScreen();
@@ -229,7 +231,6 @@ public abstract class PreferenceFragment extends Fragment implements
      */
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
             Preference preference) {
-        //if (preference.getFragment() != null &&
     	if (
                 getActivity() instanceof OnPreferenceStartFragmentCallback) {
             return ((OnPreferenceStartFragmentCallback)getActivity()).onPreferenceStartFragment(
@@ -280,20 +281,21 @@ public abstract class PreferenceFragment extends Fragment implements
                         position -= ((ListView)parent).getHeaderViewsCount();
                     }
 
-                    Object item = preferenceScreen.getRootAdapter().getItem(position);
+                    final Object item = preferenceScreen.getRootAdapter().getItem(position);
                     if (!(item instanceof Preference))
                         return;
 
                     final Preference preference = (Preference)item;
                     try {
-                        Method performClick = Preference.class.getDeclaredMethod(
+                        final Method performClick = Preference.class.getDeclaredMethod(
                                 "performClick", PreferenceScreen.class);
                         performClick.setAccessible(true);
                         performClick.invoke(preference, preferenceScreen);
-                    } catch (InvocationTargetException e) {
-                    } catch (IllegalAccessException e) {
-                    } catch (NoSuchMethodException e) {
                     }
+                    catch (InvocationTargetException e) {}
+                    catch (IllegalAccessException e) {}
+                    catch (NoSuchMethodException e) {}
+                    
                 }
             });
         }
