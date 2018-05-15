@@ -58,3 +58,4 @@ app/build.gradle__Stepping
 app/release/output.json
 .idea/dictionaries/stepping.xml
 gradlew
+.idea/caches/build_file_checksums.ser
