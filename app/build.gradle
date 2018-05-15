@@ -17,14 +17,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 'android-P'
-    buildToolsVersion '28.0.0 rc2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId 'de.hof.university.app'
+        minSdkVersion 16
         targetSdkVersion 27
         versionCode 34
         versionName '4.5'
-        minSdkVersion 16
     }
 
     signingConfigs {
@@ -75,7 +75,7 @@ android {
         // but continue the build even when errors are found:
         abortOnError false
 
-        //disable 'MissingTranslation'
+        disable 'MissingTranslation'
     }
 }
 
@@ -84,19 +84,21 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     // jsoup HTML parser library @ http://jsoup.org/
     // Die Versionsnummer sollte die gleiche sein
-    implementation 'com.android.support:appcompat-v7:28.0.0-alpha1'
-    implementation 'com.android.support:design:28.0.0-alpha1'
-    implementation 'com.android.support:support-v4:28.0.0-alpha1'
-    implementation 'com.android.support:recyclerview-v7:28.0.0-alpha1'
-    implementation 'com.android.support:preference-v7:28.0.0-alpha1'
-    //implementation 'org.jsoup:jsoup:1.9.2'
-    //implementation 'org.jsoup:jsoup:1.9.+'
-    implementation 'org.jsoup:jsoup:+'
+    //compile 'com.android.support:appcompat-v7:25.2.0'
+    implementation 'com.android.support:appcompat-v7:27.+'
+    //compile 'com.android.support:design:25.2.0'
+    implementation 'com.android.support:design:27.+'
+    implementation 'com.android.support:support-v4:27.+'
+    //compile 'co m.android.support:recyclerview-v7:25.2.0'
+    implementation 'com.android.support:recyclerview-v7:27.+'
+    implementation 'org.jsoup:jsoup:1.10.3'
+    //compile 'org.jsoup:jsoup:1.9.2'
+    //compile 'org.jsoup:jsoup:1.9.+'
     // Die Versionsnummer sollte die gleiche sein
-    //implementation 'com.google.android.gms:play-services-gcm:10.2.0'
-    implementation 'com.google.android.gms:play-services-gcm:11.+'
-    //implementation 'com.google.firebase:firebase-messaging:10.2.0'
-    implementation 'com.google.firebase:firebase-messaging:11.+'
+    //compile 'com.google.android.gms:play-services-gcm:10.2.0'
+    implementation 'com.google.android.gms:play-services-gcm:10.+'
+    //compile 'com.google.firebase:firebase-messaging:10.2.0'
+    implementation 'com.google.firebase:firebase-messaging:10.+'
     implementation 'org.osmdroid:osmdroid-android:5.6.5'
     testImplementation 'junit:junit:4.+'
     //compile 'com.android.support.constraint:constraint-layout:1.0.2'
