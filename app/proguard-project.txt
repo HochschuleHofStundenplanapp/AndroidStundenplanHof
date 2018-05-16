@@ -81,6 +81,12 @@
 
 #
 
+#### Firebase
+-dontwarn com.google.android.gms.**
+-keep class com.google.android.gms.** { *; }
+-keep class com.google.firebase.** { *; }
+
+
 #-libraryjars /libs/Parse-1.5.1.jar
 #-libraryjars /libs/crashlytics.jar
 #-libraryjars /libs/picasso-2.3.2.jar
