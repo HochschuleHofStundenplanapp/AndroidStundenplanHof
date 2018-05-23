@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +24,7 @@ import java.util.Locale;
 import de.hof.university.app.R;
 import de.hof.university.app.adapter.MealAdapter;
 import de.hof.university.app.data.DataManager;
+import de.hof.university.app.fragment.AbstractListFragment;
 import de.hof.university.app.fragment.MealFragment;
 import de.hof.university.app.model.BigListItem;
 import de.hof.university.app.model.LastUpdated;
@@ -36,7 +36,7 @@ import de.hof.university.app.util.Define;
  * Created and © by Christian G. Pfeiffer on 21.12.17.
  */
 
-public class MealWeekFragment extends Fragment {
+public class MealWeekFragment extends AbstractListFragment {
     public final static String TAG = "MealFragment";
     int selectedWeek = -1;
     int weekdayListPos = 0;
@@ -81,7 +81,17 @@ public class MealWeekFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onResume() {
+        updateData(true);
+        super.onResume();
+    }
+
+
+
+
     private void updateData(boolean forceRefresh) {
+        Log.d("MealFragment", "Refreshing");
         String[] params = setTaskParameter(forceRefresh);
         if (params != null) {
             task = new MealWeekFragment.Task();

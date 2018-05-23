@@ -50,9 +50,9 @@ public class MealPagerFragment extends Fragment {
         adapter = new ViewPagerAdapter(getChildFragmentManager(), getActivity(), viewPager, tabLayout);
         viewPager.setAdapter(adapter);
         setEvents();
-        addPage("Diese Woche");
-        addPage("Nächste Woche");
-        addPage("Übernächste Woche");
+        addPage(getContext().getString(R.string.MEAL_DieseWoche));
+        addPage(getContext().getString(R.string.MEAL_NaechsteWoche));
+        addPage(getContext().getString(R.string.MEAL_UebernaechsteWoche));
         return view;
     }
 
@@ -61,6 +61,7 @@ public class MealPagerFragment extends Fragment {
         super.onResume();
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.getSupportActionBar().setTitle(R.string.speiseplan);
+
 
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
         navigationView.getMenu().findItem(R.id.nav_speiseplan).setChecked(true);
