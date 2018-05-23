@@ -7,15 +7,15 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
-import android.preference.Preference;
-import android.preference.PreferenceManager;
+import android.support.v7.preference.CheckBoxPreference;
+import android.support.v7.preference.EditTextPreference;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.preference.PreferenceFragment;
+import android.support.v7.preference.PreferenceFragmentCompat;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.widget.TextView;
@@ -31,7 +31,7 @@ import de.hof.university.app.calendar.CalendarSynchronization;
  * Created by Daniel on 22.11.2017.
  */
 
-public class SettingsCalendarSynchronizationFragment extends PreferenceFragment {
+public class SettingsCalendarSynchronizationFragment extends PreferenceFragmentCompat {
 
 	public final static String TAG = "SettingCalendarSyncFrag";
 
@@ -89,6 +89,11 @@ public class SettingsCalendarSynchronizationFragment extends PreferenceFragment 
 				}
 			}
 		});
+
+	}
+
+	@Override
+	public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
 
 	}
 

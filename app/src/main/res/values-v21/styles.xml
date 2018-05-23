@@ -27,6 +27,7 @@
         <item name="android:colorBackground">@color/colorWhite</item>
         <item name="android:textColorPrimary">@color/Primary_text</item>
         <item name="android:textColorSecondary">@color/Secondary_text</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
 </resources>
