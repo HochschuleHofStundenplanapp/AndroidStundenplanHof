@@ -59,6 +59,7 @@ public class MealPagerFragment extends Fragment {
     @Override
     public final void onResume() {
         super.onResume();
+        adapter.notifyDataSetChanged();
         MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.getSupportActionBar().setTitle(R.string.speiseplan);
 

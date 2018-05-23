@@ -21,7 +21,8 @@
                 android:id="@+id/my_tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:tabMode="scrollable"
+                app:tabGravity="fill"
+                app:tabMode="fixed"
                 app:tabSelectedTextColor="@android:color/background_light"
                 app:tabTextColor="@android:color/secondary_text_light_nodisable" />
 
