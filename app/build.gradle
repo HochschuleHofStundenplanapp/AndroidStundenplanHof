@@ -22,8 +22,8 @@ android {
     defaultConfig {
         applicationId 'de.hof.university.app'
         targetSdkVersion 27
-        versionCode 34
-        versionName '4.5'
+        versionCode 36
+        versionName '4.6'
         minSdkVersion 16
     }
 
@@ -34,6 +34,8 @@ android {
             keyAlias "fhhkey"
             keyPassword 'IUwbayNG54S5C4udGkjs'
             //storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
+            storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
+            storePassword 'IUwbayNG54S5C4udGkjs'
         }
         debug {
             // Ein fester debug keystore damit, wenn man mit verschiedenen Rechnern arbeitet, die APK updaten kann.
@@ -45,7 +47,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
             pseudoLocalesEnabled false
@@ -82,29 +84,25 @@ android {
 //NOTICE: Die Versionsnummer sollte pro Block gleich sein
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    // jsoup HTML parser library @ http://jsoup.org/
+
     // Die Versionsnummer sollte die gleiche sein
-    //compile 'com.android.support:appcompat-v7:25.2.0'
     implementation 'com.android.support:appcompat-v7:27.+'
-    //compile 'com.android.support:design:25.2.0'
     implementation 'com.android.support:design:27.+'
     implementation 'com.android.support:support-v4:27.+'
-    //compile 'co m.android.support:recyclerview-v7:25.2.0'
     implementation 'com.android.support:recyclerview-v7:27.+'
-    implementation 'org.jsoup:jsoup:1.11.3'
+
+    // jsoup HTML parser library @ http://jsoup.org/
     //compile 'org.jsoup:jsoup:1.9.2'
     //compile 'org.jsoup:jsoup:1.9.+'
+    implementation 'org.jsoup:jsoup:1.11.3'
+
     // Die Versionsnummer sollte die gleiche sein
-    //implementation 'com.google.android.gms:play-services-gcm:10.2.0'
-    implementation 'com.google.android.gms:play-services-gcm:12.+'
-    //implementation 'com.google.firebase:firebase-messaging:10.2.0'
-    implementation 'com.google.firebase:firebase-messaging:12.+'
-
+    implementation 'com.google.android.gms:play-services-gcm:15.+'
+    implementation 'com.google.firebase:firebase-messaging:15.+'
     implementation 'org.osmdroid:osmdroid-android:5.+'
-
     testImplementation 'junit:junit:4.+'
-    //compile 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.android.support.constraint:constraint-layout:+'
+
     implementation project(':subProject:android-support-v4-preferencefragment')
 }
 
