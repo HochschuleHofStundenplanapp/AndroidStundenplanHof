@@ -177,18 +177,20 @@ public class MainActivity extends AppCompatActivity
 	private void createNotificationChannels() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 			// Create the NotificationChannel
-			CharSequence name = getString(R.string.notification_channel_schedule_changes_name);
-			String description = getString(R.string.notification_channel_schedule_changes_description);
-			int importance = NotificationManager.IMPORTANCE_HIGH;
+			final CharSequence name = getString(R.string.notification_channel_schedule_changes_name);
+			final String description = getString(R.string.notification_channel_schedule_changes_description);
+			final int importance = NotificationManager.IMPORTANCE_HIGH;
 
-			NotificationChannel scheduleNotificationsChannel = new NotificationChannel(Define.NOTIFICATION_CHANNEL_SCHEDULE_CHANGES_ID, name, importance);
+			final NotificationChannel scheduleNotificationsChannel = new NotificationChannel(Define.NOTIFICATION_CHANNEL_SCHEDULE_CHANGES_ID, name, importance);
 			scheduleNotificationsChannel.setDescription(description);
 
 			// Register the channel with the system; you can't change the importance
 			// or other notification behaviors after this
-			NotificationManager notificationManager = (NotificationManager) getSystemService(
+			final NotificationManager notificationManager = (NotificationManager) getSystemService(
 					NOTIFICATION_SERVICE);
-			notificationManager.createNotificationChannel(scheduleNotificationsChannel);
+			if (notificationManager != null) {
+				notificationManager.createNotificationChannel(scheduleNotificationsChannel);
+			}
 		}
 	}
 
@@ -294,7 +296,7 @@ public class MainActivity extends AppCompatActivity
 			navigationView.getMenu().findItem(R.id.nav_navigation).setVisible(true);    // Navigation anzeigen
 
 			// TODO Weil ausblenden solange die neue Authentifizierungsmethode noch nicht funktioniert
-			if (Define.SHOW_NOTEN == false) {
+			if (!Define.SHOW_NOTEN) {
 				navigationView.getMenu().findItem(R.id.nav_notenbekanntgabe).setVisible(false);
 				navigationView.getMenu().findItem(R.id.nav_notenblatt).setVisible(false);
 			} else {

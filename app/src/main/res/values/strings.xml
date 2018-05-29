@@ -94,7 +94,7 @@
                                - Johannes Franz\n
                                - Marcel Hagmann\n
                                - Maxi Sonntag\n
-                               - Normen Krugl\n
+                               - Normen Krug\n
                                - Patrick Niepel\n
                                - Phillipp Dümleim\n
                                - Phillipp Knoblauch\n</string>
@@ -182,6 +182,9 @@
     <string name="MEAL_Geflügel">Geflügel</string>
     <string name="MEAL_vegetarisch">vegetarian</string>
     <string name="MEAL_Schwein">Pork</string>
+    <string name="MEAL_DieseWoche">This Week</string>
+    <string name="MEAL_NaechsteWoche">Next Week</string>
+    <string name="MEAL_UebernaechsteWoche">The Week After Next</string>
     <string name="pref_calendar_reminder_text">Default reminder (Minutes)</string>
     <string name="minute">Minute</string>
     <string name="minutes">Minutes</string>

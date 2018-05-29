@@ -88,10 +88,6 @@ public class DataManager {
 	    this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public void setMeals(ArrayList<Meal> newMeals){
-        meals.setMeals(newMeals);
-    }
-
     public final ArrayList<Meal> getMeals(final Context context, boolean forceRefresh, int forWeek) {
         final Meals meals = this.getMeals(context);
 
@@ -99,12 +95,13 @@ public class DataManager {
                 || (meals.getMeals().isEmpty())
                 || (meals.getLastSaved() == null)
                 || !cacheStillValid(meals, Define.MEAL_CACHE_TIME)
-                || Define.mensa_changed) {
+                || Define.mensa_changed)
+        {
             final Parser parser = ParserFactory.create(EParser.MENU);
             final Calendar calendar = Calendar.getInstance();
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-            String selectedMensa = sharedPref.getString("selected_canteen", "340");
-            String [] urls = new String[3];
+            final String selectedMensa = sharedPreferences.getString("selected_canteen", "340");
+        
+            final String [] urls = new String[3];
             urls[0] = Define.URL_MEAL1 + selectedMensa + Define.URL_MEAL2 + calendar.get(Calendar.YEAR) + '-' + (calendar.get(Calendar.MONTH) + 1) + '-' + calendar.get(Calendar.DAY_OF_MONTH);
             calendar.add(Calendar.DAY_OF_MONTH,7);
             urls[1] = Define.URL_MEAL1 + selectedMensa + Define.URL_MEAL2 + calendar.get(Calendar.YEAR) + '-' + (calendar.get(Calendar.MONTH) + 1) + '-' + calendar.get(Calendar.DAY_OF_MONTH);
@@ -136,12 +133,8 @@ public class DataManager {
                 }
             }
 
-            final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-
             final String[] params = {xmlString, sharedPreferences.getString( MainActivity.getAppContext().getString( R.string.PREF_KEY_MEAL_TARIFF ), "1")};
             junit.framework.Assert.assertTrue(parser != null);
-
-
 
             switch (forWeek){
                 case 0:
@@ -507,8 +500,7 @@ public class DataManager {
             Object obtMyScheduleOpj = readObject(context, Define.myScheduleFilename);
             if ((obtMyScheduleOpj != null) && (obtMyScheduleOpj instanceof Set)) {
                 this.mySchedule = new MySchedule();
-                ArrayList<String> result = new ArrayList<>();
-                result.addAll( (Set) obtMyScheduleOpj );
+                ArrayList<String> result = new ArrayList<>((Set) obtMyScheduleOpj);
                 this.mySchedule.setIds(result);
             } else if ((obtMyScheduleOpj != null) && (obtMyScheduleOpj instanceof MySchedule)) {
                 this.mySchedule = (MySchedule) obtMyScheduleOpj;

@@ -16,10 +16,10 @@
 
 package de.hof.university.app.experimental.fragment;
 
-import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -41,8 +41,8 @@ import java.io.InterruptedIOException;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
-import de.hof.university.app.util.Define;
 import de.hof.university.app.experimental.LoginController;
+import de.hof.university.app.util.Define;
 
 
 public class NotenblattFragment extends android.support.v4.app.Fragment {
@@ -83,7 +83,7 @@ public class NotenblattFragment extends android.support.v4.app.Fragment {
     }
 
     @Override
-    public final void onSaveInstanceState(Bundle outState) {
+    public final void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString("DATA", html);
     }

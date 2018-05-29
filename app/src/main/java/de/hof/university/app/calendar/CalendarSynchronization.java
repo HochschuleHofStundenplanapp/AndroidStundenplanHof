@@ -127,7 +127,7 @@ public class CalendarSynchronization {
 
             junit.framework.Assert.assertTrue( calendarInterface != null );
             calendarInterface.createLectureEvent(lectureItem.getId(), lectureItem.getLabel(), "",
-                    tmpStartDate, newEndDateCalendar.getTime(), calendarInterface.getLocation(lectureItem.getRoom()));
+                    tmpStartDate, newEndDateCalendar.getTime(), CalendarInterface.getLocation(lectureItem.getRoom()));
 
 			// Ausgabe, was wir anlegen
             Log.i( TAG, "createLectureEvent: " + lectureItem.getLabel() + " " + tmpStartDate.toString() );
@@ -233,7 +233,6 @@ public class CalendarSynchronization {
      * @return returns the names of the existing calendars
      */
     public ArrayList<String> getCalendarsNames() {
-        ArrayList<String> result = new ArrayList<>();
         calendars = calendarInterface.getCalendars();
 
         // Kalender für Kontakte entfernen
@@ -264,8 +263,8 @@ public class CalendarSynchronization {
         calendars.remove("Day of the year");
         calendars.remove("Week Numbers");
         calendars.remove("Geburtstage");
-
-        result.addAll(calendars.keySet());
+    
+        ArrayList<String> result = new ArrayList<>(calendars.keySet());
         return result;
     }
 

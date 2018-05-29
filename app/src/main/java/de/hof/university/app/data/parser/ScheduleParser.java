@@ -61,7 +61,7 @@ public class ScheduleParser implements Parser<LectureItem> {
 
         JSONArray jsonArray = null;
         try {
-            JSONObject jsonObject = new JSONObject(jsonString);
+            final JSONObject jsonObject = new JSONObject(jsonString);
             jsonArray = jsonObject.optJSONArray(Define.PARSER_SCHEDULE);
         } catch (final JSONException e) {
             Log.e(TAG, "JSONException", e);
@@ -69,7 +69,7 @@ public class ScheduleParser implements Parser<LectureItem> {
         }
 
         for (int i = 0; i < jsonArray.length(); ++i) {
-            LectureItem lectureItem = convertJsonObject(jsonArray.optJSONObject(i));
+            final LectureItem lectureItem = convertJsonObject(jsonArray.optJSONObject(i));
             if ( lectureItem != null) {
                 result.add(lectureItem);
             }

@@ -3,8 +3,9 @@ package de.hof.university.app.fragment.meal_plan;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,9 +26,6 @@ import de.hof.university.app.adapter.MealAdapter;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.fragment.AbstractListFragment;
 import de.hof.university.app.fragment.MealFragment;
-import de.hof.university.app.fragment.schedule.ChangesFragment;
-import de.hof.university.app.fragment.schedule.MyScheduleFragment;
-import de.hof.university.app.fragment.schedule.ScheduleFragment;
 import de.hof.university.app.model.BigListItem;
 import de.hof.university.app.model.LastUpdated;
 import de.hof.university.app.model.MediumListItem;
@@ -38,7 +36,7 @@ import de.hof.university.app.util.Define;
  * Created and © by Christian G. Pfeiffer on 21.12.17.
  */
 
-public class MealWeekFragment extends Fragment {
+public class MealWeekFragment extends AbstractListFragment {
     public final static String TAG = "MealFragment";
     int selectedWeek = -1;
     int weekdayListPos = 0;
@@ -48,23 +46,21 @@ public class MealWeekFragment extends Fragment {
     protected ArrayAdapter adapter;
     protected ArrayList<Object> dataList;
     private MealWeekFragment.Task task;
-    SharedPreferences sharedPref;
 
     private static final String ARG_SECTION_NUMBER ="section_number";
 
-    public static MealPagerFragment newInstance(int sectionNumber) {
-        MealPagerFragment fragment = new MealPagerFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-        fragment.setArguments(args);
-
-
-        return fragment;
-    }
+//    public static MealPagerFragment newInstance(int sectionNumber) {
+//        MealPagerFragment fragment = new MealPagerFragment();
+//        Bundle args = new Bundle();
+//        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+//        fragment.setArguments(args);
+//
+//        return fragment;
+//    }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_list,container,false);
         Bundle bundle = getArguments();
         weekdayListPos = 0;
@@ -85,7 +81,17 @@ public class MealWeekFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onResume() {
+        updateData(true);
+        super.onResume();
+    }
+
+
+
+
     private void updateData(boolean forceRefresh) {
+        Log.d("MealFragment", "Refreshing");
         String[] params = setTaskParameter(forceRefresh);
         if (params != null) {
             task = new MealWeekFragment.Task();
@@ -115,7 +121,8 @@ public class MealWeekFragment extends Fragment {
         String category = "";
         String curWeekDay = new SimpleDateFormat("EEEE", Locale.GERMANY).format(new Date());
         final SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN);
-
+    
+        final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getView().getContext());;
         final boolean isDish = sharedPref.getBoolean("speiseplan_hauptgericht", true);
         final boolean isSupplement = sharedPref.getBoolean("speiseplan_beilage", true);
         final boolean isPasta = sharedPref.getBoolean("speiseplan_pasta", true);

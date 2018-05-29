@@ -16,7 +16,6 @@
 
 package de.hof.university.app.experimental.fragment;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -51,17 +50,17 @@ import java.util.Map;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
-import de.hof.university.app.util.Define;
 import de.hof.university.app.experimental.LoginController;
 import de.hof.university.app.experimental.adapter.NotenAdapter;
 import de.hof.university.app.experimental.model.Noten;
+import de.hof.university.app.util.Define;
 
 import static android.widget.Toast.makeText;
 
 
 public class NotenbekanntgabeFragment extends android.support.v4.app.Fragment {
 
-    private final static String TAG = "NotenbekanntgabeFragment";
+    private final static String TAG = "NotenbekanntgabeFragm";
 
     private NotenAdapter adapter;
     private ArrayList<Noten> items;

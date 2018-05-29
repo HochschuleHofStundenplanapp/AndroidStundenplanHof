@@ -25,13 +25,11 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceCategory;
-import android.support.v4.preference.PreferenceFragment;
+import android.support.v7.preference.ListPreference;
+import android.support.v7.preference.Preference;
+import android.support.v7.preference.PreferenceCategory;
+import android.support.v7.preference.PreferenceFragmentCompat;
 import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
 import android.support.design.widget.NavigationView;
 import android.util.Log;
 import android.view.Menu;
@@ -60,7 +58,7 @@ import de.hof.university.app.util.Define;
 /**
  * Created by Lukas on 24.11.2015.
  */
-public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener, TaskComplete {
+public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 	public final static String TAG = "SettingsFragment";
 
@@ -92,7 +90,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.preferences);
 
-		final ListPreference lpSemester = (ListPreference) findPreference(getString(R.string.PREF_KEY_SEMESTER));
+		final Preference lpSemester = findPreference(getString(R.string.PREF_KEY_SEMESTER));
 
 		if ( lpSemester != null ) {
 			lpSemester.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -133,14 +131,14 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 				}
 			});
 		}
-		else {
-			lpCanteen.setEnabled(false);
-		}
+//		else {
+//			lpCanteen.setEnabled(false);
+//		}
 
 
 
 		// Benachrichtigungen
-		final CheckBoxPreference changes_notifications = (CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_CHANGES_NOTIFICATION));
+		final android.support.v7.preference.CheckBoxPreference changes_notifications = (android.support.v7.preference.CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_CHANGES_NOTIFICATION));
 
 		if (Define.PUSH_NOTIFICATIONS_ENABLED) {
 			changes_notifications.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -169,7 +167,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 				}
 			});
 		} else {
-			final PreferenceScreen preferenceScreen = getPreferenceScreen();
+			final android.support.v7.preference.PreferenceScreen preferenceScreen = getPreferenceScreen();
 			final PreferenceCategory category_notification = (PreferenceCategory) findPreference(getString(R.string.PREF_KEY_CATEGORY_NOTIFICATION));
 
 			preferenceScreen.removePreference(category_notification);
@@ -209,7 +207,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 			}
 		});
 
-		final CheckBoxPreference experimentalFeatures = (CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES));
+		final android.support.v7.preference.CheckBoxPreference experimentalFeatures = (android.support.v7.preference.CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES));
 
 		if ( experimentalFeatures.isChecked() ) {
 			edtLogin.setEnabled(true);
@@ -267,6 +265,11 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 	}
 
+	@Override
+	public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+
+	}
+
 	/**
 	 *
 	 */
@@ -291,10 +294,10 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		refreshSummaries();
 	}
 
-	@Override
-	public boolean onPreferenceTreeClick( PreferenceScreen preferenceScreen, Preference preference ) {
-		return super.onPreferenceTreeClick( preferenceScreen, preference );
-	}
+	//@Override
+	//public boolean onPreferenceTreeClick( PreferenceScreen preferenceScreen, Preference preference ) {
+	//	return super.onPreferenceTreeClick( preferenceScreen, preference );
+	//}
 
 	@Override
 	public void onPause() {
@@ -506,25 +509,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		}
 	}
 
-	private void updateCanteenData(){
-		final  ListPreference lpCanteen = (ListPreference) findPreference(getString((R.string.PREF_KEY_SELECTED_CANTEEN)));
-		final CharSequence[] entries = {"Bayreuth","Coburg","Amberg", "Hof", "Weiden", "Münchberg"};
-		final CharSequence[] entryValues = {"310", "320", "330", "340", "350","370"};
-		//"310", "320", "330", "340", "350","370"
-
-		if ( lpCanteen != null ) {
-			if ( entries.length > 0 ) {
-				lpCanteen.setEntries(entries);
-				lpCanteen.setEntryValues(entryValues);
-				lpCanteen.setEnabled(true);
-			} else {
-				lpCanteen.setEnabled(false);
-			}
-		}
-
-
-	}
-
 	/**
 	 * Öffnet Prozessdialog und aktualisiert die Semester zu dem zuvor ausgewählten Studiengang
 	 *
@@ -568,7 +552,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		Log.i( TAG, "onSharedPreferenceChanged" );
 		if ( getString( R.string.PREF_KEY_CHANGES_NOTIFICATION).equals( key ) ) {
 			Log.i( TAG, "CHANES_NOTIFICATION has changed" );
-			CheckBoxPreference changes_notification = (CheckBoxPreference) findPreference( key );
+			android.support.v7.preference.CheckBoxPreference changes_notification = (android.support.v7.preference.CheckBoxPreference) findPreference( key );
 			changes_notification.setChecked( sharedPreferences.getBoolean( key, false ) );
 		}
 	}

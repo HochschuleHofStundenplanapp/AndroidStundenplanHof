@@ -1024,13 +1024,13 @@ class CalendarInterface {
 		calendarData.getLecturesEventIDs().put(lectureID, eventIDs);
 	}
 
-	private void removeLectureEventID(final String lectureID, final Long eventID) {
-		final ArrayList<Long> eventIDs = calendarData.getLecturesEventIDs().get(lectureID);
-		if (eventIDs != null) {
-			eventIDs.remove(eventID);
-			calendarData.getLecturesEventIDs().put(lectureID, eventIDs);
-		}
-	}
+//	private void removeLectureEventID(final String lectureID, final Long eventID) {
+//		final ArrayList<Long> eventIDs = calendarData.getLecturesEventIDs().get(lectureID);
+//		if (eventIDs != null) {
+//			eventIDs.remove(eventID);
+//			calendarData.getLecturesEventIDs().put(lectureID, eventIDs);
+//		}
+//	}
 
 	private void removeAllLectureEventIDs(final String lectureID) {
 		calendarData.getLecturesEventIDs().put(lectureID, new ArrayList<Long>());

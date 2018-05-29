@@ -56,7 +56,7 @@ public class StudyCourseParser implements Parser<StudyCourse> {
 
             JSONArray jsonArray = null;
             try {
-	            JSONObject jsonObject = new JSONObject(jsonString);
+	            final JSONObject jsonObject = new JSONObject(jsonString);
                 jsonArray = jsonObject.optJSONArray("courses");
             } catch (final JSONException e) {
                 Log.e(TAG, "fehlerhaftes JSONObject", e);

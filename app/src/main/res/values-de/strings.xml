@@ -184,6 +184,9 @@
     <string name="onboarding_error_not_selected_message">Es muss alles ausgewählt sein</string>
     <string name="onboarding_restart">Einrichtungs-Assistent neustarten</string>
 
+    <string name="MEAL_DieseWoche">Diese Woche</string>
+    <string name="MEAL_NaechsteWoche">Nächste Woche</string>
+    <string name="MEAL_UebernaechsteWoche">Übernächste Woche</string>
     <string name="pref_calendar_reminder_text">Standard-Erinnerung (Minuten)</string>
     <string name="minute">Minute</string>
     <string name="minutes">Minuten</string>

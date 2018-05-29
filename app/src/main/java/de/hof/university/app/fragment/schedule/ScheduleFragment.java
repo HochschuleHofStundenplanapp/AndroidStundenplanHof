@@ -260,7 +260,7 @@ public class ScheduleFragment extends AbstractListFragment {
 
         junit.framework.Assert.assertTrue( title.length() > 0 );
 
-        if (getString(R.string.stundenplan).equals(title)) {
+        if (getString(R.string.stundenplan).contentEquals(title)) {
             inflater.inflate(R.menu.schedule_main, menu);
         }
     }

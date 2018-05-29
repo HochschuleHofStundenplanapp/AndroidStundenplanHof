@@ -123,7 +123,7 @@ final public class MealParser implements Parser<Meal> {
                                 if (tariff.equals(xmlTariff)) {
                                     junit.framework.Assert.assertTrue( meal != null );
                                     meal.setPrice(xmlText);
-                                    meal.setTariff(xmlGroup);
+                                    /* meal.setTariff(xmlGroup); not used */
                                     result.add(meal);
                                 }
                             } else if (xmlTag.equalsIgnoreCase("gerichtAttribut")) {
