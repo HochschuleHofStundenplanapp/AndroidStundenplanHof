@@ -71,9 +71,11 @@ public class DataConnector extends AsyncTask<String, Void, String> {
             return sb.toString();
 
         } catch (final MalformedURLException | UnsupportedEncodingException exception) {
-            Log.e(TAG, "readStringFromUrl: MalformedURLException | UnsupportedEncodingException: ", exception);
+            Log.e(TAG, "readStringFromUrl: MalformedURLException | UnsupportedEncodingException: ");
+            exception.printStackTrace();
         } catch (final IOException exception) {
-            Log.e(TAG, "readStringFromUrl: IOExcepton: ", exception);
+            Log.e(TAG, "readStringFromUrl: IOExcepton: ");
+            exception.printStackTrace();
         }
 
         return "";
