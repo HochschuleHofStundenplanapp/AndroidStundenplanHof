@@ -50,6 +50,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:title="@string/speiseplan">
+        <ListPreference
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:key="selected_canteen"
+            android:title="@string/mensa" />
         <CheckBoxPreference
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -122,19 +127,9 @@
             android:key="login"
             android:title="@string/LOGIN_DIALOG" />
 
-        <!--<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:key="pref_screen_calendar_synchronization"
-            android:title="@string/calendar_synchronization">-->
-
-        <CheckBoxPreference
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:key="calendar_synchronization"
-            android:title="@string/pref_screen_calendar_synchronization" />
-
-        <!--</PreferenceScreen>-->
+        <Preference
+            android:key="@string/PREF_KEY_SCREEN_CALENDAR_SYNCHRONIZATION"
+            android:title="@string/calendar_synchronization" />
 
     </PreferenceCategory>
 

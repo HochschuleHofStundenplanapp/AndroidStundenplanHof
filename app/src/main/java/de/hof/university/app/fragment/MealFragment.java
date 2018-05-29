@@ -19,6 +19,7 @@ package de.hof.university.app.fragment;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import java.text.SimpleDateFormat;
@@ -39,12 +40,15 @@ import de.hof.university.app.model.meal.Meal;
 public class MealFragment extends AbstractListFragment {
 
 	public final static String TAG = "MealFragment";
+	private static final String ARG_SECTION_NUMBER ="section_number";
 
 	private int weekdayListPos;
+	private int selectedWeek;
 
 	@Override
 	public final void onCreate(Bundle savedInstanceState) {
 		weekdayListPos = 0;
+		selectedWeek = this.getArguments().getInt(ARG_SECTION_NUMBER);
 		super.onCreate(savedInstanceState);
 	}
 
@@ -66,8 +70,11 @@ public class MealFragment extends AbstractListFragment {
 		MainActivity mainActivity = (MainActivity) getActivity();
 		mainActivity.getSupportActionBar().setTitle(R.string.speiseplan);
 
+		Log.d("MealFragment", "onResume");
+
 		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
 		navigationView.getMenu().findItem(R.id.nav_speiseplan).setChecked(true);
+
 	}
 
 	@Override
@@ -120,7 +127,7 @@ public class MealFragment extends AbstractListFragment {
 			if ( !day.equalsIgnoreCase(meal.getWeekDay()) ) {
 				day = meal.getWeekDay();
 				tmpDataList.add(new BigListItem(day + " - " + sdf.format(meal.getDay())));
-				if ( day.equalsIgnoreCase(curWeekDay) ) {
+				if ( day.equalsIgnoreCase(curWeekDay) && selectedWeek != 2 && selectedWeek != 3) {
 					weekdayListPos = tmpDataList.size() - 1;
 				}
 				category = "";//Bei neuen Tagen immer auch die Kategorie anzeigen
@@ -150,7 +157,7 @@ public class MealFragment extends AbstractListFragment {
 
 	@Override
 	protected final ArrayList<Object> background(String[] params) {
-		List<Meal> meals = DataManager.getInstance().getMeals(getActivity().getApplicationContext(), Boolean.valueOf(params[ 0 ]));
+		List<Meal> meals = DataManager.getInstance().getMeals(getActivity().getApplicationContext(), Boolean.valueOf(params[ 0 ]),selectedWeek-1);
 
 		if (meals != null ) {
 			return updateListView(meals);

@@ -22,9 +22,11 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
@@ -498,13 +500,25 @@ class CalendarInterface {
 		// die EventID kommt zurück
 		final Long eventID = insertEvent(values);
 
-		// if to want to add personal reminders
-		//TODO in configuration: Let the user decide
-		//TODO how many minutes before
-        /*if (value) {
-            addReminderToEvent(eventID, 15);
-            addReminderToEvent(eventID, 60);
-        }*/
+		// set a reminder
+		// get the context and the sharedPreferences
+		Context context = MainActivity.getAppContext();
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+		// get the minutes
+		int reminderMinutes;
+		try {
+			reminderMinutes = Integer.parseInt(sharedPreferences.getString(context.getString(R.string.PREF_KEY_CALENDAR_REMINDER),
+					"" + context.getResources().getInteger(R.integer.CALENDAR_REMINDER_DEFAULT_VALUE)));
+		} catch (NumberFormatException e) {
+			reminderMinutes = context.getResources().getInteger(R.integer.CALENDAR_REMINDER_DEFAULT_VALUE);
+			Log.e(TAG, "reminderMinutes was set to default value", e);
+		}
+
+		// if minutes are not 0
+        if (reminderMinutes != 0) {
+        	// add the reminder
+            addReminderToEvent(eventID, reminderMinutes);
+        }
 
 		return eventID;
 	}

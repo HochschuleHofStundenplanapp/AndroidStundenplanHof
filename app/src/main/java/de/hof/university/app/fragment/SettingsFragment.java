@@ -17,40 +17,32 @@
 package de.hof.university.app.fragment;
 
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
-import android.preference.PreferenceFragment;
+import android.support.v4.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import de.hof.university.app.communication.RegisterLectures;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.data.SettingsController;
@@ -59,11 +51,11 @@ import de.hof.university.app.onboarding.Fragments.OnboardingStudyFragment;
 import de.hof.university.app.onboarding.OnboardingController;
 import de.hof.university.app.util.Define;
 import de.hof.university.app.calendar.CalendarSynchronization;
+import de.hof.university.app.communication.RegisterLectures;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.LoginController;
 import de.hof.university.app.model.settings.StudyCourse;
-
-import static android.os.Build.VERSION_CODES;
+import de.hof.university.app.util.Define;
 
 /**
  * Created by Lukas on 24.11.2015.
@@ -78,6 +70,8 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
     private final int REQUEST_CODE_CALENDAR_TURN_ON_PERMISSION =  2;
     private final int REQUEST_CODE_CALENDAR_TURN_OFF_PERMISSION =  3;
+	private List<StudyCourse> studyCourseList;
+	private LoginController loginController = null;
 
     private SettingsController settingsCtrl;
 
@@ -93,6 +87,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		this.settingsCtrl = new SettingsController(getActivity(), this);
 		//this.loginController = LoginController.getInstance(getActivity());
 		//this.calendarSynchronization = CalendarSynchronization.getInstance();
+		this.loginController = LoginController.getInstance(getActivity());
 
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.preferences);
@@ -114,6 +109,35 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		if ( lpCourse != null ) {
 			lpCourse.setEnabled(false);
 		}
+
+		final ListPreference lpCanteen = (ListPreference) findPreference(getString(R.string.PREF_KEY_SELECTED_CANTEEN));
+		final CharSequence[] entries = {"Bayreuth","Coburg","Amberg", "Hof", "Weiden", "Münchberg"};
+		final CharSequence[] entryValues = {"310", "320", "330", "340", "350","370"};
+		//"310", "320", "330", "340", "350","370"
+		if (lpCanteen != null){
+			lpCanteen.setEntries(entries);
+			lpCanteen.setEntryValues(entryValues);
+			// Set default value (setDefaultValue-Method not function!)
+			if (lpCanteen.getValue() == null) {
+				lpCanteen.setValue("" + entryValues[3]);
+			}
+			lpCanteen.setEnabled(true);
+
+			lpCanteen.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+				@Override
+				public boolean onPreferenceChange(Preference preference, Object newValue) {
+					Define.mensa_changed = true;
+					Log.d("Settings: ", "new Canteen selected! Invalidating Cache!");
+					refreshCanteenSummary((String) newValue);
+					return true;
+				}
+			});
+		}
+		else {
+			lpCanteen.setEnabled(false);
+		}
+
+
 
 		// Benachrichtigungen
 		final CheckBoxPreference changes_notifications = (CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_CHANGES_NOTIFICATION));
@@ -152,43 +176,24 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 			preferenceScreen.removePreference(changes_notifications);
 		}
 
+
 		// Calendar synchronization
-		final CheckBoxPreference calendar_syncronization = (CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION));
+		final Preference calendar_synchronzation_screen = findPreference( getString( R.string.PREF_KEY_SCREEN_CALENDAR_SYNCHRONIZATION ) );
 
-		calendar_syncronization.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+		calendar_synchronzation_screen.setOnPreferenceClickListener( new Preference.OnPreferenceClickListener() {
 			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				if ( (Boolean) newValue ) {
-					// an schalten
-					turnCalendarSyncOn();
-				} else {
-					// aus schalten
+			public boolean onPreferenceClick( Preference preference ) {
 
-					// mit einem Dialog nachfragen ob der Nutzer die Kalendereinträge behalten möchte
-					final AlertDialog d = new AlertDialog.Builder(getView().getContext())
-							.setTitle(R.string.calendar_syncronization_keep_events_title)
-							.setMessage(R.string.calendar_syncronization_keep_events_message)
-							.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									// behalten, mache nichts
-								}
-							})
-							.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									// löschen
-									settingsCtrl.turnCalendarSyncOff();
-								}
-							})
-							.setCancelable(false)
-							.setIcon(android.R.drawable.ic_dialog_alert)
-							.create();
-					d.show();
-				}
+				SettingsCalendarSynchronizationFragment settingsCalendarSynchronizationFragment = new SettingsCalendarSynchronizationFragment();
+				getFragmentManager().beginTransaction()
+						.addToBackStack( null )
+						.replace( R.id.content_main, settingsCalendarSynchronizationFragment )
+						.commit();
+
 				return true;
 			}
-		});
+		} );
+
 
 		//Login für die experimentellen Funktionen
 		final Preference edtLogin = findPreference(getString(R.string.PREF_KEY_LOGIN));
@@ -208,18 +213,16 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 
 		if ( experimentalFeatures.isChecked() ) {
 			edtLogin.setEnabled(true);
-			calendar_syncronization.setEnabled(true);
 			//changes_notifications.setEnabled(true);
 		} else {
 			edtLogin.setEnabled(false);
-			calendar_syncronization.setEnabled(false);
 			//changes_notifications.setEnabled(false);
 		}
 
 		experimentalFeatures.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				final Preference edtLogin = findPreference("login");
+				final Preference edtLogin = findPreference( getString( R.string.PREF_KEY_LOGIN) );
 //				final CheckBoxPreference changes_notifications = (CheckBoxPreference) findPreference("changes_notifications");
 				final MainActivity activity = (MainActivity) getActivity();
 				if ( (Boolean) newValue ) {
@@ -236,26 +239,10 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 							.setIcon(android.R.drawable.ic_dialog_alert)
 							.show();
 					edtLogin.setEnabled(true);
-					calendar_syncronization.setEnabled(true);
-					/*if (changes_notifications != null) {
-						changes_notifications.setEnabled(true);
-						// falls ausgewählt war
-						if (changes_notifications.isChecked()) {
-							// für Push-Notifications registrieren,
-							// falls schon ein Stundenplan angelegt wurde
-							DataManager.getInstance().registerFCMServerForce(MainActivity.contextOfApplication);
-						}
-					}*/
 					activity.displayExperimentalFeaturesMenuEntries(true);
 
 				} else {
 					edtLogin.setEnabled(false);
-					calendar_syncronization.setEnabled(false);
-					/*if (changes_notifications != null) {
-						changes_notifications.setEnabled(false);
-						// von Push-Notifications abmelden
-						new RegisterLectures().deRegisterLectures();
-					}*/
 					activity.displayExperimentalFeaturesMenuEntries(false);
 				}
 				return true;
@@ -291,16 +278,22 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		final MainActivity mainActivity = (MainActivity) getActivity();
 		mainActivity.getSupportActionBar().setTitle(R.string.einstellungen);
 
-		final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+		final NavigationView navigationView = mainActivity.findViewById(R.id.nav_view);
 		navigationView.getMenu().findItem(R.id.nav_einstellungen).setChecked(true);
 
 		if ( settingsCtrl.getStudyCourseList() == null ) {
 			updateCourseListPreference("", false);
 		}
 
+
 		updateSemesterData(PreferenceManager.getDefaultSharedPreferences(getView().getContext()).getString(getString(R.string.PREF_KEY_STUDIENGANG), ""));
 //        updateSemesterListPreference();
 		refreshSummaries();
+	}
+
+	@Override
+	public boolean onPreferenceTreeClick( PreferenceScreen preferenceScreen, Preference preference ) {
+		return super.onPreferenceTreeClick( preferenceScreen, preference );
 	}
 
 	@Override
@@ -322,19 +315,76 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
 	}
 
+	private void refreshCanteenSummary(String newCanteen){
+		String selectedMensa;
+		switch (newCanteen){
+			case "310":
+				selectedMensa = "Bayreuth";
+				break;
+			case "320":
+				selectedMensa = "Coburg";
+				break;
+			case "330":
+				selectedMensa = "Amberg";
+				break;
+			case "340":
+				selectedMensa = "Hof";
+				break;
+			case "350":
+				selectedMensa = "Weiden";
+				break;
+			case "370":
+				selectedMensa = "Münchberg";
+				break;
+			default:
+				selectedMensa = "Hof";
+		}
+
+		final ListPreference lpCanteen = (ListPreference) findPreference(getString(R.string.PREF_KEY_SELECTED_CANTEEN));
+		lpCanteen.setSummary(selectedMensa);
+
+	}
+
 	private void refreshSummaries() {
 	    /*
         EditTextPreference edtName = (EditTextPreference) findPreference("primuss_user");
         edtName.setSummary(edtName.getText());
         */
-
 		final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getView().getContext());
+	    String selectedMensa;
+
+	    switch (sharedPreferences.getString("selected_canteen", "340")){
+			case "310":
+				selectedMensa = "Bayreuth";
+				break;
+			case "320":
+				selectedMensa = "Coburg";
+				break;
+			case "330":
+				selectedMensa = "Amberg";
+				break;
+			case "340":
+				selectedMensa = "Hof";
+				break;
+			case "350":
+				selectedMensa = "Weiden";
+				break;
+			case "370":
+				selectedMensa = "Münchberg";
+				break;
+			default:
+				selectedMensa = "Hof";
+		}
+
 
 		final ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREF_KEY_STUDIENGANG));
 		lpCourse.setSummary(sharedPreferences.getString(getString(R.string.PREF_KEY_STUDIENGANG), ""));
 
 		final ListPreference lpSemester = (ListPreference) findPreference(getString(R.string.PREF_KEY_SEMESTER));
 		lpSemester.setSummary(sharedPreferences.getString(getString(R.string.PREF_KEY_SEMESTER), ""));
+
+		final ListPreference lpCanteen = (ListPreference) findPreference(getString(R.string.PREF_KEY_SELECTED_CANTEEN));
+		lpCanteen.setSummary(selectedMensa);
 
 		final ListPreference lpTarif = (ListPreference) findPreference(getString(R.string.PREF_KEY_MEAL_TARIFF));
 		lpTarif.setSummary(lpTarif.getEntry());
@@ -456,6 +506,24 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		}
 	}
 
+	private void updateCanteenData(){
+		final  ListPreference lpCanteen = (ListPreference) findPreference(getString((R.string.PREF_KEY_SELECTED_CANTEEN)));
+		final CharSequence[] entries = {"Bayreuth","Coburg","Amberg", "Hof", "Weiden", "Münchberg"};
+		final CharSequence[] entryValues = {"310", "320", "330", "340", "350","370"};
+		//"310", "320", "330", "340", "350","370"
+
+		if ( lpCanteen != null ) {
+			if ( entries.length > 0 ) {
+				lpCanteen.setEntries(entries);
+				lpCanteen.setEntryValues(entryValues);
+				lpCanteen.setEnabled(true);
+			} else {
+				lpCanteen.setEnabled(false);
+			}
+		}
+
+
+	}
 
 	/**
 	 * Öffnet Prozessdialog und aktualisiert die Semester zu dem zuvor ausgewählten Studiengang
@@ -548,11 +616,13 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 					getString(R.string.language), termTime, pForceRefresh);
 
 			if (studyCourseList != null) {
-				entries = new CharSequence[studyCourseList.size()];
-				entryValues = new CharSequence[studyCourseList.size()];
+				final int length = studyCourseList.size();
+				
+				entries = new CharSequence[length];
+				entryValues = new CharSequence[length];
 
-				StudyCourse studyCourse;
-				for (int i = 0; i < studyCourseList.size(); ++i) {
+				for (int i = 0; i < length; ++i) {
+					StudyCourse studyCourse;
 					if (studyCourseList.get(i) instanceof StudyCourse) {
 						studyCourse = studyCourseList.get(i);
 						entries[i] = studyCourse.getName();
@@ -567,7 +637,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
 		@Override
 		protected final void onPostExecute(Void aVoid) {
 			super.onPostExecute(aVoid);
-			ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREF_KEY_STUDIENGANG));
+			final ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREF_KEY_STUDIENGANG));
 			if (entries != null) {
 				if (entries.length > 0) {
 					lpCourse.setEntries(entries);

@@ -17,6 +17,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="">
     <string name="app_name">Hof University</string>
 
+    <string name="DEFAULT_NOTIFICATION_CHANNEL_ID" translatable="false">notification_channel_schedule_changes</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -32,6 +34,7 @@
     <string name="date">Date:</string>
     <string name="edvraum">Computer room</string>
     <string name="search">Search</string>
+    <string name="mensa">Canteen</string>
     <string name="hauptgerichte">Main course</string>
     <string name="beilagen">Side dishes</string>
     <string name="desserts">Desserts</string>
@@ -86,7 +89,15 @@
                                - Daniel Glaser\n
                                - Christian Pfeiffer\n
                                - Jonas Beetz\n
-                               - Angelina Scheler</string>
+                               - Angelina Scheler\n
+                               - Bastian Kusserow\n
+                               - Johannes Franz\n
+                               - Marcel Hagmann\n
+                               - Maxi Sonntag\n
+                               - Normen Krugl\n
+                               - Patrick Niepel\n
+                               - Phillipp Dümleim\n
+                               - Phillipp Knoblauch\n</string>
     <string name="noCourseSelected">No course of studies selected!</string>
     <string name="to">To:</string>
     <string name="doubleBackOnClose">To close press back twice</string>
@@ -137,20 +148,22 @@
     <string name="raum" translatable="false">Room</string>
     <string name="zeit" translatable="false">Time</string>
     <string name="fach_dozent" translatable="false">Fach Dozent</string>
-    <string name="PREF_KEY_CALENDAR_SYNCHRONIZATION" translatable="false">calendar_synchronization</string>
-    <string name="PREF_KEY_CATEGORY_NOTIFICATION" translatable="false">category_notification</string>
-    <string name="PREF_KEY_STUDIENGANG" translatable="false">studiengang</string>
-    <string name="PREF_KEY_CHANGES_NOTIFICATION" translatable="false">changes_notifications</string>
-    <string name="PREF_KEY_SEMESTER" translatable="false">semester</string>
-    <string name="PREF_KEY_LOGIN" translatable="false">login</string>
-    <string name="PREF_KEY_EXPERIMENTAL_FEATURES" translatable="false">experimental_features</string>
-    <string name="PREF_KEY_TERM_TIME" translatable="false">term_time</string>
-    <string name="PREF_KEY_EXPERIMENTAL_FEATURES_ENABLED" translatable="false">experimental_features</string>
-    <string name="PREF_KEY_MEAL_TARIFF" translatable="false">speiseplan_tarif</string>
-    <string name="PREF_KEY_SHOW_PUSH_DIALOG" translatable="false">show_push_notifications_dialog</string>
-    <string name="PREF_KEY_SHOW_EXPERIMENTAL_FEATURES_INFO" translatable="false">show_experimental_features_info</string>
+    <string translatable="false" name="PREF_KEY_CALENDAR_SYNCHRONIZATION">calendar_synchronization</string>
+    <string translatable="false" name="PREF_KEY_CATEGORY_NOTIFICATION">category_notification</string>
+    <string translatable="false" name="PREF_KEY_STUDIENGANG">studiengang</string>
+    <string translatable="false" name="PREF_KEY_CHANGES_NOTIFICATION">changes_notifications</string>
+    <string translatable="false" name="PREF_KEY_SEMESTER">semester</string>
+    <string translatable="false" name="PREF_KEY_LOGIN">login</string>
+    <string translatable="false" name="PREF_KEY_EXPERIMENTAL_FEATURES">experimental_features</string>
+    <string translatable="false" name="PREF_KEY_TERM_TIME">term_time</string>
+    <string translatable="false" name="PREF_KEY_EXPERIMENTAL_FEATURES_ENABLED">experimental_features</string>
+    <string translatable="false" name="PREF_KEY_SELECTED_CANTEEN">selected_canteen</string>
+    <string translatable="false" name="PREF_KEY_MEAL_TARIFF">speiseplan_tarif</string>
+    <string translatable="false" name="PREF_KEY_SHOW_PUSH_DIALOG">show_push_notifications_dialog</string>
+    <string translatable="false" name="PREF_KEY_SHOW_EXPERIMENTAL_FEATURES_INFO">show_experimental_features_info</string>
+    <string translatable="false" name="PREF_KEY_SCREEN_CALENDAR_SYNCHRONIZATION">pref_screen_calendar_synchronization</string>
+    <string translatable="false" name="PREF_KEY_CALENDAR_REMINDER">calendar_reminder</string>
     <string name="calendar_synchronization_successful">Schedule successfully synchronized with the calendar!</string>
-    <string name="pref_screen_calendar_synchronization">My schedule calendar synchronization</string>
     <string name="calendar_syncronization_keep_events_title">Keep Events?</string>
     <string name="calendar_syncronization_keep_events_message">Do you want to keep the events or the local calendar?</string>
     <string name="versionString">Version</string>
@@ -167,8 +180,14 @@
     <string name="MEAL_nichtvegetarisch">non vegetarian</string>
     <string name="MEAL_Kraueterkueche">Herbs</string>
     <string name="MEAL_Geflügel">Geflügel</string>
-    <string name="MEAL_vegetarisch">vegatarian</string>
+    <string name="MEAL_vegetarisch">vegetarian</string>
     <string name="MEAL_Schwein">Pork</string>
+    <string name="pref_calendar_reminder_text">Default reminder (Minutes)</string>
+    <string name="minute">Minute</string>
+    <string name="minutes">Minutes</string>
+    <string name="schedule_reminder">Reminder</string>
+    <string name="notification_channel_schedule_changes_name">Schedule changes</string>
+    <string name="notification_channel_schedule_changes_description">Get notifications about schedule changes</string>
 
     <!-- Onboarding -->
     <string name="continue_onboarding">Continue</string>

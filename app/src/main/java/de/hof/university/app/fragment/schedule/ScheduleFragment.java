@@ -124,12 +124,12 @@ public class ScheduleFragment extends AbstractListFragment {
             final MainActivity mainActivity = (MainActivity) getActivity();
             mainActivity.getSupportActionBar().setTitle(R.string.stundenplan);
 
-            NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+            final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
             navigationView.getMenu().findItem(R.id.nav_stundenplan).setChecked(true);
 
             // fragen, ob die Push Notifications aktiviert werden sollen
-            MainActivity mActivity = (MainActivity) getActivity();
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mActivity.getApplicationContext());
+            final MainActivity mActivity = (MainActivity) getActivity();
+            final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mActivity.getApplicationContext());
             mActivity.showPushNotificationDialog(sharedPreferences);
         }
     }

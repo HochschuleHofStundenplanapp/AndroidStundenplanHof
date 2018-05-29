@@ -38,6 +38,7 @@
     <string name="date">Datum:</string>
     <string name="edvraum">EDV-Raum</string>
     <string name="search">Suchen</string>
+    <string name="mensa">Mensa</string>
     <string name="hauptgerichte">Hauptgerichte</string>
     <string name="beilagen">Beilagen</string>
     <string name="desserts">Desserts</string>
@@ -89,7 +90,15 @@
                                - Daniel Glaser\n
                                - Christian Pfeiffer\n
                                - Jonas Beetz\n
-                               - Angelina Scheler</string>
+                               - Angelina Scheler\n
+                               - Bastian Kusserow\n
+                               - Johannes Franz\n
+                               - Marcel Hagmann\n
+                               - Maxi Sonntag\n
+                               - Normen Krugl\n
+                               - Patrick Niepel\n
+                               - Phillipp Dümleim\n
+                               - Phillipp Knoblauch\n</string>
     <!--URLs -->
     <string name="doubleBackOnClose">Zum Beenden erneut Zurück tippen</string>
     <string name="noChanges">Es gibt keine Änderungen</string>
@@ -119,13 +128,13 @@
     <string name="noEmailApp">Keine E-Mail App installiert</string>
     <string name="noBrowserApp">Keine Browser App installiert</string>
     <string name="rateThisAppBtn">Bewerte diese App</string>
-    <string name="experimental_features_infotext">Es gibt experimentelle Funktionen, die in den Einstellungen aktiviert werden können</string>
-    <string name="notifications_infotext">Sie erhalten nun Benachrichtigungen für neue Änderungen.</string>
+    <string name="experimental_features_infotext">Experimentelle Funktionen können in den Einstellungen aktiviert werden.</string>
+    <string name="notifications_infotext">Sie erhalten nun Benachrichtigungen über Änderungen.</string>
 
     <string name="disabled_shortcut">Der Shortcut wurde deaktiviert</string>
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
-    <string name="notifications_question">Möchten Sie grundsätzlich über ihre Änderungen benachrichtigt werden?</string>
+    <string name="notifications_question">Möchten Sie generell über Änderungen benachrichtigt werden?</string>
     <string name="lastUpdated">Zuletzt aktualisiert</string>
     <string name="calendar_synchronization">Kalender Synchronisation</string>
     <string name="changeCancelled">[Entfällt]</string>
@@ -135,12 +144,11 @@
     <string name="changeNewDate">Neuer Termin</string>
     <string name="noLocation">Kein Ort</string>
     <string name="calendar_synchronitation_ownLocalCalendar">Eigenen lokalen Kalender</string>
-    <string name="calendar_synchronization_infoText">Sie haben die Kalender Synchronisation eingeschaltet.\n\nIm nächsten Dialog können Sie den Kalender auswählen, mit dem die Vorlesungen und Änderungen synchronisiert werden oder einen eigenen lokalen Kalender dafür nutzen.\n\n(Empfohlen: Einen neuen Kalender auf der <a href="https://calendar.google.com/calendar/render?hl=de#main_7">Google Kalender Webseite</a> anlegen und diesen im nächsten Dialog auswählen.)\n\nBitte beachten Sie Folgendes:\n- Termine bleiben beim Löschen der App bestehen (wenn Sie sie löschen möchten, vorher die Synchronisation ausschalten)\n- Termine mit Notizen werden nicht gelöscht\n- Ferien und Feiertage werden noch nicht berücksichtigt</string>
+    <string name="calendar_synchronization_infoText">Sie haben die Kalender-Synchronisation eingeschaltet.\n\nIm nächsten Dialog wählen Sie den Kalender aus, mit dem die Vorlesungen und Änderungen synchronisiert werden oder einen eigenen lokalen Kalender dafür nutzen.\n\n(Empfohlen: Einen neuen Kalender auf der <a href="https://calendar.google.com/calendar/render?hl=de#main_7">Google Kalender Webseite</a> anlegen und diesen im nächsten Dialog auswählen.)\n\nBitte beachten Sie Folgendes:\n- Termine bleiben beim Löschen der App bestehen (wenn Sie sie löschen möchten, vorher die Synchronisation ausschalten)\n- Termine mit Notizen werden nicht gelöscht\n- Ferien und Feiertage werden noch nicht berücksichtigt</string>
     <string name="calendar_synchronization_chooseCalendar">Bitte wählen Sie einen Kalender</string>
     <string name="calendar_synchronization_permissionNotGranted">Berechtigung für den Kalender verweigert</string>
     <string name="navigation">Bus &amp; Bahn Fahrplan</string>
     <string name="calendar_synchronization_successful">Stundenplan erfolgreich mit dem Kalender synchronisiert!</string>
-    <string name="pref_screen_calendar_synchronization">Mein Stundenplan Kalender Synchronisation</string>
     <string name="calendar_syncronization_keep_events_title">Kalendereinträge behalten?</string>
     <string name="calendar_syncronization_keep_events_message">Möchten Sie die Kalendereinträge oder den lokalen Kalender behalten?</string>
     <string name="versionString">Version</string>
@@ -175,5 +183,12 @@
 
     <string name="onboarding_error_not_selected_message">Es muss alles ausgewählt sein</string>
     <string name="onboarding_restart">Einrichtungs-Assistent neustarten</string>
+
+    <string name="pref_calendar_reminder_text">Standard-Erinnerung (Minuten)</string>
+    <string name="minute">Minute</string>
+    <string name="minutes">Minuten</string>
+    <string name="schedule_reminder">Erinnerung anzeigen</string>
+    <string name="notification_channel_schedule_changes_name">Stundenplan Änderungen</string>
+    <string name="notification_channel_schedule_changes_description">Bekomme Benachrichtigungen über Stundenplan Änderungen</string>
 
 </resources>

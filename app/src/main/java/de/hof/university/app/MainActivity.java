@@ -17,8 +17,10 @@
 package de.hof.university.app;
 
 import android.app.AlertDialog;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.app.NotificationChannel;
+import android.os.StrictMode;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -45,6 +47,7 @@ import java.net.CookieManager;
 import de.hof.university.app.onboarding.Fragments.OnboardingMenuPlanFragment;
 import de.hof.university.app.onboarding.Fragments.OnboardingStudyFragment;
 import de.hof.university.app.onboarding.OnboardingController;
+import de.hof.university.app.fragment.meal_plan.MealPagerFragment;
 import de.hof.university.app.util.Define;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.fragment.NotenbekanntgabeFragment;
@@ -70,7 +73,7 @@ public class MainActivity extends AppCompatActivity
 
 	private DrawerLayout mDrawerLayout;
 	private ActionBarDrawerToggle mDrawerToggle;
-	private MealFragment mealFragment;
+	private MealPagerFragment mealPagerFragment;
 	private ScheduleFragment scheduleFragment;
 	private ChangesFragment changesFragment;
 	private MyScheduleFragment myScheduleFragment;
@@ -98,6 +101,7 @@ public class MainActivity extends AppCompatActivity
 
 		setContentView(R.layout.activity_main);
 		appContext = this;
+		final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
 		// Let the cookieManager handle the Cookies
 		final CookieManager cookieManager = new CookieManager();
@@ -142,7 +146,6 @@ public class MainActivity extends AppCompatActivity
 		navigationView.setNavigationItemSelectedListener(this);
 
 		// Experimentelle Features anzeigen?
-		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		final boolean showExperimentalFeatures = sharedPreferences.getBoolean(getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES_ENABLED), false);
 		displayExperimentalFeaturesMenuEntries(showExperimentalFeatures);
 
@@ -154,14 +157,39 @@ public class MainActivity extends AppCompatActivity
 			checkStartingScreen();
 		}
 
+		//Downloads die von Fragmenten (wie dem neuem MealFragment) gestartet wurden erlauben
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+
+		// Um den geänderten Beamten Tarif zu fixen
+		fixMealTariff();
+
+		// create notifications channels for Android 8 (Oreo)
+		createNotificationChannels();
+
 		// wurde die Activity durch ein Intent gestartet, vermutlich durch klicken auf eine Benachrichtigung?
 		handleIntent();
 
 		// beim ersten Start einen Hinweis auf die experimentellen Funktionen geben
 		showExperimentalFeaturesInfoDialog(sharedPreferences);
+	}
 
-		// Um den geänderten Beamten Tarif zu fixen
-		fixMealTariff();
+	private void createNotificationChannels() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			// Create the NotificationChannel
+			CharSequence name = getString(R.string.notification_channel_schedule_changes_name);
+			String description = getString(R.string.notification_channel_schedule_changes_description);
+			int importance = NotificationManager.IMPORTANCE_HIGH;
+
+			NotificationChannel scheduleNotificationsChannel = new NotificationChannel(Define.NOTIFICATION_CHANNEL_SCHEDULE_CHANGES_ID, name, importance);
+			scheduleNotificationsChannel.setDescription(description);
+
+			// Register the channel with the system; you can't change the importance
+			// or other notification behaviors after this
+			NotificationManager notificationManager = (NotificationManager) getSystemService(
+					NOTIFICATION_SERVICE);
+			notificationManager.createNotificationChannel(scheduleNotificationsChannel);
+		}
 	}
 
 	public void checkStartingScreen() {
@@ -363,6 +391,8 @@ public class MainActivity extends AppCompatActivity
 			// aber in der Haupt-Activity wollen wir ja eben noch mal nachfragen.
 			if (getFragmentManager().getBackStackEntryCount() >= 1) {
 				getFragmentManager().popBackStack();
+			} else if (getSupportFragmentManager().getBackStackEntryCount() >= 1) {
+				getSupportFragmentManager().popBackStack();
 			} else {
 				// Wurde der Zurück-Button zwei Mal gedrückt? Dann verlassen wir erst die App
 				if (!backButtonPressedOnce) {
@@ -387,17 +417,18 @@ public class MainActivity extends AppCompatActivity
 	public final boolean onNavigationItemSelected(@NonNull final MenuItem item) {
 		final int id = item.getItemId();
 
-		FragmentManager manager = getFragmentManager();
+		FragmentManager manager = getSupportFragmentManager();
+		//FragmentManager manager = getFragmentManager();
 
 
 		switch (id) {
 			case R.id.nav_speiseplan:
 				if (!manager.popBackStackImmediate(MealFragment.class.getName(), 0)) {
-					if (mealFragment == null) {
-						mealFragment = new MealFragment();
+					if (mealPagerFragment == null) {
+						mealPagerFragment = new MealPagerFragment();
 					}
 					FragmentTransaction trans = manager.beginTransaction();
-					trans.replace(R.id.content_main, mealFragment, Define.mealsFragmentName);
+					trans.replace(R.id.content_main, mealPagerFragment, Define.mealplanFragmentName);
 					trans.commit();
 				}
 				break;

@@ -59,7 +59,7 @@ import de.hof.university.app.experimental.model.Noten;
 import static android.widget.Toast.makeText;
 
 
-public class NotenbekanntgabeFragment extends Fragment {
+public class NotenbekanntgabeFragment extends android.support.v4.app.Fragment {
 
     private final static String TAG = "NotenbekanntgabeFragment";
 

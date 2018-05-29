@@ -63,7 +63,7 @@ import de.hof.university.app.R;
  * Created by angelina on 18.01.17.
  */
 
-public class MapFragment extends Fragment {
+public class MapFragment extends android.support.v4.app.Fragment {
 
     final private int REQUEST_CODE_ASK_PERMISSIONS = 1;
     private final static String TAG = "MapFragment";

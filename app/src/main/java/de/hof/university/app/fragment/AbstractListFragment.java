@@ -43,7 +43,7 @@ import de.hof.university.app.fragment.schedule.ScheduleFragment;
 /**
  * Created by larsg on 20.06.2016.
  */
-public abstract class AbstractListFragment extends Fragment {
+public abstract class AbstractListFragment extends android.support.v4.app.Fragment {
 
     private final static String TAG = "AbstractListFragment";
 
