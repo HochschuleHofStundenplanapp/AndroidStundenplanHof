@@ -18,8 +18,8 @@ package de.hof.university.app.fragment;
 
 
 import android.app.AlertDialog;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -36,6 +36,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.google.android.gms.gcm.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,7 +60,7 @@ import de.hof.university.app.util.Define;
 /**
  * Created by Lukas on 24.11.2015.
  */
-public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener, TaskComplete {
 
 	public final static String TAG = "SettingsFragment";
 
@@ -66,8 +68,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 	//private LoginController loginController = null;
 	//private CalendarSynchronization calendarSynchronization = null;
 
-    private final int REQUEST_CODE_CALENDAR_TURN_ON_PERMISSION =  2;
-    private final int REQUEST_CODE_CALENDAR_TURN_OFF_PERMISSION =  3;
 	private List<StudyCourse> studyCourseList;
 	private LoginController loginController = null;
 
@@ -646,6 +646,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 		}
     }*/
 
+	/**
 	@Override
 	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 		switch (requestCode) {
@@ -739,4 +740,5 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 		// Make the textview clickable. Must be called after show()
 		((TextView)d.findViewById(android.R.id.message)).setMovementMethod(LinkMovementMethod.getInstance());
 	}
+	*/
 }

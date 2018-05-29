@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity
 
 		setContentView(R.layout.activity_main);
 		appContext = this;
-		final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
 		// Let the cookieManager handle the Cookies
 		final CookieManager cookieManager = new CookieManager();
@@ -198,7 +198,8 @@ public class MainActivity extends AppCompatActivity
 
 		//Soll das Onboarding gestartet werden
 		if (new OnboardingController().shouldStartOnboaringIfNeeded(this)) {
-			FragmentManager manager = getFragmentManager();
+			//FragmentManager manager = getFragmentManager();
+			FragmentManager manager = getSupportFragmentManager();
 			FragmentTransaction trans = manager.beginTransaction();
 			trans.replace(R.id.content_main, new OnboardingStudyFragment());
 			trans.commit();
