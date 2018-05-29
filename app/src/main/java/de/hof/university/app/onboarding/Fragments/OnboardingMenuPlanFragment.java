@@ -22,19 +22,26 @@ import java.util.ArrayList;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.data.SettingsController;
+import de.hof.university.app.data.SettingsKeys;
 
 
 public class OnboardingMenuPlanFragment extends Fragment {
 
-    private Button continueBtn, tariffBtn;
+    private Button continueBtn, tariffBtn, canteenBtn;
     private CheckBox mainCourseCb, sideDishesCb, pastaCb, dessertsCb, saladCb;
-    private ArrayList<String> tariffList;
+    private ArrayList<String> tariffList, canteenList, canteenShort, tariffShort;
     private String selectedTariff = "";
+    private String selectedCanteen = "";
+    private SettingsController settingsCtrl;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tariffList = new ArrayList<>();
+        tariffShort = new ArrayList<>();
+        canteenList = new ArrayList<>();
+        canteenShort = new ArrayList<>();
+        settingsCtrl = new SettingsController(getActivity(), this);
     }
 
     @Override
@@ -64,6 +71,7 @@ public class OnboardingMenuPlanFragment extends Fragment {
     private void setupLayout() {
         continueBtn = getActivity().findViewById(R.id.onboarding_menu_plan_continue_button);
         tariffBtn = getActivity().findViewById(R.id.onboarding_menu_plan_tariff_button);
+        canteenBtn = getActivity().findViewById(R.id.onboarding_menu_plan_cateen_button);
 
         mainCourseCb = getActivity().findViewById(R.id.onboarding_menu_plan_main_course_checkbox);
         sideDishesCb = getActivity().findViewById(R.id.onboarding_menu_plan_side_dishes_checkbox);
@@ -72,6 +80,7 @@ public class OnboardingMenuPlanFragment extends Fragment {
         saladCb = getActivity().findViewById(R.id.onboarding_menu_plan_salad_checkbox);
 
         fillTariffList();
+        fillCanteenList();
     }
 
     private void setupClickListener() {
@@ -81,10 +90,10 @@ public class OnboardingMenuPlanFragment extends Fragment {
             public void onClick(View view) {
 
                 //Tariff must be selected to continue
-                if (selectedTariff.isEmpty()) {
+                if (selectedTariff.isEmpty() || selectedCanteen.isEmpty()) {
                     new AlertDialog.Builder(getView().getContext())
                             .setTitle("Error")
-                            .setMessage(R.string.onboarding_error_not_selected_message)
+                            .setMessage(R.string.onboarding_error_not_selected_message_menu)
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -100,10 +109,17 @@ public class OnboardingMenuPlanFragment extends Fragment {
             }
         });
 
+        canteenBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createDialog("canteen");
+            }
+        });
+
         tariffBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createDialog();
+                createDialog("tariff");
             }
         });
 
@@ -111,12 +127,7 @@ public class OnboardingMenuPlanFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                if (mainCourseCb.isChecked()) {
-
-                }
-                else {
-
-                }
+                settingsCtrl.saveBooleanSettings(SettingsKeys.MAIN_COURSE, b);
             }
         });
 
@@ -124,12 +135,7 @@ public class OnboardingMenuPlanFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                if (sideDishesCb.isChecked()) {
-
-                }
-                else {
-
-                }
+                settingsCtrl.saveBooleanSettings(SettingsKeys.SIDE_DISHES, b);
             }
         });
 
@@ -137,12 +143,7 @@ public class OnboardingMenuPlanFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                if (pastaCb.isChecked()) {
-
-                }
-                else {
-
-                }
+                settingsCtrl.saveBooleanSettings(SettingsKeys.PASTA, b);
             }
         });
 
@@ -150,12 +151,7 @@ public class OnboardingMenuPlanFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                if (dessertsCb.isChecked()) {
-
-                }
-                else {
-
-                }
+                settingsCtrl.saveBooleanSettings(SettingsKeys.DESSERT, b);
             }
         });
 
@@ -163,12 +159,7 @@ public class OnboardingMenuPlanFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                if (saladCb.isChecked()) {
-
-                }
-                else {
-
-                }
+                settingsCtrl.saveBooleanSettings(SettingsKeys.SALAD, b);
             }
         });
     }
@@ -177,6 +168,10 @@ public class OnboardingMenuPlanFragment extends Fragment {
         if (!selectedTariff.isEmpty()) {
             tariffBtn.setText(selectedTariff);
         }
+
+        if (!selectedCanteen.isEmpty()) {
+            canteenBtn.setText(selectedCanteen);
+        }
     }
 
     private void fillTariffList() {
@@ -184,15 +179,37 @@ public class OnboardingMenuPlanFragment extends Fragment {
         for (String t : tariffArray) {
             tariffList.add(t);
         }
+
+        String[] tariffShortArray = MainActivity.getAppContext().getResources().getStringArray(R.array.speiseplan_tarife_values);
+        for (String t : tariffShortArray) {
+            tariffShort.add(t);
+        }
     }
 
-    private void createDialog() {
+    private void fillCanteenList() {
+        String[] canteenArray = MainActivity.getAppContext().getResources().getStringArray(R.array.canteen);
+        for (String t : canteenArray) {
+            canteenList.add(t);
+        }
+
+        String[] canteenShortArray = MainActivity.getAppContext().getResources().getStringArray(R.array.canteen_values);
+        for (String t : canteenShortArray) {
+            canteenShort.add(t);
+        }
+    }
+
+    private void createDialog(final String valueKey) {
 
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
 
         final ArrayAdapter<String> valueAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.select_dialog_item);
 
-        valueAdapter.addAll(tariffList);
+        if (valueKey.equals("tariff")) {
+            valueAdapter.addAll(tariffList);
+        }
+        else if (valueKey.equals("canteen")) {
+            valueAdapter.addAll(canteenList);
+        }
 
         builderSingle.setNegativeButton("cancel", new DialogInterface.OnClickListener() {
             @Override
@@ -204,8 +221,18 @@ public class OnboardingMenuPlanFragment extends Fragment {
         builderSingle.setAdapter(valueAdapter, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                selectedTariff = valueAdapter.getItem(which);
-                tariffBtn.setText(selectedTariff);
+
+                if (valueKey.equals("tariff")) {
+                    selectedTariff = valueAdapter.getItem(which);
+                    tariffBtn.setText(selectedTariff);
+                    settingsCtrl.saveStringSettings(SettingsKeys.TARIFF, tariffShort.get(which));
+
+                }
+                else if (valueKey.equals("canteen")) {
+                    selectedCanteen = valueAdapter.getItem(which);
+                    canteenBtn.setText(selectedCanteen);
+                    settingsCtrl.saveStringSettings(SettingsKeys.CANTEEN, canteenShort.get(which));
+                }
             }
         });
         builderSingle.show();

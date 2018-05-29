@@ -68,7 +68,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 	//private LoginController loginController = null;
 	//private CalendarSynchronization calendarSynchronization = null;
 
-	private List<StudyCourse> studyCourseList;
 	private LoginController loginController = null;
 
     private SettingsController settingsCtrl;
@@ -109,8 +108,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 		}
 
 		final ListPreference lpCanteen = (ListPreference) findPreference(getString(R.string.PREF_KEY_SELECTED_CANTEEN));
-		final CharSequence[] entries = {"Bayreuth","Coburg","Amberg", "Hof", "Weiden", "Münchberg"};
-		final CharSequence[] entryValues = {"310", "320", "330", "340", "350","370"};
+		final CharSequence[] entries = MainActivity.getAppContext().getResources().getStringArray(R.array.canteen);
+		final CharSequence[] entryValues = MainActivity.getAppContext().getResources().getStringArray(R.array.canteen_values);
 		//"310", "320", "330", "340", "350","370"
 		if (lpCanteen != null){
 			lpCanteen.setEntries(entries);
@@ -253,6 +252,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				new OnboardingController().resetOnboarding(getActivity().getApplicationContext());
+				resetAllSavedSettings();
 				FragmentManager manager = getFragmentManager();
 				FragmentTransaction trans = manager.beginTransaction();
 				trans.replace(R.id.content_main, new OnboardingStudyFragment());
@@ -263,6 +263,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
 		enableSettingsSummary();
 		getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+	}
+
+	private void resetAllSavedSettings() {
+		settingsCtrl.resetSettings();
 	}
 
 	@Override

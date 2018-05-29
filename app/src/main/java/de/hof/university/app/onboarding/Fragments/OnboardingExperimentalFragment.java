@@ -30,6 +30,7 @@ import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.calendar.CalendarSynchronization;
 import de.hof.university.app.data.SettingsController;
+import de.hof.university.app.data.SettingsKeys;
 import de.hof.university.app.experimental.LoginController;
 import de.hof.university.app.onboarding.OnboardingController;
 
@@ -100,12 +101,29 @@ public class OnboardingExperimentalFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                if (featuresCb.isChecked()) {
+                final MainActivity activity = (MainActivity) getActivity();
 
+                if(b) {
+                    new AlertDialog.Builder(getView().getContext())
+                            .setTitle(getString(R.string.experimental_features))
+                            .setMessage(getString(R.string.enableExperimentalSure))
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //nothing to do here. Just close the message
+                                }
+                            })
+                            .setCancelable(false)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+
+                    activity.displayExperimentalFeaturesMenuEntries(true);
                 }
                 else {
-
+                    activity.displayExperimentalFeaturesMenuEntries(false);
                 }
+
+                settingsCtrl.saveBooleanSettings(SettingsKeys.EXPERIMENTAL, b);
             }
         });
 
@@ -144,6 +162,8 @@ public class OnboardingExperimentalFragment extends Fragment {
                             .create();
                     d.show();
                 }
+
+                settingsCtrl.saveBooleanSettings(SettingsKeys.CALENDAR_SYNC, b);
             }
         });
     }

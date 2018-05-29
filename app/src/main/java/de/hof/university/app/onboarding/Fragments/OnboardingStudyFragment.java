@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import java.util.HashMap;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.data.SettingsController;
+import de.hof.university.app.data.SettingsKeys;
 import de.hof.university.app.data.TaskComplete;
 import de.hof.university.app.model.settings.StudyCourse;
 
@@ -36,6 +38,9 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
     private ArrayList<String> termList, degreeProgramList, degreeProgramListTags, semesterList;
     private String selectedTerm, selectedDegreeProgram, selectedSemester;
 
+    //Keys for saving settings
+    private ArrayList<String> termShort, degreeProgramShort, semesterShort;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +52,11 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
         selectedTerm = selectedDegreeProgram = selectedSemester = "";
 
         settingsCtrl = new SettingsController(getActivity(), this);
+
+        //keys
+        termShort = new ArrayList<>();
+        degreeProgramShort = new ArrayList<>();
+        semesterShort = new ArrayList<>();
     }
 
     @Override
@@ -85,8 +95,6 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
 
         degreeProgramBtn.setEnabled(false);
         semesterBtn.setEnabled(false);
-
-
     }
 
     private void setupClickListener() {
@@ -122,7 +130,7 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
                 if (selectedTerm.isEmpty() || selectedDegreeProgram.isEmpty() || selectedSemester.isEmpty()) {
                     new AlertDialog.Builder(getView().getContext())
                             .setTitle("Error")
-                            .setMessage(R.string.onboarding_error_not_selected_message)
+                            .setMessage(R.string.onboarding_error_not_selected_message_study)
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -194,8 +202,11 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
         for (String t : termArray) {
             termList.add(t);
         }
-        //termList.add("WS");
-        //termList.add("SS");
+
+        String[] termShortArray = MainActivity.getAppContext().getResources().getStringArray(R.array.term_time_values);
+        for (String t : termShortArray) {
+            termShort.add(t);
+        }
     }
 
     @Override
@@ -261,18 +272,21 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
                 if(valueKey.equals("term")) {
                     selectedTerm = valueAdapter.getItem(which);
                     studyTermBtn.setText(selectedTerm);
+                    Log.d("+++++++++++++++++++++++", termShort.get(which));
+                    settingsCtrl.saveStringSettings(SettingsKeys.TERM, termShort.get(which));
                     degreeProgramBtn.setEnabled(true);
-
                 }
                 if(valueKey.equals("degreeProgram")) {
                     selectedDegreeProgram = valueAdapter.getItem(which);
                     String selectedDegreeProgramList = degreeProgramListTags.get(which);
                     degreeProgramBtn.setText(selectedDegreeProgram);
+                    settingsCtrl.saveStringSettings(SettingsKeys.DEGREE_PROGRAM, degreeProgramListTags.get(which));
                     semesterBtn.setEnabled(true);
                     updateSemesterData(selectedDegreeProgramList);
                 }
                 if(valueKey.equals("semester")) {
                     selectedSemester = valueAdapter.getItem(which);
+                    settingsCtrl.saveStringSettings(SettingsKeys.SEMESTER, semesterList.get(which));
                     semesterBtn.setText(selectedSemester);
                 }
             }

@@ -21,6 +21,7 @@ import de.hof.university.app.R;
 import de.hof.university.app.communication.RegisterLectures;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.data.SettingsController;
+import de.hof.university.app.data.SettingsKeys;
 import de.hof.university.app.util.Define;
 
 public class OnboardingNotificationsFragment extends Fragment {
@@ -96,6 +97,8 @@ public class OnboardingNotificationsFragment extends Fragment {
                     // von Push-Notifications abmelden
                     settingsCtrl.deregisterPushNotifications();
                 }
+
+                settingsCtrl.saveBooleanSettings(SettingsKeys.NOTIFICATIONS, b);
             }
         });
     }

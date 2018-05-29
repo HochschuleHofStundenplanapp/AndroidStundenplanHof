@@ -44,6 +44,7 @@ import android.widget.Toast;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 
+import de.hof.university.app.data.SettingsController;
 import de.hof.university.app.onboarding.Fragments.OnboardingMenuPlanFragment;
 import de.hof.university.app.onboarding.Fragments.OnboardingStudyFragment;
 import de.hof.university.app.onboarding.OnboardingController;
@@ -199,6 +200,7 @@ public class MainActivity extends AppCompatActivity
 		//Soll das Onboarding gestartet werden
 		if (new OnboardingController().shouldStartOnboaringIfNeeded(this)) {
 			//FragmentManager manager = getFragmentManager();
+			new SettingsController(this).resetSettings();
 			FragmentManager manager = getSupportFragmentManager();
 			FragmentTransaction trans = manager.beginTransaction();
 			trans.replace(R.id.content_main, new OnboardingStudyFragment());

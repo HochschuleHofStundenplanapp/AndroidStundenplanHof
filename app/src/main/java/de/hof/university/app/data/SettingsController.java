@@ -4,11 +4,14 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,13 +38,19 @@ public class SettingsController  {
     private Fragment mFragment;
     private ProgressDialog progressDialog;
     private List<StudyCourse> studyCourseList;
+    private SharedPreferences sharedPreferences;
 
+    public SettingsController(Activity activity) {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
+        this.mActivity = activity;
+    }
 
     public SettingsController(Activity activity, Fragment fragment) {
         this.mActivity = activity;
         this.mFragment = fragment;
         this.loginController = LoginController.getInstance(mActivity);
         this.calendarSynchronization = CalendarSynchronization.getInstance();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
     }
 
     public CalendarSynchronization getCalendarSynchronization() {
@@ -119,6 +128,95 @@ public class SettingsController  {
         getSemesterTask.execute(params);
     }
 
+    public void saveStringSettings(SettingsKeys key, String value) {
+
+        String prefKey = "";
+
+        switch (key) {
+            case TERM:
+                prefKey = mActivity.getString(R.string.PREF_KEY_TERM_TIME);
+                break;
+            case DEGREE_PROGRAM:
+                prefKey = mActivity.getString(R.string.PREF_KEY_STUDIENGANG);
+                break;
+            case SEMESTER:
+                prefKey = mActivity.getString(R.string.PREF_KEY_SEMESTER);
+                break;
+            case TARIFF:
+                prefKey = mActivity.getString(R.string.PREF_KEY_MEAL_TARIFF);
+                break;
+            case CANTEEN:
+                prefKey = mActivity.getString(R.string.PREF_KEY_SELECTED_CANTEEN);
+                break;
+
+                default:
+                    Log.v("SAVING_FAILED", "ONBOARDING-SettingsController-saveStringSettings");
+                    return;
+        }
+        sharedPreferences.edit().putString(prefKey, value).apply();
+    }
+
+    public void saveBooleanSettings(SettingsKeys key, boolean value) {
+
+        String prefKey = "";
+
+        switch (key) {
+            case MAIN_COURSE:
+                prefKey = mActivity.getString(R.string.PREF_KEY_MAIN_COURSE);
+                break;
+            case SIDE_DISHES:
+                prefKey = mActivity.getString(R.string.PREF_KEY_SIDE_DISHES);
+                break;
+            case PASTA:
+                prefKey = mActivity.getString(R.string.PREF_KEY_PASTA);
+                break;
+            case DESSERT:
+                prefKey = mActivity.getString(R.string.PREF_KEY_DESSERTS);
+                break;
+            case SALAD:
+                prefKey = mActivity.getString(R.string.PREF_KEY_SALAD);
+                break;
+            case EXPERIMENTAL:
+                prefKey = mActivity.getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES);
+                break;
+            case NOTIFICATIONS:
+                prefKey = mActivity.getString(R.string.PREF_KEY_CHANGES_NOTIFICATION);
+                break;
+            case CALENDAR_SYNC:
+                prefKey = mActivity.getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION);
+                break;
+
+            default:
+                Log.v("SAVING_FAILED", "ONBOARDING-SettingsController-saveBooleanSettings");
+                return;
+        }
+
+        sharedPreferences.edit().putBoolean(prefKey, value).apply();
+    }
+
+    public void resetSettings() {
+
+        sharedPreferences.edit().putString( mActivity.getString(R.string.PREF_KEY_TERM_TIME), "").apply();
+        sharedPreferences.edit().putString( mActivity.getString(R.string.PREF_KEY_STUDIENGANG), "").apply();
+        sharedPreferences.edit().putString( mActivity.getString(R.string.PREF_KEY_SEMESTER), "").apply();
+        sharedPreferences.edit().putString( mActivity.getString(R.string.PREF_KEY_MEAL_TARIFF), "").apply();
+        sharedPreferences.edit().putString( mActivity.getString(R.string.PREF_KEY_SELECTED_CANTEEN), "").apply();
+
+        //Meals
+        sharedPreferences.edit().putBoolean( mActivity.getString(R.string.PREF_KEY_MAIN_COURSE), false).apply();
+        sharedPreferences.edit().putBoolean( mActivity.getString(R.string.PREF_KEY_SIDE_DISHES), false).apply();
+        sharedPreferences.edit().putBoolean( mActivity.getString(R.string.PREF_KEY_PASTA), false).apply();
+        sharedPreferences.edit().putBoolean( mActivity.getString(R.string.PREF_KEY_DESSERTS), false).apply();
+        sharedPreferences.edit().putBoolean( mActivity.getString(R.string.PREF_KEY_SALAD), false).apply();
+
+        sharedPreferences.edit().putBoolean( mActivity.getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES), false).apply();
+        sharedPreferences.edit().putBoolean( mActivity.getString(R.string.PREF_KEY_CHANGES_NOTIFICATION), false).apply();
+        sharedPreferences.edit().putBoolean( mActivity.getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION), false).apply();
+
+        final MainActivity activity = (MainActivity) mActivity;
+        activity.displayExperimentalFeaturesMenuEntries(false);
+    }
+
     private class GetSemesterTask extends AsyncTask<String, Void, Void> {
 
         CharSequence[] entries = null;
@@ -159,6 +257,7 @@ public class SettingsController  {
                     if (studyCourseList.get(i) instanceof StudyCourse) {
                         studyCourse = studyCourseList.get(i);
                         entries[i] = studyCourse.getName();
+                        //Log.d("---------------------", entries  + ""));
                         entryValues[i] = studyCourse.getTag();
                         //entryValues[i]= String.valueOf(studyCourseList.get(i).getId());
                     }
