@@ -53,7 +53,7 @@ import de.hof.university.app.experimental.fragment.RaumsucheFragment;
 import de.hof.university.app.fragment.AboutusFragment;
 import de.hof.university.app.fragment.MapFragment;
 import de.hof.university.app.fragment.MealFragment;
-import de.hof.university.app.fragment.NavigationFragment;
+import de.hof.university.app.fragment.BusTrainScheduleFragment;
 import de.hof.university.app.fragment.PrimussTabFragment;
 import de.hof.university.app.fragment.SettingsFragment;
 import de.hof.university.app.fragment.schedule.ChangesFragment;
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity
 	private NotenbekanntgabeFragment notenbekanntgabeFragment;
 	private RaumsucheFragment raumsucheFragment;
 	private MapFragment mapFragment;
-	private NavigationFragment navigationFragment;
+	private BusTrainScheduleFragment navigationFragment;
 	private NavigationView navigationView;
 	// für Navigation
 	private boolean backButtonPressedOnce = false;
@@ -465,9 +465,9 @@ public class MainActivity extends AppCompatActivity
 				break;
 
 			case R.id.nav_navigation:
-				if (!manager.popBackStackImmediate(NavigationFragment.class.getName(), 0)) {
+				if (!manager.popBackStackImmediate(BusTrainScheduleFragment.class.getName(), 0)) {
 					if (navigationFragment == null) {
-						navigationFragment = new NavigationFragment();
+						navigationFragment = new BusTrainScheduleFragment();
 					}
 					FragmentTransaction trans = manager.beginTransaction();
 					trans.replace(R.id.content_main, navigationFragment);
