@@ -167,6 +167,9 @@
     <string name="MEAL_Fisch">Fisch</string>
     <string name="MEAL_vegetarisch">vegetarisch</string>
     <string name="MEAL_vegan">vegan</string>
+    <string name="MEAL_DieseWoche">Diese Woche</string>
+    <string name="MEAL_NaechsteWoche">Nächste Woche</string>
+    <string name="MEAL_UebernaechsteWoche">Übernächste Woche</string>
     <string name="pref_calendar_reminder_text">Standard-Erinnerung (Minuten)</string>
     <string name="minute">Minute</string>
     <string name="minutes">Minuten</string>

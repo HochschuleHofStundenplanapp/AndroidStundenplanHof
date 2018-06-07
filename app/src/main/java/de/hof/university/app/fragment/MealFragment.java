@@ -72,7 +72,7 @@ public class MealFragment extends AbstractListFragment {
 
 		Log.d("MealFragment", "onResume");
 
-		final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+		final NavigationView navigationView = mainActivity.findViewById(R.id.nav_view);
 		navigationView.getMenu().findItem(R.id.nav_speiseplan).setChecked(true);
 	}
 
@@ -80,7 +80,7 @@ public class MealFragment extends AbstractListFragment {
 	public void onPause() {
 		super.onPause();
 		final MainActivity mainActivity = (MainActivity) getActivity();
-		final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+		final NavigationView navigationView = mainActivity.findViewById(R.id.nav_view);
 		navigationView.getMenu().findItem(R.id.nav_speiseplan).setChecked(false);
 	}
 
