@@ -1,12 +1,12 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
+		google()
         jcenter()
-        google()
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.2'
-        //Michael Stepping 20180516 stay with 3.1.1 and do not update to 3._3_.1. That has an error with "multiple app" projects
+
+	dependencies {
+        classpath 'com.android.tools.build:gradle:3.1.3'
         classpath 'com.google.gms:google-services:3.1.1'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -14,10 +14,11 @@ buildscript {
 }
 allprojects {
     repositories {
-        jcenter()
         google()
+        jcenter()
     }
 }
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

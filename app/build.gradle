@@ -18,13 +18,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '28.0.0 rc2'
+    //buildToolsVersion '28.0.0'
     defaultConfig {
         applicationId 'de.hof.university.app'
         targetSdkVersion 27
         versionCode 36
         versionName '4.6'
         minSdkVersion 16
+		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
@@ -45,27 +46,27 @@ android {
         }
     }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
-            pseudoLocalesEnabled false
-            /* proguardFile 'D:/Projekt/Mobile.AndroidStudio/VideoChat/app/proguard-project.txt' */
-            proguardFile 'proguard-project.txt'
-            debuggable false
-            jniDebuggable false
-            //schöneren APK Namen
-            archivesBaseName = 'Hochschule_Hof_Stundenplan_App'
-        }
-        debug {
-            debuggable true
-            //schöneren APK Namen
-            archivesBaseName = 'Hochschule_Hof_Stundenplan_App'
-            // damit wir die debug Version parallel zu der release Version installieren können
-            applicationIdSuffix = ".debug"
-        }
-    }
+	buildTypes {
+		release {
+			minifyEnabled true
+			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+			signingConfig signingConfigs.release
+			pseudoLocalesEnabled false
+			/* proguardFile 'D:/Projekt/Mobile.AndroidStudio/VideoChat/app/proguard-project.txt' */
+			proguardFile 'proguard-project.txt'
+			debuggable false
+			jniDebuggable false
+			//schöneren APK Namen
+			archivesBaseName = 'Hochschule_Hof_Stundenplan_App'
+		}
+		debug {
+			debuggable true
+			//schöneren APK Namen
+			archivesBaseName = 'Hochschule_Hof_Stundenplan_App'
+			// damit wir die debug Version parallel zu der release Version installieren können
+			applicationIdSuffix = ".debug"
+		}
+	}
     productFlavors {
     }
 
@@ -83,34 +84,23 @@ android {
 
 //NOTICE: Die Versionsnummer sollte pro Block gleich sein
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-
-    // Die Versionsnummer sollte die gleiche sein
-    implementation 'com.android.support:appcompat-v7:27.+'
-    implementation 'com.android.support:design:27.+'
-    implementation 'com.android.support:support-v4:27.+'
-    implementation 'com.android.support:recyclerview-v7:27.+'
+	implementation fileTree(include: ['*.jar'], dir: 'libs')
+	// Die Versionsnummer sollte die gleiche sein
+	implementation 'com.android.support:appcompat-v7:27.+'
+	implementation 'com.android.support:design:27.+'
+	implementation 'com.android.support:support-v4:27.+'
+	implementation 'com.android.support:recyclerview-v7:27.+'
 	implementation 'com.android.support:preference-v7:27.+'
+	// jsoup HTML parser library @ http://jsoup.org/
+	implementation 'org.jsoup:jsoup:1.11.3'
+	// Die Versionsnummer sollte die gleiche sein
+	implementation 'com.google.android.gms:play-services-gcm:15.+'
+	implementation 'com.google.firebase:firebase-messaging:15.+'
 
-    // jsoup HTML parser library @ http://jsoup.org/
-    //compile 'org.jsoup:jsoup:1.9.2'
-    //compile 'org.jsoup:jsoup:1.9.+'
-    implementation 'org.jsoup:jsoup:1.11.3'
+	implementation 'org.osmdroid:osmdroid-android:5.+'
 
-    // Die Versionsnummer sollte die gleiche sein
-    implementation 'com.google.android.gms:play-services-gcm:15.+'
-    implementation 'com.google.firebase:firebase-messaging:15.+'
-    implementation 'org.osmdroid:osmdroid-android:5.+'
-    testImplementation 'junit:junit:4.+'
-    implementation 'com.android.support.constraint:constraint-layout:+'
+	testImplementation 'junit:junit:4.+'
+	implementation 'com.android.support.constraint:constraint-layout:+'
 }
-
-allprojects {
-    repositories {
-        mavenCentral()
-        mavenLocal()    //add this if it's missing
-    }
-}
-
 
 apply plugin: 'com.google.gms.google-services'
