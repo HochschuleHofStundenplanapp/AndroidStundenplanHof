@@ -45,6 +45,8 @@ import de.hof.university.app.experimental.LoginController;
 import de.hof.university.app.model.settings.StudyCourse;
 import de.hof.university.app.util.Define;
 
+
+
 /**
  * Created by Lukas on 24.11.2015.
  */
@@ -55,7 +57,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 	private ProgressDialog progressDialog;
 	private List<StudyCourse> studyCourseList;
 	private LoginController loginController = null;
-
+	
+	final static CharSequence[] CanteenEntries = {"Bayreuth","Coburg","Amberg", "Hof", "Weiden", "Münchberg"};
+	final static CharSequence[] CanteenEntryValues = {"310", "320", "330", "340", "350","370"};
+	
 	/**
 	 * @param savedInstanceState
 	 */
@@ -89,15 +94,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 		}
 
 		final ListPreference lpCanteen = (ListPreference) findPreference(getString(R.string.PREF_KEY_SELECTED_CANTEEN));
-		final CharSequence[] entries = {"Bayreuth","Coburg","Amberg", "Hof", "Weiden", "Münchberg"};
-		final CharSequence[] entryValues = {"310", "320", "330", "340", "350","370"};
 		//"310", "320", "330", "340", "350","370"
 		if (lpCanteen != null){
-			lpCanteen.setEntries(entries);
-			lpCanteen.setEntryValues(entryValues);
+			lpCanteen.setEntries(CanteenEntries);
+			lpCanteen.setEntryValues(CanteenEntryValues);
 			// Set default value (setDefaultValue-Method not function!)
 			if (lpCanteen.getValue() == null) {
-				lpCanteen.setValue("" + entryValues[3]);
+				lpCanteen.setValue("" + CanteenEntryValues[3]);
 			}
 			lpCanteen.setEnabled(true);
 
@@ -558,12 +561,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 				entryValues = new CharSequence[length];
 
 				for (int i = 0; i < length; ++i) {
-					StudyCourse studyCourse;
 					if (studyCourseList.get(i) instanceof StudyCourse) {
-						studyCourse = studyCourseList.get(i);
+						StudyCourse studyCourse = studyCourseList.get(i);
 						entries[i] = studyCourse.getName();
 						entryValues[i] = studyCourse.getTag();
-						//entryValues[i]= String.valueOf(studyCourseList.get(i).getId());
+						//CanteenEntryValues[i]= String.valueOf(studyCourseList.get(i).getId());
 					}
 				}
 			}
