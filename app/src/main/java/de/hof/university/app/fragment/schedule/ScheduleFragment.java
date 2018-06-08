@@ -16,10 +16,13 @@
 
 package de.hof.university.app.fragment.schedule;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,6 +32,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DateFormat;
@@ -44,6 +48,7 @@ import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.adapter.ScheduleAdapter;
 import de.hof.university.app.data.DataManager;
+import de.hof.university.app.debug.ChatFragment;
 import de.hof.university.app.fragment.AbstractListFragment;
 import de.hof.university.app.model.BigListItem;
 import de.hof.university.app.model.LastUpdated;
@@ -68,6 +73,27 @@ public class ScheduleFragment extends AbstractListFragment {
     public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);
         registerForContextMenu(listView);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                TextView myTextv = view.findViewById(R.id.stundenplan_details);
+                Log.d("onItemClick", "i was clicked m8");
+                Log.d("onItemClick", "v: " + myTextv.getText() );
+
+                //ChatFragment chatfrgmnt = (ChatFragment) getFragmentManager().findFragmentById(R.id.chatfragment);
+                LectureItem obc = (LectureItem) dataList.get(i);
+                ChatFragment chatfrgmnt = ChatFragment.newInstance(obc.getId());
+                if (chatfrgmnt != null){
+
+                    // Execute a transaction, replacing any existing
+                    // fragment with this one inside the frame.
+                    final FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    ft.replace(R.id.content_main, chatfrgmnt);
+                    ft.commit();
+                }
+            }
+        });
         return v;
     }
 

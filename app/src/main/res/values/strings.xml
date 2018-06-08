@@ -148,21 +148,21 @@
     <string name="raum" translatable="false">Room</string>
     <string name="zeit" translatable="false">Time</string>
     <string name="fach_dozent" translatable="false">Fach Dozent</string>
-    <string translatable="false" name="PREF_KEY_CALENDAR_SYNCHRONIZATION">calendar_synchronization</string>
-    <string translatable="false" name="PREF_KEY_CATEGORY_NOTIFICATION">category_notification</string>
-    <string translatable="false" name="PREF_KEY_STUDIENGANG">studiengang</string>
-    <string translatable="false" name="PREF_KEY_CHANGES_NOTIFICATION">changes_notifications</string>
-    <string translatable="false" name="PREF_KEY_SEMESTER">semester</string>
-    <string translatable="false" name="PREF_KEY_LOGIN">login</string>
-    <string translatable="false" name="PREF_KEY_EXPERIMENTAL_FEATURES">experimental_features</string>
-    <string translatable="false" name="PREF_KEY_TERM_TIME">term_time</string>
-    <string translatable="false" name="PREF_KEY_EXPERIMENTAL_FEATURES_ENABLED">experimental_features</string>
-    <string translatable="false" name="PREF_KEY_SELECTED_CANTEEN">selected_canteen</string>
-    <string translatable="false" name="PREF_KEY_MEAL_TARIFF">speiseplan_tarif</string>
-    <string translatable="false" name="PREF_KEY_SHOW_PUSH_DIALOG">show_push_notifications_dialog</string>
-    <string translatable="false" name="PREF_KEY_SHOW_EXPERIMENTAL_FEATURES_INFO">show_experimental_features_info</string>
-    <string translatable="false" name="PREF_KEY_SCREEN_CALENDAR_SYNCHRONIZATION">pref_screen_calendar_synchronization</string>
-    <string translatable="false" name="PREF_KEY_CALENDAR_REMINDER">calendar_reminder</string>
+    <string name="PREF_KEY_CALENDAR_SYNCHRONIZATION" translatable="false">calendar_synchronization</string>
+    <string name="PREF_KEY_CATEGORY_NOTIFICATION" translatable="false">category_notification</string>
+    <string name="PREF_KEY_STUDIENGANG" translatable="false">studiengang</string>
+    <string name="PREF_KEY_CHANGES_NOTIFICATION" translatable="false">changes_notifications</string>
+    <string name="PREF_KEY_SEMESTER" translatable="false">semester</string>
+    <string name="PREF_KEY_LOGIN" translatable="false">login</string>
+    <string name="PREF_KEY_EXPERIMENTAL_FEATURES" translatable="false">experimental_features</string>
+    <string name="PREF_KEY_TERM_TIME" translatable="false">term_time</string>
+    <string name="PREF_KEY_EXPERIMENTAL_FEATURES_ENABLED" translatable="false">experimental_features</string>
+    <string name="PREF_KEY_SELECTED_CANTEEN" translatable="false">selected_canteen</string>
+    <string name="PREF_KEY_MEAL_TARIFF" translatable="false">speiseplan_tarif</string>
+    <string name="PREF_KEY_SHOW_PUSH_DIALOG" translatable="false">show_push_notifications_dialog</string>
+    <string name="PREF_KEY_SHOW_EXPERIMENTAL_FEATURES_INFO" translatable="false">show_experimental_features_info</string>
+    <string name="PREF_KEY_SCREEN_CALENDAR_SYNCHRONIZATION" translatable="false">pref_screen_calendar_synchronization</string>
+    <string name="PREF_KEY_CALENDAR_REMINDER" translatable="false">calendar_reminder</string>
     <string name="calendar_synchronization_successful">Schedule successfully synchronized with the calendar!</string>
     <string name="calendar_syncronization_keep_events_title">Keep Events?</string>
     <string name="calendar_syncronization_keep_events_message">Do you want to keep the events or the local calendar?</string>
@@ -191,5 +191,8 @@
     <string name="schedule_reminder">Reminder</string>
     <string name="notification_channel_schedule_changes_name">Schedule changes</string>
     <string name="notification_channel_schedule_changes_description">Get notifications about schedule changes</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

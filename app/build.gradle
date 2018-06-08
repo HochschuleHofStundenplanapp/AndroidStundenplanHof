@@ -33,8 +33,6 @@ android {
             //storeFile file('D:\\Projekt\\Mobile.AndroidStudio\\Hof.Stundenplaner\\fhhkey.jks')
             keyAlias "fhhkey"
             keyPassword 'IUwbayNG54S5C4udGkjs'
-            //storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
-            storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
             storePassword 'IUwbayNG54S5C4udGkjs'
         }
         debug {
@@ -90,11 +88,11 @@ dependencies {
     implementation 'com.android.support:design:27.+'
     implementation 'com.android.support:support-v4:27.+'
     implementation 'com.android.support:recyclerview-v7:27.+'
-	implementation 'com.android.support:preference-v7:27.+'
+    implementation 'com.android.support:preference-v7:27.+'
 
     // jsoup HTML parser library @ http://jsoup.org/
-    //compile 'org.jsoup:jsoup:1.9.2'
-    //compile 'org.jsoup:jsoup:1.9.+'
+    //implementation 'org.jsoup:jsoup:1.9.2'
+    //implementation 'org.jsoup:jsoup:1.9.+'
     implementation 'org.jsoup:jsoup:1.11.3'
 
     // Die Versionsnummer sollte die gleiche sein
