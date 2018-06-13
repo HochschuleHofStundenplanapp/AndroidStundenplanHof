@@ -29,6 +29,7 @@ public class OnboardingNotificationsFragment extends Fragment {
     private Button continueBtn;
     private CheckBox changesCb;
     private SettingsController settingsCtrl;
+    private boolean userReceivedInfo = false;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,9 +76,10 @@ public class OnboardingNotificationsFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                if (changesCb.isChecked()) {
+                // Checked 
+                if (b) {
 
-                    if (Define.PUSH_NOTIFICATIONS_ENABLED) {
+                    if (Define.PUSH_NOTIFICATIONS_ENABLED && !userReceivedInfo) {
 
                         settingsCtrl.registerFCMServerForce(getActivity().getApplicationContext());
                         new AlertDialog.Builder(getView().getContext())
@@ -91,11 +93,14 @@ public class OnboardingNotificationsFragment extends Fragment {
                                 })
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
+
+                        userReceivedInfo = true;
                     }
                 }
                 else {
                     // von Push-Notifications abmelden
                     settingsCtrl.deregisterPushNotifications();
+                    userReceivedInfo = false;
                 }
 
                 settingsCtrl.saveBooleanSettings(SettingsKeys.NOTIFICATIONS, b);

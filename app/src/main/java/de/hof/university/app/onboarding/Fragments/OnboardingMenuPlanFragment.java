@@ -16,7 +16,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import de.hof.university.app.MainActivity;
@@ -62,6 +61,14 @@ public class OnboardingMenuPlanFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        fillTariffList();
+        fillCanteenList();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         final MainActivity mainActivity = (MainActivity) getActivity();
@@ -78,9 +85,6 @@ public class OnboardingMenuPlanFragment extends Fragment {
         pastaCb = getActivity().findViewById(R.id.onboarding_menu_plan_pasta_checkbox);
         dessertsCb = getActivity().findViewById(R.id.onboarding_menu_plan_desserts_checkbox);
         saladCb = getActivity().findViewById(R.id.onboarding_menu_plan_salad_checkbox);
-
-        fillTariffList();
-        fillCanteenList();
     }
 
     private void setupClickListener() {
@@ -240,10 +244,20 @@ public class OnboardingMenuPlanFragment extends Fragment {
 
     private void startOnboardingNotifications() {
 
+        resetLists();
+
         FragmentManager manager = getFragmentManager();
         FragmentTransaction trans = manager.beginTransaction();
         trans.addToBackStack(OnboardingNotificationsFragment.class.getName());
         trans.replace(R.id.content_main, new OnboardingNotificationsFragment());
         trans.commit();
+    }
+
+    private void resetLists() {
+        tariffList.clear();
+        tariffShort.clear();
+
+        canteenList.clear();
+        canteenShort.clear();
     }
 }

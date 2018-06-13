@@ -29,7 +29,7 @@ import de.hof.university.app.model.settings.StudyCourse;
  * Created by patrickniepel on 03.01.18.
  */
 
-public class OnboardingStudyFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener, TaskComplete {
+public class OnboardingStudyFragment extends Fragment implements TaskComplete {
 
     private Button studyTermBtn, degreeProgramBtn, semesterBtn, continueBtn;
     private SettingsController settingsCtrl;
@@ -75,12 +75,6 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        fillTermList();
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         final MainActivity mainActivity = (MainActivity) getActivity();
@@ -95,6 +89,8 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
 
         degreeProgramBtn.setEnabled(false);
         semesterBtn.setEnabled(false);
+
+        fillTermList();
     }
 
     private void setupClickListener() {
@@ -190,6 +186,9 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
     }
 
     private void startOnboardingMenuPlan() {
+        termList.clear();
+        termShort.clear();
+
         FragmentManager manager = getFragmentManager();
         FragmentTransaction trans = manager.beginTransaction();
         trans.addToBackStack(OnboardingMenuPlanFragment.class.getName());
@@ -207,11 +206,6 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
         for (String t : termShortArray) {
             termShort.add(t);
         }
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-
     }
 
     private void updateSemesterData(String selectedTag) {
@@ -246,7 +240,7 @@ public class OnboardingStudyFragment extends Fragment implements SharedPreferenc
 
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
 
-        final ArrayAdapter<String> valueAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.select_dialog_item);
+        final ArrayAdapter<String> valueAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.select_dialog_singlechoice);
 
         if(valueKey.equals("term")) {
             valueAdapter.addAll(termList);
