@@ -17,7 +17,9 @@
 package de.hof.university.app.fragment;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -95,12 +97,14 @@ public class MealFragment extends AbstractListFragment {
 		String category = "";
 		String curWeekDay = new SimpleDateFormat("EEEE", Locale.GERMANY).format(new Date());
 		final SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN);
-
-		final boolean isDish = sharedPref.getBoolean(getString(R.string.PREF_KEY_MAIN_COURSE), true);
-		final boolean isSupplement = sharedPref.getBoolean(getString(R.string.PREF_KEY_SIDE_DISHES), true);
-		final boolean isPasta = sharedPref.getBoolean(getString(R.string.PREF_KEY_PASTA), true);
-		final boolean isDessert = sharedPref.getBoolean(getString(R.string.PREF_KEY_DESSERTS), true);
-		final boolean isSalad = sharedPref.getBoolean(getString(R.string.PREF_KEY_SALAD), true);
+		
+		
+		final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+		final boolean isDish = sharedPref.getBoolean("speiseplan_hauptgericht", true);
+		final boolean isSupplement = sharedPref.getBoolean("speiseplan_beilage", true);
+		final boolean isPasta = sharedPref.getBoolean("speiseplan_pasta", true);
+		final boolean isDessert = sharedPref.getBoolean("speiseplan_dessert", true);
+		final boolean isSalad = sharedPref.getBoolean("speiseplan_salat", true);
 
 //        tarif = sharedPref.getString("speiseplan_tarif", "1");
 

@@ -16,7 +16,6 @@
 
 package de.hof.university.app.fragment;
 
-import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -37,9 +36,9 @@ import de.hof.university.app.util.Define;
  * Created by Daniel on 02.08.2017.
  */
 
-public class NavigationFragment extends android.support.v4.app.Fragment {
+public class BusTrainScheduleFragment extends android.support.v4.app.Fragment {
 
-    public final static String TAG = "NavigationFragment";
+    public final static String TAG = "BusTrainScheduleFragment";
     private SwipeRefreshLayout swipeContainer;
 
     @Override

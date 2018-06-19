@@ -57,6 +57,8 @@ import de.hof.university.app.experimental.LoginController;
 import de.hof.university.app.model.settings.StudyCourse;
 import de.hof.university.app.util.Define;
 
+
+
 /**
  * Created by Lukas on 24.11.2015.
  */
@@ -112,11 +114,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 		final CharSequence[] entryValues = MainActivity.getAppContext().getResources().getStringArray(R.array.canteen_values);
 		//"310", "320", "330", "340", "350","370"
 		if (lpCanteen != null){
-			lpCanteen.setEntries(entries);
-			lpCanteen.setEntryValues(entryValues);
+			lpCanteen.setEntries(CanteenEntries);
+			lpCanteen.setEntryValues(CanteenEntryValues);
 			// Set default value (setDefaultValue-Method not function!)
 			if (lpCanteen.getValue() == null) {
-				lpCanteen.setValue("" + entryValues[3]);
+				lpCanteen.setValue("" + CanteenEntryValues[3]);
 			}
 			lpCanteen.setEnabled(true);
 
@@ -610,12 +612,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 				entryValues = new CharSequence[length];
 
 				for (int i = 0; i < length; ++i) {
-					StudyCourse studyCourse;
 					if (studyCourseList.get(i) instanceof StudyCourse) {
-						studyCourse = studyCourseList.get(i);
+						StudyCourse studyCourse = studyCourseList.get(i);
 						entries[i] = studyCourse.getName();
 						entryValues[i] = studyCourse.getTag();
-						//entryValues[i]= String.valueOf(studyCourseList.get(i).getId());
+						//CanteenEntryValues[i]= String.valueOf(studyCourseList.get(i).getId());
 					}
 				}
 			}
