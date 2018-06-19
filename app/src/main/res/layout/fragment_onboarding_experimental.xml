@@ -12,7 +12,7 @@
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="0dp"
-        android:layout_height="100sp"
+        android:layout_height="150dp"
         android:layout_marginEnd="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
@@ -32,6 +32,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:text="@string/experimental_features"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView4" />
@@ -47,6 +48,7 @@
         android:text="@string/LOGIN_DIALOG"
         android:textAlignment="center"
         android:textAllCaps="false"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/onboarding_experimental_synchronization_checkbox" />
@@ -59,24 +61,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:text="@string/calendar_synchronization"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/onboarding_experimental_features_checkbox" />
-
-    <TextView
-        android:id="@+id/onboarding_experimental_info"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:text="@string/onboarding_experimental_info"
-        android:textAlignment="center"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/onboarding_experimental_finish_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/onboarding_experimental_finish_button"
@@ -86,8 +74,9 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:background="@color/Primary"
-        android:textColor="#FFFFFF"
         android:text="@string/finish_onboarding"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
