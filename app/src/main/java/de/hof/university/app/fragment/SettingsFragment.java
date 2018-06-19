@@ -114,11 +114,11 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 		final CharSequence[] entryValues = MainActivity.getAppContext().getResources().getStringArray(R.array.canteen_values);
 		//"310", "320", "330", "340", "350","370"
 		if (lpCanteen != null){
-			lpCanteen.setEntries(CanteenEntries);
-			lpCanteen.setEntryValues(CanteenEntryValues);
+			lpCanteen.setEntries(entries);
+			lpCanteen.setEntryValues(entryValues);
 			// Set default value (setDefaultValue-Method not function!)
 			if (lpCanteen.getValue() == null) {
-				lpCanteen.setValue("" + CanteenEntryValues[3]);
+				lpCanteen.setValue("" + entryValues[3]);
 			}
 			lpCanteen.setEnabled(true);
 
