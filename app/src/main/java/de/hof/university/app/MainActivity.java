@@ -47,6 +47,7 @@ import java.net.CookieManager;
 import de.hof.university.app.data.SettingsController;
 import de.hof.university.app.onboarding.Fragments.OnboardingMenuPlanFragment;
 import de.hof.university.app.onboarding.Fragments.OnboardingStudyFragment;
+import de.hof.university.app.onboarding.Fragments.OnboardingWelcomeFragment;
 import de.hof.university.app.onboarding.OnboardingController;
 import de.hof.university.app.fragment.meal_plan.MealPagerFragment;
 import de.hof.university.app.util.Define;
@@ -203,7 +204,7 @@ public class MainActivity extends AppCompatActivity
 			new SettingsController(this).resetSettings();
 			FragmentManager manager = getSupportFragmentManager();
 			FragmentTransaction trans = manager.beginTransaction();
-			trans.replace(R.id.content_main, new OnboardingStudyFragment());
+			trans.replace(R.id.content_main, new OnboardingWelcomeFragment());
 			trans.commit();
 		}
 

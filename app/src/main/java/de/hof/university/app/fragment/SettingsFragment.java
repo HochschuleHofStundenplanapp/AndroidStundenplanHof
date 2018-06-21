@@ -48,6 +48,7 @@ import de.hof.university.app.R;
 import de.hof.university.app.data.SettingsController;
 import de.hof.university.app.data.TaskComplete;
 import de.hof.university.app.onboarding.Fragments.OnboardingStudyFragment;
+import de.hof.university.app.onboarding.Fragments.OnboardingWelcomeFragment;
 import de.hof.university.app.onboarding.OnboardingController;
 import de.hof.university.app.util.Define;
 import de.hof.university.app.calendar.CalendarSynchronization;
@@ -248,7 +249,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 			}
 		});
 
-		//Login für die experimentellen Funktionen
+		//Restart Onboarding
 		final Preference restartOnboarding = findPreference(getString(R.string.PREF_KEY_RESTART_ONBOARDING));
 		restartOnboarding.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 			@Override
@@ -257,7 +258,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 				resetAllSavedSettings();
 				FragmentManager manager = getFragmentManager();
 				FragmentTransaction trans = manager.beginTransaction();
-				trans.replace(R.id.content_main, new OnboardingStudyFragment());
+				trans.replace(R.id.content_main, new OnboardingWelcomeFragment());
 				trans.commit();
 				return true;
 			}

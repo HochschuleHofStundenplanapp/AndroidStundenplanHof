@@ -199,7 +199,7 @@
 
     <!-- Onboarding -->
     <string name="continue_onboarding">Continue</string>
-    <string name="finish_onboarding">Finish</string>
+    <string name="finish_onboarding">Finish Onboarding</string>
     <string name="onboarding_study">Assistant - Study</string>
     <string name="onboarding_menu_plan">Assistant - Menu Plan</string>
     <string name="onboarding_notifications">Assistant - Notifications</string>
@@ -214,5 +214,9 @@
     <string name="onboarding_error_not_selected_message_menu">Tariff and Canteen have to be selected</string>
     <string name="onboarding_restart">Restart Assistant</string>
     <string name="PREF_KEY_RESTART_ONBOARDING" translatable="false">onboarding_restart</string>
+    <string name="onboarding_error_not_selected_message">Everything has to be selected</string>
+    <string name="onboarding_welcome_title">Welcome</string>
+    <string name="onboarding_welcome_button_text">Start Onboarding</string>
+    <string name="onboarding_welcome_text">Some example text</string>
 
 </resources>

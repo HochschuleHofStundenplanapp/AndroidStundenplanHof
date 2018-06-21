@@ -170,7 +170,7 @@
 
     <!-- Onboarding -->
     <string name="continue_onboarding">Weiter</string>
-    <string name="finish_onboarding">Beenden</string>
+    <string name="finish_onboarding">Einrichtung abschließen</string>
     <string name="onboarding_study">Einrichtung - Studium</string>
     <string name="onboarding_menu_plan">Einrichtung - Speiseplan</string>
     <string name="onboarding_notifications">Einrichtung - Benachrichtigungen</string>
@@ -193,5 +193,9 @@
     <string name="schedule_reminder">Erinnerung anzeigen</string>
     <string name="notification_channel_schedule_changes_name">Stundenplan Änderungen</string>
     <string name="notification_channel_schedule_changes_description">Bekomme Benachrichtigungen über Stundenplan Änderungen</string>
+    <string name="onboarding_error_not_selected_message_study">Alle Angaben müssen ausgewählt sein</string>
+    <string name="onboarding_error_not_selected_message_menu">Tarif und Mensa müssen ausgewählt sein</string>
+    <string name="onboarding_welcome_title">Willkommen</string>
+    <string name="onboarding_welcome_button_text">Einrichtung starten</string>
 
 </resources>
