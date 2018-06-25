@@ -179,7 +179,7 @@
     <string name="onboarding_study_info">Wähle dein Semester und Studiengang</string>
     <string name="onboarding_menu_plan_info">Wähle deinen Speiseplan</string>
     <string name="onboarding_notifications_info">Schalte Benachrichtigungen ein</string>
-    <string name="onboarding_experimental_info">Schalte experimentelle Features ein</string>
+    <string name="onboarding_experimental_info">Schalte experimentelle Features + Kalender-Synchronisation ein</string>
 
     <string name="onboarding_error_not_selected_message">Es muss alles ausgewählt sein</string>
     <string name="onboarding_restart">Einrichtungs-Assistent neustarten</string>
