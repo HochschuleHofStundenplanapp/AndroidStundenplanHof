@@ -18,6 +18,8 @@ package de.hof.university.app.fragment;
 
 
 import android.app.AlertDialog;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -35,26 +37,43 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.gcm.Task;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
+import de.hof.university.app.data.SettingsController;
+import de.hof.university.app.data.TaskComplete;
+import de.hof.university.app.onboarding.Fragments.OnboardingStudyFragment;
+import de.hof.university.app.onboarding.Fragments.OnboardingWelcomeFragment;
+import de.hof.university.app.onboarding.OnboardingController;
+import de.hof.university.app.util.Define;
+import de.hof.university.app.calendar.CalendarSynchronization;
 import de.hof.university.app.communication.RegisterLectures;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.LoginController;
 import de.hof.university.app.model.settings.StudyCourse;
 import de.hof.university.app.util.Define;
 
+
+
 /**
  * Created by Lukas on 24.11.2015.
  */
-public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener, TaskComplete {
 
 	public final static String TAG = "SettingsFragment";
 
 	private ProgressDialog progressDialog;
-	private List<StudyCourse> studyCourseList;
+	//private LoginController loginController = null;
+	//private CalendarSynchronization calendarSynchronization = null;
+
 	private LoginController loginController = null;
+
+    private SettingsController settingsCtrl;
 
 	/**
 	 * @param savedInstanceState
@@ -65,6 +84,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 		Log.i(TAG, "onCreate");
 		setHasOptionsMenu(true);
 
+		this.settingsCtrl = new SettingsController(getActivity(), this);
+		//this.loginController = LoginController.getInstance(getActivity());
+		//this.calendarSynchronization = CalendarSynchronization.getInstance();
 		this.loginController = LoginController.getInstance(getActivity());
 
 		// Load the preferences from an XML resource
@@ -89,8 +111,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 		}
 
 		final ListPreference lpCanteen = (ListPreference) findPreference(getString(R.string.PREF_KEY_SELECTED_CANTEEN));
-		final CharSequence[] entries = {"Bayreuth","Coburg","Amberg", "Hof", "Weiden", "Münchberg"};
-		final CharSequence[] entryValues = {"310", "320", "330", "340", "350","370"};
+		final CharSequence[] entries = MainActivity.getAppContext().getResources().getStringArray(R.array.canteen);
+		final CharSequence[] entryValues = MainActivity.getAppContext().getResources().getStringArray(R.array.canteen_values);
 		//"310", "320", "330", "340", "350","370"
 		if (lpCanteen != null){
 			lpCanteen.setEntries(entries);
@@ -127,7 +149,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 					if ( (Boolean) newValue ) {
 						// für Push-Notifications registrieren,
 						// falls schon ein Stundenplan angelegt wurde
-						DataManager.getInstance().registerFCMServerForce(getActivity().getApplicationContext());
+						//DataManager.getInstance().registerFCMServerForce(getActivity().getApplicationContext());
+						settingsCtrl.registerFCMServerForce(getActivity().getApplicationContext());
                         new AlertDialog.Builder(getView().getContext())
                                 .setTitle(R.string.notifications)
                                 .setMessage(R.string.notifications_infotext)
@@ -140,8 +163,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
 					} else {
-						// von Push-Notifications abmelden
-						new RegisterLectures().deRegisterLectures();
+						settingsCtrl.deregisterPushNotifications();
 					}
 					return true;
 				}
@@ -179,7 +201,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 			@Override
 			public boolean onPreferenceClick(Preference preference) {
 				if (isVisible()) { //nur wenn die Activity sichtbar ist den Dialog anzeigen
-					loginController.showLoginDialog();
+					settingsCtrl.getLoginController().showLoginDialog();
 					return true;
 				} else {
 					return false;
@@ -227,9 +249,27 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 			}
 		});
 
-		enableSettingsSummary();
+		//Restart Onboarding
+		final Preference restartOnboarding = findPreference(getString(R.string.PREF_KEY_RESTART_ONBOARDING));
+		restartOnboarding.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				new OnboardingController().resetOnboarding(getActivity().getApplicationContext());
+				resetAllSavedSettings();
+				FragmentManager manager = getFragmentManager();
+				FragmentTransaction trans = manager.beginTransaction();
+				trans.replace(R.id.content_main, new OnboardingWelcomeFragment());
+				trans.commit();
+				return true;
+			}
+		});
 
+		enableSettingsSummary();
 		getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+	}
+
+	private void resetAllSavedSettings() {
+		settingsCtrl.resetSettings();
 	}
 
 	@Override
@@ -251,7 +291,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 		final NavigationView navigationView = mainActivity.findViewById(R.id.nav_view);
 		navigationView.getMenu().findItem(R.id.nav_einstellungen).setChecked(true);
 
-		if ( studyCourseList == null ) {
+		if ( settingsCtrl.getStudyCourseList() == null ) {
 			updateCourseListPreference("", false);
 		}
 
@@ -446,9 +486,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 		params[ 0 ] = term;
 		params[ 1 ] = String.valueOf(forceRefresh);
 
-		final SettingsFragment.GetSemesterTask getSemesterTask = new SettingsFragment.GetSemesterTask();
-		getSemesterTask.execute(params);
-
+		settingsCtrl.executeSemesterTask(this, params);
+		//final SettingsFragment.GetSemesterTask getSemesterTask = new SettingsFragment.GetSemesterTask();
+		//getSemesterTask.execute(params);
 	}
 
 	/**
@@ -484,13 +524,13 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 	private void updateSemesterData(final String courseStr) {
 
 		final ListPreference lpSemester = (ListPreference) findPreference(getString(R.string.PREF_KEY_SEMESTER));
-		if ( (studyCourseList == null) || courseStr.isEmpty() ) {
+		if ( (settingsCtrl.getStudyCourseList() == null) || courseStr.isEmpty() ) {
 			lpSemester.setEntries(new CharSequence[]{});
 			lpSemester.setEntryValues(new CharSequence[]{});
 			return;
 		}
 
-		for ( final StudyCourse studyCourse : studyCourseList ) {
+		for ( final StudyCourse studyCourse : settingsCtrl.getStudyCourseList() ) {
 			if ( studyCourse.getTag().equals(courseStr) ) {
 				final CharSequence[] entries = new CharSequence[ studyCourse.getTerms().size() ];
 				final CharSequence[] entryValues = new CharSequence[ studyCourse.getTerms().size() ];
@@ -524,66 +564,19 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 		}
 	}
 
+	@Override
+	public void onTaskComplete(HashMap<String, CharSequence[]> data) {
+		CharSequence[] entries = data.get("entries");
+		CharSequence[] entryValues = data.get("entryValues");
 
-	private class GetSemesterTask extends AsyncTask<String, Void, Void> {
-
-		CharSequence[] entries = null;
-		CharSequence[] entryValues = null;
-
-		@Override
-		protected final void onPreExecute() {
-			super.onPreExecute();
-
-			progressDialog = new ProgressDialog(getActivity());
-			progressDialog.setCancelable(true);
-			progressDialog.setMessage(getString(R.string.onclick_refresh));
-			progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-			progressDialog.setIndeterminate(false);
-			progressDialog.show();
-
-		}
-
-		@Override
-		protected final Void doInBackground(String... params) {
-			final String termTime = params[ 0 ];
-			final boolean pForceRefresh = Boolean.valueOf(params[ 1 ]);
-
-			studyCourseList = DataManager.getInstance().getCourses(getActivity().getApplicationContext(),
-					getString(R.string.language), termTime, pForceRefresh);
-
-			if (studyCourseList != null) {
-				final int length = studyCourseList.size();
-				
-				entries = new CharSequence[length];
-				entryValues = new CharSequence[length];
-
-				for (int i = 0; i < length; ++i) {
-					StudyCourse studyCourse;
-					if (studyCourseList.get(i) instanceof StudyCourse) {
-						studyCourse = studyCourseList.get(i);
-						entries[i] = studyCourse.getName();
-						entryValues[i] = studyCourse.getTag();
-						//entryValues[i]= String.valueOf(studyCourseList.get(i).getId());
-					}
-				}
+		ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREF_KEY_STUDIENGANG));
+		if (entries != null) {
+			if (entries.length > 0) {
+				lpCourse.setEntries(entries);
+				lpCourse.setEntryValues(entryValues);
+				lpCourse.setEnabled(true);
+				updateSemesterData(lpCourse.getValue());
 			}
-			return null;
-		}
-
-		@Override
-		protected final void onPostExecute(Void aVoid) {
-			super.onPostExecute(aVoid);
-			final ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREF_KEY_STUDIENGANG));
-			if (entries != null) {
-				if (entries.length > 0) {
-					lpCourse.setEntries(entries);
-					lpCourse.setEntryValues(entryValues);
-					lpCourse.setEnabled(true);
-					updateSemesterData(lpCourse.getValue());
-				}
-			}
-
-			progressDialog.dismiss();
 		}
 	}
 }

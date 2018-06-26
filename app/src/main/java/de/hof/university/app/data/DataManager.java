@@ -239,10 +239,10 @@ public class DataManager {
     }
 
     public final ArrayList<LectureItem> getMySchedule(Context context, String language,
-                                                      boolean forceRefresh) {
+                                                      boolean bForceRefreshFromNetwork) {
         MySchedule mySchedule = this.getMySchedule(context);
 
-        if (forceRefresh
+        if (bForceRefreshFromNetwork
                 || (mySchedule.getLectures().isEmpty())
                 || (mySchedule.getLastSaved() == null)
                 || !cacheStillValid(mySchedule, Define.MYSCHEDULE_CACHE_TIME)
@@ -266,7 +266,7 @@ public class DataManager {
             // falls der String leer ist war ein Problem mit dem Internet
             if (jsonString.isEmpty()) {
                 // prüfen ob es kein ForceRefreseh war, dann kann gecachtes zurück gegeben werden
-                if (!forceRefresh && !mySchedule.getLectures().isEmpty()) {
+                if (!bForceRefreshFromNetwork && !mySchedule.getLectures().isEmpty()) {
                     return mySchedule.getLectures();
                 } else {
                     // anderen falls null, damit dann die Fehlermeldung "Aktualisierung fehlgeschlagen" kommt

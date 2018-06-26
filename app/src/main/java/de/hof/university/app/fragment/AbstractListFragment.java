@@ -16,10 +16,8 @@
 
 package de.hof.university.app.fragment;
 
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -52,13 +50,11 @@ public abstract class AbstractListFragment extends android.support.v4.app.Fragme
     protected ArrayAdapter adapter;
     protected ArrayList<Object> dataList;
     private AbstractListFragment.Task task;
-    SharedPreferences sharedPref;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(false);
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         dataList = new ArrayList<>();
     }
 
@@ -67,7 +63,7 @@ public abstract class AbstractListFragment extends android.support.v4.app.Fragme
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_list, container, false);
+        final View v = inflater.inflate(R.layout.fragment_list, container, false);
 
         swipeContainer = (SwipeRefreshLayout) v.findViewById(R.id.swipeContainer);
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
