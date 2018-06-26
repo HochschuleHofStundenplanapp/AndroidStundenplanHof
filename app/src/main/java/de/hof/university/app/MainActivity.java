@@ -362,7 +362,7 @@ public class MainActivity extends AppCompatActivity
 					.putBoolean(getString(R.string.PREF_KEY_SHOW_EXPERIMENTAL_FEATURES_INFO), false)
 					.apply();
 
-			// Anzeigen falls nicht schon aktiviert
+			/** // Anzeigen falls nicht schon aktiviert
 			if (!showExperimentalFeatures) {
 				new AlertDialog.Builder(this)
 						.setTitle(R.string.experimental_features)
@@ -381,7 +381,7 @@ public class MainActivity extends AppCompatActivity
 						})
 						.setIcon(android.R.drawable.ic_dialog_info)
 						.show();
-			}
+			} */
 		}
 	}
 

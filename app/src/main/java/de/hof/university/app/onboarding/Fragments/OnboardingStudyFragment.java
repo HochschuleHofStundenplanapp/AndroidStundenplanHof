@@ -1,6 +1,7 @@
 package de.hof.university.app.onboarding.Fragments;
 
 import android.app.AlertDialog;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -88,7 +89,9 @@ public class OnboardingStudyFragment extends Fragment implements TaskComplete {
         continueBtn = getActivity().findViewById(R.id.onboarding_study_continue_button);
 
         degreeProgramBtn.setEnabled(false);
+        degreeProgramBtn.setTextColor(Color.GRAY);
         semesterBtn.setEnabled(false);
+        semesterBtn.setTextColor(Color.GRAY);
 
         fillTermList();
     }
@@ -125,7 +128,7 @@ public class OnboardingStudyFragment extends Fragment implements TaskComplete {
                 //Everything must be selected to continue
                 if (selectedTerm.isEmpty() || selectedDegreeProgram.isEmpty() || selectedSemester.isEmpty()) {
                     new AlertDialog.Builder(getView().getContext())
-                            .setTitle("Error")
+                            .setTitle(R.string.onboarding_error_text)
                             .setMessage(R.string.onboarding_error_not_selected_message_study)
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
@@ -269,6 +272,7 @@ public class OnboardingStudyFragment extends Fragment implements TaskComplete {
                     Log.d("+++++++++++++++++++++++", termShort.get(which));
                     settingsCtrl.saveStringSettings(SettingsKeys.TERM, termShort.get(which));
                     degreeProgramBtn.setEnabled(true);
+                    degreeProgramBtn.setTextColor(Color.BLACK);
                 }
                 if(valueKey.equals("degreeProgram")) {
                     selectedDegreeProgram = valueAdapter.getItem(which);
@@ -276,6 +280,7 @@ public class OnboardingStudyFragment extends Fragment implements TaskComplete {
                     degreeProgramBtn.setText(selectedDegreeProgram);
                     settingsCtrl.saveStringSettings(SettingsKeys.DEGREE_PROGRAM, degreeProgramListTags.get(which));
                     semesterBtn.setEnabled(true);
+                    semesterBtn.setTextColor(Color.BLACK);
                     updateSemesterData(selectedDegreeProgramList);
                 }
                 if(valueKey.equals("semester")) {

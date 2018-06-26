@@ -58,6 +58,7 @@ public class OnboardingMenuPlanFragment extends Fragment {
         setupLayout();
         setupClickListener();
         fillLayoutIfPossible();
+        setPresets();
     }
 
     @Override
@@ -87,6 +88,22 @@ public class OnboardingMenuPlanFragment extends Fragment {
         saladCb = getActivity().findViewById(R.id.onboarding_menu_plan_salad_checkbox);
     }
 
+    // Preselect
+    private void setPresets() {
+        mainCourseCb.setChecked(true);
+        sideDishesCb.setChecked(true);
+        pastaCb.setChecked(true);
+        dessertsCb.setChecked(true);
+        saladCb.setChecked(true);
+
+        //Save settings
+        settingsCtrl.saveBooleanSettings(SettingsKeys.MAIN_COURSE, true);
+        settingsCtrl.saveBooleanSettings(SettingsKeys.SIDE_DISHES, true);
+        settingsCtrl.saveBooleanSettings(SettingsKeys.PASTA, true);
+        settingsCtrl.saveBooleanSettings(SettingsKeys.DESSERT, true);
+        settingsCtrl.saveBooleanSettings(SettingsKeys.SALAD, true);
+    }
+
     private void setupClickListener() {
 
         continueBtn.setOnClickListener(new View.OnClickListener() {
@@ -96,7 +113,7 @@ public class OnboardingMenuPlanFragment extends Fragment {
                 //Tariff must be selected to continue
                 if (selectedTariff.isEmpty() || selectedCanteen.isEmpty()) {
                     new AlertDialog.Builder(getView().getContext())
-                            .setTitle("Error")
+                            .setTitle(R.string.onboarding_error_text)
                             .setMessage(R.string.onboarding_error_not_selected_message_menu)
                             .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                                 @Override
