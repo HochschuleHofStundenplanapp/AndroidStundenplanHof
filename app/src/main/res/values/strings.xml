@@ -217,7 +217,8 @@
     <string name="onboarding_error_not_selected_message">Everything has to be selected</string>
     <string name="onboarding_welcome_title">Welcome</string>
     <string name="onboarding_welcome_button_text">Start Onboarding</string>
-    <string name="onboarding_welcome_text">Quick and easy \n \n Follow the instructions to setup your personal schedule app</string>
+    <string name="onboarding_welcome_text_title">Quick and easy</string>
+    <string name="onboarding_welcome_text_message">Follow the instructions to setup your personal schedule app</string>
     <string name="onboarding_login_info">This login is used to show your mark sheet/announcement and for room search, if experimental features are enabled</string>
 
 </resources>
