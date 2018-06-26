@@ -163,6 +163,11 @@
     <string translatable="false" name="PREF_KEY_SHOW_EXPERIMENTAL_FEATURES_INFO">show_experimental_features_info</string>
     <string translatable="false" name="PREF_KEY_SCREEN_CALENDAR_SYNCHRONIZATION">pref_screen_calendar_synchronization</string>
     <string translatable="false" name="PREF_KEY_CALENDAR_REMINDER">calendar_reminder</string>
+    <string translatable="false" name="PREF_KEY_MAIN_COURSE">speiseplan_hauptgericht</string>
+    <string translatable="false" name="PREF_KEY_SIDE_DISHES">speiseplan_beilage</string>
+    <string translatable="false" name="PREF_KEY_PASTA">speiseplan_pasta</string>
+    <string translatable="false" name="PREF_KEY_DESSERTS">speiseplan_dessert</string>
+    <string translatable="false" name="PREF_KEY_SALAD">speiseplan_salat</string>
     <string name="calendar_synchronization_successful">Schedule successfully synchronized with the calendar!</string>
     <string name="calendar_syncronization_keep_events_title">Keep Events?</string>
     <string name="calendar_syncronization_keep_events_message">Do you want to keep the events or the local calendar?</string>
@@ -191,5 +196,31 @@
     <string name="schedule_reminder">Reminder</string>
     <string name="notification_channel_schedule_changes_name">Schedule changes</string>
     <string name="notification_channel_schedule_changes_description">Get notifications about schedule changes</string>
+
+    <!-- Onboarding -->
+    <string name="continue_onboarding">Continue</string>
+    <string name="finish_onboarding">Finish Onboarding</string>
+    <string name="onboarding_study">Assistant - Study</string>
+    <string name="onboarding_menu_plan">Assistant - Menu Plan</string>
+    <string name="onboarding_notifications">Assistant - Notifications</string>
+    <string name="onboarding_experimental">Assistant - Experimental</string>
+
+    <string name="onboarding_study_info">Choose your semester and degree program</string>
+    <string name="onboarding_menu_plan_info">Choose your menu plan</string>
+    <string name="onboarding_notifications_info">Turn on notifications \n Recieve Push Notifications of current changes</string>
+    <string name="onboarding_experimental_info">Turn on experimental features \n Enable sync to see your schedule in your calendar</string>
+
+    <string name="onboarding_error_text">Attention</string>
+
+    <string name="onboarding_error_not_selected_message_study">Everything has to be selected</string>
+    <string name="onboarding_error_not_selected_message_menu">Tariff and Canteen have to be selected</string>
+    <string name="onboarding_restart">Restart Assistant</string>
+    <string name="PREF_KEY_RESTART_ONBOARDING" translatable="false">onboarding_restart</string>
+    <string name="onboarding_error_not_selected_message">Everything has to be selected</string>
+    <string name="onboarding_welcome_title">Welcome</string>
+    <string name="onboarding_welcome_button_text">Start Onboarding</string>
+    <string name="onboarding_welcome_text_title">Quick and easy</string>
+    <string name="onboarding_welcome_text_message">Follow the instructions to setup your personal schedule app</string>
+    <string name="onboarding_login_info">This login is used to show your mark sheet/announcement and for room search, if experimental features are enabled</string>
 
 </resources>

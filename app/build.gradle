@@ -35,7 +35,7 @@ android {
             keyAlias "fhhkey"
             keyPassword 'IUwbayNG54S5C4udGkjs'
             //storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
-            storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
+            //storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
             storePassword 'IUwbayNG54S5C4udGkjs'
         }
         debug {
