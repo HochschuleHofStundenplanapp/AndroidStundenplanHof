@@ -35,7 +35,7 @@ android {
             keyAlias "fhhkey"
             keyPassword 'IUwbayNG54S5C4udGkjs'
             //storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
-            storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
+            //storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
             storePassword 'IUwbayNG54S5C4udGkjs'
         }
         debug {
@@ -100,7 +100,7 @@ dependencies {
 	implementation 'org.osmdroid:osmdroid-android:5.+'
 
 	testImplementation 'junit:junit:4.+'
-	implementation 'com.android.support.constraint:constraint-layout:+'
+	implementation 'com.android.support.constraint:constraint-layout:1.+' //if using above 2.+ the minSdkVersion must be 18
 }
 
 apply plugin: 'com.google.gms.google-services'

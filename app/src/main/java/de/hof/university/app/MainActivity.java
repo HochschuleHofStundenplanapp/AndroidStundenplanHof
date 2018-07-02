@@ -44,6 +44,11 @@ import android.widget.Toast;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 
+import de.hof.university.app.data.SettingsController;
+import de.hof.university.app.onboarding.Fragments.OnboardingMenuPlanFragment;
+import de.hof.university.app.onboarding.Fragments.OnboardingStudyFragment;
+import de.hof.university.app.onboarding.Fragments.OnboardingWelcomeFragment;
+import de.hof.university.app.onboarding.OnboardingController;
 import de.hof.university.app.fragment.meal_plan.MealPagerFragment;
 import de.hof.university.app.util.Define;
 import de.hof.university.app.data.DataManager;
@@ -86,6 +91,8 @@ public class MainActivity extends AppCompatActivity
 	// für Navigation
 	private boolean backButtonPressedOnce = false;
 
+	private SharedPreferences sharedPreferences;
+
 	public static Context getAppContext() {
 		return appContext;
 	}
@@ -96,7 +103,7 @@ public class MainActivity extends AppCompatActivity
 
 		setContentView(R.layout.activity_main);
 		appContext = this;
-		final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
 		// Let the cookieManager handle the Cookies
 		final CookieManager cookieManager = new CookieManager();
@@ -149,24 +156,7 @@ public class MainActivity extends AppCompatActivity
 		if (savedInstanceState == null) {
 			// ja die App wurde neu gestartet
 
-			// Ist ein "Mein Stundenplan" vorhanden?
-			if (DataManager.getInstance().getMyScheduleSize(getApplicationContext()) > 0) {
-				// Es gibt einen "Mein Studnenplan". Also gehen wir zu ihm.
-				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_mySchedule));
-			}
-			// Sind die Einstellungen vorhanden?
-			else if (!sharedPreferences.getString(getString(R.string.PREF_KEY_TERM_TIME), "").isEmpty()
-					&& !sharedPreferences.getString(getString(R.string.PREF_KEY_STUDIENGANG), "").isEmpty()
-					&& !sharedPreferences.getString(getString(R.string.PREF_KEY_SEMESTER), "").isEmpty()) {
-				// ja, also gehen wir zum Stundenplan
-				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_stundenplan));
-			} else {
-				// In allen anderen Fällen gehen wir zu den Einstellungen
-				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_einstellungen));
-
-				// returnen damit keine Intents gehandelt werden und keine Dialoge kommen.
-				return;
-			}
+			checkStartingScreen();
 		}
 
 		//Downloads die von Fragmenten (wie dem neuem MealFragment) gestartet wurden erlauben
@@ -203,6 +193,38 @@ public class MainActivity extends AppCompatActivity
 			if (notificationManager != null) {
 				notificationManager.createNotificationChannel(scheduleNotificationsChannel);
 			}
+		}
+	}
+
+	public void checkStartingScreen() {
+
+		//Soll das Onboarding gestartet werden
+		if (new OnboardingController().shouldStartOnboaringIfNeeded(this)) {
+			//FragmentManager manager = getFragmentManager();
+			new SettingsController(this).resetSettings();
+			FragmentManager manager = getSupportFragmentManager();
+			FragmentTransaction trans = manager.beginTransaction();
+			trans.replace(R.id.content_main, new OnboardingWelcomeFragment());
+			trans.commit();
+		}
+
+		// Ist ein "Mein Stundenplan" vorhanden?
+		else if (DataManager.getInstance().getMyScheduleSize(getApplicationContext()) > 0) {
+			// Es gibt einen "Mein Studnenplan". Also gehen wir zu ihm.
+			onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_mySchedule));
+		}
+		// Sind die Einstellungen vorhanden?
+		else if (!sharedPreferences.getString(getString(R.string.PREF_KEY_TERM_TIME), "").isEmpty()
+				&& !sharedPreferences.getString(getString(R.string.PREF_KEY_STUDIENGANG), "").isEmpty()
+				&& !sharedPreferences.getString(getString(R.string.PREF_KEY_SEMESTER), "").isEmpty()) {
+			// ja, also gehen wir zum Stundenplan
+			onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_stundenplan));
+		} else {
+			// In allen anderen Fällen gehen wir zu den Einstellungen
+			onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_einstellungen));
+
+			// returnen damit keine Intents gehandelt werden und keine Dialoge kommen.
+			return;
 		}
 	}
 
@@ -340,7 +362,7 @@ public class MainActivity extends AppCompatActivity
 					.putBoolean(getString(R.string.PREF_KEY_SHOW_EXPERIMENTAL_FEATURES_INFO), false)
 					.apply();
 
-			// Anzeigen falls nicht schon aktiviert
+			/** // Anzeigen falls nicht schon aktiviert
 			if (!showExperimentalFeatures) {
 				new AlertDialog.Builder(this)
 						.setTitle(R.string.experimental_features)
@@ -359,7 +381,7 @@ public class MainActivity extends AppCompatActivity
 						})
 						.setIcon(android.R.drawable.ic_dialog_info)
 						.show();
-			}
+			} */
 		}
 	}
 
