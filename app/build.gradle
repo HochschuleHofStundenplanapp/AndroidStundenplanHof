@@ -22,8 +22,8 @@ android {
     defaultConfig {
         applicationId 'de.hof.university.app'
         targetSdkVersion 27
-        versionCode 36
-        versionName '4.6'
+        versionCode 37
+        versionName '4.7'
         minSdkVersion 16
 		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
