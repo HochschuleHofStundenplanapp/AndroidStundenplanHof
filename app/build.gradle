@@ -15,6 +15,7 @@
  */
 
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 27
@@ -27,6 +28,10 @@ android {
         minSdkVersion 16
 		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+	packagingOptions {
+		exclude 'META-INF/DEPENDENCIES'
+	}
 
     signingConfigs {
         release {
@@ -99,8 +104,18 @@ dependencies {
 
 	implementation 'org.osmdroid:osmdroid-android:5.+'
 
+	implementation "org.igniterealtime.smack:smack-android-extensions:4.2.0"
+	implementation "org.igniterealtime.smack:smack-tcp:4.2.0"
+	implementation "org.igniterealtime.smack:smack-extensions:4.2.0"
+	implementation "org.igniterealtime.smack:smack-bosh:4.2.0"
+
+
 	testImplementation 'junit:junit:4.+'
-	implementation 'com.android.support.constraint:constraint-layout:+'
+	implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+	api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 apply plugin: 'com.google.gms.google-services'
+repositories {
+	mavenCentral()
+}
