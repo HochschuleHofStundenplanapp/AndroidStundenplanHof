@@ -16,7 +16,6 @@
 
 package de.hof.university.app.fragment.schedule;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -48,7 +47,7 @@ import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.adapter.ScheduleAdapter;
 import de.hof.university.app.data.DataManager;
-import de.hof.university.app.debug.ChatFragment;
+import de.hof.university.app.fragment.ChatFragment;
 import de.hof.university.app.fragment.AbstractListFragment;
 import de.hof.university.app.model.BigListItem;
 import de.hof.university.app.model.LastUpdated;
