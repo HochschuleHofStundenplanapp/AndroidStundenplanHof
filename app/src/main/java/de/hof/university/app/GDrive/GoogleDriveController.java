@@ -92,9 +92,9 @@ public class GoogleDriveController {
         this.context = context;
     }
 
-    public static GoogleDriveController getInstance(Activity activity){
+    public static GoogleDriveController getInstance(Context context){
         if(null == controller){
-            controller = new GoogleDriveController(activity);
+            controller = new GoogleDriveController(context);
         }
         return controller;
     }
@@ -271,7 +271,7 @@ public class GoogleDriveController {
             Log.i(TAG, item.toString());
         }
 
-        this.saveInDrive(context.getString(R.string.myschedule), mySchedule.getLectures(), myScheduleDate);
+        this.saveInDrive(context.getString(R.string.myschedule), mySchedule, myScheduleDate);
 
 
     }
@@ -348,7 +348,8 @@ public class GoogleDriveController {
         this.restoreActive = false;
 
         Log.i(TAG, "Update my schedule called");
-        ArrayList<LectureItem> lectures = DataManager.getInstance().getMySchedule(context).getLectures();
+        //ArrayList<LectureItem> lectures = DataManager.getInstance().getMySchedule(context).getLectures();
+        MySchedule lectures = DataManager.getInstance().getMySchedule(context);
         this.updateInDrive(context.getString(R.string.myschedule), lectures, myScheduleDate);
     }
 
@@ -392,12 +393,19 @@ public class GoogleDriveController {
 
 
 
-    public void loadMyScheduleFromDrive(@Nullable OnGDriveRestore<List<LectureItem>> callback){
+    public void loadMyScheduleFromDrive(@Nullable OnGDriveRestore<MySchedule> callback){
         Log.i(TAG, "Load my schedule called");
 
-        this.loadFromDrive(context.getString(R.string.myschedule), (OnGDriveRestore<ArrayList<LectureItem>>) mySchedule -> {
+        this.loadFromDrive(context.getString(R.string.myschedule), (OnGDriveRestore<MySchedule>) mySchedule -> {
             DataManager.getInstance().deleteAllFromMySchedule(context);
-                for(LectureItem item: mySchedule){
+
+            for (String str: mySchedule.getIds()){
+                Log.i("LectureSPlusID: ", str);
+            }
+
+            DataManager.getInstance().getMySchedule(context).setIds(mySchedule.getIds());
+
+                for(LectureItem item: mySchedule.getLectures()){
 
                     DataManager.getInstance().addToMySchedule(context, item);
 

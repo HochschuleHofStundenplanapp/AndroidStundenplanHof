@@ -206,7 +206,7 @@ public class MyScheduleFragment extends ScheduleFragment {
 
 //            List<LectureItem> lectures = DataManager.getInstance().getMySchedule(getContext(), getString(R.string.language), false);
             if(BuildConfig.DEBUG) {
-                for (LectureItem lecture : lectures) {
+                for (LectureItem lecture : lectures.getLectures()) {
                     Log.i(TAG, lecture.getLabel());
                 }
             }
@@ -217,7 +217,7 @@ public class MyScheduleFragment extends ScheduleFragment {
                     //super.updateListView(lectures);
                     //adapter.notifyDataSetChanged();
                     MyScheduleFragment frag = (MyScheduleFragment)getFragmentManager().findFragmentByTag(Define.myScheduleFragmentName);
-                    frag.updateListView(lectures);
+                    frag.updateListView(lectures.getLectures());
                     frag.modifyListViewAfterDataSetChanged();
                     frag.listView.invalidateViews();
                     frag.adapter.notifyDataSetChanged();
