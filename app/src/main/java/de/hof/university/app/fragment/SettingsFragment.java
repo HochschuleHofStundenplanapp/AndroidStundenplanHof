@@ -25,6 +25,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceCategory;
@@ -63,86 +64,84 @@ import de.hof.university.app.model.settings.StudyCourse;
 import de.hof.university.app.util.Define;
 
 
-
 /**
  * Created by Lukas on 24.11.2015.
  */
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener, TaskComplete {
 
-	public final static String TAG = "SettingsFragment";
+    public final static String TAG = "SettingsFragment";
 
-	private ProgressDialog progressDialog;
-	//private LoginController loginController = null;
-	//private CalendarSynchronization calendarSynchronization = null;
+    private ProgressDialog progressDialog;
+    //private LoginController loginController = null;
+    //private CalendarSynchronization calendarSynchronization = null;
 
-	private LoginController loginController = null;
+    private LoginController loginController = null;
     private GoogleDriveController gDriveCtrl = null;
 
     private SettingsController settingsCtrl;
 
-	/**
-	 * @param savedInstanceState
-	 */
-	@Override
-	public final void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		Log.i(TAG, "onCreate");
-		setHasOptionsMenu(true);
+    /**
+     * @param savedInstanceState
+     */
+    @Override
+    public final void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.i(TAG, "onCreate");
+        setHasOptionsMenu(true);
 
-		this.settingsCtrl = new SettingsController(getActivity(), this);
-		//this.loginController = LoginController.getInstance(getActivity());
-		//this.calendarSynchronization = CalendarSynchronization.getInstance();
-		this.loginController = LoginController.getInstance(getActivity());
+        this.settingsCtrl = new SettingsController(getActivity(), this);
+        //this.loginController = LoginController.getInstance(getActivity());
+        //this.calendarSynchronization = CalendarSynchronization.getInstance();
+        this.loginController = LoginController.getInstance(getActivity());
         this.gDriveCtrl = GoogleDriveController.getInstance(getActivity());
 
-		// Load the preferences from an XML resource
-		addPreferencesFromResource(R.xml.preferences);
+        // Load the preferences from an XML resource
+        addPreferencesFromResource(R.xml.preferences);
 
-		final Preference lpSemester = findPreference(getString(R.string.PREF_KEY_SEMESTER));
+        final Preference lpSemester = findPreference(getString(R.string.PREF_KEY_SEMESTER));
 
-		if ( lpSemester != null ) {
-			lpSemester.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-				@Override
-				public boolean onPreferenceClick(Preference preference) {
-					return ((ListPreference) preference).getEntries().length > 0;
-				}
-			});
-			lpSemester.setEnabled(false);
-		}
+        if (lpSemester != null) {
+            lpSemester.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    return ((ListPreference) preference).getEntries().length > 0;
+                }
+            });
+            lpSemester.setEnabled(false);
+        }
 
 
-		final ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREF_KEY_STUDIENGANG));
-		if ( lpCourse != null ) {
-			lpCourse.setEnabled(false);
-		}
+        final ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREF_KEY_STUDIENGANG));
+        if (lpCourse != null) {
+            lpCourse.setEnabled(false);
+        }
 
-		final ListPreference lpCanteen = (ListPreference) findPreference(getString(R.string.PREF_KEY_SELECTED_CANTEEN));
-		final CharSequence[] entries = MainActivity.getAppContext().getResources().getStringArray(R.array.canteen);
-		final CharSequence[] entryValues = MainActivity.getAppContext().getResources().getStringArray(R.array.canteen_values);
-		//"310", "320", "330", "340", "350","370"
-		if (lpCanteen != null){
-			lpCanteen.setEntries(entries);
-			lpCanteen.setEntryValues(entryValues);
-			// Set default value (setDefaultValue-Method not function!)
-			if (lpCanteen.getValue() == null) {
-				lpCanteen.setValue("" + entryValues[3]);
-			}
-			lpCanteen.setEnabled(true);
+        final ListPreference lpCanteen = (ListPreference) findPreference(getString(R.string.PREF_KEY_SELECTED_CANTEEN));
+        final CharSequence[] entries = MainActivity.getAppContext().getResources().getStringArray(R.array.canteen);
+        final CharSequence[] entryValues = MainActivity.getAppContext().getResources().getStringArray(R.array.canteen_values);
+        //"310", "320", "330", "340", "350","370"
+        if (lpCanteen != null) {
+            lpCanteen.setEntries(entries);
+            lpCanteen.setEntryValues(entryValues);
+            // Set default value (setDefaultValue-Method not function!)
+            if (lpCanteen.getValue() == null) {
+                lpCanteen.setValue("" + entryValues[3]);
+            }
+            lpCanteen.setEnabled(true);
 
-			lpCanteen.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-				@Override
-				public boolean onPreferenceChange(Preference preference, Object newValue) {
-					Define.mensa_changed = true;
-					Log.d("Settings: ", "new Canteen selected! Invalidating Cache!");
-					refreshCanteenSummary((String) newValue);
-					return true;
-				}
-			});
-		}
+            lpCanteen.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    Define.mensa_changed = true;
+                    Log.d("Settings: ", "new Canteen selected! Invalidating Cache!");
+                    refreshCanteenSummary((String) newValue);
+                    return true;
+                }
+            });
+        }
 //		else {
 //			lpCanteen.setEnabled(false);
 //		}
-
 
 
         // GDrive Sync
@@ -157,7 +156,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                     sync(isChecked);
                 }).addOnFailureListener((e) -> {
                     ApiException apiExcepition = (ApiException) e;
-                    if(DriveStatusCodes.DRIVE_RATE_LIMIT_EXCEEDED == apiExcepition.getStatusCode()){
+                    if (DriveStatusCodes.DRIVE_RATE_LIMIT_EXCEEDED == apiExcepition.getStatusCode()) {
                         Log.i(TAG, "Drive Limit exceeeded, performing sync");
                         sync(isChecked);
                     }
@@ -171,9 +170,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         });
 
 
-
         // Benachrichtigungen
         final CheckBoxPreference changes_notifications = (CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_CHANGES_NOTIFICATION));
+
 
         if (Define.PUSH_NOTIFICATIONS_ENABLED) {
             changes_notifications.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -182,19 +181,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                     if ((Boolean) newValue) {
                         // für Push-Notifications registrieren,
                         // falls schon ein Stundenplan angelegt wurde
-                        DataManager.getInstance().registerFCMServerForce(getActivity().getApplicationContext());
-		// Benachrichtigungen
-		final android.support.v7.preference.CheckBoxPreference changes_notifications = (android.support.v7.preference.CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_CHANGES_NOTIFICATION));
-
-		if (Define.PUSH_NOTIFICATIONS_ENABLED) {
-			changes_notifications.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-				@Override
-				public boolean onPreferenceChange(Preference preference, Object newValue) {
-					if ( (Boolean) newValue ) {
-						// für Push-Notifications registrieren,
-						// falls schon ein Stundenplan angelegt wurde
-						//DataManager.getInstance().registerFCMServerForce(getActivity().getApplicationContext());
-						settingsCtrl.registerFCMServerForce(getActivity().getApplicationContext());
+                        //DataManager.getInstance().registerFCMServerForce(getActivity().getApplicationContext());
+                        settingsCtrl.registerFCMServerForce(getActivity().getApplicationContext());
                         new AlertDialog.Builder(getView().getContext())
                                 .setTitle(R.string.notifications)
                                 .setMessage(R.string.notifications_infotext)
@@ -206,498 +194,497 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                                 })
                                 .setIcon(android.R.drawable.ic_dialog_alert)
                                 .show();
-					} else {
-						settingsCtrl.deregisterPushNotifications();
-					}
-					return true;
-				}
-			});
-		} else {
-			final android.support.v7.preference.PreferenceScreen preferenceScreen = getPreferenceScreen();
-			final PreferenceCategory category_notification = (PreferenceCategory) findPreference(getString(R.string.PREF_KEY_CATEGORY_NOTIFICATION));
-
-			preferenceScreen.removePreference(category_notification);
-			preferenceScreen.removePreference(changes_notifications);
-		}
-
-
-		// Calendar synchronization
-		final Preference calendar_synchronzation_screen = findPreference( getString( R.string.PREF_KEY_SCREEN_CALENDAR_SYNCHRONIZATION ) );
-
-		calendar_synchronzation_screen.setOnPreferenceClickListener( new Preference.OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick( Preference preference ) {
-
-				SettingsCalendarSynchronizationFragment settingsCalendarSynchronizationFragment = new SettingsCalendarSynchronizationFragment();
-				getFragmentManager().beginTransaction()
-						.addToBackStack( null )
-						.replace( R.id.content_main, settingsCalendarSynchronizationFragment )
-						.commit();
-
-				return true;
-			}
-		} );
-
-
-		//Login für die experimentellen Funktionen
-		final Preference edtLogin = findPreference(getString(R.string.PREF_KEY_LOGIN));
-		edtLogin.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				if (isVisible()) { //nur wenn die Activity sichtbar ist den Dialog anzeigen
-					settingsCtrl.getLoginController().showLoginDialog();
-					return true;
-				} else {
-					return false;
-				}
-			}
-		});
-
-		final android.support.v7.preference.CheckBoxPreference experimentalFeatures = (android.support.v7.preference.CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES));
-
-		if ( experimentalFeatures.isChecked() ) {
-			edtLogin.setEnabled(true);
-			//changes_notifications.setEnabled(true);
-		} else {
-			edtLogin.setEnabled(false);
-			//changes_notifications.setEnabled(false);
-		}
-
-		experimentalFeatures.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				final Preference edtLogin = findPreference( getString( R.string.PREF_KEY_LOGIN) );
-//				final CheckBoxPreference changes_notifications = (CheckBoxPreference) findPreference("changes_notifications");
-				final MainActivity activity = (MainActivity) getActivity();
-				if ( (Boolean) newValue ) {
-					new AlertDialog.Builder(getView().getContext())
-							.setTitle(getString(R.string.experimental_features))
-							.setMessage(getString(R.string.enableExperimentalSure))
-							.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									//nothing to do here. Just close the message
-								}
-							})
-							.setCancelable(false)
-							.setIcon(android.R.drawable.ic_dialog_alert)
-							.show();
-					edtLogin.setEnabled(true);
-					activity.displayExperimentalFeaturesMenuEntries(true);
-
-				} else {
-					edtLogin.setEnabled(false);
-					activity.displayExperimentalFeaturesMenuEntries(false);
-				}
-				return true;
-			}
-		});
-
-		//Restart Onboarding
-		final Preference restartOnboarding = findPreference(getString(R.string.PREF_KEY_RESTART_ONBOARDING));
-		restartOnboarding.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				new OnboardingController().resetOnboarding(getActivity().getApplicationContext());
-				resetAllSavedSettings();
-				FragmentManager manager = getFragmentManager();
-				FragmentTransaction trans = manager.beginTransaction();
-				trans.replace(R.id.content_main, new OnboardingWelcomeFragment());
-				trans.commit();
-				return true;
-			}
-		});
-
-		enableSettingsSummary();
-		getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-	}
-                    
-                    private void sync(boolean isChecked){
-                        final CheckBoxPreference gDriveSync = (CheckBoxPreference) findPreference("drive_sync");
-                        if (isChecked) {
-                            
-                            gDriveCtrl.getAppFolderFileList(metadataBuffer -> {
-                                Log.i(TAG, metadataBuffer.getCount() + "Items in Drive");
-                                if (metadataBuffer.getCount() == 0) {
-                                    gDriveCtrl.saveMySchedule();
-                                    gDriveCtrl.saveSharedPreferences();
-                                } else {
-                                    new AlertDialog.Builder(getContext()).setTitle("Drive File in GDrive")
-                                    .setMessage("There are Drive Files in your GDrive, do you want to restore them?")
-                                    .setCancelable(false)
-                                    .setPositiveButton("Use GDrive schedule",(dialog, which) -> {
-                                        gDriveCtrl.loadMyScheduleFromDrive(null);
-                                        gDriveCtrl.loadSharedPreferences();
-                                    })
-                                    .setNegativeButton("Use local schedule", (dialog, which) ->
-                                                       {
-                                                           gDriveCtrl.updateMyScheduleFromDrive();
-                                                           gDriveCtrl.updateSharedPreferences();
-                                                       })
-                                    .setNeutralButton("Cancel", (dialog, which) -> gDriveSync.setChecked(false))
-                                    .show();
-                                    
-                                }
-                                metadataBuffer.release();
-                            });
-                            
-                            
-                        } else {
-                            new AlertDialog.Builder(getContext()).setTitle("Delete Drive Files")
-                            .setMessage("Do you want to delete the schedule in your Google Drive?")
-                            .setCancelable(false)
-                            .setPositiveButton(android.R.string.yes, (dialog, which) ->
-                                               gDriveCtrl.deleteMyScheduleDriveFile()).setNegativeButton(android.R.string.no, (dialog, which) -> {
-                                
-                            }).setIcon(android.R.drawable.ic_dialog_alert).show();
-                        }
+                    } else {
+                        settingsCtrl.deregisterPushNotifications();
                     }
+                    return true;
+                }
+            });
+        } else {
+            final android.support.v7.preference.PreferenceScreen preferenceScreen = getPreferenceScreen();
+            final PreferenceCategory category_notification = (PreferenceCategory) findPreference(getString(R.string.PREF_KEY_CATEGORY_NOTIFICATION));
+
+            preferenceScreen.removePreference(category_notification);
+            preferenceScreen.removePreference(changes_notifications);
+        }
 
 
-	private void resetAllSavedSettings() {
-		settingsCtrl.resetSettings();
-	}
+        // Calendar synchronization
+        final Preference calendar_synchronzation_screen = findPreference(getString(R.string.PREF_KEY_SCREEN_CALENDAR_SYNCHRONIZATION));
 
-	@Override
-	public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        calendar_synchronzation_screen.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
 
-	}
+                SettingsCalendarSynchronizationFragment settingsCalendarSynchronizationFragment = new SettingsCalendarSynchronizationFragment();
+                getFragmentManager().beginTransaction()
+                        .addToBackStack(null)
+                        .replace(R.id.content_main, settingsCalendarSynchronizationFragment)
+                        .commit();
 
-	/**
-	 *
-	 */
-	@Override
-	public final void onResume() {
-		super.onResume();
-		Log.i( TAG, "onResume" );
-
-		final MainActivity mainActivity = (MainActivity) getActivity();
-		mainActivity.getSupportActionBar().setTitle(R.string.einstellungen);
-
-		final NavigationView navigationView = mainActivity.findViewById(R.id.nav_view);
-		navigationView.getMenu().findItem(R.id.nav_einstellungen).setChecked(true);
-
-		if ( settingsCtrl.getStudyCourseList() == null ) {
-			updateCourseListPreference("", false);
-		}
+                return true;
+            }
+        });
 
 
-		updateSemesterData(PreferenceManager.getDefaultSharedPreferences(getView().getContext()).getString(getString(R.string.PREF_KEY_STUDIENGANG), ""));
+        //Login für die experimentellen Funktionen
+        final Preference edtLogin = findPreference(getString(R.string.PREF_KEY_LOGIN));
+        edtLogin.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                if (isVisible()) { //nur wenn die Activity sichtbar ist den Dialog anzeigen
+                    settingsCtrl.getLoginController().showLoginDialog();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
+        final android.support.v7.preference.CheckBoxPreference experimentalFeatures = (android.support.v7.preference.CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES));
+
+        if (experimentalFeatures.isChecked()) {
+            edtLogin.setEnabled(true);
+            //changes_notifications.setEnabled(true);
+        } else {
+            edtLogin.setEnabled(false);
+            //changes_notifications.setEnabled(false);
+        }
+
+        experimentalFeatures.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                final Preference edtLogin = findPreference(getString(R.string.PREF_KEY_LOGIN));
+//				final CheckBoxPreference changes_notifications = (CheckBoxPreference) findPreference("changes_notifications");
+                final MainActivity activity = (MainActivity) getActivity();
+                if ((Boolean) newValue) {
+                    new AlertDialog.Builder(getView().getContext())
+                            .setTitle(getString(R.string.experimental_features))
+                            .setMessage(getString(R.string.enableExperimentalSure))
+                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    //nothing to do here. Just close the message
+                                }
+                            })
+                            .setCancelable(false)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                    edtLogin.setEnabled(true);
+                    activity.displayExperimentalFeaturesMenuEntries(true);
+
+                } else {
+                    edtLogin.setEnabled(false);
+                    activity.displayExperimentalFeaturesMenuEntries(false);
+                }
+                return true;
+            }
+        });
+
+        //Restart Onboarding
+        final Preference restartOnboarding = findPreference(getString(R.string.PREF_KEY_RESTART_ONBOARDING));
+        restartOnboarding.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                new OnboardingController().resetOnboarding(getActivity().getApplicationContext());
+                resetAllSavedSettings();
+                FragmentManager manager = getFragmentManager();
+                FragmentTransaction trans = manager.beginTransaction();
+                trans.replace(R.id.content_main, new OnboardingWelcomeFragment());
+                trans.commit();
+                return true;
+            }
+        });
+
+        enableSettingsSummary();
+        getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+    }
+       
+
+    private void sync(boolean isChecked) {
+        final CheckBoxPreference gDriveSync = (CheckBoxPreference) findPreference("drive_sync");
+        if (isChecked) {
+
+            gDriveCtrl.getAppFolderFileList(metadataBuffer -> {
+                Log.i(TAG, metadataBuffer.getCount() + "Items in Drive");
+                if (metadataBuffer.getCount() == 0) {
+                    gDriveCtrl.saveMySchedule();
+                    gDriveCtrl.saveSharedPreferences();
+                } else {
+                    new AlertDialog.Builder(getContext()).setTitle("Drive File in GDrive")
+                            .setMessage("There are Drive Files in your GDrive, do you want to restore them?")
+                            .setCancelable(false)
+                            .setPositiveButton("Use GDrive schedule", (dialog, which) -> {
+                                gDriveCtrl.loadMyScheduleFromDrive(null);
+                                gDriveCtrl.loadSharedPreferences();
+                            })
+                            .setNegativeButton("Use local schedule", (dialog, which) ->
+                            {
+                                gDriveCtrl.updateMyScheduleFromDrive();
+                                gDriveCtrl.updateSharedPreferences();
+                            })
+                            .setNeutralButton("Cancel", (dialog, which) -> gDriveSync.setChecked(false))
+                            .show();
+
+                }
+                metadataBuffer.release();
+            });
+
+
+        } else {
+            new AlertDialog.Builder(getContext()).setTitle("Delete Drive Files")
+                    .setMessage("Do you want to delete the schedule in your Google Drive?")
+                    .setCancelable(false)
+                    .setPositiveButton(android.R.string.yes, (dialog, which) ->
+                            gDriveCtrl.deleteMyScheduleDriveFile()).setNegativeButton(android.R.string.no, (dialog, which) -> {
+
+            }).setIcon(android.R.drawable.ic_dialog_alert).show();
+        }
+    }
+
+
+    private void resetAllSavedSettings() {
+        settingsCtrl.resetSettings();
+    }
+
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+
+    }
+
+    /**
+     *
+     */
+    @Override
+    public final void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume");
+
+        final MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.getSupportActionBar().setTitle(R.string.einstellungen);
+
+        final NavigationView navigationView = mainActivity.findViewById(R.id.nav_view);
+        navigationView.getMenu().findItem(R.id.nav_einstellungen).setChecked(true);
+
+        if (settingsCtrl.getStudyCourseList() == null) {
+            updateCourseListPreference("", false);
+        }
+
+
+        updateSemesterData(PreferenceManager.getDefaultSharedPreferences(getView().getContext()).getString(getString(R.string.PREF_KEY_STUDIENGANG), ""));
 //        updateSemesterListPreference();
-		refreshSummaries();
-	}
+        refreshSummaries();
+    }
 
-	//@Override
-	//public boolean onPreferenceTreeClick( PreferenceScreen preferenceScreen, Preference preference ) {
-	//	return super.onPreferenceTreeClick( preferenceScreen, preference );
-	//}
+    //@Override
+    //public boolean onPreferenceTreeClick( PreferenceScreen preferenceScreen, Preference preference ) {
+    //	return super.onPreferenceTreeClick( preferenceScreen, preference );
+    //}
 
-	@Override
-	public void onPause() {
-		super.onPause();
-		Log.i( TAG, "onPause" );
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i(TAG, "onPause");
 
-		final MainActivity mainActivity = (MainActivity) getActivity();
-		final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+        final MainActivity mainActivity = (MainActivity) getActivity();
+        final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
 
-		navigationView.getMenu().findItem(R.id.nav_einstellungen).setChecked(false);
-	}
+        navigationView.getMenu().findItem(R.id.nav_einstellungen).setChecked(false);
+    }
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		Log.i( TAG, "onDestroy" );
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "onDestroy");
 
-		getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
-	}
+        getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+    }
 
-	private void refreshCanteenSummary(String newCanteen){
-		String selectedMensa;
-		switch (newCanteen){
-			case "310":
-				selectedMensa = "Bayreuth";
-				break;
-			case "320":
-				selectedMensa = "Coburg";
-				break;
-			case "330":
-				selectedMensa = "Amberg";
-				break;
-			case "340":
-				selectedMensa = "Hof";
-				break;
-			case "350":
-				selectedMensa = "Weiden";
-				break;
-			case "370":
-				selectedMensa = "Münchberg";
-				break;
-			default:
-				selectedMensa = "Hof";
-		}
+    private void refreshCanteenSummary(String newCanteen) {
+        String selectedMensa;
+        switch (newCanteen) {
+            case "310":
+                selectedMensa = "Bayreuth";
+                break;
+            case "320":
+                selectedMensa = "Coburg";
+                break;
+            case "330":
+                selectedMensa = "Amberg";
+                break;
+            case "340":
+                selectedMensa = "Hof";
+                break;
+            case "350":
+                selectedMensa = "Weiden";
+                break;
+            case "370":
+                selectedMensa = "Münchberg";
+                break;
+            default:
+                selectedMensa = "Hof";
+        }
 
-		final ListPreference lpCanteen = (ListPreference) findPreference(getString(R.string.PREF_KEY_SELECTED_CANTEEN));
-		lpCanteen.setSummary(selectedMensa);
+        final ListPreference lpCanteen = (ListPreference) findPreference(getString(R.string.PREF_KEY_SELECTED_CANTEEN));
+        lpCanteen.setSummary(selectedMensa);
 
-	}
+    }
 
-	private void refreshSummaries() {
-	    /*
+    private void refreshSummaries() {
+        /*
         EditTextPreference edtName = (EditTextPreference) findPreference("primuss_user");
         edtName.setSummary(edtName.getText());
         */
-		final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getView().getContext());
-	    String selectedMensa;
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getView().getContext());
+        String selectedMensa;
 
-	    switch (sharedPreferences.getString("selected_canteen", "340")){
-			case "310":
-				selectedMensa = "Bayreuth";
-				break;
-			case "320":
-				selectedMensa = "Coburg";
-				break;
-			case "330":
-				selectedMensa = "Amberg";
-				break;
-			case "340":
-				selectedMensa = "Hof";
-				break;
-			case "350":
-				selectedMensa = "Weiden";
-				break;
-			case "370":
-				selectedMensa = "Münchberg";
-				break;
-			default:
-				selectedMensa = "Hof";
-		}
-
-
-		final ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREF_KEY_STUDIENGANG));
-		lpCourse.setSummary(sharedPreferences.getString(getString(R.string.PREF_KEY_STUDIENGANG), ""));
-
-		final ListPreference lpSemester = (ListPreference) findPreference(getString(R.string.PREF_KEY_SEMESTER));
-		lpSemester.setSummary(sharedPreferences.getString(getString(R.string.PREF_KEY_SEMESTER), ""));
-
-		final ListPreference lpCanteen = (ListPreference) findPreference(getString(R.string.PREF_KEY_SELECTED_CANTEEN));
-		lpCanteen.setSummary(selectedMensa);
-
-		final ListPreference lpTarif = (ListPreference) findPreference(getString(R.string.PREF_KEY_MEAL_TARIFF));
-		lpTarif.setSummary(lpTarif.getEntry());
-
-		final ListPreference lpTermTime = (ListPreference) findPreference(getString(R.string.PREF_KEY_TERM_TIME));
-		lpTermTime.setSummary(lpTermTime.getEntry());
-	}
+        switch (sharedPreferences.getString("selected_canteen", "340")) {
+            case "310":
+                selectedMensa = "Bayreuth";
+                break;
+            case "320":
+                selectedMensa = "Coburg";
+                break;
+            case "330":
+                selectedMensa = "Amberg";
+                break;
+            case "340":
+                selectedMensa = "Hof";
+                break;
+            case "350":
+                selectedMensa = "Weiden";
+                break;
+            case "370":
+                selectedMensa = "Münchberg";
+                break;
+            default:
+                selectedMensa = "Hof";
+        }
 
 
-	/**
-	 * Alle eingestellten Werte werden nun unterhalb des jeweiligen Punktes angezeigt.
-	 */
-	private void enableSettingsSummary() {
-		final ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREF_KEY_STUDIENGANG));
-		lpCourse.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, final Object newValue) {
-				preference.setSummary(newValue.toString());
-				updateSemesterData(newValue.toString());
-				return true;
-			}
-		});
+        final ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREF_KEY_STUDIENGANG));
+        lpCourse.setSummary(sharedPreferences.getString(getString(R.string.PREF_KEY_STUDIENGANG), ""));
 
-		final ListPreference lpSemester = (ListPreference) findPreference(getString(R.string.PREF_KEY_SEMESTER));
-		lpSemester.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				preference.setSummary(newValue.toString());
-				return true;
-			}
-		});
+        final ListPreference lpSemester = (ListPreference) findPreference(getString(R.string.PREF_KEY_SEMESTER));
+        lpSemester.setSummary(sharedPreferences.getString(getString(R.string.PREF_KEY_SEMESTER), ""));
 
-		final ListPreference lpTarif = (ListPreference) findPreference(getString( R.string.PREF_KEY_MEAL_TARIFF ));
-		lpTarif.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				if ( preference instanceof ListPreference ) {
-					ListPreference listPreference = (ListPreference) preference;
-					int index = listPreference.findIndexOfValue(newValue.toString());
-					if ( index >= 0 ) {
-						listPreference.setSummary(listPreference.getEntries()[ index ]);
-						return true;
-					}
-				}
-				return false;
-			}
-		});
+        final ListPreference lpCanteen = (ListPreference) findPreference(getString(R.string.PREF_KEY_SELECTED_CANTEEN));
+        lpCanteen.setSummary(selectedMensa);
 
-		final ListPreference lpTermTime = (ListPreference) findPreference(getString( R.string.PREF_KEY_TERM_TIME ));
-		lpTermTime.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object newValue) {
-				if ( preference instanceof ListPreference ) {
-					final ListPreference listPreference = (ListPreference) preference;
-					final int index = listPreference.findIndexOfValue(newValue.toString());
-					if ( index >= 0 ) {
-						listPreference.setSummary(listPreference.getEntries()[ index ]);
-						updateCourseListPreference(newValue.toString(), true);
-						return true;
-					}
-				}
-				return false;
-			}
-		});
-	}
+        final ListPreference lpTarif = (ListPreference) findPreference(getString(R.string.PREF_KEY_MEAL_TARIFF));
+        lpTarif.setSummary(lpTarif.getEntry());
 
-	/**
-	 * Aktuallisiert die Studiengänge aus der Datenbank mit der ListPreference
-	 */
-	private void updateCourseListPreference(String term, boolean forceRefresh) {
+        final ListPreference lpTermTime = (ListPreference) findPreference(getString(R.string.PREF_KEY_TERM_TIME));
+        lpTermTime.setSummary(lpTermTime.getEntry());
+    }
 
-		if ( term.isEmpty() ) {
-			ListPreference lpTermTime = (ListPreference) findPreference(MainActivity.getAppContext().getString( R.string.PREF_KEY_TERM_TIME ));
-			term = lpTermTime.getValue();
-		}
 
-		//Cancel, if no termTime is set!
-		if ( term == null ) {
-			Toast.makeText(getActivity(), getString(R.string.noTermTimeSelected), Toast.LENGTH_LONG).show();
-			return;
-		}
+    /**
+     * Alle eingestellten Werte werden nun unterhalb des jeweiligen Punktes angezeigt.
+     */
+    private void enableSettingsSummary() {
+        final ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREF_KEY_STUDIENGANG));
+        lpCourse.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, final Object newValue) {
+                preference.setSummary(newValue.toString());
+                updateSemesterData(newValue.toString());
+                return true;
+            }
+        });
 
-		// Beim ersten Start braucht er noch keine Abfrage zu machen weil noch keine termTime ausgewählt wurde.
-		if (term.isEmpty()) {
-			return;
-		}
+        final ListPreference lpSemester = (ListPreference) findPreference(getString(R.string.PREF_KEY_SEMESTER));
+        lpSemester.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                preference.setSummary(newValue.toString());
+                return true;
+            }
+        });
 
-		final String[] params = new String[ 2 ];
-		params[ 0 ] = term;
-		params[ 1 ] = String.valueOf(forceRefresh);
-
-		settingsCtrl.executeSemesterTask(this, params);
-		//final SettingsFragment.GetSemesterTask getSemesterTask = new SettingsFragment.GetSemesterTask();
-		//getSemesterTask.execute(params);
-	}
-
-	/**
-	 * @param menu
-	 * @param inflater
-	 */
-	@Override
-	public final void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.settings_main, menu);
-	}
-
-	/**
-	 * @param item
-	 * @return
-	 */
-	@Override
-	public final boolean onOptionsItemSelected(MenuItem item) {
-		// handle item selection
-		if ( item.getItemId() == R.id.action_refresh ) {
-			updateCourseListPreference("", true);
-			return super.onOptionsItemSelected(item);
-		} else {
-			return super.onOptionsItemSelected(item);
-		}
-	}
-
-	/**
-	 * Öffnet Prozessdialog und aktualisiert die Semester zu dem zuvor ausgewählten Studiengang
-	 *
-	 * @param courseStr Studiengang dessen Semester geladen werden
-	 */
-	private void updateSemesterData(final String courseStr) {
-
-		final ListPreference lpSemester = (ListPreference) findPreference(getString(R.string.PREF_KEY_SEMESTER));
-		if ( (settingsCtrl.getStudyCourseList() == null) || courseStr.isEmpty() ) {
-			lpSemester.setEntries(new CharSequence[]{});
-			lpSemester.setEntryValues(new CharSequence[]{});
-			return;
-		}
-
-		for ( final StudyCourse studyCourse : settingsCtrl.getStudyCourseList() ) {
-			if ( studyCourse.getTag().equals(courseStr) ) {
-				final CharSequence[] entries = new CharSequence[ studyCourse.getTerms().size() ];
-				final CharSequence[] entryValues = new CharSequence[ studyCourse.getTerms().size() ];
-
-				for ( int j = 0; j < studyCourse.getTerms().size(); ++j ) {
-					entries[ j ] = studyCourse.getTerms().get(j);
-					entryValues[ j ] = studyCourse.getTerms().get(j);
-				}
-
-				if ( lpSemester != null ) {
-					if ( entries.length > 0 ) {
-						lpSemester.setEntries(entries);
-						lpSemester.setEntryValues(entryValues);
-						lpSemester.setEnabled(true);
-					} else {
-						lpSemester.setEnabled(false);
-					}
-				}
-			}
-		}
-	}
-                    
-                    // Einstellungen aktualisieren wenn sie geändert werden
-                    @Override
-                    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                        Log.i(TAG, "onSharedPreferenceChanged");
-                        
-                        if (getString(R.string.PREF_KEY_CHANGES_NOTIFICATION).equals(key)) {
-                            Log.i(TAG, "CHANES_NOTIFICATION has changed");
-                            android.support.v7.preference.CheckBoxPreference changes_notification = (android.support.v7.preference.CheckBoxPreference) findPreference(key);
-                            changes_notification.setChecked(sharedPreferences.getBoolean(key, false));
-                        }
-                        //update Preferences if gdrive Sync is enabled
-                        final boolean gdriveSynchronization = sharedPreferences.getBoolean("drive_sync", false);
-                        Log.i(TAG, "GDrive Snyc on: " + gdriveSynchronization);
-                        if (!key.equals("drive_sync") && gdriveSynchronization && !gDriveCtrl.restoreActive) {
-                            gDriveCtrl.updateSharedPreferences();
-                        }else{
-                            Preference pref = findPreference(key);
-                            if(pref instanceof ListPreference){
-                                ListPreference listPref = (ListPreference) pref;
-                                Log.i(TAG, getPreferenceManager().getSharedPreferences().getString(key,""));
-                                
-                                listPref.setValue(getPreferenceManager().getSharedPreferences().getString(key,""));
-                                refreshSummaries();
-                            }else if(pref instanceof CheckBoxPreference){
-                                CheckBoxPreference cPref = (CheckBoxPreference)pref;
-                                boolean isChecked = getPreferenceManager().getSharedPreferences().getBoolean(key,false);
-                                cPref.setChecked(isChecked);
-                                
-                                if(key.equals(getActivity().getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES))){
-                                    Log.i(TAG, "Current Key: " + key);
-                                    ((MainActivity)getActivity()).displayExperimentalFeaturesMenuEntries(isChecked);
-                                }else if(key.equals(getActivity().getString(R.string.PREF_KEY_CHANGES_NOTIFICATION))){
-                                    if (isChecked) {
-                                        DataManager.getInstance().registerFCMServerForce(getContext());
-                                    } else {
-                                        new RegisterLectures().deRegisterLectures();
-                                    }
-                                }
-                            }
-                        }
-                        
+        final ListPreference lpTarif = (ListPreference) findPreference(getString(R.string.PREF_KEY_MEAL_TARIFF));
+        lpTarif.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if (preference instanceof ListPreference) {
+                    ListPreference listPreference = (ListPreference) preference;
+                    int index = listPreference.findIndexOfValue(newValue.toString());
+                    if (index >= 0) {
+                        listPreference.setSummary(listPreference.getEntries()[index]);
+                        return true;
                     }
-                    
+                }
+                return false;
+            }
+        });
+
+        final ListPreference lpTermTime = (ListPreference) findPreference(getString(R.string.PREF_KEY_TERM_TIME));
+        lpTermTime.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if (preference instanceof ListPreference) {
+                    final ListPreference listPreference = (ListPreference) preference;
+                    final int index = listPreference.findIndexOfValue(newValue.toString());
+                    if (index >= 0) {
+                        listPreference.setSummary(listPreference.getEntries()[index]);
+                        updateCourseListPreference(newValue.toString(), true);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
+    }
+
+    /**
+     * Aktuallisiert die Studiengänge aus der Datenbank mit der ListPreference
+     */
+    private void updateCourseListPreference(String term, boolean forceRefresh) {
+
+        if (term.isEmpty()) {
+            ListPreference lpTermTime = (ListPreference) findPreference(MainActivity.getAppContext().getString(R.string.PREF_KEY_TERM_TIME));
+            term = lpTermTime.getValue();
+        }
+
+        //Cancel, if no termTime is set!
+        if (term == null) {
+            Toast.makeText(getActivity(), getString(R.string.noTermTimeSelected), Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Beim ersten Start braucht er noch keine Abfrage zu machen weil noch keine termTime ausgewählt wurde.
+        if (term.isEmpty()) {
+            return;
+        }
+
+        final String[] params = new String[2];
+        params[0] = term;
+        params[1] = String.valueOf(forceRefresh);
+
+        settingsCtrl.executeSemesterTask(this, params);
+        //final SettingsFragment.GetSemesterTask getSemesterTask = new SettingsFragment.GetSemesterTask();
+        //getSemesterTask.execute(params);
+    }
+
+    /**
+     * @param menu
+     * @param inflater
+     */
+    @Override
+    public final void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.settings_main, menu);
+    }
+
+    /**
+     * @param item
+     * @return
+     */
+    @Override
+    public final boolean onOptionsItemSelected(MenuItem item) {
+        // handle item selection
+        if (item.getItemId() == R.id.action_refresh) {
+            updateCourseListPreference("", true);
+            return super.onOptionsItemSelected(item);
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    /**
+     * Öffnet Prozessdialog und aktualisiert die Semester zu dem zuvor ausgewählten Studiengang
+     *
+     * @param courseStr Studiengang dessen Semester geladen werden
+     */
+    private void updateSemesterData(final String courseStr) {
+
+        final ListPreference lpSemester = (ListPreference) findPreference(getString(R.string.PREF_KEY_SEMESTER));
+        if ((settingsCtrl.getStudyCourseList() == null) || courseStr.isEmpty()) {
+            lpSemester.setEntries(new CharSequence[]{});
+            lpSemester.setEntryValues(new CharSequence[]{});
+            return;
+        }
+
+        for (final StudyCourse studyCourse : settingsCtrl.getStudyCourseList()) {
+            if (studyCourse.getTag().equals(courseStr)) {
+                final CharSequence[] entries = new CharSequence[studyCourse.getTerms().size()];
+                final CharSequence[] entryValues = new CharSequence[studyCourse.getTerms().size()];
+
+                for (int j = 0; j < studyCourse.getTerms().size(); ++j) {
+                    entries[j] = studyCourse.getTerms().get(j);
+                    entryValues[j] = studyCourse.getTerms().get(j);
+                }
+
+                if (lpSemester != null) {
+                    if (entries.length > 0) {
+                        lpSemester.setEntries(entries);
+                        lpSemester.setEntryValues(entryValues);
+                        lpSemester.setEnabled(true);
+                    } else {
+                        lpSemester.setEnabled(false);
+                    }
+                }
+            }
+        }
+    }
+
+    // Einstellungen aktualisieren wenn sie geändert werden
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Log.i(TAG, "onSharedPreferenceChanged");
+
+        if (getString(R.string.PREF_KEY_CHANGES_NOTIFICATION).equals(key)) {
+            Log.i(TAG, "CHANES_NOTIFICATION has changed");
+            android.support.v7.preference.CheckBoxPreference changes_notification = (android.support.v7.preference.CheckBoxPreference) findPreference(key);
+            changes_notification.setChecked(sharedPreferences.getBoolean(key, false));
+        }
+        //update Preferences if gdrive Sync is enabled
+        final boolean gdriveSynchronization = sharedPreferences.getBoolean("drive_sync", false);
+        Log.i(TAG, "GDrive Snyc on: " + gdriveSynchronization);
+        if (!key.equals("drive_sync") && gdriveSynchronization && !gDriveCtrl.restoreActive) {
+            gDriveCtrl.updateSharedPreferences();
+        } else {
+            Preference pref = findPreference(key);
+            if (pref instanceof ListPreference) {
+                ListPreference listPref = (ListPreference) pref;
+                Log.i(TAG, getPreferenceManager().getSharedPreferences().getString(key, ""));
+
+                listPref.setValue(getPreferenceManager().getSharedPreferences().getString(key, ""));
+                refreshSummaries();
+            } else if (pref instanceof CheckBoxPreference) {
+                CheckBoxPreference cPref = (CheckBoxPreference) pref;
+                boolean isChecked = getPreferenceManager().getSharedPreferences().getBoolean(key, false);
+                cPref.setChecked(isChecked);
+
+                if (key.equals(getActivity().getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES))) {
+                    Log.i(TAG, "Current Key: " + key);
+                    ((MainActivity) getActivity()).displayExperimentalFeaturesMenuEntries(isChecked);
+                } else if (key.equals(getActivity().getString(R.string.PREF_KEY_CHANGES_NOTIFICATION))) {
+                    if (isChecked) {
+                        DataManager.getInstance().registerFCMServerForce(getContext());
+                    } else {
+                        new RegisterLectures().deRegisterLectures();
+                    }
+                }
+            }
+        }
+
+    }
 
 
-	
-	@Override
-	public void onTaskComplete(HashMap<String, CharSequence[]> data) {
-		CharSequence[] entries = data.get("entries");
-		CharSequence[] entryValues = data.get("entryValues");
+    @Override
+    public void onTaskComplete(HashMap<String, CharSequence[]> data) {
+        CharSequence[] entries = data.get("entries");
+        CharSequence[] entryValues = data.get("entryValues");
 
-		ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREF_KEY_STUDIENGANG));
-		if (entries != null) {
-			if (entries.length > 0) {
-				lpCourse.setEntries(entries);
-				lpCourse.setEntryValues(entryValues);
-				lpCourse.setEnabled(true);
-				updateSemesterData(lpCourse.getValue());
-			}
-		}
-	}
+        ListPreference lpCourse = (ListPreference) findPreference(getString(R.string.PREF_KEY_STUDIENGANG));
+        if (entries != null) {
+            if (entries.length > 0) {
+                lpCourse.setEntries(entries);
+                lpCourse.setEntryValues(entryValues);
+                lpCourse.setEnabled(true);
+                updateSemesterData(lpCourse.getValue());
+            }
+        }
+    }
 }

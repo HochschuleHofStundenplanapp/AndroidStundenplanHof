@@ -23,7 +23,7 @@ android {
         applicationId 'de.hof.university.app'
         targetSdkVersion 27
         versionCode 37
-        versionName '4.7'
+        versionName '4.8'
         minSdkVersion 16
 		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -98,8 +98,11 @@ dependencies {
 	// jsoup HTML parser library @ http://jsoup.org/
 	implementation 'org.jsoup:jsoup:1.11.3'
 	// Die Versionsnummer sollte die gleiche sein
-	implementation 'com.google.android.gms:play-services-gcm:15.+'
-	implementation 'com.google.firebase:firebase-messaging:15.+'
+	implementation 'com.google.android.gms:play-services-gcm:12.+'
+	implementation 'com.google.firebase:firebase-messaging:12.+'
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
+    implementation 'com.google.android.gms:play-services-auth:12.+'
+    implementation 'com.google.android.gms:play-services-drive:12.+'
 
 allprojects {
     repositories {
