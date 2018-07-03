@@ -20,7 +20,7 @@
         <item>Student</item>
         <item>Employee</item>
         <item>Guest</item>
-        <item>Special Tariff (Hföd)</item>
+        <item>Special Tariff (HföD)</item>
     </string-array>
     <string-array name="speiseplan_tarife_values">
         <item>1</item>
@@ -36,6 +36,21 @@
         <item>SS</item>
         <item>WS</item>
     </string-array>
-
+    <string-array name="canteen">
+        <item>Bayreuth</item>
+        <item>Coburg</item>
+        <item>Amberg</item>
+        <item>Hof</item>
+        <item>Weiden</item>
+        <item>Münchberg</item>
+    </string-array>
+    <string-array name="canteen_values">
+        <item>310</item>
+        <item>320</item>
+        <item>330</item>
+        <item>340</item>
+        <item>350</item>
+        <item>370</item>
+    </string-array>
 
 </resources>

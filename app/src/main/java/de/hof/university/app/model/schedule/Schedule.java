@@ -29,9 +29,9 @@ public class Schedule extends HofObject {
 	private static final long serialVersionUID = Define.serialVersionUIDv1;
 
 	private ArrayList<LectureItem> lectures;
-	private String course;
+	private String course; //Studiengang
 	private String semester;
-	private String termtime;
+	private String termtime; // Summer-Term or Winter-Term
 
 	public Schedule() {
 		super();

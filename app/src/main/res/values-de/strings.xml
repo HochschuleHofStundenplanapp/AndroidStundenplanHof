@@ -167,13 +167,40 @@
     <string name="MEAL_Fisch">Fisch</string>
     <string name="MEAL_vegetarisch">vegetarisch</string>
     <string name="MEAL_vegan">vegan</string>
+
+    <!-- Onboarding -->
+    <string name="continue_onboarding">Weiter</string>
+    <string name="finish_onboarding">Einrichtung abschließen</string>
+    <string name="onboarding_study">Einrichtung - Studium</string>
+    <string name="onboarding_menu_plan">Einrichtung - Speiseplan</string>
+    <string name="onboarding_notifications">Einrichtung - Benachrichtigungen</string>
+    <string name="onboarding_experimental">Einrichtung - Experimentell</string>
+
+    <string name="onboarding_study_info">Wähle dein Semester und Studiengang</string>
+    <string name="onboarding_menu_plan_info">Wähle deinen Speiseplan</string>
+    <string name="onboarding_notifications_info">Schalte Benachrichtigungen ein</string>
+    <string name="onboarding_experimental_info">Schalte experimentelle Features + Kalender-Synchronisation ein</string>
+
+    <string name="onboarding_error_not_selected_message">Es muss alles ausgewählt sein</string>
+    <string name="onboarding_restart">Einrichtungs-Assistent neustarten</string>
+
+    <string name="MEAL_DieseWoche">Diese Woche</string>
+    <string name="MEAL_NaechsteWoche">Nächste Woche</string>
+    <string name="MEAL_UebernaechsteWoche">Übernächste Woche</string>
     <string name="pref_calendar_reminder_text">Standard-Erinnerung (Minuten)</string>
     <string name="minute">Minute</string>
     <string name="minutes">Minuten</string>
     <string name="schedule_reminder">Erinnerung anzeigen</string>
     <string name="notification_channel_schedule_changes_name">Stundenplan Änderungen</string>
     <string name="notification_channel_schedule_changes_description">Bekomme Benachrichtigungen über Stundenplan Änderungen</string>
-    <string name="DRIVE_SYNC">Google Drive Synchronisation</string>
-    <string name="action_refresh_from_GDrive">Von GDrive laden</string>
+    <string name="onboarding_error_not_selected_message_study">Alle Angaben müssen ausgewählt sein</string>
+    <string name="onboarding_error_not_selected_message_menu">Tarif und Mensa müssen ausgewählt sein</string>
+    <string name="onboarding_welcome_title">Willkommen</string>
+    <string name="onboarding_welcome_button_text">Einrichtung starten</string>
+    <string name="onboarding_welcome_text">Schnell un</string>
+    <string name="onboarding_login_info">Dieser Login wird genutzt, um dein Notenblatt/Notenbekanntgabe oder die Raum-Suche anzuzeigen (Experimentelle Features müssen aktiviert sein).</string>
+    <string name="onboarding_welcome_text_title">Schnell und einfach</string>
+    <string name="onboarding_welcome_text_message">Folge den Anweisungen, um deinen persönlichen Stundenplan anzulegen</string>
+    <string name="onboarding_error_text">Hinweis</string>
 
 </resources>

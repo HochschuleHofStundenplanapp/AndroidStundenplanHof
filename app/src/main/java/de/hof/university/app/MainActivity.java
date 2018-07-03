@@ -47,6 +47,11 @@ import java.net.CookieManager;
 
 import de.hof.university.app.GDrive.GDriveCallbackManager;
 import de.hof.university.app.GDrive.GoogleDriveController;
+import de.hof.university.app.data.SettingsController;
+import de.hof.university.app.onboarding.Fragments.OnboardingMenuPlanFragment;
+import de.hof.university.app.onboarding.Fragments.OnboardingStudyFragment;
+import de.hof.university.app.onboarding.Fragments.OnboardingWelcomeFragment;
+import de.hof.university.app.onboarding.OnboardingController;
 import de.hof.university.app.fragment.meal_plan.MealPagerFragment;
 import de.hof.university.app.util.Define;
 import de.hof.university.app.data.DataManager;
@@ -56,7 +61,7 @@ import de.hof.university.app.experimental.fragment.RaumsucheFragment;
 import de.hof.university.app.fragment.AboutusFragment;
 import de.hof.university.app.fragment.MapFragment;
 import de.hof.university.app.fragment.MealFragment;
-import de.hof.university.app.fragment.NavigationFragment;
+import de.hof.university.app.fragment.BusTrainScheduleFragment;
 import de.hof.university.app.fragment.PrimussTabFragment;
 import de.hof.university.app.fragment.SettingsFragment;
 import de.hof.university.app.fragment.schedule.ChangesFragment;
@@ -65,537 +70,546 @@ import de.hof.university.app.fragment.schedule.ScheduleFragment;
 
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+		implements NavigationView.OnNavigationItemSelectedListener {
 
-    private final String TAG = "MainActivity";
+	private final String TAG = "MainActivity";
 
-    private static Context appContext;
+	private static Context appContext;
 
-    private DrawerLayout mDrawerLayout;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private MealPagerFragment mealPagerFragment;
-    private ScheduleFragment scheduleFragment;
-    private ChangesFragment changesFragment;
-    private MyScheduleFragment myScheduleFragment;
-    private AboutusFragment aboutusFragment;
-    // Experimentelle Fragmente
-    private PrimussTabFragment primussTabFragment;
-    private NotenblattFragment notenblattFragment;
-    private NotenbekanntgabeFragment notenbekanntgabeFragment;
-    private RaumsucheFragment raumsucheFragment;
-    private MapFragment mapFragment;
-    private NavigationFragment navigationFragment;
-    private NavigationView navigationView;
-    // für Navigation
-    private boolean backButtonPressedOnce = false;
+	private DrawerLayout mDrawerLayout;
+	private ActionBarDrawerToggle mDrawerToggle;
+	private MealPagerFragment mealPagerFragment;
+	private ScheduleFragment scheduleFragment;
+	private ChangesFragment changesFragment;
+	private MyScheduleFragment myScheduleFragment;
+	private AboutusFragment aboutusFragment;
+	// Experimentelle Fragmente
+	private PrimussTabFragment primussTabFragment;
+	private NotenblattFragment notenblattFragment;
+	private NotenbekanntgabeFragment notenbekanntgabeFragment;
+	private RaumsucheFragment raumsucheFragment;
+	private MapFragment mapFragment;
+	private BusTrainScheduleFragment navigationFragment;
+	private NavigationView navigationView;
+	// für Navigation
+	private boolean backButtonPressedOnce = false;
     //für GDrive
     private GDriveCallbackManager mCallbackManager;
 
-    public static Context getAppContext() {
-        return appContext;
-    }
+	private SharedPreferences sharedPreferences;
 
-    @Override
-    protected final void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	public static Context getAppContext() {
+		return appContext;
+	}
 
-        setContentView(R.layout.activity_main);
-        appContext = this;
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+	@Override
+	protected final void onCreate(final Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        // Let the cookieManager handle the Cookies
-        final CookieManager cookieManager = new CookieManager();
-        CookieHandler.setDefault(cookieManager);
+		setContentView(R.layout.activity_main);
+		appContext = this;
+		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        // getActionBar geht nicht wahrscheinlich weil doch noch irgendwo dafür die Support Libary eingebunden wird
-        // zum Nachlesen: http://codetheory.in/difference-between-setdisplayhomeasupenabled-sethomebuttonenabled-and-setdisplayshowhomeenabled/
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-        // getSupportActionBar().setHomeButtonEnabled(true);
+		// Let the cookieManager handle the Cookies
+		final CookieManager cookieManager = new CookieManager();
+		CookieHandler.setDefault(cookieManager);
 
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(
-                this,                  /* host Activity */
-                mDrawerLayout,         /* DrawerLayout object */
-                //R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
-                R.string.navigation_drawer_open,  /* "open drawer" description */
-                R.string.navigation_drawer_close  /* "close drawer" description */
-        ) {
-            /** Called when a drawer has settled in a completely closed state. */
-            public void onDrawerClosed(View view) {
-                super.onDrawerClosed(view);
-                //getActionBar().setTitle(mTitle);
-                invalidateOptionsMenu();
-            }
+		// getActionBar geht nicht wahrscheinlich weil doch noch irgendwo dafür die Support Libary eingebunden wird
+		// zum Nachlesen: http://codetheory.in/difference-between-setdisplayhomeasupenabled-sethomebuttonenabled-and-setdisplayshowhomeenabled/
+		ActionBar actionBar = getSupportActionBar();
+		if (actionBar != null) {
+			actionBar.setDisplayHomeAsUpEnabled(true);
+		}
+		// getSupportActionBar().setHomeButtonEnabled(true);
 
-            /** Called when a drawer has settled in a completely open state. */
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                //getActionBar().setTitle("mTitle");
-                invalidateOptionsMenu();
-            }
-        };
+		mDrawerLayout = findViewById(R.id.drawer_layout);
+		mDrawerToggle = new ActionBarDrawerToggle(
+				this,                  /* host Activity */
+				mDrawerLayout,         /* DrawerLayout object */
+				//R.drawable.ic_drawer,  /* nav drawer icon to replace 'Up' caret */
+				R.string.navigation_drawer_open,  /* "open drawer" description */
+				R.string.navigation_drawer_close  /* "close drawer" description */
+		) {
+			/** Called when a drawer has settled in a completely closed state. */
+			public void onDrawerClosed(View view) {
+				super.onDrawerClosed(view);
+				//getActionBar().setTitle(mTitle);
+				invalidateOptionsMenu();
+			}
 
-        // Set the drawer toggle as the DrawerListener
-        mDrawerLayout.addDrawerListener(mDrawerToggle);
+			/** Called when a drawer has settled in a completely open state. */
+			public void onDrawerOpened(View drawerView) {
+				super.onDrawerOpened(drawerView);
+				//getActionBar().setTitle("mTitle");
+				invalidateOptionsMenu();
+			}
+		};
 
-
-        navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        // Experimentelle Features anzeigen?
-        final boolean showExperimentalFeatures = sharedPreferences.getBoolean(getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES_ENABLED), false);
-        displayExperimentalFeaturesMenuEntries(showExperimentalFeatures);
+		// Set the drawer toggle as the DrawerListener
+		mDrawerLayout.addDrawerListener(mDrawerToggle);
 
 
-        // wurde die App gerade neu gestartet?
-        if (savedInstanceState == null) {
-            // ja die App wurde neu gestartet
+		navigationView = findViewById(R.id.nav_view);
+		navigationView.setNavigationItemSelectedListener(this);
 
-            // Ist ein "Mein Stundenplan" vorhanden?
-            if (DataManager.getInstance().getMyScheduleSize(getApplicationContext()) > 0) {
-                // Es gibt einen "Mein Studnenplan". Also gehen wir zu ihm.
-                onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_mySchedule));
-            }
-            // Sind die Einstellungen vorhanden?
-            else if (!sharedPreferences.getString(getString(R.string.PREF_KEY_TERM_TIME), "").isEmpty()
-                    && !sharedPreferences.getString(getString(R.string.PREF_KEY_STUDIENGANG), "").isEmpty()
-                    && !sharedPreferences.getString(getString(R.string.PREF_KEY_SEMESTER), "").isEmpty()) {
-                // ja, also gehen wir zum Stundenplan
-                onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_stundenplan));
-            } else {
-                // In allen anderen Fällen gehen wir zu den Einstellungen
-                onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_einstellungen));
-
-                // returnen damit keine Intents gehandelt werden und keine Dialoge kommen.
-                return;
-            }
-        }
-
-        //Downloads die von Fragmenten (wie dem neuem MealFragment) gestartet wurden erlauben
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
-        // Um den geänderten Beamten Tarif zu fixen
-        fixMealTariff();
-
-        // create notifications channels for Android 8 (Oreo)
-        createNotificationChannels();
-
-        // wurde die Activity durch ein Intent gestartet, vermutlich durch klicken auf eine Benachrichtigung?
-        handleIntent();
-
-        // beim ersten Start einen Hinweis auf die experimentellen Funktionen geben
-        showExperimentalFeaturesInfoDialog(sharedPreferences);
+		// Experimentelle Features anzeigen?
+		final boolean showExperimentalFeatures = sharedPreferences.getBoolean(getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES_ENABLED), false);
+		displayExperimentalFeaturesMenuEntries(showExperimentalFeatures);
 
 
+		// wurde die App gerade neu gestartet?
+		if (savedInstanceState == null) {
+			// ja die App wurde neu gestartet
+
+			checkStartingScreen();
+		}
+
+		//Downloads die von Fragmenten (wie dem neuem MealFragment) gestartet wurden erlauben
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+
+		// Um den geänderten Beamten Tarif zu fixen
+		fixMealTariff();
+
+		// create notifications channels for Android 8 (Oreo)
+		createNotificationChannels();
+
+		// wurde die Activity durch ein Intent gestartet, vermutlich durch klicken auf eine Benachrichtigung?
+		handleIntent();
+
+		// beim ersten Start einen Hinweis auf die experimentellen Funktionen geben
+		showExperimentalFeaturesInfoDialog(sharedPreferences);
+        
+        
+        
         mCallbackManager = GDriveCallbackManager.Factory.create();
-
+        
         GoogleDriveController gDriveCtrl = GoogleDriveController.getInstance(this);
         gDriveCtrl.registerCallback(mCallbackManager, () -> {
-
-
+            
+            
             // Called after user is signed in.
-
+            
             Log.i(TAG, "Signed in successfully.");
             // Create Drive clients now that account has been authorized access.
-
+            
             gDriveCtrl.createDriveClients();
-
-
+            
+            
         });
-
+        
         gDriveCtrl.signInIfNeeded(null);
-    }
 
+	}
 
-    private void createNotificationChannels() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // Create the NotificationChannel
-            final CharSequence name = getString(R.string.notification_channel_schedule_changes_name);
-            final String description = getString(R.string.notification_channel_schedule_changes_description);
-            final int importance = NotificationManager.IMPORTANCE_HIGH;
+	private void createNotificationChannels() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			// Create the NotificationChannel
+			final CharSequence name = getString(R.string.notification_channel_schedule_changes_name);
+			final String description = getString(R.string.notification_channel_schedule_changes_description);
+			final int importance = NotificationManager.IMPORTANCE_HIGH;
 
-            final NotificationChannel scheduleNotificationsChannel = new NotificationChannel(Define.NOTIFICATION_CHANNEL_SCHEDULE_CHANGES_ID, name, importance);
-            scheduleNotificationsChannel.setDescription(description);
+			final NotificationChannel scheduleNotificationsChannel = new NotificationChannel(Define.NOTIFICATION_CHANNEL_SCHEDULE_CHANGES_ID, name, importance);
+			scheduleNotificationsChannel.setDescription(description);
 
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            final NotificationManager notificationManager = (NotificationManager) getSystemService(
-                    NOTIFICATION_SERVICE);
-            if (notificationManager != null) {
-                notificationManager.createNotificationChannel(scheduleNotificationsChannel);
-            }
-        }
-    }
+			// Register the channel with the system; you can't change the importance
+			// or other notification behaviors after this
+			final NotificationManager notificationManager = (NotificationManager) getSystemService(
+					NOTIFICATION_SERVICE);
+			if (notificationManager != null) {
+				notificationManager.createNotificationChannel(scheduleNotificationsChannel);
+			}
+		}
+	}
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.i(TAG, "On activity result main activity");
-        mCallbackManager.onActivityResult(requestCode, resultCode, data);
-    }
+	public void checkStartingScreen() {
 
-    /**
-     * Um den geänderten Beamten Tarif zu fixen
-     * Von Tarif 4, den es nicht mehr gibt auf Tarif 5 wechseln wenn 4 ausgewählt.
-     */
-    private void fixMealTariff() {
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String currentTariff = sharedPreferences.getString(getString(R.string.PREF_KEY_MEAL_TARIFF), "0");
-        if (currentTariff.equals("4")) {
-            sharedPreferences.edit()
-                    .putString(getString(R.string.PREF_KEY_MEAL_TARIFF), "5")
-                    .apply();
-        }
-    }
+		//Soll das Onboarding gestartet werden
+		if (new OnboardingController().shouldStartOnboaringIfNeeded(this)) {
+			//FragmentManager manager = getFragmentManager();
+			new SettingsController(this).resetSettings();
+			FragmentManager manager = getSupportFragmentManager();
+			FragmentTransaction trans = manager.beginTransaction();
+			trans.replace(R.id.content_main, new OnboardingWelcomeFragment());
+			trans.commit();
+		}
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);
-        handleIntent();
-    }
+		// Ist ein "Mein Stundenplan" vorhanden?
+		else if (DataManager.getInstance().getMyScheduleSize(getApplicationContext()) > 0) {
+			// Es gibt einen "Mein Studnenplan". Also gehen wir zu ihm.
+			onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_mySchedule));
+		}
+		// Sind die Einstellungen vorhanden?
+		else if (!sharedPreferences.getString(getString(R.string.PREF_KEY_TERM_TIME), "").isEmpty()
+				&& !sharedPreferences.getString(getString(R.string.PREF_KEY_STUDIENGANG), "").isEmpty()
+				&& !sharedPreferences.getString(getString(R.string.PREF_KEY_SEMESTER), "").isEmpty()) {
+			// ja, also gehen wir zum Stundenplan
+			onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_stundenplan));
+		} else {
+			// In allen anderen Fällen gehen wir zu den Einstellungen
+			onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_einstellungen));
 
-    private void handleIntent() {
-        final String notification_type = getIntent().getStringExtra(Define.NOTIFICATION_TYPE);
+			// returnen damit keine Intents gehandelt werden und keine Dialoge kommen.
+			return;
+		}
+	}
 
-        if (notification_type != null) {
-            // Falls auf eine Änderungs-Benachrichtigung gedrückt wurde
-            if (Define.NOTIFICATION_TYPE_CHANGE.equals(notification_type)) {
-                // Direkt zu den Änderungen springen
-                onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_aenderung));
-            }
-            // Hier noch weitere Überprüfungen für andere Intents falls nötig
-        } else {
-            final String action = getIntent().getAction();
+	/**
+	 * Um den geänderten Beamten Tarif zu fixen
+	 * Von Tarif 4, den es nicht mehr gibt auf Tarif 5 wechseln wenn 4 ausgewählt.
+	 */
+	private void fixMealTariff() {
+		final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		String currentTariff = sharedPreferences.getString(getString(R.string.PREF_KEY_MEAL_TARIFF), "0");
+		if (currentTariff.equals("4")) {
+			sharedPreferences.edit()
+					.putString(getString(R.string.PREF_KEY_MEAL_TARIFF), "5")
+					.apply();
+		}
+	}
 
-            // Start the shortcuts
-            if (Define.SHORTCUT_INTENT_CHANGES.equals(action)) {
-                onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_aenderung));
-            } else if (Define.SHORTCUT_INTENT_MEAL.equals(action)) {
-                onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_speiseplan));
-            }
-        }
-    }
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		setIntent(intent);
+		handleIntent();
+	}
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
-    }
+	private void handleIntent() {
+		final String notification_type = getIntent().getStringExtra(Define.NOTIFICATION_TYPE);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Pass the event to ActionBarDrawerToggle
-        // If it returns true, then it has handled
-        // the nav drawer indicator touch event
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
+		if (notification_type != null) {
+			// Falls auf eine Änderungs-Benachrichtigung gedrückt wurde
+			if (Define.NOTIFICATION_TYPE_CHANGE.equals(notification_type)) {
+				// Direkt zu den Änderungen springen
+				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_aenderung));
+			}
+			// Hier noch weitere Überprüfungen für andere Intents falls nötig
+		} else {
+			final String action = getIntent().getAction();
 
-        // Handle your other action bar items...
+			// Start the shortcuts
+			if (Define.SHORTCUT_INTENT_CHANGES.equals(action)) {
+				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_aenderung));
+			} else if (Define.SHORTCUT_INTENT_MEAL.equals( action )) {
+				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_speiseplan));
+			}
+		}
+	}
 
-        return super.onOptionsItemSelected(item);
-    }
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		mDrawerToggle.syncState();
+	}
 
-    public final void displayExperimentalFeaturesMenuEntries(final boolean enabled) {
-        if (enabled) {
-            navigationView.getMenu().findItem(R.id.nav_experimental).setVisible(true);
-            navigationView.getMenu().findItem(R.id.nav_raumsuche).setVisible(true);    // Raumsuche anzeigen
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Pass the event to ActionBarDrawerToggle
+		// If it returns true, then it has handled
+		// the nav drawer indicator touch event
+		if (mDrawerToggle.onOptionsItemSelected(item)) {
+			return true;
+		}
+
+		// Handle your other action bar items...
+
+		return super.onOptionsItemSelected(item);
+	}
+
+	public final void displayExperimentalFeaturesMenuEntries(final boolean enabled) {
+		if (enabled) {
+			navigationView.getMenu().findItem(R.id.nav_experimental).setVisible(true);
+			navigationView.getMenu().findItem(R.id.nav_raumsuche).setVisible(true);    // Raumsuche anzeigen
 //			navigationView.getMenu().findItem(R.id.nav_primuss).setVisible(true); 		// Primuss anzeigen
-            navigationView.getMenu().findItem(R.id.nav_map).setVisible(true);            // Map anzeigen
-            navigationView.getMenu().findItem(R.id.nav_navigation).setVisible(true);    // Navigation anzeigen
+			navigationView.getMenu().findItem(R.id.nav_map).setVisible(true);            // Map anzeigen
+			navigationView.getMenu().findItem(R.id.nav_navigation).setVisible(true);    // Navigation anzeigen
 
-            // TODO Weil ausblenden solange die neue Authentifizierungsmethode noch nicht funktioniert
-            if (Define.SHOW_NOTEN == false) {
-                navigationView.getMenu().findItem(R.id.nav_notenbekanntgabe).setVisible(false);
-                navigationView.getMenu().findItem(R.id.nav_notenblatt).setVisible(false);
-            } else {
-                // Nur bei höheren Versionen von Android funktioniert auch Primuss
-                // HTML Connectivity mit Verschlüsselung ist dann erst vorhanden
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    navigationView.getMenu().findItem(R.id.nav_notenbekanntgabe).setVisible(false);
-                    navigationView.getMenu().findItem(R.id.nav_notenblatt).setVisible(false);
-                } else {
-                    navigationView.getMenu().findItem(R.id.nav_notenbekanntgabe).setVisible(true);
-                    navigationView.getMenu().findItem(R.id.nav_notenblatt).setVisible(true);
-                }
-            }
-        } else {
-            navigationView.getMenu().findItem(R.id.nav_experimental).setVisible(false);
-        }
-    }
+			// TODO Weil ausblenden solange die neue Authentifizierungsmethode noch nicht funktioniert
+			if (!Define.SHOW_NOTEN) {
+				navigationView.getMenu().findItem(R.id.nav_notenbekanntgabe).setVisible(false);
+				navigationView.getMenu().findItem(R.id.nav_notenblatt).setVisible(false);
+			} else {
+				// Nur bei höheren Versionen von Android funktioniert auch Primuss
+				// HTML Connectivity mit Verschlüsselung ist dann erst vorhanden
+				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+					navigationView.getMenu().findItem(R.id.nav_notenbekanntgabe).setVisible(false);
+					navigationView.getMenu().findItem(R.id.nav_notenblatt).setVisible(false);
+				} else {
+					navigationView.getMenu().findItem(R.id.nav_notenbekanntgabe).setVisible(true);
+					navigationView.getMenu().findItem(R.id.nav_notenblatt).setVisible(true);
+				}
+			}
+		} else {
+			navigationView.getMenu().findItem(R.id.nav_experimental).setVisible(false);
+		}
+	}
 
-    public void showPushNotificationDialog(final SharedPreferences sharedPreferences) { // Sichtbarkeit auf public geändert
-        final boolean showPushNotificationsDialog = sharedPreferences.getBoolean(getString(R.string.PREF_KEY_SHOW_PUSH_DIALOG), true);
-        final boolean getPushNotifications = sharedPreferences.getBoolean(getString(R.string.PREF_KEY_CHANGES_NOTIFICATION), false);
+	public void showPushNotificationDialog(final SharedPreferences sharedPreferences) { // Sichtbarkeit auf public geändert
+		final boolean showPushNotificationsDialog = sharedPreferences.getBoolean(getString(R.string.PREF_KEY_SHOW_PUSH_DIALOG), true);
+		final boolean getPushNotifications = sharedPreferences.getBoolean(getString(R.string.PREF_KEY_CHANGES_NOTIFICATION), false);
 
-        if (showPushNotificationsDialog) {
-            sharedPreferences.edit()
-                    .putBoolean(getString(R.string.PREF_KEY_SHOW_PUSH_DIALOG), false)
-                    .apply();
+		if (showPushNotificationsDialog) {
+			sharedPreferences.edit()
+					.putBoolean(getString(R.string.PREF_KEY_SHOW_PUSH_DIALOG), false)
+					.apply();
 
-            if (!getPushNotifications) {
-                new AlertDialog.Builder(this)
-                        .setTitle(R.string.notifications)
-                        .setMessage(R.string.notifications_question)
-                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                sharedPreferences.edit()
-                                        .putBoolean(getString(R.string.PREF_KEY_CHANGES_NOTIFICATION), true)
-                                        .apply();
-                                DataManager.getInstance().registerFCMServerForce(getApplicationContext());
-                            }
-                        })
-                        .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //nothing to do here. Just close the dialog
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_info)
-                        .show();
-            }
-        }
-    }
+			if (!getPushNotifications) {
+				new AlertDialog.Builder(this)
+						.setTitle(R.string.notifications)
+						.setMessage(R.string.notifications_question)
+						.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								sharedPreferences.edit()
+										.putBoolean(getString(R.string.PREF_KEY_CHANGES_NOTIFICATION), true)
+										.apply();
+								DataManager.getInstance().registerFCMServerForce(getApplicationContext());
+							}
+						})
+						.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								//nothing to do here. Just close the dialog
+							}
+						})
+						.setIcon(android.R.drawable.ic_dialog_info)
+						.show();
+			}
+		}
+	}
 
-    private void showExperimentalFeaturesInfoDialog(SharedPreferences sharedPreferences) {
-        final boolean showExperimentalFeaturesInfo = sharedPreferences.getBoolean(getString(R.string.PREF_KEY_SHOW_EXPERIMENTAL_FEATURES_INFO), true);
-        final boolean showExperimentalFeatures = sharedPreferences.getBoolean(getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES), false);
+	private void showExperimentalFeaturesInfoDialog(SharedPreferences sharedPreferences) {
+		final boolean showExperimentalFeaturesInfo = sharedPreferences.getBoolean(getString(R.string.PREF_KEY_SHOW_EXPERIMENTAL_FEATURES_INFO), true);
+		final boolean showExperimentalFeatures = sharedPreferences.getBoolean(getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES), false);
 
-        if (showExperimentalFeaturesInfo) {
-            sharedPreferences.edit()
-                    .putBoolean(getString(R.string.PREF_KEY_SHOW_EXPERIMENTAL_FEATURES_INFO), false)
-                    .apply();
+		if (showExperimentalFeaturesInfo) {
+			sharedPreferences.edit()
+					.putBoolean(getString(R.string.PREF_KEY_SHOW_EXPERIMENTAL_FEATURES_INFO), false)
+					.apply();
 
-            // Anzeigen falls nicht schon aktiviert
-            if (!showExperimentalFeatures) {
-                new AlertDialog.Builder(this)
-                        .setTitle(R.string.experimental_features)
-                        .setMessage(R.string.experimental_features_infotext)
-                        .setPositiveButton(R.string.einstellungen, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_einstellungen));
-                            }
-                        })
-                        .setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                //nothing to do here. Just close the dialog
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_info)
-                        .show();
-            }
-        }
-    }
+			/** // Anzeigen falls nicht schon aktiviert
+			if (!showExperimentalFeatures) {
+				new AlertDialog.Builder(this)
+						.setTitle(R.string.experimental_features)
+						.setMessage(R.string.experimental_features_infotext)
+						.setPositiveButton(R.string.einstellungen, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_einstellungen));
+							}
+						})
+						.setNegativeButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								//nothing to do here. Just close the dialog
+							}
+						})
+						.setIcon(android.R.drawable.ic_dialog_info)
+						.show();
+			} */
+		}
+	}
 
-    @Override
-    // Idee: Wir wollen beim Rückwärtsgehen in den Activities nicht aus Versehen die App
-    // verlassen.
-    public final void onBackPressed() {
-        final DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            // Bis zum letzten Fenster ganz normal zurückgehen,
-            // aber in der Haupt-Activity wollen wir ja eben noch mal nachfragen.
-            if (getFragmentManager().getBackStackEntryCount() >= 1) {
-                getFragmentManager().popBackStack();
-            } else if (getSupportFragmentManager().getBackStackEntryCount() >= 1) {
-                getSupportFragmentManager().popBackStack();
-            } else {
-                // Wurde der Zurück-Button zwei Mal gedrückt? Dann verlassen wir erst die App
-                if (!backButtonPressedOnce) {
-                    backButtonPressedOnce = true;
-                    Toast.makeText(getApplication(), getString(R.string.doubleBackOnClose), Toast.LENGTH_SHORT).show();
-                    getWindow().getDecorView().getHandler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            backButtonPressedOnce = false;
-                        }
-                    }, 2000);
-                } else {
-                    // Weitergeben an die Parent-Klasse, dann wird erst wirklich an die App
-                    // der Zurück-Button gesendet und das ist dann ggf. das Schließen der App
-                    super.onBackPressed();
-                }
-            }
-        }
-    }
+	@Override
+	// Idee: Wir wollen beim Rückwärtsgehen in den Activities nicht aus Versehen die App
+	// verlassen.
+	public final void onBackPressed() {
+		final DrawerLayout drawer = findViewById(R.id.drawer_layout);
+		if (drawer.isDrawerOpen(GravityCompat.START)) {
+			drawer.closeDrawer(GravityCompat.START);
+		} else {
+			// Bis zum letzten Fenster ganz normal zurückgehen,
+			// aber in der Haupt-Activity wollen wir ja eben noch mal nachfragen.
+			if (getFragmentManager().getBackStackEntryCount() >= 1) {
+				getFragmentManager().popBackStack();
+			} else if (getSupportFragmentManager().getBackStackEntryCount() >= 1) {
+				getSupportFragmentManager().popBackStack();
+			} else {
+				// Wurde der Zurück-Button zwei Mal gedrückt? Dann verlassen wir erst die App
+				if (!backButtonPressedOnce) {
+					backButtonPressedOnce = true;
+					Toast.makeText(getApplication(), getString(R.string.doubleBackOnClose), Toast.LENGTH_SHORT).show();
+					getWindow().getDecorView().getHandler().postDelayed(new Runnable() {
+						@Override
+						public void run() {
+							backButtonPressedOnce = false;
+						}
+					}, 2000);
+				} else {
+					// Weitergeben an die Parent-Klasse, dann wird erst wirklich an die App
+					// der Zurück-Button gesendet und das ist dann ggf. das Schließen der App
+					super.onBackPressed();
+				}
+			}
+		}
+	}
 
-    @Override
-    public final boolean onNavigationItemSelected(@NonNull final MenuItem item) {
-        final int id = item.getItemId();
+	@Override
+	public final boolean onNavigationItemSelected(@NonNull final MenuItem item) {
+		final int id = item.getItemId();
 
-        FragmentManager manager = getSupportFragmentManager();
-        //FragmentManager manager = getFragmentManager();
-
-
-        switch (id) {
-            case R.id.nav_speiseplan:
-                if (!manager.popBackStackImmediate(MealFragment.class.getName(), 0)) {
-                    if (mealPagerFragment == null) {
-                        mealPagerFragment = new MealPagerFragment();
-                    }
-                    FragmentTransaction trans = manager.beginTransaction();
-                    trans.replace(R.id.content_main, mealPagerFragment, Define.mealplanFragmentName);
-                    trans.commit();
-                }
-                break;
-
-            case R.id.nav_notenbekanntgabe:
-                if (!manager.popBackStackImmediate(NotenbekanntgabeFragment.class.getName(), 0)) {
-
-                    FragmentTransaction trans = manager.beginTransaction();
-                    if (notenbekanntgabeFragment == null) {
-                        notenbekanntgabeFragment = new NotenbekanntgabeFragment();
-                    }
-                    trans.replace(R.id.content_main, notenbekanntgabeFragment);
-                    trans.commit();
-
-                }
-                break;
-
-            case R.id.nav_notenblatt:
-                if (!manager.popBackStackImmediate(NotenblattFragment.class.getName(), 0)) {
-
-                    FragmentTransaction trans = manager.beginTransaction();
-                    if (notenblattFragment == null) {
-                        notenblattFragment = new NotenblattFragment();
-                    }
-                    trans.replace(R.id.content_main, notenblattFragment);
-                    trans.commit();
-                }
-                break;
-
-            case R.id.nav_raumsuche:
-                if (!manager.popBackStackImmediate(RaumsucheFragment.class.getName(), 0)) {
-                    if (raumsucheFragment == null) {
-                        raumsucheFragment = new RaumsucheFragment();
-                    }
-                    FragmentTransaction trans = manager.beginTransaction();
-                    trans.replace(R.id.content_main, raumsucheFragment);
-                    trans.commit();
-                }
-                break;
-
-            case R.id.nav_map:
-                if (!manager.popBackStackImmediate(MapFragment.class.getName(), 0)) {
-                    if (mapFragment == null) {
-                        mapFragment = new MapFragment();
-                    }
-                    FragmentTransaction trans = manager.beginTransaction();
-                    trans.replace(R.id.content_main, mapFragment);
-                    trans.commit();
-                }
-                break;
-
-            case R.id.nav_navigation:
-                if (!manager.popBackStackImmediate(NavigationFragment.class.getName(), 0)) {
-                    if (navigationFragment == null) {
-                        navigationFragment = new NavigationFragment();
-                    }
-                    FragmentTransaction trans = manager.beginTransaction();
-                    trans.replace(R.id.content_main, navigationFragment);
-                    trans.commit();
-                }
-                break;
-
-            case R.id.nav_stundenplan:
-                if (!manager.popBackStackImmediate(ScheduleFragment.class.getName(), 0)) {
-                    if (scheduleFragment == null) {
-                        scheduleFragment = new ScheduleFragment();
-                    }
-                    FragmentTransaction trans = manager.beginTransaction();
-                    trans.replace(R.id.content_main, scheduleFragment, Define.scheduleFragmentName);
-                    trans.commit();
-                }
-                break;
-
-            case R.id.nav_mySchedule:
-                if (!manager.popBackStackImmediate(MyScheduleFragment.class.getName(), 0)) {
-                    if (myScheduleFragment == null) {
-                        myScheduleFragment = new MyScheduleFragment();
-                    }
-                    FragmentTransaction trans = manager.beginTransaction();
-                    trans.replace(R.id.content_main, myScheduleFragment, Define.myScheduleFragmentName);
-                    trans.commit();
-                }
-                break;
-
-            case R.id.nav_aenderung:
-                if (!manager.popBackStackImmediate(ChangesFragment.class.getName(), 0)) {
-                    if (changesFragment == null) {
-                        changesFragment = new ChangesFragment();
-                    }
-                    FragmentTransaction trans = manager.beginTransaction();
-                    trans.replace(R.id.content_main, changesFragment, Define.changesFragmentName);
-                    trans.commit();
-                }
-
-                // Notifications entfernen wenn man zu den Änderungen geht
-                NotificationManager nm = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                if (nm != null) {
-                    nm.cancelAll();
-                }
-                break;
-
-            case R.id.nav_einstellungen:
-                if (!manager.popBackStackImmediate(SettingsFragment.class.getName(), 0)) {
-                    FragmentTransaction trans = manager.beginTransaction();
-                    trans.replace(R.id.content_main, new SettingsFragment(), "SettingsFragment");
-                    trans.commit();
-                }
-                break;
-
-            case R.id.nav_impressum: {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Define.IMPRESSUMURL));
-                startActivity(browserIntent);
-
-                break;
-            }
-
-            case R.id.nav_aboutus:
-                if (!manager.popBackStackImmediate(AboutusFragment.class.getName(), 0)) {
-
-                    FragmentTransaction trans = manager.beginTransaction();
-                    if (aboutusFragment == null) {
-                        aboutusFragment = new AboutusFragment();
-                    }
-                    trans.replace(R.id.content_main, aboutusFragment);
-                    trans.commit();
-                }
-                break;
-
-            case R.id.nav_datenschutz: {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Define.DATENSCHUTZURL));
-                startActivity(browserIntent);
-                break;
-            }
-
-            case R.id.nav_primuss:
-                if (!manager.popBackStackImmediate(PrimussTabFragment.class.getName(), 0)) {
-
-                    FragmentTransaction trans = manager.beginTransaction();
-                    if (primussTabFragment == null) {
-                        primussTabFragment = new PrimussTabFragment();
-                    }
-                    trans.replace(R.id.content_main, primussTabFragment);
-                    trans.commit();
-                }
-                break;
-        }
-
-        final DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
+		FragmentManager manager = getSupportFragmentManager();
+		//FragmentManager manager = getFragmentManager();
 
 
+		switch (id) {
+			case R.id.nav_speiseplan:
+				if (!manager.popBackStackImmediate(MealFragment.class.getName(), 0)) {
+					if (mealPagerFragment == null) {
+						mealPagerFragment = new MealPagerFragment();
+					}
+					FragmentTransaction trans = manager.beginTransaction();
+					trans.replace(R.id.content_main, mealPagerFragment, Define.mealplanFragmentName);
+					trans.commit();
+				}
+				break;
+
+			case R.id.nav_notenbekanntgabe:
+				if (!manager.popBackStackImmediate(NotenbekanntgabeFragment.class.getName(), 0)) {
+
+					FragmentTransaction trans = manager.beginTransaction();
+					if (notenbekanntgabeFragment == null) {
+						notenbekanntgabeFragment = new NotenbekanntgabeFragment();
+					}
+					trans.replace(R.id.content_main, notenbekanntgabeFragment);
+					trans.commit();
+
+				}
+				break;
+
+			case R.id.nav_notenblatt:
+				if (!manager.popBackStackImmediate(NotenblattFragment.class.getName(), 0)) {
+
+					FragmentTransaction trans = manager.beginTransaction();
+					if (notenblattFragment == null) {
+						notenblattFragment = new NotenblattFragment();
+					}
+					trans.replace(R.id.content_main, notenblattFragment);
+					trans.commit();
+				}
+				break;
+
+			case R.id.nav_raumsuche:
+				if (!manager.popBackStackImmediate(RaumsucheFragment.class.getName(), 0)) {
+					if (raumsucheFragment == null) {
+						raumsucheFragment = new RaumsucheFragment();
+					}
+					FragmentTransaction trans = manager.beginTransaction();
+					trans.replace(R.id.content_main, raumsucheFragment);
+					trans.commit();
+				}
+				break;
+
+			case R.id.nav_map:
+				if (!manager.popBackStackImmediate(MapFragment.class.getName(), 0)) {
+					if (mapFragment == null) {
+						mapFragment = new MapFragment();
+					}
+					FragmentTransaction trans = manager.beginTransaction();
+					trans.replace(R.id.content_main, mapFragment);
+					trans.commit();
+				}
+				break;
+
+			case R.id.nav_navigation:
+				if (!manager.popBackStackImmediate(BusTrainScheduleFragment.class.getName(), 0)) {
+					if (navigationFragment == null) {
+						navigationFragment = new BusTrainScheduleFragment();
+					}
+					FragmentTransaction trans = manager.beginTransaction();
+					trans.replace(R.id.content_main, navigationFragment);
+					trans.commit();
+				}
+				break;
+
+			case R.id.nav_stundenplan:
+				if (!manager.popBackStackImmediate(ScheduleFragment.class.getName(), 0)) {
+					if (scheduleFragment == null) {
+						scheduleFragment = new ScheduleFragment();
+					}
+					FragmentTransaction trans = manager.beginTransaction();
+					trans.replace(R.id.content_main, scheduleFragment, Define.scheduleFragmentName);
+					trans.commit();
+				}
+				break;
+
+			case R.id.nav_mySchedule:
+				if (!manager.popBackStackImmediate(MyScheduleFragment.class.getName(), 0)) {
+					if (myScheduleFragment == null) {
+						myScheduleFragment = new MyScheduleFragment();
+					}
+					FragmentTransaction trans = manager.beginTransaction();
+					trans.replace(R.id.content_main, myScheduleFragment, Define.myScheduleFragmentName);
+					trans.commit();
+				}
+				break;
+
+			case R.id.nav_aenderung:
+				if (!manager.popBackStackImmediate(ChangesFragment.class.getName(), 0)) {
+					if (changesFragment == null) {
+						changesFragment = new ChangesFragment();
+					}
+					FragmentTransaction trans = manager.beginTransaction();
+					trans.replace(R.id.content_main, changesFragment, Define.changesFragmentName);
+					trans.commit();
+				}
+
+				// Notifications entfernen wenn man zu den Änderungen geht
+				NotificationManager nm = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+				if (nm != null) {
+					nm.cancelAll();
+				}
+				break;
+
+			case R.id.nav_einstellungen:
+				if (!manager.popBackStackImmediate(SettingsFragment.class.getName(), 0)) {
+					FragmentTransaction trans = manager.beginTransaction();
+					trans.replace(R.id.content_main, new SettingsFragment());
+					trans.commit();
+				}
+				break;
+
+			case R.id.nav_impressum: {
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Define.IMPRESSUMURL));
+				startActivity(browserIntent);
+
+				break;
+			}
+
+			case R.id.nav_aboutus:
+				if (!manager.popBackStackImmediate(AboutusFragment.class.getName(), 0)) {
+
+					FragmentTransaction trans = manager.beginTransaction();
+					if (aboutusFragment == null) {
+						aboutusFragment = new AboutusFragment();
+					}
+					trans.replace(R.id.content_main, aboutusFragment);
+					trans.commit();
+				}
+				break;
+
+			case R.id.nav_datenschutz: {
+				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(Define.DATENSCHUTZURL));
+				startActivity(browserIntent);
+				break;
+			}
+
+			case R.id.nav_primuss:
+				if (!manager.popBackStackImmediate(PrimussTabFragment.class.getName(), 0)) {
+
+					FragmentTransaction trans = manager.beginTransaction();
+					if (primussTabFragment == null) {
+						primussTabFragment = new PrimussTabFragment();
+					}
+					trans.replace(R.id.content_main, primussTabFragment);
+					trans.commit();
+				}
+				break;
+		}
+
+		final DrawerLayout drawer = findViewById(R.id.drawer_layout);
+		drawer.closeDrawer(GravityCompat.START);
+		return true;
+	}
 }

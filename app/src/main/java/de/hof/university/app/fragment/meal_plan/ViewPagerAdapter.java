@@ -42,7 +42,22 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return ("Woche " + (position+1));
+        String pageTitle;
+        switch (position){
+            case 0:
+                pageTitle = context.getString(R.string.MEAL_DieseWoche);
+                break;
+            case 1:
+                pageTitle = context.getString(R.string.MEAL_NaechsteWoche);
+                break;
+            case 2:
+                pageTitle = context.getString(R.string.MEAL_UebernaechsteWoche);
+                break;
+                default: pageTitle = "";
+        }
+
+
+        return pageTitle;
     }
 
     public void addFrag(Fragment fragment, String title) {

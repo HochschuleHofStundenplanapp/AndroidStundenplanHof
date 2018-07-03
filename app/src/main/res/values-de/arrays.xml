@@ -20,7 +20,7 @@
         <item>Student</item>
         <item>Bedienstete</item>
         <item>Gast</item>
-        <item>Sondertarif (Hföd)</item>
+        <item>Sondertarif (HföD)</item>
     </string-array>
     <string-array name="speiseplan_tarife_values">
         <item>1</item>
