@@ -58,7 +58,7 @@ public class ScheduleFragment extends AbstractListFragment {
 
     //TODO onCreateView?
     @Override
-    public final void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         weekdayListPos = 0;
@@ -104,6 +104,8 @@ public class ScheduleFragment extends AbstractListFragment {
         if (item.getTitle().equals(getString(R.string.addToMySchedule))) {
             DataManager.getInstance().addToMySchedule(info.targetView.getContext().getApplicationContext(), lectureItem);
             Toast.makeText(getView().getContext(), getString(R.string.added), Toast.LENGTH_SHORT).show();
+            // Stundenplan auf GDrive syncen
+            DataManager.getInstance().updateGDrive(MainActivity.getAppContext());
             if (DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) == 1) {
                 Toast.makeText(getView().getContext(), getString(R.string.changesMyScheduleText), Toast.LENGTH_LONG).show();
             }
@@ -286,6 +288,7 @@ public class ScheduleFragment extends AbstractListFragment {
                 }
             }
             DataManager.getInstance().addAllToMySchedule(getActivity().getApplicationContext(), schedulesIds);
+            DataManager.getInstance().updateGDrive(MainActivity.getAppContext());
 
             Toast.makeText(getView().getContext(), getString(R.string.changesMyScheduleText), Toast.LENGTH_LONG).show();
         }

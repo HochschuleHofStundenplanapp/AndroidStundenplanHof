@@ -21,6 +21,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,7 +44,7 @@ import de.hof.university.app.util.Define;
 /**
  * Created by larsg on 20.06.2016.
  */
-public abstract class AbstractListFragment extends android.support.v4.app.Fragment {
+public abstract class AbstractListFragment extends Fragment {
 
     private final static String TAG = "AbstractListFragment";
 

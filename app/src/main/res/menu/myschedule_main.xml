@@ -11,4 +11,9 @@
         android:title="@string/action_delete_all"
         android:orderInCategory="100"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_refresh_from_gdrive"
+        android:title="@string/action_refresh_from_GDrive"
+        android:orderInCategory="200"
+        app:showAsAction="never" />
 </menu>

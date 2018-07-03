@@ -85,12 +85,14 @@ public class MealFragment extends AbstractListFragment {
 	}
 
 
+
 	@Override
 	protected final void modifyListViewAfterDataSetChanged() {
 		listView.setSelection(weekdayListPos);
 	}
 
 	private ArrayList<Object> updateListView(List<Meal> list) {
+
 		String day = "";
 		String category = "";
 		String curWeekDay = new SimpleDateFormat("EEEE", Locale.GERMANY).format(new Date());

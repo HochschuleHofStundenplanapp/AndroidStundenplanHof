@@ -16,6 +16,7 @@
 
 package de.hof.university.app.data;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -45,6 +46,7 @@ import de.hof.university.app.communication.RegisterLectures;
 import de.hof.university.app.data.parser.Parser;
 import de.hof.university.app.data.parser.ParserFactory;
 import de.hof.university.app.data.parser.ParserFactory.EParser;
+import de.hof.university.app.GDrive.GoogleDriveController;
 import de.hof.university.app.model.HofObject;
 import de.hof.university.app.model.meal.Meal;
 import de.hof.university.app.model.meal.Meals;
@@ -612,6 +614,7 @@ public class DataManager {
             fos.close();
         } catch (Exception e) { //TODO Eigentlich nur IOException, aber kann im Moment auch ConcurrentModificationException kommen
             Log.e(TAG, "Fehler beim Speichern des Objektes", e);
+            return;
         }
 
         if ((object instanceof Schedule) || (object instanceof MySchedule)) {
@@ -619,6 +622,20 @@ public class DataManager {
             resetChangesLastSave(context);
             // Stundenplan registrieren
             registerFCMServer(context);
+
+        }
+    }
+
+    //TODO: Was ist wenn GDrive Sync an ist aber readObject gecalled wurde?!
+    public void updateGDrive(Context context){
+
+        final boolean gdriveSynchronization = sharedPreferences.getBoolean("drive_sync", false);
+
+        if(MainActivity.getAppContext() instanceof Activity && gdriveSynchronization) {
+            Log.i(TAG, "####################GDrive Sync ######################");
+            GoogleDriveController.getInstance((Activity) MainActivity.getAppContext()).updateMyScheduleFromDrive();
+            GoogleDriveController.getInstance((Activity)MainActivity.getAppContext()).updateSharedPreferences();
+
         }
     }
 

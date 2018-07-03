@@ -37,6 +37,7 @@
             android:layout_height="match_parent"
             android:defaultValue="Sprachenprogramm"
             android:key="studiengang"
+
             android:title="@string/studiengang" />
         <ListPreference
             android:layout_width="match_parent"
@@ -130,6 +131,12 @@
         <Preference
             android:key="@string/PREF_KEY_SCREEN_CALENDAR_SYNCHRONIZATION"
             android:title="@string/calendar_synchronization" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="drive_sync"
+            android:title="@string/DRIVE_SYNC"
+            />
 
     </PreferenceCategory>
 

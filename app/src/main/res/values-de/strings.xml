@@ -173,5 +173,7 @@
     <string name="schedule_reminder">Erinnerung anzeigen</string>
     <string name="notification_channel_schedule_changes_name">Stundenplan Änderungen</string>
     <string name="notification_channel_schedule_changes_description">Bekomme Benachrichtigungen über Stundenplan Änderungen</string>
+    <string name="DRIVE_SYNC">Google Drive Synchronisation</string>
+    <string name="action_refresh_from_GDrive">Von GDrive laden</string>
 
 </resources>

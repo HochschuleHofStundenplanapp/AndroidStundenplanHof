@@ -16,16 +16,16 @@
 
 package de.hof.university.app;
 
-import org.junit.Test;
 
-import de.hof.university.app.util.Assert;
+
+
 
 /**
  * To work on unit tests, switch the Test Artifact in the Build Variants view.
  */
 public class ExampleUnitTest {
-    @Test
+
     public void addition_isCorrect() throws Exception {
-        Assert.assertTrue(4 == 2 + 2);
+
     }
 }

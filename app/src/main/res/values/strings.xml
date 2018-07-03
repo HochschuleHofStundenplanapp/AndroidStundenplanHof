@@ -70,6 +70,7 @@
     <string name="USERNAME">Username</string>
     <string name="PASSWORD">Password</string>
     <string name="LOGIN_DIALOG">Hochschule Hof Login</string>
+    <string name="DRIVE_SYNC">Google Drive synchronization</string>
     <string name="SAVE_PASSWORD">Save password</string>
     <string name="impressum">Imprint</string>
     <string name="term_time">Study term</string>
@@ -105,6 +106,7 @@
     <string name="refreshFailed">Refresh failed</string>
     <string name="action_add_all">Add all</string>
     <string name="action_delete_all">Delete all</string>
+    <string name="action_refresh_from_GDrive">Refresh from GDrive</string>
     <string name="added">Added</string>
     <string name="deleted">Deleted</string>
     <string name="details">Details</string>
@@ -155,6 +157,7 @@
     <string translatable="false" name="PREF_KEY_SEMESTER">semester</string>
     <string translatable="false" name="PREF_KEY_LOGIN">login</string>
     <string translatable="false" name="PREF_KEY_EXPERIMENTAL_FEATURES">experimental_features</string>
+    <string translatable="false" name="PREF_KEY_MYSCHEDULE_DATE">myschedule_date</string>
     <string translatable="false" name="PREF_KEY_TERM_TIME">term_time</string>
     <string translatable="false" name="PREF_KEY_EXPERIMENTAL_FEATURES_ENABLED">experimental_features</string>
     <string translatable="false" name="PREF_KEY_SELECTED_CANTEEN">selected_canteen</string>

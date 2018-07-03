@@ -77,6 +77,10 @@ android {
 
         //disable 'MissingTranslation'
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 //NOTICE: Die Versionsnummer sollte pro Block gleich sein
@@ -99,13 +103,14 @@ dependencies {
     implementation 'com.google.android.gms:play-services-gcm:12.+'
     //implementation 'com.google.firebase:firebase-messaging:10.2.0'
     implementation 'com.google.firebase:firebase-messaging:12.+'
-
     implementation 'org.osmdroid:osmdroid-android:5.+'
-
-    testImplementation 'junit:junit:4.+'
+    implementation 'android.arch.lifecycle:extensions:1.1.1'
+    //testImplementation 'junit:junit:4.+'
     //compile 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.android.support.constraint:constraint-layout:+'
     implementation project(':subProject:android-support-v4-preferencefragment')
+    implementation 'com.google.android.gms:play-services-auth:12.+'
+    implementation 'com.google.android.gms:play-services-drive:12.+'
 }
 
 allprojects {
