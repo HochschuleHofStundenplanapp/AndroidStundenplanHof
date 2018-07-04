@@ -18,6 +18,7 @@ package de.hof.university.app;
 
 import android.app.AlertDialog;
 import android.app.NotificationChannel;
+import android.graphics.PorterDuff;
 import android.os.StrictMode;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -37,6 +38,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -114,6 +116,7 @@ public class MainActivity extends AppCompatActivity
 		ActionBar actionBar = getSupportActionBar();
 		if (actionBar != null) {
 			actionBar.setDisplayHomeAsUpEnabled(true);
+
 		}
 		// getSupportActionBar().setHomeButtonEnabled(true);
 

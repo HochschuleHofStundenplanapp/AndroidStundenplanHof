@@ -1,10 +1,15 @@
-package de.hof.university.app.fragment;
+package de.hof.university.app.chat;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +17,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
@@ -32,9 +40,11 @@ public class ChatFragment extends Fragment {
 
     private String mySplus;
     private TextView myLectureTitleTextView;
-    private RecyclerView chatHistoryView;
+    private RecyclerView recyclerView;
     private EditText myEditTextView;
     private Button mySendButton;
+    private ArrayList<ChatMessage> chatlist = new ArrayList<>();
+    private ChatAdapter chatAdapter;
 
     private OnFragmentInteractionListener mListener;
 
@@ -77,16 +87,41 @@ public class ChatFragment extends Fragment {
 
 
         myLectureTitleTextView = v.findViewById(R.id.lectureTitleTextView);
-        chatHistoryView = v.findViewById(R.id.chatHistoryRecycler);
+        recyclerView = v.findViewById(R.id.chatHistoryRecycler);
         myEditTextView = v.findViewById(R.id.editChat);
         mySendButton = v.findViewById(R.id.sendMessageButton);
 
+        mySendButton.setOnClickListener( new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                sendMessage(v);
+            }
+        });
+
         final MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().setTitle("Stundenplanchat");
+        mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='"+ ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack)+"'>"+ "Stundenplanchat" +"</font>"));
         mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
+
+        chatAdapter = new ChatAdapter(chatlist);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(MainActivity.getAppContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(chatAdapter);
+
+        prepareChatData();
 
         Log.d("recieved SPLUS", mySplus);
         return v;
+    }
+
+    public void sendMessage (View v){
+        Log.d("send Message: ", myEditTextView.getText().toString());
+        ChatMessage msg = new ChatMessage("CarlaGuluci91", myEditTextView.getText().toString());
+        chatlist.add(msg);
+
+        chatAdapter.notifyDataSetChanged();
+        recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -95,6 +130,23 @@ public class ChatFragment extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
+
+    private void prepareChatData() {
+        ChatMessage msg = new ChatMessage("Justine82", "Hallo Leute, wie fandet ihr die Vorleusng heute?");
+        chatlist.add(msg);
+
+        msg = new ChatMessage("Carla42", "Boah das wqhr voll schwer, vorallem der Dreisatz");
+        chatlist.add(msg);
+
+        msg = new ChatMessage("Brunhild92", "Lass uns exmatrikulieren Lol");
+        chatlist.add(msg);
+
+        msg = new ChatMessage("Manfred_Der_Weiße", "Ich zieh das durch auch ohne euch");
+        chatlist.add(msg);
+
+        chatAdapter.notifyDataSetChanged();
+    }
+
 
     @Override
     public void onAttach(Context context) {

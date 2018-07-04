@@ -21,6 +21,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -47,7 +49,7 @@ import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.adapter.ScheduleAdapter;
 import de.hof.university.app.data.DataManager;
-import de.hof.university.app.fragment.ChatFragment;
+import de.hof.university.app.chat.ChatFragment;
 import de.hof.university.app.fragment.AbstractListFragment;
 import de.hof.university.app.model.BigListItem;
 import de.hof.university.app.model.LastUpdated;
@@ -147,7 +149,9 @@ public class ScheduleFragment extends AbstractListFragment {
         super.onResume();
         if (getClass().getSimpleName().equals(ScheduleFragment.class.getSimpleName())) {
             final MainActivity mainActivity = (MainActivity) getActivity();
-            mainActivity.getSupportActionBar().setTitle(R.string.stundenplan);
+            mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='"+ ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack)+"'>"+ getString(R.string.stundenplan)+"</font>"));
+            mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_accent_24dp);
+
 
             final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
             navigationView.getMenu().findItem(R.id.nav_stundenplan).setChecked(true);

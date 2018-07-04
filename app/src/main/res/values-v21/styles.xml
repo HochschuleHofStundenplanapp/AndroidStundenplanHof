@@ -28,6 +28,9 @@
         <item name="android:textColorPrimary">@color/Primary_text</item>
         <item name="android:textColorSecondary">@color/Secondary_text</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+        <item name="colorControlNormal">@color/Accent</item>
+        <item name="colorControlActivated">@color/Accent</item>
+        <item name="colorControlHighlight">@color/Accent</item>
     </style>
 
 </resources>

@@ -17,14 +17,17 @@
 
 <resources>
     //Appfarben
-    <color name="Primary">#3F51B5</color>
-    <color name="Primary_dark">#303F9F</color>
+    <color name="Primary">#FFFF</color>
+    <color name="Primary_dark">#F1F3F4</color>
     <color name="Primary_light">#C5CAE9</color>
-    <color name="Accent">#9E9E9E</color>
+    <color name="Accent">#3700B3</color>
     <color name="Primary_text">#212121</color>
     <color name="Secondary_text">#757575</color>
-    <color name="icons">#FFFFFF</color>
+    <color name="icons">#6200EE</color>
     <color name="divider">#BDBDBD</color>
+    <color name="Primary_material2">#F1F3F4</color>
+    <color name="material_textgrey">#3C4043</color>
+    <color name="material_accent">#5c6bc0</color>
 
     //HSHof_CDFarben
     <color name="colorBlack">#000000</color>
@@ -54,4 +57,15 @@
     <color name="colorWR60P">#99c2161c</color>
     <color name="colorWR30P">#4dc2161c</color>
     <color name="colorWR20P">#33c2161c</color>
+
+
+    //Appfarben
+    <color name="Primary_backup">#3F51B5</color>
+    <color name="Primary_dark_backup">#303F9F</color>
+    <color name="Primary_light_backup">#C5CAE9</color>
+    <color name="Accent_backup">#9E9E9E</color>
+    <color name="Primary_text_backup">#212121</color>
+    <color name="Secondary_text_backup">#757575</color>
+    <color name="icons_backup">#FFFFFF</color>
+    <color name="divider_backup">#BDBDBD</color>
 </resources>

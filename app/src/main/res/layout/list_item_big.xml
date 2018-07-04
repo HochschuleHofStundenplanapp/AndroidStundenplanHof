@@ -31,7 +31,7 @@
         android:gravity="center"
         android:text="Medium Text"
         android:id="@+id/list_item_big_text"
-        android:textColor="@color/Primary"
+        android:textColor="@color/material_accent"
         android:textStyle="bold"
         android:textSize="25sp"
         android:layout_marginTop="5dp"
