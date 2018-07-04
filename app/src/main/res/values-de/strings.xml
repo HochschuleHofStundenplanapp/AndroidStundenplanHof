@@ -202,5 +202,7 @@
     <string name="onboarding_welcome_text_title">Schnell und einfach</string>
     <string name="onboarding_welcome_text_message">Folge den Anweisungen, um deinen persönlichen Stundenplan anzulegen</string>
     <string name="onboarding_error_text">Hinweis</string>
+    <string name="send">Send</string>
+    <string name="chat">Chat....</string>
 
 </resources>

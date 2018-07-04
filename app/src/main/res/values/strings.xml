@@ -224,5 +224,7 @@
     <string name="onboarding_login_info">This login is used to show your mark sheet/announcement and for room search, if experimental features are enabled</string>
 
     <string name="chatfragment">chatfragment</string>
+    <string name="send">Send</string>
+    <string name="chat">Chat....</string>
 
 </resources>

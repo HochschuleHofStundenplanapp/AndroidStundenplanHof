@@ -20,7 +20,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:text="Send"
+            android:text="@string/send"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -35,7 +35,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:ems="10"
-            android:hint="Chat...."
+            android:hint="@string/chat"
             android:inputType="text|textPersonName"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/sendMessageButton"
@@ -55,10 +55,10 @@
             app:layout_constraintBottom_toTopOf="@+id/editChat"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/LectureTitleTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/lectureTitleTextView" />
 
         <TextView
-            android:id="@+id/LectureTitleTextView"
+            android:id="@+id/lectureTitleTextView"
             android:layout_width="373dp"
             android:layout_height="40dp"
             android:layout_marginEnd="8dp"
@@ -66,12 +66,12 @@
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
-            android:text="Fortgeschrittene Programmierung"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/Primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.4"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="lulz" />
     </android.support.constraint.ConstraintLayout>
 </FrameLayout>

@@ -18,39 +18,36 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 27
-    //buildToolsVersion '28.0.0'
-    defaultConfig {
-        applicationId 'de.hof.university.app'
-        targetSdkVersion 27
-        versionCode 36
-        versionName '4.6'
-        minSdkVersion 16
+	compileSdkVersion 27
+	//buildToolsVersion '28.0.0'
+	defaultConfig {
+		applicationId 'de.hof.university.app'
+		targetSdkVersion 27
+		versionCode 36
+		versionName '4.6'
+		minSdkVersion 16
 		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
-
+	}
 	packagingOptions {
 		exclude 'META-INF/DEPENDENCIES'
 	}
-
-    signingConfigs {
-        release {
-            //Folgender Pfad führt zum Absturz des Gradle Wrappers auf manchen Systemen (wie meinen Mac)!
-            //storeFile file('D:\\Projekt\\Mobile.AndroidStudio\\Hof.Stundenplaner\\fhhkey.jks')
-            keyAlias "fhhkey"
-            keyPassword 'IUwbayNG54S5C4udGkjs'
-            //storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
-            //storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
-            storePassword 'IUwbayNG54S5C4udGkjs'
-        }
-        debug {
-            // Ein fester debug keystore damit, wenn man mit verschiedenen Rechnern arbeitet, die APK updaten kann.
-            // Der dubug.keystore liegt im Projekt unter /app/debug.keystore und kann auch ausgetauscht werden.
-            storeFile file('debug.keystore')
-            storePassword 'android'
-        }
-    }
-
+	signingConfigs {
+		release {
+			//Folgender Pfad führt zum Absturz des Gradle Wrappers auf manchen Systemen (wie meinen Mac)!
+			//storeFile file('D:\\Projekt\\Mobile.AndroidStudio\\Hof.Stundenplaner\\fhhkey.jks')
+			keyAlias "fhhkey"
+			keyPassword 'IUwbayNG54S5C4udGkjs'
+			//storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
+			//storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
+			storePassword 'IUwbayNG54S5C4udGkjs'
+		}
+		debug {
+			// Ein fester debug keystore damit, wenn man mit verschiedenen Rechnern arbeitet, die APK updaten kann.
+			// Der dubug.keystore liegt im Projekt unter /app/debug.keystore und kann auch ausgetauscht werden.
+			storeFile file('debug.keystore')
+			storePassword 'android'
+		}
+	}
 	buildTypes {
 		release {
 			minifyEnabled true
@@ -72,19 +69,19 @@ android {
 			applicationIdSuffix = ".debug"
 		}
 	}
-    productFlavors {
-    }
+	productFlavors {
+	}
+	// Lint found fatal errors while assembling a release target
+	lintOptions {
+		//checkReleaseBuilds false
 
-    // Lint found fatal errors while assembling a release target
-    lintOptions {
-        //checkReleaseBuilds false
+		// Or, if you prefer, you can continue to check for errors in release builds,
+		// but continue the build even when errors are found:
+		abortOnError false
 
-        // Or, if you prefer, you can continue to check for errors in release builds,
-        // but continue the build even when errors are found:
-        abortOnError false
-
-        //disable 'MissingTranslation'
-    }
+		//disable 'MissingTranslation'
+	}
+	buildToolsVersion '28.0.1'
 }
 
 //NOTICE: Die Versionsnummer sollte pro Block gleich sein
@@ -101,15 +98,11 @@ dependencies {
 	// Die Versionsnummer sollte die gleiche sein
 	implementation 'com.google.android.gms:play-services-gcm:15.+'
 	implementation 'com.google.firebase:firebase-messaging:15.+'
-
 	implementation 'org.osmdroid:osmdroid-android:5.+'
-
-	implementation "org.igniterealtime.smack:smack-android-extensions:4.2.0"
-	implementation "org.igniterealtime.smack:smack-tcp:4.2.0"
-	implementation "org.igniterealtime.smack:smack-extensions:4.2.0"
-	implementation "org.igniterealtime.smack:smack-bosh:4.2.0"
-
-
+	implementation 'org.igniterealtime.smack:smack-android-extensions:4.2.0'
+	implementation 'org.igniterealtime.smack:smack-tcp:4.2.0'
+	implementation 'org.igniterealtime.smack:smack-extensions:4.2.0'
+	implementation 'org.igniterealtime.smack:smack-bosh:4.2.0'
 	testImplementation 'junit:junit:4.+'
 	implementation 'com.android.support.constraint:constraint-layout:1.1.2'
 	api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

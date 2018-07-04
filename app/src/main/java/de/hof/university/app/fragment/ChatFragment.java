@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 
 
@@ -72,16 +73,20 @@ public class ChatFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        View v= inflater.inflate(R.layout.fragment_chat, container, false);
+        View v = inflater.inflate(R.layout.fragment_chat, container, false);
 
 
-        myLectureTitleTextView = v.findViewById(R.id.LectureTitleTextView);
+        myLectureTitleTextView = v.findViewById(R.id.lectureTitleTextView);
         chatHistoryView = v.findViewById(R.id.chatHistoryRecycler);
         myEditTextView = v.findViewById(R.id.editChat);
         mySendButton = v.findViewById(R.id.sendMessageButton);
 
+        final MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.getSupportActionBar().setTitle("Stundenplanchat");
+        mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
+
         Log.d("recieved SPLUS", mySplus);
-        return inflater.inflate(R.layout.fragment_chat, container, false);
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -106,6 +111,13 @@ public class ChatFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        Log.d("mySplus ist:", mySplus);
+        myLectureTitleTextView.setText(mySplus);
     }
 
     /**
