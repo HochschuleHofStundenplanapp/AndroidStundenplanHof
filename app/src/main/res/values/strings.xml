@@ -106,7 +106,7 @@
     <string name="refreshFailed">Refresh failed</string>
     <string name="action_add_all">Add all</string>
     <string name="action_delete_all">Delete all</string>
-    <string name="action_refresh_from_GDrive">Refresh from GDrive</string>
+    <string name="action_refresh_from_GDrive" translatable="false">Refresh from GDrive</string>
     <string name="added">Added</string>
     <string name="deleted">Deleted</string>
     <string name="details">Details</string>
@@ -200,6 +200,10 @@
     <string name="notification_channel_schedule_changes_name">Schedule changes</string>
     <string name="notification_channel_schedule_changes_description">Get notifications about schedule changes</string>
 
+    <!-- GDrive -->
+    <string name="preferences_file" translatable="false">Preferences</string>
+
+
     <!-- Onboarding -->
     <string name="continue_onboarding">Continue</string>
     <string name="finish_onboarding">Finish Onboarding</string>
@@ -225,5 +229,15 @@
     <string name="onboarding_welcome_text_title">Quick and easy</string>
     <string name="onboarding_welcome_text_message">Follow the instructions to setup your personal schedule app</string>
     <string name="onboarding_login_info">This login is used to show your mark sheet/announcement and for room search, if experimental features are enabled</string>
+    <string name="gdrive_restore_question">There are schedule files in your GDrive, would you like to restore them?</string>
+    <string name="gdrive_use_remote">Use GDrive schedule</string>
+    <string name="gdrive_use_local">Use local schedule</string>
+    <string name="gdrive_files_online">Files in GDrive</string>
+    <string name="cancel">Cancel</string>
+    <string name="gdrive_delete_drive_files">Delete Drive Files</string>
+    <string name="gdrive_delete_drive_files_question">Do you want to delete the schedule in your Google Drive?</string>
+    <string name="gdrive_sync" translatable="false">drive_sync</string>
+    <string name="gdrive_unexpected_callback_manager" translatable="false">Unexpected CallbackManager, please use the provided CallbackManager Factory</string>
+    <string name="gdrive_signed_in_successfully" translatable="false">Signed in successfully</string>
 
 </resources>

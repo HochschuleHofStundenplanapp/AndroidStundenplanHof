@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity
             
             // Called after user is signed in.
             
-            Log.i(TAG, "Signed in successfully.");
+            Log.i(TAG, getString(R.string.gdrive_signed_in_successfully));
             // Create Drive clients now that account has been authorized access.
             
             gDriveCtrl.createDriveClients();
