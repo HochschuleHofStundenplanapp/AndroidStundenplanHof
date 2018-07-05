@@ -55,8 +55,8 @@ public class RaumlistAdapter extends ArrayAdapter<Level> {
     public final View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View v = convertView;
         switch (items.get(position).getLevel()) {
-            case 0:
-                Raum raum = (Raum) items.get(position);
+            case Level.LEVEL_0_RAUM:
+                final Raum raum = (Raum) items.get(position);
                 if (raum != null) {
                     v = vi.inflate(R.layout.list_item_raum, null);
 
@@ -68,8 +68,8 @@ public class RaumlistAdapter extends ArrayAdapter<Level> {
                     raumView.setText(raum.getName());
                 }
                 break;
-            case 1:
-                Raumkategorie category = (Raumkategorie) items.get(position);
+            case Level.LEVEL_1_RAUMKATEGORIE:
+                final Raumkategorie category = (Raumkategorie) items.get(position);
                 if (category != null) {
                     v = vi.inflate(R.layout.list_item_big, null);
 
@@ -81,8 +81,8 @@ public class RaumlistAdapter extends ArrayAdapter<Level> {
                     raumView.setText(category.getTitle());
                 }
                 break;
-            case 2:
-                Suchdetails details = (Suchdetails) items.get(position);
+            case Level.LEVEL_2_SUCHE:
+                final Suchdetails details = (Suchdetails) items.get(position);
                 if (details != null) {
                     v = vi.inflate(R.layout.list_item_medium, null);
 
