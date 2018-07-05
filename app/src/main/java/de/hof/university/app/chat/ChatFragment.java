@@ -1,5 +1,6 @@
 package de.hof.university.app.chat;
 
+import android.bluetooth.BluetoothClass;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,9 +21,12 @@ import android.widget.TextView;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
+import de.hof.university.app.chat.Helper.ChatController;
 
 
 /**
@@ -33,7 +37,7 @@ import de.hof.university.app.R;
  * Use the {@link ChatFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ChatFragment extends Fragment {
+public class ChatFragment extends Fragment implements Observer {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_SPLUS = "splus";
     private static final String ARG_LECTURE = "mylecture";
@@ -47,6 +51,7 @@ public class ChatFragment extends Fragment {
     private ChatAdapter chatAdapter;
 
     private OnFragmentInteractionListener mListener;
+    private ChatController chatCtrl;
 
     public ChatFragment() {
         // Required empty public constructor
@@ -57,7 +62,6 @@ public class ChatFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment ChatFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -74,7 +78,9 @@ public class ChatFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mySplus = getArguments().getString(ARG_SPLUS);
-
+            chatCtrl = new ChatController(getContext(),mySplus);
+            chatCtrl.login();
+            MessageSingleton.getInstance().addObserver(this);
         }
     }
 
@@ -122,6 +128,8 @@ public class ChatFragment extends Fragment {
 
         chatAdapter.notifyDataSetChanged();
         recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+        chatCtrl.sendMessage(msg.getMessage());
+        chatAdapter.notifyDataSetChanged();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -132,16 +140,16 @@ public class ChatFragment extends Fragment {
     }
 
     private void prepareChatData() {
-        ChatMessage msg = new ChatMessage("Justine82", "Hallo Leute, wie fandet ihr die Vorleusng heute?");
+        ChatMessage msg = new ChatMessage("Justine82", "Hallo Leute, wie fandet ihr die Vorleusng vong heute?");
         chatlist.add(msg);
 
-        msg = new ChatMessage("Carla42", "Boah das wqhr voll schwer, vorallem der Dreisatz");
+        msg = new ChatMessage("Carla42", "Boah Dude das wqhr voll schwer, vorallem vong Dreisatz her");
         chatlist.add(msg);
 
-        msg = new ChatMessage("Brunhild92", "Lass uns exmatrikulieren Lol");
+        msg = new ChatMessage("Brunhild92", "Lass uns exmatrikulieren omegalul");
         chatlist.add(msg);
 
-        msg = new ChatMessage("Manfred_Der_Weiße", "Ich zieh das durch auch ohne euch");
+        msg = new ChatMessage("Manfred_Der_Weiße", "Ich zieh das durch auch ohne euch, bois");
         chatlist.add(msg);
 
         chatAdapter.notifyDataSetChanged();
@@ -152,10 +160,10 @@ public class ChatFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         //if (context instanceof OnFragmentInteractionListener) {
-           // mListener = (OnFragmentInteractionListener) context;
+        // mListener = (OnFragmentInteractionListener) context;
         //} else {
-          //  throw new RuntimeException(context.toString()
-            //        + " must implement OnFragmentInteractionListener");
+        //  throw new RuntimeException(context.toString()
+        //        + " must implement OnFragmentInteractionListener");
         //}
     }
 
@@ -172,6 +180,26 @@ public class ChatFragment extends Fragment {
         myLectureTitleTextView.setText(mySplus);
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        chatCtrl.stopChat();
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+
+        ArrayList<ChatMessage> messages = MessageSingleton.getInstance().getMessages();
+        chatlist = messages;
+        this.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                chatAdapter.notifyDataSetChanged();
+            }
+        });
+
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -180,7 +208,7 @@ public class ChatFragment extends Fragment {
      * <p>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * >Communicating with Other Fragments</a> for more it {nformation.
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
