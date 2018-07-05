@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Lars Gaidzik & Lukas Mahr
+ * Copyright (c) 2016-2018 Lars Gaidzik & Lukas Mahr & Hochschule Hof
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -37,6 +37,7 @@ android {
             //storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
             //storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
             storePassword 'IUwbayNG54S5C4udGkjs'
+			storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
         }
         debug {
             // Ein fester debug keystore damit, wenn man mit verschiedenen Rechnern arbeitet, die APK updaten kann.
@@ -98,26 +99,24 @@ dependencies {
 	// jsoup HTML parser library @ http://jsoup.org/
 	implementation 'org.jsoup:jsoup:1.11.3'
 	// Die Versionsnummer sollte die gleiche sein
-	implementation 'com.google.android.gms:play-services-gcm:12.+'
-	implementation 'com.google.firebase:firebase-messaging:12.+'
+	implementation 'com.google.android.gms:play-services-gcm:15.+'
+	implementation 'com.google.firebase:firebase-messaging:15.+'
     implementation 'android.arch.lifecycle:extensions:1.1.1'
-    implementation 'com.google.android.gms:play-services-auth:12.+'
-    implementation 'com.google.android.gms:play-services-drive:12.+'
+    implementation 'com.google.android.gms:play-services-auth:15.+'
+    implementation 'com.google.android.gms:play-services-drive:15.+'
 
-allprojects {
-    repositories {
-        mavenCentral()
-        mavenLocal()    //add this if it's missing
-    }
-}
 	implementation 'org.osmdroid:osmdroid-android:5.+'
 
 	testImplementation 'junit:junit:4.+'
-	implementation 'com.android.support.constraint:constraint-layout:1.+' //if using above 2.+ the minSdkVersion must be 18
+    //if using constraint-layout above 2.+ the minSdkVersion must be 18
+	implementation 'com.android.support.constraint:constraint-layout:1.+' 
 
-
-
+    allprojects {
+        repositories {
+            mavenCentral()
+            mavenLocal()    //add this if it's missing
+        }
+    }
 
 }
-
 apply plugin: 'com.google.gms.google-services'
