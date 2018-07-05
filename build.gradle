@@ -16,8 +16,11 @@ allprojects {
     repositories {
         google()
         jcenter()
+//      mavenCentral()
+//      mavenLocal()    //add this if it's missing
     }
 }
+
 
 task clean(type: Delete) {
     delete rootProject.buildDir

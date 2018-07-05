@@ -17,36 +17,34 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
-    //buildToolsVersion '28.0.0'
-    defaultConfig {
-        applicationId 'de.hof.university.app'
-        targetSdkVersion 27
-        versionCode 37
-        versionName '4.8'
-        minSdkVersion 16
+	compileSdkVersion 27
+	//buildToolsVersion '28.0.0'
+	defaultConfig {
+		applicationId 'de.hof.university.app'
+		targetSdkVersion 27
+		versionCode 37
+		versionName '4.8'
+		minSdkVersion 16
 		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
-
-    signingConfigs {
-        release {
-            //Folgender Pfad führt zum Absturz des Gradle Wrappers auf manchen Systemen (wie meinen Mac)!
-            //storeFile file('D:\\Projekt\\Mobile.AndroidStudio\\Hof.Stundenplaner\\fhhkey.jks')
-            keyAlias "fhhkey"
-            keyPassword 'IUwbayNG54S5C4udGkjs'
-            //storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
-            //storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
-            storePassword 'IUwbayNG54S5C4udGkjs'
+	}
+	signingConfigs {
+		release {
+			//Folgender Pfad führt zum Absturz des Gradle Wrappers auf manchen Systemen (wie meinen Mac)!
+			//storeFile file('D:\\Projekt\\Mobile.AndroidStudio\\Hof.Stundenplaner\\fhhkey.jks')
+			keyAlias "fhhkey"
+			keyPassword 'IUwbayNG54S5C4udGkjs'
+			//storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
+			//storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
+			storePassword 'IUwbayNG54S5C4udGkjs'
 			storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
-        }
-        debug {
-            // Ein fester debug keystore damit, wenn man mit verschiedenen Rechnern arbeitet, die APK updaten kann.
-            // Der dubug.keystore liegt im Projekt unter /app/debug.keystore und kann auch ausgetauscht werden.
-            storeFile file('debug.keystore')
-            storePassword 'android'
-        }
-    }
-
+		}
+		debug {
+			// Ein fester debug keystore damit, wenn man mit verschiedenen Rechnern arbeitet, die APK updaten kann.
+			// Der dubug.keystore liegt im Projekt unter /app/debug.keystore und kann auch ausgetauscht werden.
+			storeFile file('debug.keystore')
+			storePassword 'android'
+		}
+	}
 	buildTypes {
 		release {
 			minifyEnabled true
@@ -68,55 +66,63 @@ android {
 			applicationIdSuffix = ".debug"
 		}
 	}
-    productFlavors {
-    }
+	productFlavors {
+	}
+	// Lint found fatal errors while assembling a release target
+	lintOptions {
+		//checkReleaseBuilds false
 
-    // Lint found fatal errors while assembling a release target
-    lintOptions {
-        //checkReleaseBuilds false
+		// Or, if you prefer, you can continue to check for errors in release builds,
+		// but continue the build even when errors are found:
+		abortOnError false
 
-        // Or, if you prefer, you can continue to check for errors in release builds,
-        // but continue the build even when errors are found:
-        abortOnError false
-
-        //disable 'MissingTranslation'
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
+		//disable 'MissingTranslation'
+	}
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_1_8
+//        targetCompatibility JavaVersion.VERSION_1_8
+//    }
+	buildToolsVersion '28.0.1'
+	compileOptions {
+		sourceCompatibility JavaVersion.VERSION_1_8
+		targetCompatibility JavaVersion.VERSION_1_8
+	}
 }
 
 //NOTICE: Die Versionsnummer sollte pro Block gleich sein
 dependencies {
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
 	// Die Versionsnummer sollte die gleiche sein
-	implementation 'com.android.support:appcompat-v7:27.+'
 	implementation 'com.android.support:design:27.+'
-	implementation 'com.android.support:support-v4:27.+'
+	//deprecated: implementation 'com.android.support:support-v4:27.+'
+	implementation 'com.android.support:support-compat:27.+'
+	implementation 'com.android.support:support-core-utils:27.+'
+	implementation 'com.android.support:support-core-ui:27.+'
+	implementation 'com.android.support:support-media-compat:27.+'
+	implementation 'com.android.support:support-fragment:27.+'
+
+	implementation 'com.android.support:appcompat-v7:27.+'
+	implementation 'com.android.support:gridlayout-v7:27.+'
 	implementation 'com.android.support:recyclerview-v7:27.+'
 	implementation 'com.android.support:preference-v7:27.+'
+
+	implementation 'com.android.support:preference-v14:27.+'
+
 	// jsoup HTML parser library @ http://jsoup.org/
 	implementation 'org.jsoup:jsoup:1.11.3'
 	// Die Versionsnummer sollte die gleiche sein
+	//implementation 'com.google.android.gms:play-services:12.+'
 	implementation 'com.google.android.gms:play-services-gcm:15.+'
+	implementation 'com.google.android.gms:play-services-auth:15.+'
+	implementation 'com.google.android.gms:play-services-drive:15.+'
+
 	implementation 'com.google.firebase:firebase-messaging:15.+'
-    implementation 'android.arch.lifecycle:extensions:1.1.1'
-    implementation 'com.google.android.gms:play-services-auth:15.+'
-    implementation 'com.google.android.gms:play-services-drive:15.+'
-
+	implementation 'android.arch.lifecycle:extensions:1.1.1'
 	implementation 'org.osmdroid:osmdroid-android:5.+'
-
 	testImplementation 'junit:junit:4.+'
-    //if using constraint-layout above 2.+ the minSdkVersion must be 18
-	implementation 'com.android.support.constraint:constraint-layout:1.+' 
-
-    allprojects {
-        repositories {
-            mavenCentral()
-            mavenLocal()    //add this if it's missing
-        }
-    }
+	//if using constraint-layout above 2.+ the minSdkVersion must be 18
+	implementation 'com.android.support.constraint:constraint-layout:1.+'
 
 }
+
 apply plugin: 'com.google.gms.google-services'
