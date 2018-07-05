@@ -46,7 +46,7 @@ import de.hof.university.app.model.settings.StudyCourse;
  * Created by patrickniepel on 03.01.18.
  */
 
-public class OnboardingStudyFragment extends Fragment implements TaskComplete {
+public class OnboardingStudyFragment extends android.support.v4.app.Fragment implements TaskComplete {
 
     private Button studyTermBtn, degreeProgramBtn, semesterBtn, continueBtn;
     private SettingsController settingsCtrl;
