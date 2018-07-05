@@ -38,7 +38,7 @@ import java.util.HashMap;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.data.SettingsController;
-import de.hof.university.app.data.SettingsKeys;
+import de.hof.university.app.data.SettingsController.SettingsKeys;
 import de.hof.university.app.data.TaskComplete;
 import de.hof.university.app.model.settings.StudyCourse;
 

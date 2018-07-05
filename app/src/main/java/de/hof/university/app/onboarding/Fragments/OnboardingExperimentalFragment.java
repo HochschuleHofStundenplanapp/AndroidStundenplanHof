@@ -47,7 +47,7 @@ import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.calendar.CalendarSynchronization;
 import de.hof.university.app.data.SettingsController;
-import de.hof.university.app.data.SettingsKeys;
+import de.hof.university.app.data.SettingsController.SettingsKeys;
 import de.hof.university.app.experimental.LoginController;
 import de.hof.university.app.onboarding.OnboardingController;
 

@@ -37,7 +37,7 @@ import java.util.ArrayList;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.data.SettingsController;
-import de.hof.university.app.data.SettingsKeys;
+import de.hof.university.app.data.SettingsController.SettingsKeys;
 
 
 public class OnboardingMenuPlanFragment extends Fragment {
