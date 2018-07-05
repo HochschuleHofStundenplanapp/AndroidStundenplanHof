@@ -43,7 +43,7 @@ public class Raum implements Level, Serializable {
 
     @Override
     public final int getLevel() {
-        return 0;
+        return LEVEL_0_RAUM;
     }
 
 
