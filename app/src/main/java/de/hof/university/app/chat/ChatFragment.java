@@ -115,7 +115,6 @@ public class ChatFragment extends Fragment implements Observer {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(chatAdapter);
 
-        prepareChatData();
 
         Log.d("recieved SPLUS", mySplus);
         return v;
@@ -130,6 +129,7 @@ public class ChatFragment extends Fragment implements Observer {
         recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
         chatCtrl.sendMessage(msg.getMessage());
         chatAdapter.notifyDataSetChanged();
+        myEditTextView.setText("");
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -188,13 +188,14 @@ public class ChatFragment extends Fragment implements Observer {
 
     @Override
     public void update(Observable observable, Object o) {
-
-        ArrayList<ChatMessage> messages = MessageSingleton.getInstance().getMessages();
-        chatlist = messages;
         this.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                ArrayList<ChatMessage> messages = MessageSingleton.getInstance().getMessages();
+                chatlist.clear();
+                chatlist.addAll(messages);
                 chatAdapter.notifyDataSetChanged();
+                recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
             }
         });
 

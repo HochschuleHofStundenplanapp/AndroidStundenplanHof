@@ -18,7 +18,8 @@ public class OnboardingController {
 
         SharedPreferences prefs = context.getSharedPreferences(PREFERENCES_ONBOARDING, Context.MODE_PRIVATE);
 
-        boolean startedOnce = prefs.getBoolean(ONBOARDING_KEY, false);
+        boolean startedOnce = true;
+        //boolean startedOnce = prefs.getBoolean(ONBOARDING_KEY, false);
 
         //Returns true if onboarding hasn't been started yet -> start onboarding
         return !startedOnce;
