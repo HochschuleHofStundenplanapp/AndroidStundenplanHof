@@ -159,6 +159,9 @@ public class ChatFragment extends Fragment implements Observer {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (chatAdapter != null) {
+                chatAdapter.notifyDataSetChanged();
+        }
         //if (context instanceof OnFragmentInteractionListener) {
         // mListener = (OnFragmentInteractionListener) context;
         //} else {
@@ -171,6 +174,8 @@ public class ChatFragment extends Fragment implements Observer {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        chatCtrl.stopChat();
+        chatlist.clear();
     }
 
     @Override
@@ -183,7 +188,6 @@ public class ChatFragment extends Fragment implements Observer {
     @Override
     public void onStop() {
         super.onStop();
-        chatCtrl.stopChat();
     }
 
     @Override
