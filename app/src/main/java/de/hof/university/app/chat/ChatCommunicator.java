@@ -152,7 +152,7 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
     @Override
     public void processMessage(Message message) {
         StringTrimmer trimmer = new StringTrimmer();
-        String sender = trimmer.trimmStartingAt(message.getFrom().toString(),'%');
+        String sender = trimmer.trimmStartingAt(message.getFrom().toString(),'/');
         Log.d("Achtung!",message.getBody());
         MessageSingleton.getInstance().appendMessage(new ChatMessage(sender,message.getBody()));
     }
