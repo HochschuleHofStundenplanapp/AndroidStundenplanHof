@@ -1,7 +1,9 @@
 package de.hof.university.app.chat;
 
-import android.bluetooth.BluetoothClass;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
@@ -20,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -29,6 +32,7 @@ import java.util.Observer;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.chat.Helper.ChatController;
+import de.hof.university.app.chat.Helper.ConnectionMannager;
 
 
 /**
@@ -54,6 +58,7 @@ public class ChatFragment extends Fragment implements Observer {
 
     private OnFragmentInteractionListener mListener;
     private ChatController chatCtrl;
+    private ConnectionMannager conManager;
 
     public ChatFragment() {
         // Required empty public constructor
@@ -79,9 +84,11 @@ public class ChatFragment extends Fragment implements Observer {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            MessageSingleton.getInstance().addObserver(this);
             mySplus = getArguments().getString(ARG_SPLUS);
-            chatCtrl = new ChatController(getContext(),mySplus);
+            chatCtrl = new ChatController(getContext(), mySplus);
             chatCtrl.login();
+            conManager = new ConnectionMannager(getContext());
             MessageSingleton.getInstance().addObserver(this);
         }
     }
@@ -99,7 +106,7 @@ public class ChatFragment extends Fragment implements Observer {
         myEditTextView = v.findViewById(R.id.editChat);
         mySendButton = v.findViewById(R.id.sendMessageButton);
 
-        mySendButton.setOnClickListener( new View.OnClickListener() {
+        mySendButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -108,8 +115,8 @@ public class ChatFragment extends Fragment implements Observer {
         });
 
         final MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='"+ ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack)+"'>"+ "Stundenplanchat" +"</font>"));
-        mainActivity.setDrawerState(false);
+        mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='" + ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack) + "'>" + "Stundenplanchat" + "</font>"));
+        mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
 
         chatAdapter = new ChatAdapter(chatlist);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(MainActivity.getAppContext());
@@ -122,95 +129,100 @@ public class ChatFragment extends Fragment implements Observer {
         return v;
     }
 
-    public void sendMessage (View v){
-        Log.d("myEditTextView:", "says " + myEditTextView.getText());
+    public void sendMessage(View v) {
         if (myEditTextView.getText().length() > 1){
-            Log.d("send Message: ", myEditTextView.getText().toString());
-            ChatMessage msg = new ChatMessage("", myEditTextView.getText().toString());
-            chatlist.add(msg);
+            if (!conManager.checkInternet()) {
+                mySendButton.setActivated(false);
+                mySendButton.setTextColor(Color.GRAY);
+                showToast();
+            }else {
+                mySendButton.setActivated(true);
+                mySendButton.setTextColor(Color.BLACK);
+                Log.d("send Message: ", myEditTextView.getText().toString());
+                ChatMessage msg = new ChatMessage("CarlaGuluci91", myEditTextView.getText().toString());
+                chatlist.add(msg);
 
-            chatAdapter.notifyDataSetChanged();
-            recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
-            chatCtrl.sendMessage(msg.getMessage());
-            chatAdapter.notifyDataSetChanged();
-            myEditTextView.setText("");
-        }
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    private void prepareChatData() {
-        ChatMessage msg = new ChatMessage("Justine82", "Hallo Leute, wie fandet ihr die Vorleusng vong heute?");
-        chatlist.add(msg);
-
-        msg = new ChatMessage("Carla42", "Boah Dude das wqhr voll schwer, vorallem vong Dreisatz her");
-        chatlist.add(msg);
-
-        msg = new ChatMessage("Brunhild92", "Lass uns exmatrikulieren omegalul");
-        chatlist.add(msg);
-
-        msg = new ChatMessage("Manfred_Der_Weiße", "Ich zieh das durch auch ohne euch, bois");
-        chatlist.add(msg);
-
-        chatAdapter.notifyDataSetChanged();
-    }
-
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (chatAdapter != null) {
-                chatAdapter.notifyDataSetChanged();
-        }
-        //if (context instanceof OnFragmentInteractionListener) {
-        // mListener = (OnFragmentInteractionListener) context;
-        //} else {
-        //  throw new RuntimeException(context.toString()
-        //        + " must implement OnFragmentInteractionListener");
-        //}
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-        chatCtrl.stopChat();
-        chatlist.clear();
-        final MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.setDrawerState(true);
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        Log.d("mySplus ist:", mySplus);
-        myLectureTitleTextView.setText(mySplus);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    public void update(Observable observable, Object o) {
-        this.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ArrayList<ChatMessage> messages = MessageSingleton.getInstance().getMessages();
-                chatlist.clear();
-                chatlist.addAll(messages);
                 chatAdapter.notifyDataSetChanged();
                 recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+                chatCtrl.sendMessage(msg.getMessage());
+                chatAdapter.notifyDataSetChanged();
+                myEditTextView.setText("");
             }
-        });
-
+        }
     }
+
+        // TODO: Rename method, update argument and hook method into UI event
+        public void onButtonPressed (Uri uri){
+            if (mListener != null) {
+                mListener.onFragmentInteraction(uri);
+            }
+        }
+
+        @Override
+        public void onAttach(Context context){
+            super.onAttach(context);
+            if (chatAdapter != null) {
+                chatAdapter.notifyDataSetChanged();
+            }
+            //if (context instanceof OnFragmentInteractionListener) {
+            // mListener = (OnFragmentInteractionListener) context;
+            //} else {
+            //  throw new RuntimeException(context.toString()
+            //        + " must implement OnFragmentInteractionListener");
+            //}
+        }
+
+        @Override
+        public void onDetach () {
+            super.onDetach();
+            mListener = null;
+            chatCtrl.stopChat();
+            chatlist.clear();
+            final MainActivity mainActivity = (MainActivity) getActivity();
+            mainActivity.setDrawerState(true);
+        }
+
+        @Override
+        public void onResume () {
+            super.onResume();
+            Log.d("mySplus ist:", mySplus);
+            myLectureTitleTextView.setText(mySplus);
+        }
+
+        @Override
+        public void onStop(){
+            super.onStop();
+        }
+
+        @Override
+        public void update (Observable observable, Object o){
+            this.getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ArrayList<ChatMessage> messages = MessageSingleton.getInstance().getMessages();
+                    chatlist.clear();
+                    chatlist.addAll(messages);
+                    chatAdapter.notifyDataSetChanged();
+                    recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+                    Log.d("Achtung!", MessageSingleton.getInstance().getStatus().toString());
+                    switch (MessageSingleton.getInstance().getStatus()) {
+                        case working:
+                            break;
+                        case networkUnavailable:
+                            showToast();
+                            break;
+                        default:
+                    }
+                }
+            });
+
+        }
+
+        public void showToast() {
+            Toast.makeText(getContext(), R.string.chat_offline,
+                    Toast.LENGTH_SHORT).show();
+        }
+
 
     /**
      * This interface must be implemented by activities that contain this

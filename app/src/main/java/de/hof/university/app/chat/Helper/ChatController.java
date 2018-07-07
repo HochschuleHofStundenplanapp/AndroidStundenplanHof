@@ -2,10 +2,13 @@ package de.hof.university.app.chat.Helper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 
 import de.hof.university.app.chat.ChatCommunicator;
+import de.hof.university.app.chat.MessageSingleton;
 
 public class ChatController {
 
@@ -13,7 +16,8 @@ public class ChatController {
     private final String PREFERENCES_CHAT = "chatPrefs";
     private final String CHAT_KEY = "alreadyCreated";
     private final String USERNAME_KEY = "username";
-    private UserGenerator userGen;
+    private final UserGenerator userGen;
+    private final ConnectionMannager conManager;
     private Context context;
     private ChatCommunicator chatCommunicator;
     private SharedPreferences prefs;
@@ -22,6 +26,7 @@ public class ChatController {
 
     public ChatController(Context context, String splusname){
         userGen = new UserGenerator();
+        conManager = new ConnectionMannager(context);
         this.splusname = splusname;
         this.context = context;
         trimmer = new StringTrimmer();
@@ -41,7 +46,6 @@ public class ChatController {
         chatCommunicator.setNickname(prefs.getString(USERNAME_KEY,"DefaultUser"));
         chatCommunicator.setRoomname(trimmer.trimmTill(splusname,'%'));
         chatCommunicator.execute();
-
     }
 
     private boolean checkIfUserExist(){
@@ -66,8 +70,6 @@ public class ChatController {
     public void stopChat(){
         chatCommunicator.disconnect();
     }
-
-
 
 
 }

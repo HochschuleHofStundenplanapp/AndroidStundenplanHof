@@ -1,5 +1,7 @@
 package de.hof.university.app.chat;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -10,7 +12,6 @@ import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.bosh.BOSHConfiguration;
 import org.jivesoftware.smack.bosh.XMPPBOSHConnection;
 import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smack.util.Async;
 import org.jivesoftware.smackx.iqregister.AccountManager;
 import org.jivesoftware.smackx.muc.MucEnterConfiguration;
 import org.jivesoftware.smackx.muc.MultiUserChat;
@@ -201,9 +202,21 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
     }
 
     public void disconnect(){
-        multiChat.removeMessageListener(this);
-        conn1.disconnect();
+        if (multiChat != null){
+            multiChat.removeMessageListener(this);
+            conn1.disconnect();
+        }
+
         MessageSingleton.getInstance().clear();
     }
+
+
+
+
+
+
+
+
+
 
 }
