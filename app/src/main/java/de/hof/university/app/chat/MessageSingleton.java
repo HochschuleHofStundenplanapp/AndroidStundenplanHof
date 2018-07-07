@@ -2,19 +2,26 @@ package de.hof.university.app.chat;
 
 import java.util.ArrayList;
 import java.util.Observable;
-import java.util.Observer;
 
-class MessageSingleton extends Observable {
+public class MessageSingleton extends Observable {
 
     private static final MessageSingleton ourInstance = new MessageSingleton();
     private ArrayList<ChatMessage> chatMessageArrayList;
+    public enum ErrorEnum {
+        working,
+        networkUnavailable,
+        openfireUnvailable,
+        defaultError
+    }
+    private ErrorEnum status;
 
-    static MessageSingleton getInstance() {
+    public static MessageSingleton getInstance() {
         return ourInstance;
     }
 
     private MessageSingleton() {
         chatMessageArrayList = new ArrayList<ChatMessage>();
+        status = ErrorEnum.working;
     }
 
     public void appendMessage(ChatMessage message){
@@ -28,5 +35,14 @@ class MessageSingleton extends Observable {
 
     public void clear(){
         this.chatMessageArrayList = new ArrayList<ChatMessage>();
+    }
+
+    public void changeStatus(ErrorEnum status){
+        this.status = status;
+        notifyObservers();
+    }
+
+    public ErrorEnum getStatus() {
+        return status;
     }
 }
