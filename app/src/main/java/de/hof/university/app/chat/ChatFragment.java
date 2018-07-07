@@ -12,7 +12,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -107,7 +109,7 @@ public class ChatFragment extends Fragment implements Observer {
 
         final MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='"+ ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack)+"'>"+ "Stundenplanchat" +"</font>"));
-        mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
+        mainActivity.setDrawerState(false);
 
         chatAdapter = new ChatAdapter(chatlist);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(MainActivity.getAppContext());
@@ -121,15 +123,18 @@ public class ChatFragment extends Fragment implements Observer {
     }
 
     public void sendMessage (View v){
-        Log.d("send Message: ", myEditTextView.getText().toString());
-        ChatMessage msg = new ChatMessage("", myEditTextView.getText().toString());
-        chatlist.add(msg);
+        Log.d("myEditTextView:", "says " + myEditTextView.getText());
+        if (myEditTextView.getText().length() > 1){
+            Log.d("send Message: ", myEditTextView.getText().toString());
+            ChatMessage msg = new ChatMessage("", myEditTextView.getText().toString());
+            chatlist.add(msg);
 
-        chatAdapter.notifyDataSetChanged();
-        recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
-        chatCtrl.sendMessage(msg.getMessage());
-        chatAdapter.notifyDataSetChanged();
-        myEditTextView.setText("");
+            chatAdapter.notifyDataSetChanged();
+            recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+            chatCtrl.sendMessage(msg.getMessage());
+            chatAdapter.notifyDataSetChanged();
+            myEditTextView.setText("");
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -176,6 +181,8 @@ public class ChatFragment extends Fragment implements Observer {
         mListener = null;
         chatCtrl.stopChat();
         chatlist.clear();
+        final MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.setDrawerState(true);
     }
 
     @Override

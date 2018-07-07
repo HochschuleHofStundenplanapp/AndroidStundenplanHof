@@ -23,7 +23,7 @@
     <color name="Accent">#0031ca</color>
     <color name="Primary_text">#000000</color>
     <color name="Secondary_text">#bdbdbd</color>
-    <color name="icons">#0031ca</color>
+    <color name="accent_dark">#0031ca</color>
     <color name="divider">#BDBDBD</color>
     <color name="Primary_material2">#F1F3F4</color>
     <color name="material_textgrey">#3C4043</color>

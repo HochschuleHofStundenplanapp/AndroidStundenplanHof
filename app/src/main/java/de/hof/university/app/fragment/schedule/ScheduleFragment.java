@@ -91,6 +91,7 @@ public class ScheduleFragment extends AbstractListFragment {
                     // fragment with this one inside the frame.
                     final FragmentTransaction ft = getFragmentManager().beginTransaction();
                     ft.replace(R.id.content_main, chatfrgmnt);
+                    ft.addToBackStack(null);
                     ft.commit();
                 }
             }

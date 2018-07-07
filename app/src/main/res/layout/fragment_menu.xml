@@ -23,8 +23,8 @@
                 android:layout_height="?attr/actionBarSize"
                 app:tabGravity="fill"
                 app:tabMode="fixed"
-                app:tabSelectedTextColor="@android:color/background_light"
-                app:tabTextColor="@android:color/secondary_text_light_nodisable" />
+                app:tabSelectedTextColor="@color/accent_dark"
+                app:tabTextColor="@color/Primary_text" />
 
         </LinearLayout>
     </android.support.design.widget.AppBarLayout>

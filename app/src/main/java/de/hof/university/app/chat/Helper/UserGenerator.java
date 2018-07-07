@@ -8,8 +8,7 @@ public class UserGenerator {
 
         Random random = new Random();
         int number = random.nextInt(100000);
-        String username = "Guest" + number;
-        return username;
+        return "Guest" + number;
     }
 
 
