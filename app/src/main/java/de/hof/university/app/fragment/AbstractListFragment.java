@@ -83,9 +83,6 @@ public abstract class AbstractListFragment extends android.support.v4.app.Fragme
     public void onResume() {
         super.onResume();
         updateData(false);
-        // falls es eine andere Toolbar Farbe soll
-        //MainActivity mainActivity = (MainActivity) getActivity();
-        //mainActivity.findViewById(R.id.toolbar).setBackgroundColor(getResources().getColor(R.color.colorBlue));
     }
 
 

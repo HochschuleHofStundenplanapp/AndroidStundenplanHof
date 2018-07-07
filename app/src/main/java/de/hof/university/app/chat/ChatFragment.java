@@ -122,7 +122,7 @@ public class ChatFragment extends Fragment implements Observer {
 
     public void sendMessage (View v){
         Log.d("send Message: ", myEditTextView.getText().toString());
-        ChatMessage msg = new ChatMessage("CarlaGuluci91", myEditTextView.getText().toString());
+        ChatMessage msg = new ChatMessage("", myEditTextView.getText().toString());
         chatlist.add(msg);
 
         chatAdapter.notifyDataSetChanged();
