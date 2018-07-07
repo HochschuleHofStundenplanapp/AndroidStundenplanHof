@@ -116,7 +116,7 @@ public class ChatFragment extends Fragment implements Observer {
 
         final MainActivity mainActivity = (MainActivity) getActivity();
         mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='" + ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack) + "'>" + "Stundenplanchat" + "</font>"));
-        mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
+        mainActivity.setDrawerState(false);
 
         chatAdapter = new ChatAdapter(chatlist);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(MainActivity.getAppContext());
