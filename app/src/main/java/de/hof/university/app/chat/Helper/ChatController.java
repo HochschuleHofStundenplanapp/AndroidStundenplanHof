@@ -45,6 +45,7 @@ public class ChatController {
         }
         chatCommunicator.setNickname(prefs.getString(USERNAME_KEY,"DefaultUser"));
         chatCommunicator.setRoomname(trimmer.trimmTill(splusname,'%'));
+        chatCommunicator.execute();
     }
 
     private boolean checkIfUserExist(){

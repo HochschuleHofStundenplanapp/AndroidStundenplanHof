@@ -54,7 +54,7 @@ public class ChatFragment extends Fragment implements Observer {
     private ArrayList<ChatMessage> chatlist = new ArrayList<>();
     private ChatAdapter chatAdapter;
 
-    private de.hof.university.app.debug.ChatFragment.OnFragmentInteractionListener mListener;
+    private OnFragmentInteractionListener mListener;
     private ChatController chatCtrl;
     private ConnectionMannager conManager;
 
@@ -84,9 +84,9 @@ public class ChatFragment extends Fragment implements Observer {
         if (getArguments() != null) {
             MessageSingleton.getInstance().addObserver(this);
             mySplus = getArguments().getString(ARG_SPLUS);
-            chatCtrl = new ChatController(getContext(),mySplus);
-            conManager = new ConnectionMannager(getContext());
+            chatCtrl = new ChatController(getContext(), mySplus);
             chatCtrl.login();
+            conManager = new ConnectionMannager(getContext());
             MessageSingleton.getInstance().addObserver(this);
         }
     }
@@ -104,7 +104,7 @@ public class ChatFragment extends Fragment implements Observer {
         myEditTextView = v.findViewById(R.id.editChat);
         mySendButton = v.findViewById(R.id.sendMessageButton);
 
-        mySendButton.setOnClickListener( new View.OnClickListener() {
+        mySendButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -113,7 +113,7 @@ public class ChatFragment extends Fragment implements Observer {
         });
 
         final MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='"+ ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack)+"'>"+ "Stundenplanchat" +"</font>"));
+        mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='" + ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack) + "'>" + "Stundenplanchat" + "</font>"));
         mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
 
         chatAdapter = new ChatAdapter(chatlist);
@@ -127,94 +127,95 @@ public class ChatFragment extends Fragment implements Observer {
         return v;
     }
 
-    public void sendMessage (View v){
-        if (!conManager.checkInternet()){
+    public void sendMessage(View v) {
+        if (!conManager.checkInternet()) {
             mySendButton.setActivated(false);
             mySendButton.setTextColor(Color.GRAY);
             showToast();
-        }else{
+        } else {
             mySendButton.setActivated(true);
             mySendButton.setTextColor(Color.BLACK);
             Log.d("send Message: ", myEditTextView.getText().toString());
             ChatMessage msg = new ChatMessage("CarlaGuluci91", myEditTextView.getText().toString());
             chatlist.add(msg);
 
-        chatAdapter.notifyDataSetChanged();
-        recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
-        chatCtrl.sendMessage(msg.getMessage());
-        chatAdapter.notifyDataSetChanged();
-        myEditTextView.setText("");
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            chatAdapter.notifyDataSetChanged();
+            recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+            chatCtrl.sendMessage(msg.getMessage());
+            chatAdapter.notifyDataSetChanged();
+            myEditTextView.setText("");
         }
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (chatAdapter != null) {
-                chatAdapter.notifyDataSetChanged();
-        }
-        //if (context instanceof OnFragmentInteractionListener) {
-        // mListener = (OnFragmentInteractionListener) context;
-        //} else {
-        //  throw new RuntimeException(context.toString()
-        //        + " must implement OnFragmentInteractionListener");
-        //}
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-        chatCtrl.stopChat();
-        chatlist.clear();
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-        Log.d("mySplus ist:", mySplus);
-        myLectureTitleTextView.setText(mySplus);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    public void update(Observable observable, Object o) {
-        this.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ArrayList<ChatMessage> messages = MessageSingleton.getInstance().getMessages();
-                chatlist.clear();
-                chatlist.addAll(messages);
-                chatAdapter.notifyDataSetChanged();
-                recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
-                Log.d("Achtung!",MessageSingleton.getInstance().getStatus().toString());
-                switch (MessageSingleton.getInstance().getStatus()){
-                    case working:
-                        break;
-                    case networkUnavailable:
-                        showToast();
-                        break;
-                        default:
-                }
+        // TODO: Rename method, update argument and hook method into UI event
+        public void onButtonPressed (Uri uri){
+            if (mListener != null) {
+                mListener.onFragmentInteraction(uri);
             }
-        });
+        }
 
-    }
+        @Override
+        public void onAttach(Context context){
+            super.onAttach(context);
+            if (chatAdapter != null) {
+                chatAdapter.notifyDataSetChanged();
+            }
+            //if (context instanceof OnFragmentInteractionListener) {
+            // mListener = (OnFragmentInteractionListener) context;
+            //} else {
+            //  throw new RuntimeException(context.toString()
+            //        + " must implement OnFragmentInteractionListener");
+            //}
+        }
 
-    public void showToast(){
-        Toast.makeText(getContext(),R.string.chat_offline,
-                Toast.LENGTH_SHORT).show();
-    }
+        @Override
+        public void onDetach () {
+            super.onDetach();
+            mListener = null;
+            chatCtrl.stopChat();
+            chatlist.clear();
+        }
+
+        @Override
+        public void onResume () {
+            super.onResume();
+            Log.d("mySplus ist:", mySplus);
+            myLectureTitleTextView.setText(mySplus);
+        }
+
+        @Override
+        public void onStop(){
+            super.onStop();
+        }
+
+        @Override
+        public void update (Observable observable, Object o){
+            this.getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ArrayList<ChatMessage> messages = MessageSingleton.getInstance().getMessages();
+                    chatlist.clear();
+                    chatlist.addAll(messages);
+                    chatAdapter.notifyDataSetChanged();
+                    recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+                    Log.d("Achtung!", MessageSingleton.getInstance().getStatus().toString());
+                    switch (MessageSingleton.getInstance().getStatus()) {
+                        case working:
+                            break;
+                        case networkUnavailable:
+                            showToast();
+                            break;
+                        default:
+                    }
+                }
+            });
+
+        }
+
+        public void showToast() {
+            Toast.makeText(getContext(), R.string.chat_offline,
+                    Toast.LENGTH_SHORT).show();
+        }
 
 
     /**
