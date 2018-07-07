@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -33,6 +34,8 @@ import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.chat.Helper.ChatController;
 import de.hof.university.app.chat.Helper.ConnectionMannager;
+
+import static android.content.Context.INPUT_METHOD_SERVICE;
 
 
 /**
@@ -49,6 +52,7 @@ public class ChatFragment extends Fragment implements Observer {
     private static final String ARG_LECTURE = "mylecture";
 
     private String mySplus;
+    private String myLectureName;
     private TextView myLectureTitleTextView;
     private RecyclerView recyclerView;
     private EditText myEditTextView;
@@ -72,10 +76,11 @@ public class ChatFragment extends Fragment implements Observer {
      * @return A new instance of fragment ChatFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ChatFragment newInstance(String param1) {
+    public static ChatFragment newInstance(String param1, String param2) {
         ChatFragment fragment = new ChatFragment();
         Bundle args = new Bundle();
         args.putString(ARG_SPLUS, param1);
+        args.putString(ARG_LECTURE,param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -86,6 +91,7 @@ public class ChatFragment extends Fragment implements Observer {
         if (getArguments() != null) {
             MessageSingleton.getInstance().addObserver(this);
             mySplus = getArguments().getString(ARG_SPLUS);
+            myLectureName = getArguments().getString(ARG_LECTURE);
             chatCtrl = new ChatController(getContext(), mySplus);
             chatCtrl.login();
             conManager = new ConnectionMannager(getContext());
@@ -130,7 +136,7 @@ public class ChatFragment extends Fragment implements Observer {
     }
 
     public void sendMessage(View v) {
-        if (myEditTextView.getText().length() > 1){
+        if (myEditTextView.getText().length() > 0){
             if (!conManager.checkInternet()) {
                 mySendButton.setActivated(false);
                 mySendButton.setTextColor(Color.GRAY);
@@ -149,6 +155,11 @@ public class ChatFragment extends Fragment implements Observer {
                 myEditTextView.setText("");
             }
         }
+
+        // hide virtual keyboard
+        InputMethodManager im = (InputMethodManager)getActivity().getSystemService(INPUT_METHOD_SERVICE);
+        im.hideSoftInputFromWindow(v.getWindowToken(),
+                InputMethodManager.RESULT_UNCHANGED_SHOWN);
     }
 
         // TODO: Rename method, update argument and hook method into UI event
@@ -174,19 +185,18 @@ public class ChatFragment extends Fragment implements Observer {
 
         @Override
         public void onDetach () {
-            super.onDetach();
-            mListener = null;
             chatCtrl.stopChat();
             chatlist.clear();
             final MainActivity mainActivity = (MainActivity) getActivity();
             mainActivity.setDrawerState(true);
+            super.onDetach();
         }
 
         @Override
         public void onResume () {
             super.onResume();
             Log.d("mySplus ist:", mySplus);
-            myLectureTitleTextView.setText(mySplus);
+            myLectureTitleTextView.setText(myLectureName);
         }
 
         @Override

@@ -31,6 +31,11 @@
         <item name="colorControlNormal">@color/Accent</item>
         <item name="colorControlActivated">@color/Accent</item>
         <item name="colorControlHighlight">@color/Accent</item>
+        <item name="actionOverflowButtonStyle">@style/MyOverflowButtonStyle</item>
+    </style>
+
+    <style name="MyOverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">@color/Accent</item>
     </style>
 
 </resources>

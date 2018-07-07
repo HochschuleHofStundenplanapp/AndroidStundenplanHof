@@ -314,6 +314,7 @@ public class MainActivity extends AppCompatActivity
             mDrawerToggle.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
 			mDrawerToggle.syncState();
 			navigationDrawerIsEnabled =false;
+
 		}
 	}
 
