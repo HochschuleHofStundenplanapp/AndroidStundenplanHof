@@ -25,4 +25,8 @@ class MessageSingleton extends Observable {
     public ArrayList<ChatMessage> getMessages(){
         return chatMessageArrayList;
     }
+
+    public void clear(){
+        this.chatMessageArrayList = new ArrayList<ChatMessage>();
+    }
 }

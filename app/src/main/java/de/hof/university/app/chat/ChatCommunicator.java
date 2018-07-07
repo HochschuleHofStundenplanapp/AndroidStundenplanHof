@@ -65,14 +65,13 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
     protected String doInBackground(String... strings) {
 
         BOSHConfiguration config;
-
         if(newUser){
             try {
                 config = BOSHConfiguration.builder()
                         .setUseHttps(true)
-                        .setXmppDomain("sl-app01-test01.hof-university.de")
+                        .setXmppDomain("sl-app01.hof-university.de")
                         .setFile("/http-bind/")
-                        .setHost("apptest.hof-university.de")
+                        .setHost("app.hof-university.de")
                         .setPort(443)
                         .build();
                 conn1 = new XMPPBOSHConnection(config);
@@ -96,9 +95,9 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
             config = BOSHConfiguration.builder()
                         .setUseHttps(true)
                         .setUsernameAndPassword(this.nickname, this.nickname)
-                        .setXmppDomain("sl-app01-test01.hof-university.de")
+                        .setXmppDomain("sl-app01.hof-university.de")
                         .setFile("/http-bind/")
-                        .setHost("apptest.hof-university.de")
+                        .setHost("app.hof-university.de")
                         .setPort(443)
                         .build();
         }
@@ -124,7 +123,7 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
         }
         multiChatManager = MultiUserChatManager.getInstanceFor(conn1);
         try {
-            jid = JidCreate.entityBareFrom(roomname + "@" + "chat.sl-app01-test01.hof-university.de");
+            jid = JidCreate.entityBareFrom(roomname + "@" + "chat.sl-app01.hof-university.de");
 
             multiChat = multiChatManager.getMultiUserChat(jid);
             try {
@@ -204,6 +203,7 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
     public void disconnect(){
         multiChat.removeMessageListener(this);
         conn1.disconnect();
+        MessageSingleton.getInstance().clear();
     }
 
 }
