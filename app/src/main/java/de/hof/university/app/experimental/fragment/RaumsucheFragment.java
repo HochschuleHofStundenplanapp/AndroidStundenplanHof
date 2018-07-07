@@ -22,6 +22,8 @@ import android.app.Fragment;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -91,8 +93,9 @@ public class RaumsucheFragment extends android.support.v4.app.Fragment {
     @Override
     public final void onResume() {
         super.onResume();
-        MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().setTitle(R.string.raumsuche);
+        final MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='"+ ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack)+"'>"+ getString(R.string.raumsuche)+"</font>"));
+        mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_accent_24dp);
 
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
         MenuItem item = navigationView.getMenu().findItem(R.id.nav_experimental);

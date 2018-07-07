@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -21,6 +22,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -52,7 +54,7 @@ public class ChatFragment extends Fragment implements Observer {
     private ArrayList<ChatMessage> chatlist = new ArrayList<>();
     private ChatAdapter chatAdapter;
 
-    private OnFragmentInteractionListener mListener;
+    private de.hof.university.app.debug.ChatFragment.OnFragmentInteractionListener mListener;
     private ChatController chatCtrl;
     private ConnectionMannager conManager;
 
@@ -85,6 +87,7 @@ public class ChatFragment extends Fragment implements Observer {
             chatCtrl = new ChatController(getContext(),mySplus);
             conManager = new ConnectionMannager(getContext());
             chatCtrl.login();
+            MessageSingleton.getInstance().addObserver(this);
         }
     }
 
@@ -136,13 +139,11 @@ public class ChatFragment extends Fragment implements Observer {
             ChatMessage msg = new ChatMessage("CarlaGuluci91", myEditTextView.getText().toString());
             chatlist.add(msg);
 
-            chatAdapter.notifyDataSetChanged();
-            recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
-            chatCtrl.sendMessage(msg.getMessage());
-            chatAdapter.notifyDataSetChanged();
-            myEditTextView.setText("");
-        }
-
+        chatAdapter.notifyDataSetChanged();
+        recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+        chatCtrl.sendMessage(msg.getMessage());
+        chatAdapter.notifyDataSetChanged();
+        myEditTextView.setText("");
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -188,7 +189,6 @@ public class ChatFragment extends Fragment implements Observer {
 
     @Override
     public void update(Observable observable, Object o) {
-
         this.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -208,7 +208,6 @@ public class ChatFragment extends Fragment implements Observer {
                 }
             }
         });
-
 
     }
 

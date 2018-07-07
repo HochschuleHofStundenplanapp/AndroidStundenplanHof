@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.EditTextPreference;
 import android.support.v7.preference.Preference;
@@ -16,6 +17,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.widget.TextView;
@@ -103,7 +105,8 @@ public class SettingsCalendarSynchronizationFragment extends PreferenceFragmentC
 
 		final MainActivity mainActivity = (MainActivity) getActivity();
 		try {
-			mainActivity.getSupportActionBar().setTitle(R.string.calendar_synchronization);
+			mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='"+ ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack)+"'>"+ getString(R.string.calendar_synchronization)+"</font>"));
+			mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_accent_24dp);
 		} catch (NullPointerException e) {
 			Log.e(TAG, "NullPointerException bei setTitle abgefangen:", e);
 		}

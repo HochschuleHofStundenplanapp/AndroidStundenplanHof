@@ -17,17 +17,17 @@
 
 <resources>
     //Appfarben
-    <color name="Primary">#FFFF</color>
-    <color name="Primary_dark">#F1F3F4</color>
+    <color name="Primary">#fafafa</color>
+    <color name="Primary_dark">#c7c7c7</color>
     <color name="Primary_light">#C5CAE9</color>
-    <color name="Accent">#3700B3</color>
-    <color name="Primary_text">#212121</color>
-    <color name="Secondary_text">#757575</color>
-    <color name="icons">#6200EE</color>
+    <color name="Accent">#0031ca</color>
+    <color name="Primary_text">#000000</color>
+    <color name="Secondary_text">#bdbdbd</color>
+    <color name="icons">#0031ca</color>
     <color name="divider">#BDBDBD</color>
     <color name="Primary_material2">#F1F3F4</color>
     <color name="material_textgrey">#3C4043</color>
-    <color name="material_accent">#5c6bc0</color>
+    <color name="material_accent">#3949ab</color>
 
     //HSHof_CDFarben
     <color name="colorBlack">#000000</color>
