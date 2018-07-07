@@ -48,6 +48,7 @@ import java.util.Set;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.adapter.ScheduleAdapter;
+import de.hof.university.app.chat.Helper.ConnectionMannager;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.chat.ChatFragment;
 import de.hof.university.app.fragment.AbstractListFragment;
@@ -78,20 +79,25 @@ public class ScheduleFragment extends AbstractListFragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                TextView myTextv = view.findViewById(R.id.stundenplan_details);
-                Log.d("onItemClick", "i was clicked m8");
-                Log.d("onItemClick", "v: " + myTextv.getText() );
+                ConnectionMannager conMan = new ConnectionMannager(getContext());
+                if (conMan.checkInternet()) {
+                    TextView myTextv = view.findViewById(R.id.stundenplan_details);
+                    Log.d("onItemClick", "v: " + myTextv.getText());
 
-                //ChatFragment chatfrgmnt = (ChatFragment) getFragmentManager().findFragmentById(R.id.chatfragment);
-                LectureItem obc = (LectureItem) dataList.get(i);
-                ChatFragment chatfrgmnt = ChatFragment.newInstance(obc.getId());
-                if (chatfrgmnt != null){
+                    //ChatFragment chatfrgmnt = (ChatFragment) getFragmentManager().findFragmentById(R.id.chatfragment);
+                    LectureItem obc = (LectureItem) dataList.get(i);
+                    ChatFragment chatfrgmnt = ChatFragment.newInstance(obc.getId());
+                    if (chatfrgmnt != null) {
 
-                    // Execute a transaction, replacing any existing
-                    // fragment with this one inside the frame.
-                    final FragmentTransaction ft = getFragmentManager().beginTransaction();
-                    ft.replace(R.id.content_main, chatfrgmnt);
-                    ft.commit();
+                        // Execute a transaction, replacing any existing
+                        // fragment with this one inside the frame.
+                        final FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.replace(R.id.content_main, chatfrgmnt);
+                        ft.commit();
+                    }
+                }else {
+                    Toast.makeText(getContext(),R.string.chat_no_internet,
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
