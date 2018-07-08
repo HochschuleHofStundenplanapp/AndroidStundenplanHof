@@ -214,7 +214,6 @@ public class ChatFragment extends Fragment implements Observer {
                     chatlist.addAll(messages);
                     chatAdapter.notifyDataSetChanged();
                     recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
-                    Log.d("Achtung!", MessageSingleton.getInstance().getStatus().toString());
                     switch (MessageSingleton.getInstance().getStatus()) {
                         case working:
                             break;

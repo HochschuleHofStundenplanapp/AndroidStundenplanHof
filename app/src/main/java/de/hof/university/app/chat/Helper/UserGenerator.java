@@ -11,5 +11,15 @@ public class UserGenerator {
         return "Guest" + number;
     }
 
+    public String generatePassword(){
+        Random random = new Random();
+        int number = random.nextInt(10000000);
+
+        while (number < 1000)
+            number = random.nextInt(10000000);
+
+        return Integer.toString(number);
+    }
+
 
 }

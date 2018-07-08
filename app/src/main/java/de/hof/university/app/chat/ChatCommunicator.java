@@ -17,6 +17,7 @@ import org.jivesoftware.smackx.muc.MucEnterConfiguration;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.MultiUserChatException;
 import org.jivesoftware.smackx.muc.MultiUserChatManager;
+import org.jivesoftware.smackx.xdata.Form;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.Jid;
 import org.jxmpp.jid.impl.JidCreate;
@@ -30,13 +31,35 @@ import de.hof.university.app.chat.Helper.StringTrimmer;
 
 public class ChatCommunicator extends AsyncTask<String, String, String> implements MessageListener {
 
+
     private XMPPBOSHConnection conn1;
     private String nickname = "testuser2";
+    private String password = "TestUser2";
     private Boolean newUser = false;
     private MultiUserChat multiChat;
+
     private MultiUserChatManager multiChatManager;
     private String roomname;
     private EntityBareJid jid;
+    private String subject;
+
+
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
 
     public String getNickname() {
         return nickname;
@@ -77,7 +100,7 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
                         .build();
                 conn1 = new XMPPBOSHConnection(config);
                 conn1.connect();
-                createUser(this.nickname,this.nickname);
+                createUser(this.nickname,this.password);
                 newUser = false;
             } catch (XmppStringprepException e) {
                 e.printStackTrace();
@@ -95,7 +118,7 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
         try {
             config = BOSHConfiguration.builder()
                         .setUseHttps(true)
-                        .setUsernameAndPassword(this.nickname, this.nickname)
+                        .setUsernameAndPassword(this.nickname, this.password)
                         .setXmppDomain("sl-app01.hof-university.de")
                         .setFile("/http-bind/")
                         .setHost("app.hof-university.de")
@@ -125,6 +148,7 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
         multiChatManager = MultiUserChatManager.getInstanceFor(conn1);
         try {
             jid = JidCreate.entityBareFrom(roomname + "@" + "chat.sl-app01.hof-university.de");
+
 
             multiChat = multiChatManager.getMultiUserChat(jid);
             try {
@@ -183,8 +207,13 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
         MucEnterConfiguration mucEnterConf = mec.build();
         try {
             multiChat.createOrJoin(mucEnterConf).makeInstant();
+            Form form = multiChat.getConfigurationForm();
+            Form answerForm = form.createAnswerForm();
+            answerForm.setAnswer("muc#roomconfig_roomdesc", subject);
+            multiChat.sendConfigurationForm(answerForm);
         }catch (NullPointerException e){
             multiChat.join(nickname);
+
         }
         if(multiChat.isJoined()){
             multiChat.addMessageListener(this);
