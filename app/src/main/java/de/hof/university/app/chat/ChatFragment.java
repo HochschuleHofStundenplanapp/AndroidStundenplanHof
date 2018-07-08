@@ -92,7 +92,7 @@ public class ChatFragment extends Fragment implements Observer {
             MessageSingleton.getInstance().addObserver(this);
             mySplus = getArguments().getString(ARG_SPLUS);
             myLectureName = getArguments().getString(ARG_LECTURE);
-            chatCtrl = new ChatController(getContext(), mySplus);
+            chatCtrl = new ChatController(getContext(), mySplus,myLectureName);
             chatCtrl.login();
             conManager = new ConnectionMannager(getContext());
             MessageSingleton.getInstance().addObserver(this);
@@ -214,7 +214,6 @@ public class ChatFragment extends Fragment implements Observer {
                     chatlist.addAll(messages);
                     chatAdapter.notifyDataSetChanged();
                     recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
-                    Log.d("Achtung!", MessageSingleton.getInstance().getStatus().toString());
                     switch (MessageSingleton.getInstance().getStatus()) {
                         case working:
                             break;

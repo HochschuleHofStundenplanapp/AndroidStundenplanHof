@@ -16,6 +16,8 @@ public class ChatController {
     private final String PREFERENCES_CHAT = "chatPrefs";
     private final String CHAT_KEY = "alreadyCreated";
     private final String USERNAME_KEY = "username";
+    private final String PASSWORD_KEY = "password";
+    private String subject;
     private final UserGenerator userGen;
     private final ConnectionMannager conManager;
     private Context context;
@@ -24,11 +26,12 @@ public class ChatController {
     private StringTrimmer trimmer;
 
 
-    public ChatController(Context context, String splusname){
+    public ChatController(Context context, String splusname, String subject){
         userGen = new UserGenerator();
         conManager = new ConnectionMannager(context);
         this.splusname = splusname;
         this.context = context;
+        this.subject = subject;
         trimmer = new StringTrimmer();
         chatCommunicator = new ChatCommunicator();
         prefs = context.getSharedPreferences(PREFERENCES_CHAT, Context.MODE_PRIVATE);
@@ -44,7 +47,9 @@ public class ChatController {
             chatCommunicator.setNewUser(true);
         }
         chatCommunicator.setNickname(prefs.getString(USERNAME_KEY,"DefaultUser"));
+        chatCommunicator.setPassword(prefs.getString(PASSWORD_KEY,"DefaultPassword"));
         chatCommunicator.setRoomname(trimmer.trimmTill(splusname,'%'));
+        chatCommunicator.setSubject(subject);
         chatCommunicator.execute();
     }
 
@@ -60,6 +65,7 @@ public class ChatController {
         editor.clear();
         editor.putBoolean(CHAT_KEY, true);
         editor.putString(USERNAME_KEY,userGen.generateUser());
+        editor.putString(PASSWORD_KEY,userGen.generatePassword());
         editor.commit();
     }
 
