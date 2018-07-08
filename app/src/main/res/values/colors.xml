@@ -21,6 +21,8 @@
     <color name="Primary_dark">#c7c7c7</color>
     <color name="Primary_light">#C5CAE9</color>
     <color name="Accent">#0031ca</color>
+    <color name="Accent_light">#D1C4E9</color>
+    <color name="Accent_complement">#41c300</color>
     <color name="Primary_text">#000000</color>
     <color name="Secondary_text">#bdbdbd</color>
     <color name="accent_dark">#0031ca</color>

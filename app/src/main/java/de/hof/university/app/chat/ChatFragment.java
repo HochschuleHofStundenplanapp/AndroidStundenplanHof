@@ -92,7 +92,7 @@ public class ChatFragment extends Fragment implements Observer {
             MessageSingleton.getInstance().addObserver(this);
             mySplus = getArguments().getString(ARG_SPLUS);
             myLectureName = getArguments().getString(ARG_LECTURE);
-            chatCtrl = new ChatController(getContext(), mySplus);
+            chatCtrl = new ChatController(MainActivity.getAppContext(), mySplus);
             chatCtrl.login();
             conManager = new ConnectionMannager(getContext());
             MessageSingleton.getInstance().addObserver(this);

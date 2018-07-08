@@ -50,7 +50,7 @@ public class ChatController {
 
     private boolean checkIfUserExist(){
         SharedPreferences prefs = context.getSharedPreferences(PREFERENCES_CHAT, Context.MODE_PRIVATE);
-        Log.d("Achtung",prefs.getString(USERNAME_KEY,"Nichts"));
+        Log.d("Obacht! ",prefs.getString(USERNAME_KEY,"Nichts"));
         return prefs.getBoolean(CHAT_KEY,false);
     }
 
