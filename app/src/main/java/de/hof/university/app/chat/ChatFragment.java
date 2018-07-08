@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -92,7 +93,7 @@ public class ChatFragment extends Fragment implements Observer {
             MessageSingleton.getInstance().addObserver(this);
             mySplus = getArguments().getString(ARG_SPLUS);
             myLectureName = getArguments().getString(ARG_LECTURE);
-            chatCtrl = new ChatController(MainActivity.getAppContext(), mySplus);
+            chatCtrl = new ChatController(MainActivity.getAppContext(), mySplus, myLectureName);
             chatCtrl.login();
             conManager = new ConnectionMannager(getContext());
             MessageSingleton.getInstance().addObserver(this);
@@ -138,14 +139,18 @@ public class ChatFragment extends Fragment implements Observer {
     public void sendMessage(View v) {
         if (myEditTextView.getText().length() > 0){
             if (!conManager.checkInternet()) {
-                mySendButton.setActivated(false);
-                mySendButton.setTextColor(Color.GRAY);
                 showToast();
-            }else {
+                try {
+                    ((MainActivity)getActivity()).onBackPressed();
+                }catch (Exception e){
+
+                }
+            }
+            else {
                 mySendButton.setActivated(true);
                 mySendButton.setTextColor(Color.BLACK);
                 Log.d("send Message: ", myEditTextView.getText().toString());
-                ChatMessage msg = new ChatMessage("CarlaGuluci91", myEditTextView.getText().toString());
+                ChatMessage msg = new ChatMessage(chatAdapter.thisUser, myEditTextView.getText().toString());
                 chatlist.add(msg);
 
                 chatAdapter.notifyDataSetChanged();
@@ -206,7 +211,8 @@ public class ChatFragment extends Fragment implements Observer {
 
         @Override
         public void update (Observable observable, Object o){
-            this.getActivity().runOnUiThread(new Runnable() {
+        try {
+            (this.getActivity()).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     ArrayList<ChatMessage> messages = MessageSingleton.getInstance().getMessages();
@@ -224,6 +230,9 @@ public class ChatFragment extends Fragment implements Observer {
                     }
                 }
             });
+        }catch (Exception e){
+
+        }
 
         }
 

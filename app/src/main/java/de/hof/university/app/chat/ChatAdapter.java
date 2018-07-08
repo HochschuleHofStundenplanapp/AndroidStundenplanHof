@@ -18,7 +18,7 @@ import de.hof.university.app.R;
  */
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
     private ArrayList<ChatMessage> chatList;
-    private String thisUser  = "";
+    public String thisUser  = "";
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
        public TextView sender,textmessage;

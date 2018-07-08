@@ -21,10 +21,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,13 +40,18 @@ import java.util.Locale;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.adapter.MealAdapter;
+import de.hof.university.app.chat.ChatCommunicator;
+import de.hof.university.app.chat.ChatFragment;
+import de.hof.university.app.chat.Helper.ChatController;
+import de.hof.university.app.chat.Helper.ConnectionMannager;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.model.BigListItem;
 import de.hof.university.app.model.LastUpdated;
 import de.hof.university.app.model.MediumListItem;
 import de.hof.university.app.model.meal.Meal;
+import de.hof.university.app.model.schedule.LectureItem;
 
-public class MealFragment extends AbstractListFragment {
+public class MealFragment extends AbstractListFragment{
 
 	public final static String TAG = "MealFragment";
 	private static final String ARG_SECTION_NUMBER ="section_number";
@@ -71,6 +81,7 @@ public class MealFragment extends AbstractListFragment {
 	@Override
 	public final void onResume() {
 		super.onResume();
+
 		final MainActivity mainActivity = (MainActivity) getActivity();
 		mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='"+ ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack)+"'>"+ getString(R.string.speiseplan)+"</font>"));
 		mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_accent_24dp);

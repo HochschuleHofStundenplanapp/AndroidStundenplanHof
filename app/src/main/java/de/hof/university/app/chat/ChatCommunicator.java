@@ -222,10 +222,33 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
 
     public void sendMessage(String message){
         try {
-            multiChat.sendMessage(message);
+            if (conn1.isConnected()){
+                multiChat.sendMessage(message);
+            }
+            else {
+                conn1.connect();
+                multiChat.join(Resourcepart.from(this.nickname));
+                multiChat.sendMessage(message);
+            }
         } catch (SmackException.NotConnectedException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (MultiUserChatException.MucAlreadyJoinedException e) {
+            e.printStackTrace();
+        } catch (XMPPException.XMPPErrorException e) {
+            e.printStackTrace();
+        } catch (XmppStringprepException e) {
+            e.printStackTrace();
+        } catch (SmackException.NoResponseException e) {
+            e.printStackTrace();
+        } catch (MultiUserChatException.NotAMucServiceException e) {
+            e.printStackTrace();
+        } catch (XMPPException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SmackException e) {
             e.printStackTrace();
         }
     }
