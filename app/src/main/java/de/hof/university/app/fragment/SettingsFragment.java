@@ -18,6 +18,9 @@ package de.hof.university.app.fragment;
 
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.app.ProgressDialog;
@@ -146,6 +149,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
         // GDrive Sync
         final CheckBoxPreference gDriveSync = (CheckBoxPreference) findPreference("drive_sync");
+        gDriveSync.setEnabled(isNetworkAvailable());
         gDriveSync.setOnPreferenceChangeListener((preference, newValue) -> {
             final boolean isChecked = (Boolean) newValue;
             gDriveCtrl.signInIfNeeded(input -> {
@@ -299,7 +303,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         enableSettingsSummary();
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
-       
+
 
     private void sync(boolean isChecked) {
         final CheckBoxPreference gDriveSync = (CheckBoxPreference) findPreference("drive_sync");
@@ -342,6 +346,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         }
     }
 
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
 
     private void resetAllSavedSettings() {
         settingsCtrl.resetSettings();
