@@ -20,5 +20,11 @@ package de.hof.university.app.experimental.model;
  * Created by Lukas on 05.07.2016.
  */
 public interface Level {
-    int getLevel();
+    
+    final public static int LEVEL_0_RAUM = 0 ;
+	final public static int LEVEL_1_RAUMKATEGORIE = 1 ;
+	final public static int LEVEL_2_SUCHE = 2 ;
+	
+	
+	int getLevel();
 }

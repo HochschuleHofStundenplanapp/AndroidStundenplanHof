@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2018 Hochschule Hof
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+
 package de.hof.university.app.GDrive;
 
 import android.app.Activity;
@@ -128,7 +145,7 @@ public class GoogleDriveController {
      * @param googleSignInAccount The account which was signed in to.
      */
     private void createDriveClients(GoogleSignInAccount googleSignInAccount) {
-        Log.i(TAG, "Update view with sign-in account.");
+        //Log.i(TAG, "Update view with sign-in account.");
         // Build a drive client.
         mDriveClient = Drive.getDriveClient(getActivity().getApplicationContext(), googleSignInAccount);
         // Build a drive resource client.
@@ -162,7 +179,7 @@ public class GoogleDriveController {
 
 
     public boolean isSignedIn() {
-        GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity());
+        final GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(getActivity());
         return mGoogleSignInClient != null
                 && (signInAccount != null
                 && signInAccount.getGrantedScopes().contains(Drive.SCOPE_FILE));
@@ -180,8 +197,6 @@ public class GoogleDriveController {
                 .addOnSuccessListener(googleSignInAccount -> {
 
                     createDriveClients(googleSignInAccount);
-
-
                     Log.i(TAG, "Silent sign in succesfully");
 
                 }).addOnFailureListener(e -> {
@@ -196,7 +211,7 @@ public class GoogleDriveController {
 
     public void registerCallback(GDriveCallbackManager manager, GDriveCallback callback) {
         if(!(manager instanceof GDriveCallbackManagerImpl)){
-            throw new RuntimeException("Unexpected CallbackManager, please use the provided CallbackManager Factory");
+            throw new RuntimeException(context.getString(R.string.gdrive_unexpected_callback_manager));
         }
 
         ((GDriveCallbackManagerImpl)manager).registerCallback(callback);
@@ -205,7 +220,7 @@ public class GoogleDriveController {
 
     public void unregisterCallback(final GDriveCallbackManager manager){
         if(!(manager instanceof GDriveCallbackManagerImpl)){
-            throw new RuntimeException("Unexpected CallbackManager, please use the provided CallbackManager Factory");
+            throw new RuntimeException(context.getString(R.string.gdrive_unexpected_callback_manager));
         }
 
         ((GDriveCallbackManagerImpl)manager).unregisterCallback();
@@ -231,24 +246,20 @@ public class GoogleDriveController {
                     .setDescription(timestamp.getTime()+"")
                     .build();
 
-            Log.d("#########", "called");
-
             return getDriveResourceClient().createFile(parent, metadataChangeSet, contents);
         }).addOnSuccessListener(driveFileTask -> {
-            Toast.makeText(context, filename + " saved successfully", Toast.LENGTH_LONG).show();
+            Log.i(TAG, filename + " saved successfully");
+            //Toast.makeText(context, filename + " saved successfully", Toast.LENGTH_LONG).show();
         }).addOnFailureListener(e -> Toast.makeText(context, filename + " NOT saved", Toast.LENGTH_LONG).show());
     }
 
     public Metadata getMetadataNamed(String name, MetadataBuffer metadataBuffer){
         Metadata defaultMetadata = metadataBuffer.get(0);
-        Log.i(TAG, "Search " + name);
         for (Metadata metadata: metadataBuffer){
-            Log.i(TAG, "Current File: " + metadata.getTitle());
             if(metadata.getTitle().equals(name)){
                 defaultMetadata = metadata;
             }
         }
-        Log.i(TAG, "Found " + defaultMetadata.getTitle());
 
         return defaultMetadata;
     }
@@ -280,15 +291,14 @@ public class GoogleDriveController {
         Log.i(TAG, "Save shared prefs called");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-
-        this.saveInDrive("Preferences", new HashMap<>(prefs.getAll()), new Date());
+        this.saveInDrive(context.getString(R.string.preferences_file), new HashMap<>(prefs.getAll()), new Date());
 
     }
 
     public void getAppFolderFileList(final OnMetadataBufferReady completion){
         final Query query = new Query.Builder()
                 .addFilter(Filters.or(Filters.eq(SearchableField.TITLE, context.getString(R.string.myschedule)),
-                        Filters.eq(SearchableField.TITLE, "Preferences")))
+                        Filters.eq(SearchableField.TITLE, context.getString(R.string.preferences_file))))
                 .build();
 
         final Task<DriveFolder> appFolderTask = getDriveResourceClient().getAppFolder();
@@ -296,7 +306,7 @@ public class GoogleDriveController {
         Tasks.whenAll(appFolderTask).continueWith(task -> {
             final Task<MetadataBuffer> metadataBufferTask = getDriveResourceClient().queryChildren(appFolderTask.getResult(), query);
             return metadataBufferTask;
-        }).addOnSuccessListener(metadataBufferTask -> Tasks.whenAll(metadataBufferTask).continueWith(task -> metadataBufferTask.getResult()).addOnFailureListener(e -> Log.i("####", "Failed to read MetadataBuffer")).addOnSuccessListener(metadata -> completion.handleMetadataBuffer(metadata)));
+        }).addOnSuccessListener(metadataBufferTask -> Tasks.whenAll(metadataBufferTask).continueWith(task -> metadataBufferTask.getResult()).addOnFailureListener(e -> Log.i(TAG, "Failed to read MetadataBuffer")).addOnSuccessListener(metadata -> completion.handleMetadataBuffer(metadata)));
 
 
     }
@@ -318,7 +328,6 @@ public class GoogleDriveController {
                 outputStream.close();
 
                 metadataBuffer.release();
-                Log.i(TAG, updatedAt.getTime() + " in lAST vIEWED BY ME");
                 MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
                         .setTitle(filename)
                         .setDescription(updatedAt.getTime()+"")
@@ -328,27 +337,24 @@ public class GoogleDriveController {
                 //We have to either commit or discard Changes Made to to Drive File, we only read from it so we can discard Changes. (There were none)
                 return getDriveResourceClient().commitContents(contents, metadataChangeSet);
             }).addOnSuccessListener(aVoid -> {
-                Toast.makeText(context, "Updated " + filename, Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, "Updated " + filename, Toast.LENGTH_LONG).show();
                 getDriveClient().requestSync();
 
             }).addOnFailureListener(e -> {
                 e.printStackTrace();
-                Toast.makeText(context, "Update " + filename + " failed", Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, "Update " + filename + " failed", Toast.LENGTH_LONG).show();
             });
         });
     }
 
     public void updateMyScheduleFromDrive(){
+        Log.i(TAG, "Update my schedule called");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         //Save current Date of MySchedule in SharedPrefs for later update checks
         final Date myScheduleDate = new Date();
         this.restoreActive = true;
         prefs.edit().putLong(context.getString(R.string.PREF_KEY_MYSCHEDULE_DATE), myScheduleDate.getTime()).commit();
-        Log.i(TAG, myScheduleDate.getTime() + " in Shared Prefs");
         this.restoreActive = false;
-
-        Log.i(TAG, "Update my schedule called");
-        //ArrayList<LectureItem> lectures = DataManager.getInstance().getMySchedule(context).getLectures();
         MySchedule lectures = DataManager.getInstance().getMySchedule(context);
         this.updateInDrive(context.getString(R.string.myschedule), lectures, myScheduleDate);
     }
@@ -357,7 +363,7 @@ public class GoogleDriveController {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-        this.updateInDrive("Preferences", prefs.getAll(), new Date());
+        this.updateInDrive(context.getString(R.string.preferences_file), prefs.getAll(), new Date());
     }
 
     private <T> void loadFromDrive(String filename, OnGDriveRestore<T> callback){
@@ -372,9 +378,6 @@ public class GoogleDriveController {
                 InputStream in = contents.getInputStream();
                 ObjectInputStream os = new ObjectInputStream(in);
                 final T objFromDrive =(T) os.readObject();
-
-                //SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(activity).edit();
-                Log.i(TAG, "Shared Preferences restore is active");
                 this.restoreActive = true;
 
                 callback.onResult(objFromDrive);
@@ -399,18 +402,10 @@ public class GoogleDriveController {
         this.loadFromDrive(context.getString(R.string.myschedule), (OnGDriveRestore<MySchedule>) mySchedule -> {
             DataManager.getInstance().deleteAllFromMySchedule(context);
 
-            for (String str: mySchedule.getIds()){
-                Log.i("LectureSPlusID: ", str);
-            }
-
             DataManager.getInstance().getMySchedule(context).setIds(mySchedule.getIds());
 
                 for(LectureItem item: mySchedule.getLectures()){
-
                     DataManager.getInstance().addToMySchedule(context, item);
-
-
-                    Log.i("LectureItem: ", item.toString());
                 }
 
                 if(callback != null) callback.onResult(mySchedule);
@@ -420,12 +415,12 @@ public class GoogleDriveController {
 
 
     public void loadSharedPreferences(){
-        Log.i(TAG, "load shared Preferences called");
+        Log.i(TAG, "Load shared Preferences called");
 
-        this.loadFromDrive("Preferences", (OnGDriveRestore<HashMap<String, ?>>) prefs -> {
+        this.loadFromDrive(context.getString(R.string.preferences_file), (OnGDriveRestore<HashMap<String, ?>>) prefs -> {
             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
             for (String key : prefs.keySet()) {
-                    Log.i(TAG, "key will be set: " + key);
+                    //Log.i(TAG, "key will be set: " + key);
                     Object value = prefs.get(key);
                     if (value instanceof Boolean) {
                         editor.putBoolean(key, (Boolean) value);
@@ -448,7 +443,7 @@ public class GoogleDriveController {
             for(Metadata metadata: metadataBuffer){
                 getDriveResourceClient().delete(metadata.getDriveId().asDriveFile());
                 Log.i(TAG, "Drive file deleted" + metadata.getTitle());
-                Toast.makeText(MainActivity.getAppContext(), "Deleted Drive File", Toast.LENGTH_LONG).show();
+                //Toast.makeText(MainActivity.getAppContext(), "Deleted Drive File", Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -58,7 +58,7 @@ public class ScheduleFragment extends AbstractListFragment {
 
     //TODO onCreateView?
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public final void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         weekdayListPos = 0;

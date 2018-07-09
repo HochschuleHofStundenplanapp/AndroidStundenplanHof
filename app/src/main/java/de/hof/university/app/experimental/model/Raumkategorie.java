@@ -38,7 +38,7 @@ public class Raumkategorie implements Level, Serializable {
 
     @Override
     public final int getLevel() {
-        return 1;
+        return LEVEL_1_RAUMKATEGORIE;
     }
 
 }

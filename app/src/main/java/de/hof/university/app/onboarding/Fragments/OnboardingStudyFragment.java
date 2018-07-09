@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2018 Hochschule Hof
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package de.hof.university.app.onboarding.Fragments;
 
 import android.app.AlertDialog;
@@ -22,7 +38,7 @@ import java.util.HashMap;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.data.SettingsController;
-import de.hof.university.app.data.SettingsKeys;
+import de.hof.university.app.data.SettingsController.SettingsKeys;
 import de.hof.university.app.data.TaskComplete;
 import de.hof.university.app.model.settings.StudyCourse;
 
@@ -30,7 +46,7 @@ import de.hof.university.app.model.settings.StudyCourse;
  * Created by patrickniepel on 03.01.18.
  */
 
-public class OnboardingStudyFragment extends Fragment implements TaskComplete {
+public class OnboardingStudyFragment extends android.support.v4.app.Fragment implements TaskComplete {
 
     private Button studyTermBtn, degreeProgramBtn, semesterBtn, continueBtn;
     private SettingsController settingsCtrl;

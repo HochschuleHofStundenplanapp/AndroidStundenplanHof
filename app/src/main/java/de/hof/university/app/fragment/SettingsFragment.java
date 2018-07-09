@@ -153,7 +153,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         gDriveSync.setOnPreferenceChangeListener((preference, newValue) -> {
             final boolean isChecked = (Boolean) newValue;
             gDriveCtrl.signInIfNeeded(input -> {
-                Log.i(TAG, "is Checked: " + isChecked);
                 //Request a Sync for Google Drive because this is a known bug to ensure App Folder content is synced before attempting to restore
                 //https://stackoverflow.com/questions/23755346/android-google-drive-app-data-folder-not-listing-all-childrens
                 GoogleDriveController.getInstance(getActivity()).getDriveClient().requestSync().addOnSuccessListener(aVoid -> {
@@ -161,7 +160,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 }).addOnFailureListener((e) -> {
                     ApiException apiExcepition = (ApiException) e;
                     if (DriveStatusCodes.DRIVE_RATE_LIMIT_EXCEEDED == apiExcepition.getStatusCode()) {
-                        Log.i(TAG, "Drive Limit exceeeded, performing sync");
+                        Log.i(TAG, "Drive Limit exceeded, performing sync");
                         sync(isChecked);
                     }
                 });
@@ -306,7 +305,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
 
     private void sync(boolean isChecked) {
-        final CheckBoxPreference gDriveSync = (CheckBoxPreference) findPreference("drive_sync");
+        final CheckBoxPreference gDriveSync = (CheckBoxPreference) findPreference(getContext().getString(R.string.gdrive_sync));
         if (isChecked) {
 
             gDriveCtrl.getAppFolderFileList(metadataBuffer -> {
@@ -315,19 +314,19 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                     gDriveCtrl.saveMySchedule();
                     gDriveCtrl.saveSharedPreferences();
                 } else {
-                    new AlertDialog.Builder(getContext()).setTitle("Drive File in GDrive")
-                            .setMessage("There are Drive Files in your GDrive, do you want to restore them?")
+                    new AlertDialog.Builder(getContext()).setTitle(getContext().getString(R.string.gdrive_files_online))
+                            .setMessage(getContext().getString(R.string.gdrive_restore_question))
                             .setCancelable(false)
-                            .setPositiveButton("Use GDrive schedule", (dialog, which) -> {
+                            .setPositiveButton(getContext().getString(R.string.gdrive_use_remote), (dialog, which) -> {
                                 gDriveCtrl.loadMyScheduleFromDrive(null);
                                 gDriveCtrl.loadSharedPreferences();
                             })
-                            .setNegativeButton("Use local schedule", (dialog, which) ->
+                            .setNegativeButton(getContext().getString(R.string.gdrive_use_local), (dialog, which) ->
                             {
                                 gDriveCtrl.updateMyScheduleFromDrive();
                                 gDriveCtrl.updateSharedPreferences();
                             })
-                            .setNeutralButton("Cancel", (dialog, which) -> gDriveSync.setChecked(false))
+                            .setNeutralButton(getContext().getString(R.string.cancel), (dialog, which) -> gDriveSync.setChecked(false))
                             .show();
 
                 }
@@ -336,8 +335,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
 
         } else {
-            new AlertDialog.Builder(getContext()).setTitle("Delete Drive Files")
-                    .setMessage("Do you want to delete the schedule in your Google Drive?")
+            new AlertDialog.Builder(getContext()).setTitle(getContext().getString(R.string.gdrive_delete_drive_files))
+                    .setMessage(getContext().getString(R.string.gdrive_delete_drive_files_question))
                     .setCancelable(false)
                     .setPositiveButton(android.R.string.yes, (dialog, which) ->
                             gDriveCtrl.deleteMyScheduleDriveFile()).setNegativeButton(android.R.string.no, (dialog, which) -> {
@@ -644,14 +643,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         Log.i(TAG, "onSharedPreferenceChanged");
 
         if (getString(R.string.PREF_KEY_CHANGES_NOTIFICATION).equals(key)) {
-            Log.i(TAG, "CHANES_NOTIFICATION has changed");
+            Log.i(TAG, "CHANGES_NOTIFICATION has changed");
             android.support.v7.preference.CheckBoxPreference changes_notification = (android.support.v7.preference.CheckBoxPreference) findPreference(key);
             changes_notification.setChecked(sharedPreferences.getBoolean(key, false));
         }
         //update Preferences if gdrive Sync is enabled
-        final boolean gdriveSynchronization = sharedPreferences.getBoolean("drive_sync", false);
+        final boolean gdriveSynchronization = sharedPreferences.getBoolean(getContext().getString(R.string.gdrive_sync), false);
         Log.i(TAG, "GDrive Snyc on: " + gdriveSynchronization);
-        if (!key.equals("drive_sync") && gdriveSynchronization && !gDriveCtrl.restoreActive) {
+        if (!key.equals(getContext().getString(R.string.gdrive_sync)) && gdriveSynchronization && !gDriveCtrl.restoreActive) {
             gDriveCtrl.updateSharedPreferences();
         } else {
             Preference pref = findPreference(key);
