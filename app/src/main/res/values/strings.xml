@@ -239,5 +239,8 @@
     <string name="onboarding_welcome_text_title">Quick and easy</string>
     <string name="onboarding_welcome_text_message">Follow the instructions to setup your personal schedule app</string>
     <string name="onboarding_login_info">This login is used to show your mark sheet/announcement and for room search, if experimental features are enabled</string>
+    <string name="schedule_will_be_synchronized">Schedule will be synchronized with Google Drive</string>
+    <string name="schedule_deleted">Schedule will be deleted</string>
+    <string name="cloudOverride">Cloud Data will be overwritten</string>
 
 </resources>

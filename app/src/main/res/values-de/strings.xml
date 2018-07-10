@@ -210,5 +210,8 @@
     <string name="gdrive_delete_drive_files">Dateien auf Drive löschen</string>
     <string name="gdrive_delete_drive_files_question">Möchtest du den Stundenplan auf Google Drive löschen?</string>
     <string name="DRIVE_SYNC">Google Drive Synchronisation</string>
+    <string name="schedule_will_be_synchronized">Stundenplan wird mit Google Drive synchronisiert</string>
+    <string name="schedule_deleted">Stundenplan wird gelöscht</string>
+    <string name="cloudOverride">Cloud Daten werden überschrieben</string>
 
 </resources>

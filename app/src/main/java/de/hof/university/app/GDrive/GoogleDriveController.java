@@ -18,12 +18,14 @@
 package de.hof.university.app.GDrive;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.arch.core.util.Function;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -31,12 +33,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveClient;
 import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveFile;
 import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.DriveResourceClient;
+import com.google.android.gms.drive.DriveStatusCodes;
 import com.google.android.gms.drive.Metadata;
 import com.google.android.gms.drive.MetadataBuffer;
 import com.google.android.gms.drive.MetadataChangeSet;
@@ -119,7 +123,7 @@ public class GoogleDriveController {
 
     public void signInIfNeeded(@Nullable Function<Void, Void> callback){
         this.onSignInSuccesful = callback;
-        if (!isSignedIn()) {
+        if (!isSignedIn() || null==getDriveResourceClient()) {
             signIn();
         }else{
             if(null != onSignInSuccesful)
@@ -250,7 +254,10 @@ public class GoogleDriveController {
         }).addOnSuccessListener(driveFileTask -> {
             Log.i(TAG, filename + " saved successfully");
             //Toast.makeText(context, filename + " saved successfully", Toast.LENGTH_LONG).show();
-        }).addOnFailureListener(e -> Toast.makeText(context, filename + " NOT saved", Toast.LENGTH_LONG).show());
+        }).addOnFailureListener(e -> {
+            setGDrivePreference(false);
+            Toast.makeText(context, filename + " not saved", Toast.LENGTH_LONG).show();
+            });
     }
 
     public Metadata getMetadataNamed(String name, MetadataBuffer metadataBuffer){
@@ -301,6 +308,10 @@ public class GoogleDriveController {
                         Filters.eq(SearchableField.TITLE, context.getString(R.string.preferences_file))))
                 .build();
 
+        if(getDriveResourceClient() == null){
+            setGDrivePreference(false);
+            return;
+        }
         final Task<DriveFolder> appFolderTask = getDriveResourceClient().getAppFolder();
 
         Tasks.whenAll(appFolderTask).continueWith(task -> {
@@ -313,38 +324,42 @@ public class GoogleDriveController {
 
 
     private void updateInDrive(String filename, Object fileToUpdate, Date updatedAt){
-        getAppFolderFileList(metadataBuffer -> {
-            Metadata scheduleMD = getMetadataNamed(filename, metadataBuffer);
-            Task<DriveContents> openFileTask =
-                    getDriveResourceClient().openFile(scheduleMD.getDriveId().asDriveFile(), DriveFile.MODE_WRITE_ONLY);
+        this.signInIfNeeded((Void)->{
+            getAppFolderFileList(metadataBuffer -> {
+                Metadata scheduleMD = getMetadataNamed(filename, metadataBuffer);
+                Task<DriveContents> openFileTask =
+                        getDriveResourceClient().openFile(scheduleMD.getDriveId().asDriveFile(), DriveFile.MODE_WRITE_ONLY);
 
-            openFileTask.continueWithTask(task -> {
-                DriveContents contents = task.getResult();
+                openFileTask.continueWithTask(task -> {
+                    DriveContents contents = task.getResult();
 
-                OutputStream outputStream = contents.getOutputStream();
-                ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-                objectOutputStream.writeObject(fileToUpdate);
-                objectOutputStream.close();
-                outputStream.close();
+                    OutputStream outputStream = contents.getOutputStream();
+                    ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+                    objectOutputStream.writeObject(fileToUpdate);
+                    objectOutputStream.close();
+                    outputStream.close();
 
-                metadataBuffer.release();
-                MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
-                        .setTitle(filename)
-                        .setDescription(updatedAt.getTime()+"")
-                        .build();
+                    metadataBuffer.release();
+                    MetadataChangeSet metadataChangeSet = new MetadataChangeSet.Builder()
+                            .setTitle(filename)
+                            .setDescription(updatedAt.getTime()+"")
+                            .build();
 
 
-                //We have to either commit or discard Changes Made to to Drive File, we only read from it so we can discard Changes. (There were none)
-                return getDriveResourceClient().commitContents(contents, metadataChangeSet);
-            }).addOnSuccessListener(aVoid -> {
-                //Toast.makeText(context, "Updated " + filename, Toast.LENGTH_LONG).show();
-                getDriveClient().requestSync();
+                    //We have to either commit or discard Changes Made to to Drive File, we only read from it so we can discard Changes. (There were none)
+                    return getDriveResourceClient().commitContents(contents, metadataChangeSet);
+                }).addOnSuccessListener(aVoid -> {
+                    //Toast.makeText(context, "Updated " + filename, Toast.LENGTH_LONG).show();
+                    getDriveClient().requestSync();
 
-            }).addOnFailureListener(e -> {
-                e.printStackTrace();
-                //Toast.makeText(context, "Update " + filename + " failed", Toast.LENGTH_LONG).show();
+                }).addOnFailureListener(e -> {
+                    e.printStackTrace();
+                    //Toast.makeText(context, "Update " + filename + " failed", Toast.LENGTH_LONG).show();
+                });
             });
+            return null;
         });
+
     }
 
     public void updateMyScheduleFromDrive(){
@@ -443,11 +458,79 @@ public class GoogleDriveController {
             for(Metadata metadata: metadataBuffer){
                 getDriveResourceClient().delete(metadata.getDriveId().asDriveFile());
                 Log.i(TAG, "Drive file deleted" + metadata.getTitle());
-                //Toast.makeText(MainActivity.getAppContext(), "Deleted Drive File", Toast.LENGTH_LONG).show();
             }
+            Snackbar.make(getActivity().getCurrentFocus(), R.string.schedule_deleted, Snackbar.LENGTH_SHORT).show();
         });
     }
 
+
+    public void sync(boolean isChecked){
+        this.signInIfNeeded(input -> {
+            //Request a Sync for Google Drive because this is a known bug to ensure App Folder content is synced before attempting to restore
+            //https://stackoverflow.com/questions/23755346/android-google-drive-app-data-folder-not-listing-all-childrens
+            this.getInstance(getActivity()).getDriveClient().requestSync().addOnSuccessListener(aVoid -> {
+                //sync(isChecked);
+                performSync(isChecked);
+            }).addOnFailureListener((e) -> {
+                ApiException apiExcepition = (ApiException) e;
+                if (DriveStatusCodes.DRIVE_RATE_LIMIT_EXCEEDED == apiExcepition.getStatusCode()) {
+                    Log.i(TAG, "Drive Limit exceeded, performing sync");
+                    performSync(isChecked);
+                }
+            });
+
+
+            return null;
+        });
+    }
+
+    private void performSync(boolean isChecked){
+        if (isChecked) {
+
+            this.getAppFolderFileList(metadataBuffer -> {
+                Log.i(TAG, metadataBuffer.getCount() + "Items in Drive");
+                if (metadataBuffer.getCount() == 0) {
+                    this.saveMySchedule();
+                    this.saveSharedPreferences();
+                    Snackbar.make(getActivity().getCurrentFocus(), R.string.schedule_will_be_synchronized, Snackbar.LENGTH_SHORT).show();
+                } else {
+                    new AlertDialog.Builder(context).setTitle(context.getString(R.string.gdrive_files_online))
+                            .setMessage(context.getString(R.string.gdrive_restore_question))
+                            .setCancelable(false)
+                            .setPositiveButton(context.getString(R.string.gdrive_use_remote), (dialog, which) -> {
+                                this.loadMyScheduleFromDrive(null);
+                                this.loadSharedPreferences();
+                            })
+                            .setNegativeButton(context.getString(R.string.gdrive_use_local), (dialog, which) ->
+                            {
+                                this.updateMyScheduleFromDrive();
+                                this.updateSharedPreferences();
+                                Snackbar.make(getActivity().getCurrentFocus(), R.string.cloudOverride, Snackbar.LENGTH_SHORT).show();
+                            })
+                            .setNeutralButton(context.getString(R.string.cancel), (dialog, which) -> {
+                                setGDrivePreference(false);
+                            })
+                            .show();
+
+                }
+                metadataBuffer.release();
+            });
+
+
+        } else {
+            new AlertDialog.Builder(context).setTitle(context.getString(R.string.gdrive_delete_drive_files))
+                    .setMessage(context.getString(R.string.gdrive_delete_drive_files_question))
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.yes, (dialog, which) ->
+                            this.deleteMyScheduleDriveFile()).setNegativeButton(R.string.no, (dialog, which) -> {
+
+            }).setIcon(android.R.drawable.ic_dialog_alert).show();
+        }
+    }
+
+    private void setGDrivePreference(boolean value){
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(context.getString(R.string.gdrive_sync), value).commit();
+    }
 
 }
 

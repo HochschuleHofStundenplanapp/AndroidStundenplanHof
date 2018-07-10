@@ -18,7 +18,10 @@ package de.hof.university.app.fragment;
 
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.app.FragmentManager;
@@ -51,6 +54,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import de.hof.university.app.GDrive.GoogleDriveController;
+import de.hof.university.app.GDrive.NetworkUtil;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.data.SettingsController;
@@ -80,6 +84,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     private LoginController loginController = null;
     private GoogleDriveController gDriveCtrl = null;
+    private BroadcastReceiver networkChangeReceiver = null;
+
 
     private SettingsController settingsCtrl;
 
@@ -97,6 +103,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         //this.calendarSynchronization = CalendarSynchronization.getInstance();
         this.loginController = LoginController.getInstance(getActivity());
         this.gDriveCtrl = GoogleDriveController.getInstance(getActivity());
+
 
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.preferences);
@@ -149,26 +156,19 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
         // GDrive Sync
         final CheckBoxPreference gDriveSync = (CheckBoxPreference) findPreference("drive_sync");
-        gDriveSync.setEnabled(isNetworkAvailable());
+        gDriveSync.setEnabled(NetworkUtil.isNetworkAvailable(getContext()));
+        networkChangeReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                boolean isConnected = !(NetworkUtil.getConnectivityStatus(getContext())==NetworkUtil.NETWORK_STATUS_NOT_CONNECTED);
+                gDriveSync.setEnabled(isConnected);
+            }
+        };
+        IntentFilter intentFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
+        getContext().registerReceiver(networkChangeReceiver, intentFilter);
         gDriveSync.setOnPreferenceChangeListener((preference, newValue) -> {
             final boolean isChecked = (Boolean) newValue;
-            gDriveCtrl.signInIfNeeded(input -> {
-                //Request a Sync for Google Drive because this is a known bug to ensure App Folder content is synced before attempting to restore
-                //https://stackoverflow.com/questions/23755346/android-google-drive-app-data-folder-not-listing-all-childrens
-                GoogleDriveController.getInstance(getActivity()).getDriveClient().requestSync().addOnSuccessListener(aVoid -> {
-                    sync(isChecked);
-                }).addOnFailureListener((e) -> {
-                    ApiException apiExcepition = (ApiException) e;
-                    if (DriveStatusCodes.DRIVE_RATE_LIMIT_EXCEEDED == apiExcepition.getStatusCode()) {
-                        Log.i(TAG, "Drive Limit exceeded, performing sync");
-                        sync(isChecked);
-                    }
-                });
-
-
-                return null;
-            });
-
+            gDriveCtrl.sync(isChecked);
             return true;
         });
 
@@ -304,53 +304,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     }
 
 
-    private void sync(boolean isChecked) {
-        final CheckBoxPreference gDriveSync = (CheckBoxPreference) findPreference(getContext().getString(R.string.gdrive_sync));
-        if (isChecked) {
 
-            gDriveCtrl.getAppFolderFileList(metadataBuffer -> {
-                Log.i(TAG, metadataBuffer.getCount() + "Items in Drive");
-                if (metadataBuffer.getCount() == 0) {
-                    gDriveCtrl.saveMySchedule();
-                    gDriveCtrl.saveSharedPreferences();
-                } else {
-                    new AlertDialog.Builder(getContext()).setTitle(getContext().getString(R.string.gdrive_files_online))
-                            .setMessage(getContext().getString(R.string.gdrive_restore_question))
-                            .setCancelable(false)
-                            .setPositiveButton(getContext().getString(R.string.gdrive_use_remote), (dialog, which) -> {
-                                gDriveCtrl.loadMyScheduleFromDrive(null);
-                                gDriveCtrl.loadSharedPreferences();
-                            })
-                            .setNegativeButton(getContext().getString(R.string.gdrive_use_local), (dialog, which) ->
-                            {
-                                gDriveCtrl.updateMyScheduleFromDrive();
-                                gDriveCtrl.updateSharedPreferences();
-                            })
-                            .setNeutralButton(getContext().getString(R.string.cancel), (dialog, which) -> gDriveSync.setChecked(false))
-                            .show();
-
-                }
-                metadataBuffer.release();
-            });
-
-
-        } else {
-            new AlertDialog.Builder(getContext()).setTitle(getContext().getString(R.string.gdrive_delete_drive_files))
-                    .setMessage(getContext().getString(R.string.gdrive_delete_drive_files_question))
-                    .setCancelable(false)
-                    .setPositiveButton(R.string.yes, (dialog, which) ->
-                            gDriveCtrl.deleteMyScheduleDriveFile()).setNegativeButton(R.string.no, (dialog, which) -> {
-
-            }).setIcon(android.R.drawable.ic_dialog_alert).show();
-        }
-    }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
 
     private void resetAllSavedSettings() {
         settingsCtrl.resetSettings();
@@ -397,7 +351,12 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
         final MainActivity mainActivity = (MainActivity) getActivity();
         final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
-
+        getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        try {
+            getContext().unregisterReceiver(networkChangeReceiver);
+        }catch (IllegalArgumentException e){
+            Log.i(TAG, "Receiver was not registered");
+        }
         navigationView.getMenu().findItem(R.id.nav_einstellungen).setChecked(false);
     }
 
@@ -406,7 +365,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         super.onDestroy();
         Log.i(TAG, "onDestroy");
 
-        getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
     }
 
     private void refreshCanteenSummary(String newCanteen) {
@@ -444,7 +402,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         EditTextPreference edtName = (EditTextPreference) findPreference("primuss_user");
         edtName.setSummary(edtName.getText());
         */
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getView().getContext());
+        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         String selectedMensa;
 
         switch (sharedPreferences.getString("selected_canteen", "340")) {
@@ -657,8 +615,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             Preference pref = findPreference(key);
             if (pref instanceof ListPreference) {
                 ListPreference listPref = (ListPreference) pref;
-                Log.i(TAG, getPreferenceManager().getSharedPreferences().getString(key, ""));
-
                 listPref.setValue(getPreferenceManager().getSharedPreferences().getString(key, ""));
                 refreshSummaries();
             } else if (pref instanceof CheckBoxPreference) {
@@ -667,7 +623,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 cPref.setChecked(isChecked);
 
                 if (key.equals(getActivity().getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES))) {
-                    Log.i(TAG, "Current Key: " + key);
                     ((MainActivity) getActivity()).displayExperimentalFeaturesMenuEntries(isChecked);
                 } else if (key.equals(getActivity().getString(R.string.PREF_KEY_CHANGES_NOTIFICATION))) {
                     if (isChecked) {
