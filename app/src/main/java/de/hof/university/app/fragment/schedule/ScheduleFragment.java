@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Lars Gaidzik & Lukas Mahr
+ * Copyright (c) 2018 Hochschule Hof
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -20,6 +20,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -84,7 +86,7 @@ public class ScheduleFragment extends AbstractListFragment {
 
                 final DataManager dm = DataManager.getInstance();
 
-                //Wenn noch nicht im Mein Stundenplan -> hinzufügen anzeigen
+                //Wenn noch nicht im Mein Stundenplan -> hinzufuegen anzeigen
                 if (!dm.myScheduleContains(v.getContext(), lectureItem)) {
                     menu.setHeaderTitle(R.string.myschedule);
                     menu.add(Menu.NONE, 0, 0, R.string.addToMySchedule);
@@ -111,7 +113,7 @@ public class ScheduleFragment extends AbstractListFragment {
             }
         }
 
-        // Hier unnötig wird in MyScheduleFragment behandelt
+        // Hier unnoetig wird in MyScheduleFragment behandelt
         /*if(item.getTitle().equals(getString(R.string.deleteFromMySchedule))) {
             DataManager.getInstance().deleteFromMySchedule(info.targetView.getContext(), lectureItem);
         }*/
@@ -124,7 +126,9 @@ public class ScheduleFragment extends AbstractListFragment {
         super.onResume();
         if (getClass().getSimpleName().equals(ScheduleFragment.class.getSimpleName())) {
             final MainActivity mainActivity = (MainActivity) getActivity();
-            mainActivity.getSupportActionBar().setTitle(R.string.stundenplan);
+            mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='"+ ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack)+"'>"
+                    + getString(R.string.stundenplan)+"</font>"));
+            mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_accent_24dp);
 
             final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
             navigationView.getMenu().findItem(R.id.nav_stundenplan).setChecked(true);
@@ -186,10 +190,12 @@ public class ScheduleFragment extends AbstractListFragment {
         String weekday = "";
         final String curWeekDay = new SimpleDateFormat("EEEE", DataManager.getInstance().getLocale()).format(new Date());
 
-        // Temporäre Liste für die neuen Vorlesungen damit sie erst später in ListView hinzugefügt werden können
+        // Temporaere Liste fuer die neuen Vorlesungen damit sie erst spaeter in ListView 
+        // hinzugefuegt werden koennen
         ArrayList<Object> tmpDataList = new ArrayList<>();
 
-        // Temporäre Liste für die Vorlesungen die nur an einem Tag stattfinden (fix) damit sie am Ende angezeigt werden.
+        // Temporaere Liste fuer die Vorlesungen die nur an einem Tag 
+        // stattfinden (fix) damit sie am Ende angezeigt werden.
         final ArrayList<LectureItem> fixDataList = new ArrayList<>();
         for ( final LectureItem lectureItem : list ) {
             // Wenn eine Vorlesung nur an einem Tag stattfindet sind Start- und Enddate gleich
@@ -227,7 +233,7 @@ public class ScheduleFragment extends AbstractListFragment {
             tmpDataList.addAll(sortDataList);
         }
 
-        // Wenn Daten gekommen sind das ListItem LastUpdated hinzufügen
+        // Wenn Daten gekommen sind das ListItem LastUpdated hinzufuegen
         if (!tmpDataList.isEmpty()) {
             tmpDataList.add(new LastUpdated(getString(R.string.lastUpdated) + ": " + getLastSaved()));
         }
@@ -236,7 +242,7 @@ public class ScheduleFragment extends AbstractListFragment {
     }
 
     /**
-     * gibt das Datum zurück wann der Stundenplan zuletzt geholt wurde
+     * gibt das Datum zurueck wann der Stundenplan zuletzt geholt wurde
      * @return lastSaved
      */
     String getLastSaved() {
@@ -309,10 +315,10 @@ public class ScheduleFragment extends AbstractListFragment {
 		        getString(R.string.language), course, semester, termTime, bForceRefresh );
 
         if (scheduleList != null) {
-            // wenn etwas zurück kommt, dann aktualisiere die View
+            // wenn etwas zurueck kommt, dann aktualisiere die View
             return this.updateListView(scheduleList);
         } else {
-            // wenn nichts zurück kommt returne null, damit ein Toast angezeigt wird
+            // wenn nichts zurueck kommt returne null, damit ein Toast angezeigt wird
             return null;
         }
     }

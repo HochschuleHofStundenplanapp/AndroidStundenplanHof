@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.preference.Preference;
 import android.support.annotation.Nullable;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ import de.hof.university.app.data.DataManager;
 import de.hof.university.app.data.SettingsController;
 import de.hof.university.app.data.SettingsController.SettingsKeys;
 import de.hof.university.app.util.Define;
+import android.support.v4.content.ContextCompat;
 
 public class OnboardingNotificationsFragment extends Fragment {
 
@@ -71,7 +73,11 @@ public class OnboardingNotificationsFragment extends Fragment {
     public void onResume() {
         super.onResume();
         final MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().setTitle(R.string.onboarding_notifications);
+        mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='"+ ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack)+"'>"
+                + getString(R.string.onboarding_notifications)+"</font>"));
+        mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_accent_24dp);
+        
+        
     }
 
     private void setupLayout() {

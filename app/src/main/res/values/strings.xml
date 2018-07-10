@@ -239,8 +239,18 @@
     <string name="onboarding_welcome_text_title">Quick and easy</string>
     <string name="onboarding_welcome_text_message">Follow the instructions to setup your personal schedule app</string>
     <string name="onboarding_login_info">This login is used to show your mark sheet/announcement and for room search, if experimental features are enabled</string>
+
+
+
     <string name="schedule_will_be_synchronized">Schedule will be synchronized with Google Drive</string>
     <string name="schedule_deleted">Schedule will be deleted</string>
     <string name="cloudOverride">Cloud Data will be overwritten</string>
+
+<string name="chatfragment">chatfragment</string>
+    <string name="chat_no_internet">Please make sure that you are connected to the internet</string>
+    <string name="chat_offline">You are offline</string>
+    <string name="send">Send</string>
+    <string name="chat">Chat....</string>
+
 
 </resources>

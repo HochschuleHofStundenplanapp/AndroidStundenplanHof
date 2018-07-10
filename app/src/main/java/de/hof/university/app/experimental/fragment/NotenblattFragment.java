@@ -22,6 +22,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -92,7 +94,9 @@ public class NotenblattFragment extends android.support.v4.app.Fragment {
     public final void onResume() {
         super.onResume();
         MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().setTitle(R.string.notenblatt);
+        mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='"+ ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack)+"'>"
+                + getString(R.string.notenblatt)+"</font>"));
+        mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_accent_24dp);
 
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
         MenuItem item = navigationView.getMenu().findItem(R.id.nav_experimental);

@@ -31,7 +31,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.widget.TextView;
@@ -118,12 +120,9 @@ public class SettingsCalendarSynchronizationFragment extends PreferenceFragmentC
 		super.onResume();
 
 		final MainActivity mainActivity = (MainActivity) getActivity();
-		try {
-			mainActivity.getSupportActionBar().setTitle(R.string.calendar_synchronization);
-		} catch (NullPointerException e) {
-			Log.e(TAG, "NullPointerException bei setTitle abgefangen:", e);
-		}
-
+		mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='"+ ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack)+"'>"+ getString(R.string.calendar_synchronization)+"</font>"));
+		mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_accent_24dp);
+		
 		final NavigationView navigationView = mainActivity.findViewById(R.id.nav_view);
 		navigationView.getMenu().findItem(R.id.nav_einstellungen).setChecked(true);
 

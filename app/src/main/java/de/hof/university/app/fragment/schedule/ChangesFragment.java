@@ -19,6 +19,7 @@ package de.hof.university.app.fragment.schedule;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.text.Html;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -30,7 +31,7 @@ import de.hof.university.app.adapter.ChangesAdapter;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.fragment.AbstractListFragment;
 import de.hof.university.app.model.LastUpdated;
-
+import android.support.v4.content.ContextCompat;
 
 /**
  * Created by larsg_000 on 30.11.2015.
@@ -48,7 +49,9 @@ public class ChangesFragment extends AbstractListFragment {
 	public final void onResume() {
 		super.onResume();
 		MainActivity mainActivity = (MainActivity) getActivity();
-		mainActivity.getSupportActionBar().setTitle(R.string.aenderung);
+		mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='"+ ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack)+"'>"
+				+ getString(R.string.aenderung)+"</font>"));
+		mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_accent_24dp);
 
 		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
 		navigationView.getMenu().findItem(R.id.nav_aenderung).setChecked(true);

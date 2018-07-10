@@ -20,7 +20,9 @@ import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -44,13 +46,13 @@ import java.util.Date;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.data.DataManager;
-import de.hof.university.app.util.Define;
 import de.hof.university.app.experimental.adapter.RaumlistAdapter;
 import de.hof.university.app.experimental.model.Level;
 import de.hof.university.app.experimental.model.Raum;
 import de.hof.university.app.experimental.model.Raumkategorie;
 import de.hof.university.app.experimental.model.Raumliste;
 import de.hof.university.app.experimental.model.Suchdetails;
+import de.hof.university.app.util.Define;
 
 
 /**
@@ -143,8 +145,9 @@ public class RaumlisteFragment extends android.support.v4.app.Fragment {
     @Override
     public final void onResume() {
         super.onResume();
-        MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().setTitle(R.string.raumsuche);
+        final MainActivity mainActivity = (MainActivity) getActivity();
+        mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='"+ ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack)+"'>"+ getString(R.string.raumsuche)+"</font>"));
+        mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_accent_24dp);
 
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
         MenuItem item = navigationView.getMenu().findItem(R.id.nav_experimental);

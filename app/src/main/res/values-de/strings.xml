@@ -214,4 +214,11 @@
     <string name="schedule_deleted">Stundenplan wird gelöscht</string>
     <string name="cloudOverride">Cloud Daten werden überschrieben</string>
 
+    <string name="chat_no_internet">Du benötigst eine funktionierende Internetverbindnung um ein Chat beitreten zu können</string>
+    <string name="chat_offline">Du bist nicht mit den Internet verbunden</string>
+    <string name="send">Send</string>
+    <string name="chat">Chat....</string>
+
+
+
 </resources>

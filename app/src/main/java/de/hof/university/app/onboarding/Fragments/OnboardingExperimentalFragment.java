@@ -36,6 +36,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
+import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -60,6 +61,7 @@ import de.hof.university.app.data.SettingsController;
 import de.hof.university.app.data.SettingsController.SettingsKeys;
 import de.hof.university.app.experimental.LoginController;
 import de.hof.university.app.onboarding.OnboardingController;
+import android.support.v4.content.ContextCompat;
 
 public class OnboardingExperimentalFragment extends Fragment {
 
@@ -102,7 +104,9 @@ public class OnboardingExperimentalFragment extends Fragment {
     public void onResume() {
         super.onResume();
         final MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().setTitle(R.string.onboarding_experimental);
+        mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='"+ ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack)+"'>"
+                + getString(R.string.onboarding_experimental)+"</font>"));
+        mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_accent_24dp);
     }
 
     private void setupLayout() {

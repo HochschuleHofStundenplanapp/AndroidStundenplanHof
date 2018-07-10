@@ -23,8 +23,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -102,7 +104,9 @@ public class OnboardingStudyFragment extends android.support.v4.app.Fragment imp
     public void onResume() {
         super.onResume();
         final MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().setTitle(R.string.onboarding_study);
+        mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='"+ ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack)+"'>"
+                + getString(R.string.onboarding_study)+"</font>"));
+        mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_accent_24dp);
     }
 
     private void setupLayout() {

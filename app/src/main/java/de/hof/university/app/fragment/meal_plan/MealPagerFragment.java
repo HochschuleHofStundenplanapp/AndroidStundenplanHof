@@ -24,6 +24,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +33,7 @@ import android.view.ViewGroup;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.fragment.MealFragment;
-
+import android.support.v4.content.ContextCompat;
 /**
  * Created and © by Christian G. Pfeiffer on 21.12.17.
  */
@@ -78,7 +79,9 @@ public class MealPagerFragment extends Fragment {
         super.onResume();
         adapter.notifyDataSetChanged();
         MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().setTitle(R.string.speiseplan);
+        mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='"+ ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack)+"'>"
+                + getString(R.string.speiseplan)+"</font>"));
+        mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_accent_24dp);
 
 
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);

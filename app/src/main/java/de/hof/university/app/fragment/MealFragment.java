@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.text.Html;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
@@ -38,6 +39,7 @@ import de.hof.university.app.model.BigListItem;
 import de.hof.university.app.model.LastUpdated;
 import de.hof.university.app.model.MediumListItem;
 import de.hof.university.app.model.meal.Meal;
+import android.support.v4.content.ContextCompat;
 
 public class MealFragment extends AbstractListFragment {
 
@@ -70,7 +72,8 @@ public class MealFragment extends AbstractListFragment {
 	public final void onResume() {
 		super.onResume();
 		final MainActivity mainActivity = (MainActivity) getActivity();
-		mainActivity.getSupportActionBar().setTitle(R.string.speiseplan);
+		mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='"+ ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack)+"'>"+ getString(R.string.speiseplan)+"</font>"));
+		mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_accent_24dp);
 
 		Log.d("MealFragment", "onResume");
 

@@ -20,6 +20,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -44,6 +45,7 @@ import de.hof.university.app.data.DataManager;
 import de.hof.university.app.GDrive.GoogleDriveController;
 import de.hof.university.app.model.schedule.LectureItem;
 import de.hof.university.app.util.Define;
+import android.support.v4.content.ContextCompat;
 
 /**
  * Created by Lukas on 22.06.2016.
@@ -81,7 +83,9 @@ public class MyScheduleFragment extends ScheduleFragment {
     public final void onResume() {
         super.onResume();
         final MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().setTitle(R.string.myschedule);
+        mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='"+ ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack)+"'>"
+                + getString(R.string.myschedule)+"</font>"));
+        mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_accent_24dp);
 
         final NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
         navigationView.getMenu().findItem(R.id.nav_mySchedule).setChecked(true);

@@ -21,6 +21,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.util.Define;
 import de.hof.university.app.experimental.LoginController;
+import android.support.v4.content.ContextCompat;
 
 /**
  * Created by Christian Pfeiffer on 14.12.16.
@@ -45,9 +47,10 @@ public class PrimussTabFragment extends android.support.v4.app.Fragment {
 	@Override
 	public final void onResume() {
 		super.onResume();
-		MainActivity mainActivity = (MainActivity) getActivity();
-		mainActivity.getSupportActionBar().setTitle(R.string.primuss);
-
+		final MainActivity mainActivity = (MainActivity) getActivity();
+		mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='"+ ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack)+"'>"+ getString(R.string.primuss)+"</font>"));
+		mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_accent_24dp);
+		
 		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
 		navigationView.getMenu().findItem(R.id.nav_primuss).setChecked(true);
 	}

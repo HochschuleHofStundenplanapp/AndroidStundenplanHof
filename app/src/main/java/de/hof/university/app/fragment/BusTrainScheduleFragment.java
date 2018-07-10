@@ -20,6 +20,8 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,8 +47,11 @@ public class BusTrainScheduleFragment extends android.support.v4.app.Fragment {
     public final void onResume() {
         super.onResume();
         MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().setTitle(R.string.navigation);
-
+        mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='"+ ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack)+"'>"
+                + getString(R.string.navigation)+"</font>"));
+        mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_accent_24dp);
+    
+    
         NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
         navigationView.getMenu().findItem(R.id.nav_navigation).setChecked(true);
     }

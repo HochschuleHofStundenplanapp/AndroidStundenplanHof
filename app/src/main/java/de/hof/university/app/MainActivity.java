@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity
 	private boolean backButtonPressedOnce = false;
     //für GDrive
     private GDriveCallbackManager mCallbackManager;
+	private boolean navigationDrawerIsEnabled = true;
 
 	private SharedPreferences sharedPreferences;
 
@@ -144,7 +145,7 @@ public class MainActivity extends AppCompatActivity
 				invalidateOptionsMenu();
 			}
 		};
-
+        mDrawerToggle.syncState();
 		// Set the drawer toggle as the DrawerListener
 		mDrawerLayout.addDrawerListener(mDrawerToggle);
 
@@ -316,13 +317,35 @@ public class MainActivity extends AppCompatActivity
 		// Pass the event to ActionBarDrawerToggle
 		// If it returns true, then it has handled
 		// the nav drawer indicator touch event
-		if (mDrawerToggle.onOptionsItemSelected(item)) {
+		if (mDrawerToggle.onOptionsItemSelected(item) && navigationDrawerIsEnabled) {
+			return true;
+		}
+		else if (!navigationDrawerIsEnabled){
+		    onBackPressed();
 			return true;
 		}
 
 		// Handle your other action bar items...
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	public void setDrawerState(boolean isEnabled) {
+		if ( isEnabled ) {
+			mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+			mDrawerToggle.setDrawerIndicatorEnabled(true);
+			mDrawerToggle.syncState();
+			navigationDrawerIsEnabled = true;
+
+		}
+		else {
+			mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+			mDrawerToggle.setDrawerIndicatorEnabled(false);
+            mDrawerToggle.setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
+			mDrawerToggle.syncState();
+			navigationDrawerIsEnabled =false;
+
+		}
 	}
 
 	public final void displayExperimentalFeaturesMenuEntries(final boolean enabled) {

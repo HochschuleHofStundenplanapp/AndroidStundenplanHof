@@ -26,6 +26,11 @@ android {
 		minSdkVersion 16
 		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 	}
+	packagingOptions {
+		exclude 'META-INF/DEPENDENCIES'
+	}
+
+
 	signingConfigs {
 		release {
 			//Folgender Pfad führt zum Absturz des Gradle Wrappers auf manchen Systemen (wie meinen Mac)!
