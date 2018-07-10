@@ -22,5 +22,7 @@ package de.hof.university.app.GDrive;
  */
 
 public interface GDriveCallback {
-    void onSuccess();
+    enum ResultType {success, failure}
+    void onResult(ResultType result);
+
 }

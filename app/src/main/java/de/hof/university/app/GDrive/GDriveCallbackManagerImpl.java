@@ -17,6 +17,8 @@
 package de.hof.university.app.GDrive;
 
 import android.content.Intent;
+import android.util.Log;
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by Basti on 11.06.18.
@@ -29,8 +31,12 @@ public class GDriveCallbackManagerImpl implements GDriveCallbackManager{
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i("GDriveCallbackManagerIm", "Result ok?: "+(resultCode==RESULT_OK));
         if(gDriveCallback != null){
-            gDriveCallback.onSuccess();
+            if(resultCode==RESULT_OK)
+                gDriveCallback.onResult(GDriveCallback.ResultType.success);
+            else
+                gDriveCallback.onResult(GDriveCallback.ResultType.failure);
         }
 
     }
