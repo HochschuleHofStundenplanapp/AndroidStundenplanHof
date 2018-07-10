@@ -338,8 +338,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             new AlertDialog.Builder(getContext()).setTitle(getContext().getString(R.string.gdrive_delete_drive_files))
                     .setMessage(getContext().getString(R.string.gdrive_delete_drive_files_question))
                     .setCancelable(false)
-                    .setPositiveButton(android.R.string.yes, (dialog, which) ->
-                            gDriveCtrl.deleteMyScheduleDriveFile()).setNegativeButton(android.R.string.no, (dialog, which) -> {
+                    .setPositiveButton(R.string.yes, (dialog, which) ->
+                            gDriveCtrl.deleteMyScheduleDriveFile()).setNegativeButton(R.string.no, (dialog, which) -> {
 
             }).setIcon(android.R.drawable.ic_dialog_alert).show();
         }
