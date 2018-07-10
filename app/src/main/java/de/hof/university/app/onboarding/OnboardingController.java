@@ -17,8 +17,12 @@
 
 package de.hof.university.app.onboarding;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import de.hof.university.app.MainActivity;
+import de.hof.university.app.data.SettingsController;
 
 /**
  * Created by patrickniepel on 25.12.17.
@@ -28,14 +32,25 @@ public class OnboardingController {
 
     private final String PREFERENCES_ONBOARDING = "OnboardingPrefs";
     private final String ONBOARDING_KEY = "Onboarding";
+    private Activity mActivity;
 
     public  OnboardingController() {}
+
+    public OnboardingController(Activity activity) {
+        this.mActivity = activity;
+    }
 
     public boolean shouldStartOnboaringIfNeeded(Context context) {
 
         SharedPreferences prefs = context.getSharedPreferences(PREFERENCES_ONBOARDING, Context.MODE_PRIVATE);
 
         boolean startedOnce = prefs.getBoolean(ONBOARDING_KEY, false);
+
+        // Onboarding hasnt been started once but schedule is available -> no need to start onboarding
+        if(new SettingsController(mActivity).areStudySettingsAvailable()) {
+            startedOnce = true;
+            onboardingFinished(mActivity);
+        }
 
         //Returns true if onboarding hasn't been started yet -> start onboarding
         return !startedOnce;

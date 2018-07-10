@@ -185,18 +185,21 @@ public class MainActivity extends AppCompatActivity
         mCallbackManager = GDriveCallbackManager.Factory.create();
         
         GoogleDriveController gDriveCtrl = GoogleDriveController.getInstance(this);
-        gDriveCtrl.registerCallback(mCallbackManager, () -> {
+        gDriveCtrl.registerCallback(mCallbackManager, result -> {
+        	switch (result){
+				case success:{
+					gDriveCtrl.createDriveClients();
+					break;
+				}
+				case failure:
+					Toast.makeText(this, "GDrive Login fehlgeschlagen", Toast.LENGTH_LONG).show();
+					PreferenceManager.getDefaultSharedPreferences(this).edit()
+							.putBoolean(getString(R.string.gdrive_sync), false).apply();
+					break;
+			}
+				}
             
-            
-            // Called after user is signed in.
-            
-            Log.i(TAG, getString(R.string.gdrive_signed_in_successfully));
-            // Create Drive clients now that account has been authorized access.
-            
-            gDriveCtrl.createDriveClients();
-            
-            
-        });
+        );
 
 	}
 
@@ -230,7 +233,7 @@ public class MainActivity extends AppCompatActivity
 	public void checkStartingScreen() {
 
 		//Soll das Onboarding gestartet werden
-		if (new OnboardingController().shouldStartOnboaringIfNeeded(this)) {
+		if (new OnboardingController(this).shouldStartOnboaringIfNeeded(this)) {
 			//FragmentManager manager = getFragmentManager();
 			new SettingsController(this).resetSettings();
 			FragmentManager manager = getSupportFragmentManager();

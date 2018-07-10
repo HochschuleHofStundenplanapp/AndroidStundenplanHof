@@ -31,6 +31,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,12 +50,17 @@ import de.hof.university.app.model.settings.StudyCourse;
 
 public class OnboardingStudyFragment extends android.support.v4.app.Fragment implements TaskComplete {
 
-    private Button studyTermBtn, degreeProgramBtn, semesterBtn, continueBtn;
+    private Button degreeProgramBtn, semesterBtn, continueBtn;
     private SettingsController settingsCtrl;
 
     //ArrayAdapter for dialogs
     private ArrayList<String> termList, degreeProgramList, degreeProgramListTags, semesterList;
     private String selectedTerm, selectedDegreeProgram, selectedSemester;
+
+    private RadioGroup termRadioGroup;
+    private RadioButton summerTermRB, winterTermRB;
+
+    private int lastRBIndex = -1;
 
     //Keys for saving settings
     private ArrayList<String> termShort, degreeProgramShort, semesterShort;
@@ -99,7 +106,6 @@ public class OnboardingStudyFragment extends android.support.v4.app.Fragment imp
     }
 
     private void setupLayout() {
-        studyTermBtn = getActivity().findViewById(R.id.onboarding_study_study_term_button);
         degreeProgramBtn = getActivity().findViewById(R.id.onboarding_study_degree_program_button);
         semesterBtn = getActivity().findViewById(R.id.onboarding_study_semester_button);
         continueBtn = getActivity().findViewById(R.id.onboarding_study_continue_button);
@@ -109,17 +115,42 @@ public class OnboardingStudyFragment extends android.support.v4.app.Fragment imp
         semesterBtn.setEnabled(false);
         semesterBtn.setTextColor(Color.GRAY);
 
+        termRadioGroup = getActivity().findViewById(R.id.term_radioGroup);
+        summerTermRB = getActivity().findViewById(R.id.summerTermRB);
+        winterTermRB = getActivity().findViewById(R.id.winterTermRB);
+
         fillTermList();
+
+        summerTermRB.setText(termList.get(0));
+        winterTermRB.setText(termList.get(1));
     }
 
     private void setupClickListener() {
 
-        studyTermBtn.setOnClickListener(new View.OnClickListener() {
+        termRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onClick(View view) {
-                resetButtons();
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-                createDialog("term");
+                int index = -1;
+                //Summer, index = 0
+                if(summerTermRB.getId() == checkedId) {
+                    index = 0;
+                }
+                //Winter, index = 1
+                else if(winterTermRB.getId() == checkedId) {
+                    index = 1;
+                }
+
+                if(index != lastRBIndex) {
+                    resetButtons();
+                }
+
+                lastRBIndex = index;
+
+                selectedTerm = termList.get(index);
+                settingsCtrl.saveStringSettings(SettingsKeys.TERM, termShort.get(index));
+                degreeProgramBtn.setEnabled(true);
+                degreeProgramBtn.setTextColor(Color.BLACK);
             }
         });
 
@@ -164,15 +195,16 @@ public class OnboardingStudyFragment extends android.support.v4.app.Fragment imp
 
     private void fillLayoutIfPossible() {
         if (!selectedTerm.isEmpty()) {
-            studyTermBtn.setText(selectedTerm);
             degreeProgramBtn.setEnabled(true);
         }
         if (!selectedDegreeProgram.isEmpty()) {
             degreeProgramBtn.setText(selectedDegreeProgram);
             semesterBtn.setEnabled(true);
+            degreeProgramBtn.setTextColor(Color.BLACK);
         }
         if (!selectedSemester.isEmpty()) {
             semesterBtn.setText(selectedSemester);
+            semesterBtn.setTextColor(Color.BLACK);
         }
     }
 
@@ -261,9 +293,6 @@ public class OnboardingStudyFragment extends android.support.v4.app.Fragment imp
 
         final ArrayAdapter<String> valueAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.select_dialog_singlechoice);
 
-        if(valueKey.equals("term")) {
-            valueAdapter.addAll(termList);
-        }
         if(valueKey.equals("degreeProgram")) {
             valueAdapter.addAll(degreeProgramList);
         }
@@ -282,14 +311,6 @@ public class OnboardingStudyFragment extends android.support.v4.app.Fragment imp
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                if(valueKey.equals("term")) {
-                    selectedTerm = valueAdapter.getItem(which);
-                    studyTermBtn.setText(selectedTerm);
-                    Log.d("+++++++++++++++++++++++", termShort.get(which));
-                    settingsCtrl.saveStringSettings(SettingsKeys.TERM, termShort.get(which));
-                    degreeProgramBtn.setEnabled(true);
-                    degreeProgramBtn.setTextColor(Color.BLACK);
-                }
                 if(valueKey.equals("degreeProgram")) {
                     selectedDegreeProgram = valueAdapter.getItem(which);
                     String selectedDegreeProgramList = degreeProgramListTags.get(which);
@@ -321,6 +342,7 @@ public class OnboardingStudyFragment extends android.support.v4.app.Fragment imp
     }
 
     private void resetButtons() {
+        Log.v("#########", "RESET BUTTONS");
         degreeProgramBtn.setText(R.string.studiengang);
         degreeProgramBtn.setEnabled(false);
 

@@ -71,7 +71,8 @@ public class SettingsController  {
 		CANTEEN,
 		NOTIFICATIONS,
 		EXPERIMENTAL,
-		CALENDAR_SYNC
+		CALENDAR_SYNC,
+        GDRIVE
 	}
 	
 	
@@ -220,6 +221,9 @@ public class SettingsController  {
             case CALENDAR_SYNC:
                 prefKey = mActivity.getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION);
                 break;
+            case GDRIVE:
+                prefKey = mActivity.getString(R.string.gdrive_sync);
+                break;
 
             default:
                 Log.v("SAVING_FAILED", "ONBOARDING-SettingsController-saveBooleanSettings");
@@ -229,6 +233,7 @@ public class SettingsController  {
         sharedPreferences.edit().putBoolean(prefKey, value).apply();
     }
 
+    /** Reset settings when onboarding gets restarted in settings */
     public void resetSettings() {
 
         sharedPreferences.edit().putString( mActivity.getString(R.string.PREF_KEY_TERM_TIME), "").apply();
@@ -247,9 +252,16 @@ public class SettingsController  {
         sharedPreferences.edit().putBoolean( mActivity.getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES), false).apply();
         sharedPreferences.edit().putBoolean( mActivity.getString(R.string.PREF_KEY_CHANGES_NOTIFICATION), false).apply();
         sharedPreferences.edit().putBoolean( mActivity.getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION), false).apply();
+        sharedPreferences.edit().putBoolean( mActivity.getString(R.string.gdrive_sync), false).apply();
 
         final MainActivity activity = (MainActivity) mActivity;
         activity.displayExperimentalFeaturesMenuEntries(false);
+    }
+
+    public boolean areStudySettingsAvailable() {
+        return !sharedPreferences.getString(mActivity.getString(R.string.PREF_KEY_TERM_TIME), "").isEmpty()
+                && !sharedPreferences.getString(mActivity.getString(R.string.PREF_KEY_STUDIENGANG), "").isEmpty()
+                && !sharedPreferences.getString(mActivity.getString(R.string.PREF_KEY_SEMESTER), "").isEmpty();
     }
 
     private class GetSemesterTask extends AsyncTask<String, Void, Void> {
