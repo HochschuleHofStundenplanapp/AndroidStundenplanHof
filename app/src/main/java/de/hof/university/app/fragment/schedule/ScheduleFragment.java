@@ -22,6 +22,7 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,6 +32,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DateFormat;
@@ -45,12 +47,17 @@ import java.util.Set;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.adapter.ScheduleAdapter;
+import de.hof.university.app.chat.ChatFragment;
+import de.hof.university.app.chat.Helper.ConnectionMannager;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.fragment.AbstractListFragment;
 import de.hof.university.app.model.BigListItem;
 import de.hof.university.app.model.LastUpdated;
 import de.hof.university.app.model.schedule.LectureItem;
 
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 
 public class ScheduleFragment extends AbstractListFragment {
 
@@ -70,6 +77,33 @@ public class ScheduleFragment extends AbstractListFragment {
     public final View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = super.onCreateView(inflater, container, savedInstanceState);
         registerForContextMenu(listView);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                ConnectionMannager conMan = new ConnectionMannager(getContext());
+                if (conMan.checkInternet()) {
+                    TextView myTextv = view.findViewById(R.id.stundenplan_details);
+                    Log.d("onItemClick", "v: " + myTextv.getText());
+
+                    //ChatFragment chatfrgmnt = (ChatFragment) getFragmentManager().findFragmentById(R.id.chatfragment);
+                    LectureItem obc = (LectureItem) dataList.get(i);
+                    ChatFragment chatfrgmnt = ChatFragment.newInstance(obc.getId(), obc.getLabel());
+                    if (chatfrgmnt != null) {
+
+                        // Execute a transaction, replacing any existing
+                        // fragment with this one inside the frame.
+                        final FragmentTransaction ft = getFragmentManager().beginTransaction();
+                        ft.replace(R.id.content_main, chatfrgmnt);
+                        ft.addToBackStack(null);
+                        ft.commit();
+                    }
+                }else {
+                    Toast.makeText(getContext(),R.string.chat_no_internet,
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
         return v;
     }
 
