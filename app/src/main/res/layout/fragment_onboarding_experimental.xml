@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="@string/experimental_features"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,15 +43,16 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:background="#FFFFFF"
         android:text="@string/LOGIN_DIALOG"
         android:textAlignment="center"
         android:textAllCaps="false"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/onboarding_experimental_synchronization_checkbox" />
+        app:layout_constraintTop_toBottomOf="@+id/onboarding_experimental_gDrive_checkbox" />
 
     <CheckBox
         android:id="@+id/onboarding_experimental_synchronization_checkbox"
@@ -59,12 +60,27 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="@string/calendar_synchronization"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/onboarding_experimental_features_checkbox" />
+
+    <CheckBox
+        android:id="@+id/onboarding_experimental_gDrive_checkbox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/DRIVE_SYNC"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/onboarding_experimental_synchronization_checkbox" />
 
     <Button
         android:id="@+id/onboarding_experimental_finish_button"
@@ -111,4 +127,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/onboarding_experimental_login_button" />
+
+
 </android.support.constraint.ConstraintLayout>

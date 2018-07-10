@@ -30,6 +30,8 @@ import android.preference.CheckBoxPreference;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.preference.ListPreference;
+import android.support.v7.preference.Preference;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,9 +45,12 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import de.hof.university.app.GDrive.GoogleDriveController;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.calendar.CalendarSynchronization;
+import de.hof.university.app.communication.RegisterLectures;
+import de.hof.university.app.data.DataManager;
 import de.hof.university.app.data.SettingsController;
 import de.hof.university.app.data.SettingsController.SettingsKeys;
 import de.hof.university.app.experimental.LoginController;
@@ -54,17 +59,19 @@ import de.hof.university.app.onboarding.OnboardingController;
 public class OnboardingExperimentalFragment extends Fragment {
 
     private Button finishOnboardingBtn, loginBtn;
-    private CheckBox featuresCb, synchronizationCb;
+    private CheckBox featuresCb, synchronizationCb, gDriveCb;
 
     private final int REQUEST_CODE_CALENDAR_TURN_ON_PERMISSION =  2;
     private final int REQUEST_CODE_CALENDAR_TURN_OFF_PERMISSION =  3;
 
     private SettingsController settingsCtrl;
+    private GoogleDriveController gDriveCtrl;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         settingsCtrl = new SettingsController(getActivity(), this);
+        gDriveCtrl = GoogleDriveController.getInstance(getActivity());
     }
 
     @Override
@@ -96,6 +103,7 @@ public class OnboardingExperimentalFragment extends Fragment {
 
         featuresCb = getActivity().findViewById(R.id.onboarding_experimental_features_checkbox);
         synchronizationCb = getActivity().findViewById(R.id.onboarding_experimental_synchronization_checkbox);
+        gDriveCb = getActivity().findViewById(R.id.onboarding_experimental_gDrive_checkbox);
     }
 
     private void setupClickListener() {
@@ -179,8 +187,14 @@ public class OnboardingExperimentalFragment extends Fragment {
                             .create();
                     d.show();
                 }
-
                 settingsCtrl.saveBooleanSettings(SettingsKeys.CALENDAR_SYNC, b);
+            }
+        });
+
+        gDriveCb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                settingsCtrl.saveBooleanSettings(SettingsKeys.GDRIVE, isChecked);
             }
         });
     }

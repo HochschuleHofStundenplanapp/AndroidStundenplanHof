@@ -640,7 +640,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     // Einstellungen aktualisieren wenn sie geändert werden
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Log.i(TAG, "onSharedPreferenceChanged");
+        Log.v(TAG, "onSharedPreferenceChanged");
+        Log.v(TAG, "KEY: " + key);
 
         if (getString(R.string.PREF_KEY_CHANGES_NOTIFICATION).equals(key)) {
             Log.i(TAG, "CHANGES_NOTIFICATION has changed");

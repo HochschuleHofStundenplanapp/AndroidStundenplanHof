@@ -230,7 +230,7 @@ public class MainActivity extends AppCompatActivity
 	public void checkStartingScreen() {
 
 		//Soll das Onboarding gestartet werden
-		if (new OnboardingController().shouldStartOnboaringIfNeeded(this)) {
+		if (new OnboardingController(this).shouldStartOnboaringIfNeeded(this)) {
 			//FragmentManager manager = getFragmentManager();
 			new SettingsController(this).resetSettings();
 			FragmentManager manager = getSupportFragmentManager();

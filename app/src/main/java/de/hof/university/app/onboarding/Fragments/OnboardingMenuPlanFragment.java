@@ -74,7 +74,6 @@ public class OnboardingMenuPlanFragment extends Fragment {
         setupLayout();
         setupClickListener();
         fillLayoutIfPossible();
-        setPresets();
     }
 
     @Override
@@ -83,6 +82,7 @@ public class OnboardingMenuPlanFragment extends Fragment {
 
         fillTariffList();
         fillCanteenList();
+        setPresets();
     }
 
     @Override
@@ -118,6 +118,15 @@ public class OnboardingMenuPlanFragment extends Fragment {
         settingsCtrl.saveBooleanSettings(SettingsKeys.PASTA, true);
         settingsCtrl.saveBooleanSettings(SettingsKeys.DESSERT, true);
         settingsCtrl.saveBooleanSettings(SettingsKeys.SALAD, true);
+
+        String preselectedCanteen = "Hof";
+
+        if(canteenList.contains(preselectedCanteen)) {
+            int hofIndex = canteenList.indexOf(preselectedCanteen);
+            selectedCanteen = canteenList.get(hofIndex);
+            canteenBtn.setText(selectedCanteen);
+            settingsCtrl.saveStringSettings(SettingsKeys.CANTEEN, canteenShort.get(hofIndex));
+        }
     }
 
     private void setupClickListener() {
