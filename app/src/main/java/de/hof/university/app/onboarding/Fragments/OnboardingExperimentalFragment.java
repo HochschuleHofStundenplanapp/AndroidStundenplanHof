@@ -332,7 +332,7 @@ public class OnboardingExperimentalFragment extends Fragment {
 
         FragmentManager manager = getFragmentManager();
         manager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        
+
         mainActivity.checkStartingScreen();
     }
 
