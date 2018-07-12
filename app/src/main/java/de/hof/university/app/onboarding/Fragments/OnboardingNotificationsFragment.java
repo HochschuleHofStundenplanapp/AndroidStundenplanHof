@@ -23,7 +23,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.preference.Preference;
 import android.support.annotation.Nullable;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -35,10 +34,7 @@ import android.widget.CompoundButton;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
-import de.hof.university.app.communication.RegisterLectures;
-import de.hof.university.app.data.DataManager;
 import de.hof.university.app.data.SettingsController;
-import de.hof.university.app.data.SettingsController.SettingsKeys;
 import de.hof.university.app.util.Define;
 import android.support.v4.content.ContextCompat;
 
@@ -125,15 +121,15 @@ public class OnboardingNotificationsFragment extends Fragment {
                     userReceivedInfo = false;
                 }
 
-                settingsCtrl.saveBooleanSettings(SettingsKeys.NOTIFICATIONS, b);
+                settingsCtrl.saveBooleanSettings(R.string.PREF_KEY_CHANGES_NOTIFICATION, b);
             }
         });
     }
 
     private void startOnboardingExperimental() {
 
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction trans = manager.beginTransaction();
+        final FragmentManager manager = getFragmentManager();
+        final FragmentTransaction trans = manager.beginTransaction();
         trans.addToBackStack(OnboardingExperimentalFragment.class.getName());
         trans.replace(R.id.content_main, new OnboardingExperimentalFragment());
         trans.commit();

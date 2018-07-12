@@ -39,7 +39,6 @@ import java.util.ArrayList;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.data.SettingsController;
-import de.hof.university.app.data.SettingsController.SettingsKeys;
 
 
 public class OnboardingMenuPlanFragment extends Fragment {
@@ -117,11 +116,11 @@ public class OnboardingMenuPlanFragment extends Fragment {
         saladCb.setChecked(true);
 
         //Save settings
-        settingsCtrl.saveBooleanSettings(SettingsKeys.MAIN_COURSE, true);
-        settingsCtrl.saveBooleanSettings(SettingsKeys.SIDE_DISHES, true);
-        settingsCtrl.saveBooleanSettings(SettingsKeys.PASTA, true);
-        settingsCtrl.saveBooleanSettings(SettingsKeys.DESSERT, true);
-        settingsCtrl.saveBooleanSettings(SettingsKeys.SALAD, true);
+        settingsCtrl.saveBooleanSettings(R.string.PREF_KEY_MAIN_COURSE, true);
+        settingsCtrl.saveBooleanSettings(R.string.PREF_KEY_SIDE_DISHES, true);
+        settingsCtrl.saveBooleanSettings(R.string.PREF_KEY_PASTA, true);
+        settingsCtrl.saveBooleanSettings(R.string.PREF_KEY_DESSERTS, true);
+        settingsCtrl.saveBooleanSettings(R.string.PREF_KEY_SALAD, true);
 
         String preselectedCanteen = "Hof";
 
@@ -129,7 +128,7 @@ public class OnboardingMenuPlanFragment extends Fragment {
             int hofIndex = canteenList.indexOf(preselectedCanteen);
             selectedCanteen = canteenList.get(hofIndex);
             canteenBtn.setText(selectedCanteen);
-            settingsCtrl.saveStringSettings(SettingsKeys.CANTEEN, canteenShort.get(hofIndex));
+            settingsCtrl.saveStringSettings( R.string.PREF_KEY_SELECTED_CANTEEN, canteenShort.get(hofIndex));
         }
     }
 
@@ -177,7 +176,7 @@ public class OnboardingMenuPlanFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                settingsCtrl.saveBooleanSettings(SettingsKeys.MAIN_COURSE, b);
+                settingsCtrl.saveBooleanSettings(R.string.PREF_KEY_MAIN_COURSE, b);
             }
         });
 
@@ -185,7 +184,7 @@ public class OnboardingMenuPlanFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                settingsCtrl.saveBooleanSettings(SettingsKeys.SIDE_DISHES, b);
+                settingsCtrl.saveBooleanSettings(R.string.PREF_KEY_SIDE_DISHES, b);
             }
         });
 
@@ -193,7 +192,7 @@ public class OnboardingMenuPlanFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                settingsCtrl.saveBooleanSettings(SettingsKeys.PASTA, b);
+                settingsCtrl.saveBooleanSettings(R.string.PREF_KEY_PASTA, b);
             }
         });
 
@@ -201,7 +200,7 @@ public class OnboardingMenuPlanFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                settingsCtrl.saveBooleanSettings(SettingsKeys.DESSERT, b);
+                settingsCtrl.saveBooleanSettings(R.string.PREF_KEY_DESSERTS, b);
             }
         });
 
@@ -209,7 +208,7 @@ public class OnboardingMenuPlanFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                settingsCtrl.saveBooleanSettings(SettingsKeys.SALAD, b);
+                settingsCtrl.saveBooleanSettings(R.string.PREF_KEY_SALAD, b);
             }
         });
     }
@@ -275,13 +274,13 @@ public class OnboardingMenuPlanFragment extends Fragment {
                 if (valueKey.equals("tariff")) {
                     selectedTariff = valueAdapter.getItem(which);
                     tariffBtn.setText(selectedTariff);
-                    settingsCtrl.saveStringSettings(SettingsKeys.TARIFF, tariffShort.get(which));
+                    settingsCtrl.saveStringSettings(R.string.PREF_KEY_MEAL_TARIFF, tariffShort.get(which));
 
                 }
                 else if (valueKey.equals("canteen")) {
                     selectedCanteen = valueAdapter.getItem(which);
                     canteenBtn.setText(selectedCanteen);
-                    settingsCtrl.saveStringSettings(SettingsKeys.CANTEEN, canteenShort.get(which));
+                    settingsCtrl.saveStringSettings(R.string.PREF_KEY_SELECTED_CANTEEN, canteenShort.get(which));
                 }
             }
         });

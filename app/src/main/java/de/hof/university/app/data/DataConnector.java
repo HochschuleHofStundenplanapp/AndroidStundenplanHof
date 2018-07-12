@@ -120,14 +120,8 @@ public class DataConnector extends AsyncTask<String, Void, String> {
     }
 
     @Override
-    protected void onPostExecute(String result){
-        
-        // alles nicht benötigt
-		
-        //final Parser parser = ParserFactory.create(ParserFactory.EParser.MENU);
-        //final String[] params = {result, sharedPreferences.getString( MainActivity.getAppContext().getString( R.string.PREF_KEY_MEAL_TARIFF ), "1")};
-
-        //nicht benötigt: ArrayList<Meal> tmpMeals = (ArrayList<Meal>) parser.parse(params);
+    protected void onPostExecute(final String result){
+        // nothing to do
     }
 
 

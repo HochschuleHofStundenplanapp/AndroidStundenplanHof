@@ -37,7 +37,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -48,8 +47,6 @@ import java.net.CookieManager;
 import de.hof.university.app.GDrive.GDriveCallbackManager;
 import de.hof.university.app.GDrive.GoogleDriveController;
 import de.hof.university.app.data.SettingsController;
-import de.hof.university.app.onboarding.Fragments.OnboardingMenuPlanFragment;
-import de.hof.university.app.onboarding.Fragments.OnboardingStudyFragment;
 import de.hof.university.app.onboarding.Fragments.OnboardingWelcomeFragment;
 import de.hof.university.app.onboarding.OnboardingController;
 import de.hof.university.app.fragment.meal_plan.MealPagerFragment;
@@ -195,7 +192,7 @@ public class MainActivity extends AppCompatActivity
 				case failure:
 					Toast.makeText(this, "GDrive Login fehlgeschlagen", Toast.LENGTH_LONG).show();
 					PreferenceManager.getDefaultSharedPreferences(this).edit()
-							.putBoolean(getString(R.string.gdrive_sync), false).apply();
+							.putBoolean(getString(R.string.PREF_KEY_GDRIVE_SYNC), false).apply();
 					break;
 			}
 				}

@@ -22,7 +22,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -42,7 +41,6 @@ import java.util.HashMap;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.data.SettingsController;
-import de.hof.university.app.data.SettingsController.SettingsKeys;
 import de.hof.university.app.data.TaskComplete;
 import de.hof.university.app.model.settings.StudyCourse;
 
@@ -50,7 +48,7 @@ import de.hof.university.app.model.settings.StudyCourse;
  * Created by patrickniepel on 03.01.18.
  */
 
-public class OnboardingStudyFragment extends android.support.v4.app.Fragment implements TaskComplete {
+public class OnboardingStudyFragment extends Fragment implements TaskComplete {
 
     private Button degreeProgramBtn, semesterBtn, continueBtn;
     private SettingsController settingsCtrl;
@@ -87,7 +85,7 @@ public class OnboardingStudyFragment extends android.support.v4.app.Fragment imp
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_onboarding_study, container, false);
+        final View v = inflater.inflate(R.layout.fragment_onboarding_study, container, false);
         return v;
     }
 
@@ -152,7 +150,7 @@ public class OnboardingStudyFragment extends android.support.v4.app.Fragment imp
                 lastRBIndex = index;
 
                 selectedTerm = termList.get(index);
-                settingsCtrl.saveStringSettings(SettingsKeys.TERM, termShort.get(index));
+                settingsCtrl.saveStringSettings(R.string.PREF_KEY_TERM_TIME, termShort.get(index));
                 degreeProgramBtn.setEnabled(true);
                 degreeProgramBtn.setTextColor(Color.BLACK);
             }
@@ -297,10 +295,10 @@ public class OnboardingStudyFragment extends android.support.v4.app.Fragment imp
 
         final ArrayAdapter<String> valueAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.select_dialog_singlechoice);
 
-        if(valueKey.equals("degreeProgram")) {
+        if("degreeProgram".equals(valueKey)) {
             valueAdapter.addAll(degreeProgramList);
         }
-        if(valueKey.equals("semester")) {
+        if("semester".equals(valueKey)) {
             valueAdapter.addAll(semesterList);
         }
 
@@ -319,14 +317,14 @@ public class OnboardingStudyFragment extends android.support.v4.app.Fragment imp
                     selectedDegreeProgram = valueAdapter.getItem(which);
                     String selectedDegreeProgramList = degreeProgramListTags.get(which);
                     degreeProgramBtn.setText(selectedDegreeProgram);
-                    settingsCtrl.saveStringSettings(SettingsKeys.DEGREE_PROGRAM, degreeProgramListTags.get(which));
+                    settingsCtrl.saveStringSettings(R.string.PREF_KEY_STUDIENGANG, degreeProgramListTags.get(which));
                     semesterBtn.setEnabled(true);
                     semesterBtn.setTextColor(Color.BLACK);
                     updateSemesterData(selectedDegreeProgramList);
                 }
                 if(valueKey.equals("semester")) {
                     selectedSemester = valueAdapter.getItem(which);
-                    settingsCtrl.saveStringSettings(SettingsKeys.SEMESTER, semesterList.get(which));
+                    settingsCtrl.saveStringSettings(R.string.PREF_KEY_SEMESTER, semesterList.get(which));
                     semesterBtn.setText(selectedSemester);
                 }
             }

@@ -54,12 +54,9 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 
-import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.model.schedule.LectureItem;
@@ -529,7 +526,7 @@ public class GoogleDriveController {
     }
 
     private void setGDrivePreference(boolean value){
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(context.getString(R.string.gdrive_sync), value).commit();
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(context.getString(R.string.PREF_KEY_GDRIVE_SYNC), value).commit();
     }
 
 }

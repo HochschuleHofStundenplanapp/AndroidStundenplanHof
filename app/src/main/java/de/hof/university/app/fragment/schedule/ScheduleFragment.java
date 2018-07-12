@@ -57,7 +57,7 @@ import de.hof.university.app.model.schedule.LectureItem;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentTransaction ;
 
 public class ScheduleFragment extends AbstractListFragment {
 

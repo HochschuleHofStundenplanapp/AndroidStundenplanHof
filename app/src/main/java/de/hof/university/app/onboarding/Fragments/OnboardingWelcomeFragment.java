@@ -34,7 +34,7 @@ public class OnboardingWelcomeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_onboarding_welcome, container, false);
+        final View v = inflater.inflate(R.layout.fragment_onboarding_welcome, container, false);
         return v;
     }
 
@@ -50,8 +50,8 @@ public class OnboardingWelcomeFragment extends Fragment {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager manager = getFragmentManager();
-                FragmentTransaction trans = manager.beginTransaction();
+                final FragmentManager manager = getFragmentManager();
+                final FragmentTransaction trans = manager.beginTransaction();
                 trans.addToBackStack(OnboardingStudyFragment.class.getName());
                 trans.replace(R.id.content_main, new OnboardingStudyFragment());
                 trans.commit();

@@ -209,7 +209,7 @@
     <string name="cancel">Cancel</string>
     <string name="gdrive_delete_drive_files">Delete Drive Files</string>
     <string name="gdrive_delete_drive_files_question">Do you want to delete the schedule in your Google Drive?</string>
-    <string name="gdrive_sync" translatable="false">drive_sync</string>
+    <string name="PREF_KEY_GDRIVE_SYNC" translatable="false">drive_sync</string>
     <string name="gdrive_unexpected_callback_manager" translatable="false">Unexpected CallbackManager, please use the provided CallbackManager Factory</string>
     <string name="gdrive_signed_in_successfully" translatable="false">Signed in successfully</string>
 

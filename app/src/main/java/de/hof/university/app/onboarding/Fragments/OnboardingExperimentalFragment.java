@@ -30,7 +30,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.preference.CheckBoxPreference;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -55,11 +54,7 @@ import de.hof.university.app.GDrive.NetworkUtil;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.calendar.CalendarSynchronization;
-import de.hof.university.app.communication.RegisterLectures;
-import de.hof.university.app.data.DataManager;
 import de.hof.university.app.data.SettingsController;
-import de.hof.university.app.data.SettingsController.SettingsKeys;
-import de.hof.university.app.experimental.LoginController;
 import de.hof.university.app.onboarding.OnboardingController;
 import android.support.v4.content.ContextCompat;
 
@@ -160,7 +155,7 @@ public class OnboardingExperimentalFragment extends Fragment {
                     activity.displayExperimentalFeaturesMenuEntries(false);
                 }
 
-                settingsCtrl.saveBooleanSettings(SettingsKeys.EXPERIMENTAL, b);
+                settingsCtrl.saveBooleanSettings(R.string.PREF_KEY_EXPERIMENTAL_FEATURES, b);
             }
         });
 
@@ -199,7 +194,7 @@ public class OnboardingExperimentalFragment extends Fragment {
                             .create();
                     d.show();
                 }
-                settingsCtrl.saveBooleanSettings(SettingsKeys.CALENDAR_SYNC, b);
+                settingsCtrl.saveBooleanSettings(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION, b);
             }
         });
         gDriveCb.setEnabled(NetworkUtil.isNetworkAvailable(getContext()));
@@ -213,7 +208,7 @@ public class OnboardingExperimentalFragment extends Fragment {
         IntentFilter intentFilter = new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE");
         getContext().registerReceiver(networkChangeReceiver, intentFilter);
         gDriveCb.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            settingsCtrl.saveBooleanSettings(SettingsKeys.GDRIVE, isChecked);
+            settingsCtrl.saveBooleanSettings(R.string.PREF_KEY_GDRIVE_SYNC, isChecked);
             gDriveCtrl.sync(isChecked);
         });
     }

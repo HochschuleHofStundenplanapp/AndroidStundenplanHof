@@ -22,14 +22,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v4.content.ContextCompat;
@@ -51,9 +48,7 @@ import com.google.android.gms.drive.DriveStatusCodes;
 
 import com.google.android.gms.gcm.Task;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import de.hof.university.app.GDrive.GoogleDriveController;
 import de.hof.university.app.GDrive.NetworkUtil;
@@ -61,16 +56,13 @@ import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.data.SettingsController;
 import de.hof.university.app.data.TaskComplete;
-import de.hof.university.app.onboarding.Fragments.OnboardingStudyFragment;
 import de.hof.university.app.onboarding.Fragments.OnboardingWelcomeFragment;
 import de.hof.university.app.onboarding.OnboardingController;
 import de.hof.university.app.util.Define;
-import de.hof.university.app.calendar.CalendarSynchronization;
 import de.hof.university.app.communication.RegisterLectures;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.experimental.LoginController;
 import de.hof.university.app.model.settings.StudyCourse;
-import de.hof.university.app.util.Define;
 
 
 /**
@@ -610,9 +602,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             changes_notification.setChecked(sharedPreferences.getBoolean(key, false));
         }
         //update Preferences if gdrive Sync is enabled
-        final boolean gdriveSynchronization = sharedPreferences.getBoolean(getContext().getString(R.string.gdrive_sync), false);
+        final boolean gdriveSynchronization = sharedPreferences.getBoolean(getContext().getString(R.string.PREF_KEY_GDRIVE_SYNC), false);
         Log.i(TAG, "GDrive Snyc on: " + gdriveSynchronization);
-        if (!key.equals(getContext().getString(R.string.gdrive_sync)) && gdriveSynchronization && !gDriveCtrl.restoreActive) {
+        if (!key.equals(getContext().getString(R.string.PREF_KEY_GDRIVE_SYNC)) && gdriveSynchronization && !gDriveCtrl.restoreActive) {
             gDriveCtrl.updateSharedPreferences();
         } else {
             Preference pref = findPreference(key);

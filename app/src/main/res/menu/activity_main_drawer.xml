@@ -35,8 +35,16 @@
             android:id="@+id/nav_aenderung"
             android:icon="@drawable/ic_view_list_black_24dp"
             android:title="@string/aenderung" />
+        <TextView
+            android:id="@+id/nav_footer_version"
+            android:title="Version"
+            >
+        </TextView>
 
     </group>
+
+
+
 
     <group
         android:id="@+id/menu_middle"

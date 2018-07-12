@@ -58,25 +58,7 @@ public class SettingsController  {
     private List<StudyCourse> studyCourseList;
     private SharedPreferences sharedPreferences;
 	
-	public enum SettingsKeys {
-		TERM,
-		DEGREE_PROGRAM,
-		SEMESTER,
-		MAIN_COURSE,
-		SIDE_DISHES,
-		PASTA,
-		DESSERT,
-		SALAD,
-		TARIFF,
-		CANTEEN,
-		NOTIFICATIONS,
-		EXPERIMENTAL,
-		CALENDAR_SYNC,
-        GDRIVE
-	}
-	
-	
-	public SettingsController(Activity activity) {
+    public SettingsController(Activity activity) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
         this.mActivity = activity;
     }
@@ -164,73 +146,16 @@ public class SettingsController  {
         getSemesterTask.execute(params);
     }
 
-    public void saveStringSettings(SettingsKeys key, String value) {
+    public void saveStringSettings(final int keyRessourceId, final String value) {
 
-        String prefKey = "";
-
-        switch (key) {
-            case TERM:
-                prefKey = mActivity.getString(R.string.PREF_KEY_TERM_TIME);
-                break;
-            case DEGREE_PROGRAM:
-                prefKey = mActivity.getString(R.string.PREF_KEY_STUDIENGANG);
-                break;
-            case SEMESTER:
-                prefKey = mActivity.getString(R.string.PREF_KEY_SEMESTER);
-                break;
-            case TARIFF:
-                prefKey = mActivity.getString(R.string.PREF_KEY_MEAL_TARIFF);
-                break;
-            case CANTEEN:
-                prefKey = mActivity.getString(R.string.PREF_KEY_SELECTED_CANTEEN);
-                break;
-
-                default:
-                    Log.v("SAVING_FAILED", "ONBOARDING-SettingsController-saveStringSettings");
-                    return;
-        }
+        final String prefKey = mActivity.getString(keyRessourceId) ;
         sharedPreferences.edit().putString(prefKey, value).apply();
     }
 
-    public void saveBooleanSettings(SettingsKeys key, boolean value) {
+    public void saveBooleanSettings(final int keyRessourceId, final boolean value) {
 
-        String prefKey = "";
-
-        switch (key) {
-            case MAIN_COURSE:
-                prefKey = mActivity.getString(R.string.PREF_KEY_MAIN_COURSE);
-                break;
-            case SIDE_DISHES:
-                prefKey = mActivity.getString(R.string.PREF_KEY_SIDE_DISHES);
-                break;
-            case PASTA:
-                prefKey = mActivity.getString(R.string.PREF_KEY_PASTA);
-                break;
-            case DESSERT:
-                prefKey = mActivity.getString(R.string.PREF_KEY_DESSERTS);
-                break;
-            case SALAD:
-                prefKey = mActivity.getString(R.string.PREF_KEY_SALAD);
-                break;
-            case EXPERIMENTAL:
-                prefKey = mActivity.getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES);
-                break;
-            case NOTIFICATIONS:
-                prefKey = mActivity.getString(R.string.PREF_KEY_CHANGES_NOTIFICATION);
-                break;
-            case CALENDAR_SYNC:
-                prefKey = mActivity.getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION);
-                break;
-            case GDRIVE:
-                prefKey = mActivity.getString(R.string.gdrive_sync);
-                break;
-
-            default:
-                Log.v("SAVING_FAILED", "ONBOARDING-SettingsController-saveBooleanSettings");
-                return;
-        }
-
-        sharedPreferences.edit().putBoolean(prefKey, value).apply();
+		final String prefKey = mActivity.getString(keyRessourceId) ;
+		sharedPreferences.edit().putBoolean(prefKey, value).apply();
     }
 
     /** Reset settings when onboarding gets restarted in settings */
@@ -252,7 +177,7 @@ public class SettingsController  {
         sharedPreferences.edit().putBoolean( mActivity.getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES), false).apply();
         sharedPreferences.edit().putBoolean( mActivity.getString(R.string.PREF_KEY_CHANGES_NOTIFICATION), false).apply();
         sharedPreferences.edit().putBoolean( mActivity.getString(R.string.PREF_KEY_CALENDAR_SYNCHRONIZATION), false).apply();
-        sharedPreferences.edit().putBoolean( mActivity.getString(R.string.gdrive_sync), false).apply();
+        sharedPreferences.edit().putBoolean( mActivity.getString(R.string.PREF_KEY_GDRIVE_SYNC), false).apply();
 
         final MainActivity activity = (MainActivity) mActivity;
         activity.displayExperimentalFeaturesMenuEntries(false);
@@ -299,10 +224,9 @@ public class SettingsController  {
                 entries = new CharSequence[studyCourseList.size()];
                 entryValues = new CharSequence[studyCourseList.size()];
 
-                StudyCourse studyCourse;
                 for (int i = 0; i < studyCourseList.size(); ++i) {
                     if (studyCourseList.get(i) instanceof StudyCourse) {
-                        studyCourse = studyCourseList.get(i);
+						final StudyCourse studyCourse = studyCourseList.get(i);
                         entries[i] = studyCourse.getName();
                         //Log.d("---------------------", entries  + ""));
                         entryValues[i] = studyCourse.getTag();
