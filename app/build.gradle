@@ -94,7 +94,7 @@ dependencies {
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
 	// Die Versionsnummer sollte die gleiche sein
 	implementation 'com.android.support:design:27.+'
-	//deprecated: implementation 'com.android.support:support-v4:27.+'
+	implementation 'com.android.support:support-v4:27.+'
 	implementation 'com.android.support:support-compat:27.+'
 	implementation 'com.android.support:support-core-utils:27.+'
 	implementation 'com.android.support:support-core-ui:27.+'
