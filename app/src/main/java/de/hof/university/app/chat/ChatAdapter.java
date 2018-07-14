@@ -33,11 +33,12 @@ import de.hof.university.app.R;
  * Created and © by Christian G. Pfeiffer on 04.07.18.
  */
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder>{
-    private ArrayList<ChatMessage> chatList;
+    private final ArrayList<ChatMessage> chatList;
     public String thisUser  = "";
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-       public TextView sender,textmessage;
+       public final TextView sender;
+        public final TextView textmessage;
 
 
         public MyViewHolder(View itemView) {

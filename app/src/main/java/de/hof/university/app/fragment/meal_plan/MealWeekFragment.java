@@ -138,7 +138,7 @@ public class MealWeekFragment extends AbstractListFragment {
         String curWeekDay = new SimpleDateFormat("EEEE", Locale.GERMANY).format(new Date());
         final SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN);
     
-        final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getView().getContext());;
+        final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getView().getContext());
         final boolean isDish = sharedPref.getBoolean("speiseplan_hauptgericht", true);
         final boolean isSupplement = sharedPref.getBoolean("speiseplan_beilage", true);
         final boolean isPasta = sharedPref.getBoolean("speiseplan_pasta", true);

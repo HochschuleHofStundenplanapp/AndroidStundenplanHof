@@ -35,7 +35,8 @@ public final class ParserFactory {
         } else if (parserEnum == ParserFactory.EParser.MYSCHEDULE) {
             return new MyScheduleParser();
         }
-
+    
+        //noinspection ConstantConditions
         junit.framework.Assert.assertTrue(false);
 
         return null;

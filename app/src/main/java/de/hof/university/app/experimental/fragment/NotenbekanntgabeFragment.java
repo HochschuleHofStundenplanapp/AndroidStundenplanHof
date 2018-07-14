@@ -58,6 +58,7 @@ import de.hof.university.app.experimental.model.Noten;
 import de.hof.university.app.util.Define;
 
 
+@SuppressWarnings("ALL")
 public class NotenbekanntgabeFragment extends android.support.v4.app.Fragment {
 
     private final static String TAG = "NotenbekanntgabeFragm";

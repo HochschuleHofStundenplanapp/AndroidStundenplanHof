@@ -38,7 +38,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     private final ArrayList<Fragment> mFragmentList = new ArrayList<>();
     private final ArrayList<String> mFragmentTitleList = new ArrayList<>();
-    Context context;
+    final Context context;
 
     public ViewPagerAdapter(FragmentManager manager, Context context, ViewPager viewPager,
                             TabLayout tabLayout) {
