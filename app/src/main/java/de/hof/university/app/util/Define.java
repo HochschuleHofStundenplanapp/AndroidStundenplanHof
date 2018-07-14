@@ -114,6 +114,21 @@ public final class Define {
 	public final static String URL_MEAL2		= "&tx_bwrkspeiseplan_pi2%5Bdate%5D=";
 	public static boolean mensa_changed = false;
 
+	//Chat-Server
+	public static final String SL_APP01_HOF_UNIVERSITY_DE = "sl-app01.hof-university.de";
+	public static final String CHAT_SERVER_APP_HOF_UNIVERSITY_DE = "app.hof-university.de";
+	public static final int CHAT_SERVER_BOSH_PORT = 443;
+	public static final String CHAT_HTTP_BIND = "/http-bind/";
+	//Chat
+	public static final int CHAT_HISTORY_LENGTH = 60;
+	//Chat Preference Keys
+	public final static String PREFERENCES_CHAT = "chatPrefs";
+	public final static String CHAT_KEY = "alreadyCreated";
+	public final static String USERNAME_KEY = "username";
+	public final static String PASSWORD_KEY = "password";
+	
+	
+	
 	// show the fragments dealing with the location of the user
 	//not used: public static final boolean SHOW_LOCATION_FRAGMENT = true;
 	// show Notenblatt and Notenfreigabe

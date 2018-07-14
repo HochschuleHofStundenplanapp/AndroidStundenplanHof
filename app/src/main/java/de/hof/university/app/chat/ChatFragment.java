@@ -16,13 +16,10 @@
 
 package de.hof.university.app.chat;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -30,9 +27,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -41,9 +36,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -74,7 +67,7 @@ public class ChatFragment extends Fragment implements Observer {
     private RecyclerView recyclerView;
     private EditText myEditTextView;
     private Button mySendButton;
-    private ArrayList<ChatMessage> chatlist = new ArrayList<>();
+    private final ArrayList<ChatMessage> chatlist = new ArrayList<>();
     private ChatAdapter chatAdapter;
 
     private OnFragmentInteractionListener mListener;
@@ -159,7 +152,7 @@ public class ChatFragment extends Fragment implements Observer {
                 try {
                     ((MainActivity)getActivity()).onBackPressed();
                 }catch (Exception e){
-
+                    ; //empty by intention
                 }
             }
             else {
@@ -247,7 +240,7 @@ public class ChatFragment extends Fragment implements Observer {
                 }
             });
         }catch (Exception e){
-
+            ; // empty by intention
         }
 
         }

@@ -39,12 +39,13 @@ import org.jxmpp.stringprep.XmppStringprepException;
 
 import java.io.IOException;
 
+import de.hof.university.app.util.Define;
+
 public class ChatCommunicator extends AsyncTask<String, String, String> implements MessageListener {
-
-
+    
     private XMPPBOSHConnection conn1;
-    private String nickname = "testuser2";
-    private String password = "TestUser2";
+    private String nickname = ""; //"testuser2";
+    private String password = ""; //"TestUser2";
     private Boolean newUser = false;
     private MultiUserChat multiChat;
 
@@ -55,58 +56,48 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
 
 
 
-    public String getPassword() {
-        return password;
-    }
+    final public String getPassword() { return password; }
 
-    public void setPassword(String password) {
+    final public void setPassword(String password) {
         this.password = password;
     }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
+    
+    final public String getSubject() { return subject; }
+    
+    final public void setSubject(String subject) {
         this.subject = subject;
     }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
+    
+    final public String getNickname() { return nickname; }
+    
+    final public void setNickname(String nickname) {
         this.nickname = nickname;
     }
-
-    public Boolean getNewUser() {
-        return newUser;
-    }
-
-    public void setNewUser(Boolean newUser) {
+    
+    final public Boolean getNewUser() { return newUser; }
+    
+    final public void setNewUser(Boolean newUser) {
         this.newUser = newUser;
     }
-
-    public String getRoomname() {
-        return roomname;
-    }
-
-    public void setRoomname(String roomname) {
+    
+    final public String getRoomname() { return roomname; }
+    
+    final public void setRoomname(String roomname) {
         this.roomname = roomname;
     }
 
     @Override
-    protected String doInBackground(String... strings) {
+    protected String doInBackground(final String... strings) {
 
         BOSHConfiguration config;
         if(newUser){
             try {
                 config = BOSHConfiguration.builder()
                         .setUseHttps(true)
-                        .setXmppDomain("sl-app01.hof-university.de")
-                        .setFile("/http-bind/")
-                        .setHost("app.hof-university.de")
-                        .setPort(443)
+                        .setXmppDomain(Define.SL_APP01_HOF_UNIVERSITY_DE)
+                        .setFile(Define.CHAT_HTTP_BIND)
+                        .setHost(Define.CHAT_SERVER_APP_HOF_UNIVERSITY_DE)
+                        .setPort(Define.CHAT_SERVER_BOSH_PORT)
                         .build();
                 conn1 = new XMPPBOSHConnection(config);
                 conn1.connect();
@@ -129,10 +120,10 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
             config = BOSHConfiguration.builder()
                         .setUseHttps(true)
                         .setUsernameAndPassword(this.nickname, this.password)
-                        .setXmppDomain("sl-app01.hof-university.de")
-                        .setFile("/http-bind/")
-                        .setHost("app.hof-university.de")
-                        .setPort(443)
+                        .setXmppDomain(Define.SL_APP01_HOF_UNIVERSITY_DE)
+                        .setFile(Define.CHAT_HTTP_BIND)
+                        .setHost(Define.CHAT_SERVER_APP_HOF_UNIVERSITY_DE)
+                        .setPort(Define.CHAT_SERVER_BOSH_PORT)
                         .build();
         }
         catch (XmppStringprepException e) {
@@ -211,10 +202,10 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
         }
     }
 
-    private void joinOrCreate(EntityBareJid jid) throws XmppStringprepException, InterruptedException, SmackException.NoResponseException, MultiUserChatException.MucAlreadyJoinedException, SmackException.NotConnectedException, XMPPException.XMPPErrorException, MultiUserChatException.NotAMucServiceException {
+    private void joinOrCreate(final EntityBareJid jid) throws XmppStringprepException, InterruptedException, SmackException.NoResponseException, MultiUserChatException.MucAlreadyJoinedException, SmackException.NotConnectedException, XMPPException.XMPPErrorException, MultiUserChatException.NotAMucServiceException {
         Resourcepart nickname = Resourcepart.from(this.nickname);
         MucEnterConfiguration.Builder mec = multiChat.getEnterConfigurationBuilder(nickname);
-        mec.requestHistorySince(600000);
+        mec.requestHistorySince(Define.CHAT_HISTORY_LENGTH);
         MucEnterConfiguration mucEnterConf = mec.build();
         try {
             multiChat.createOrJoin(mucEnterConf).makeInstant();
