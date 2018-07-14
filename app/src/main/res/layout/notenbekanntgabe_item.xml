@@ -16,13 +16,13 @@
   -->
 
 
-<TableRow
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="2"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp">
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:weightSum="2"
+	android:paddingTop="5dp"
+	android:paddingBottom="5dp">
 
     <TextView
         android:layout_width="wrap_content"
@@ -31,6 +31,7 @@
         android:id="@+id/notenbekanntgabe_item_fach"
         android:textSize="20sp"
         android:maxWidth="270dp"
+		tools:ignore="HardcodedText"
         android:text="fach"
         android:layout_weight="1"
         android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -45,6 +46,7 @@
         android:gravity="end"
         android:textSize="20sp"
         android:textStyle="bold"
+		tools:ignore="HardcodedText"
         android:text="note"
         android:layout_weight="1"
         android:paddingLeft="@dimen/activity_horizontal_margin"

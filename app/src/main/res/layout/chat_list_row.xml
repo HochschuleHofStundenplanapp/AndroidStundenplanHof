@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -20,12 +21,15 @@
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
-        android:text="Charlotta69"
+        tools:ignore="HardcodedText"
+        android:text="Sender"
         android:textColor="@color/Primary_backup"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+         />
+    <!-- android:text="Charlotta69" -->
 
     <TextView
         android:id="@+id/messageTextView"
@@ -37,7 +41,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
-        android:text="Dies ist eine wichtige Chatnachricht und enthält sehr wichtige Informationen für den Nutzer. Zudem soll es möglich sein, dass die Nutzer sehr lange Nachrichten schreiben können damit ihnen bei der Kommilitonen mit ihren Kommukutionen keine Grenzen gesetzt sind"
+        android:text=""
         android:textColor="@color/Primary_text"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -45,5 +49,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/senderTextView" />
+    <!-- android:text="Dies ist eine wichtige Chatnachricht und enthält sehr wichtige Informationen für den Nutzer. Zudem soll es möglich sein, dass die Nutzer sehr lange Nachrichten schreiben können damit ihnen bei der Kommilitonen mit ihren Kommukutionen keine Grenzen gesetzt sind" -->
 
 </android.support.constraint.ConstraintLayout>
