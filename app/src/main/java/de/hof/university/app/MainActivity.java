@@ -409,7 +409,6 @@ public class MainActivity extends AppCompatActivity
 
 	private void showExperimentalFeaturesInfoDialog(SharedPreferences sharedPreferences) {
 		final boolean showExperimentalFeaturesInfo = sharedPreferences.getBoolean(getString(R.string.PREF_KEY_SHOW_EXPERIMENTAL_FEATURES_INFO), true);
-		final boolean showExperimentalFeatures = sharedPreferences.getBoolean(getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES), false);
 
 		if (showExperimentalFeaturesInfo) {
 			sharedPreferences.edit()
@@ -417,6 +416,8 @@ public class MainActivity extends AppCompatActivity
 					.apply();
 
 			/** // Anzeigen falls nicht schon aktiviert
+			final boolean showExperimentalFeatures = sharedPreferences.getBoolean(getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES), false);
+
 			if (!showExperimentalFeatures) {
 				new AlertDialog.Builder(this)
 						.setTitle(R.string.experimental_features)
