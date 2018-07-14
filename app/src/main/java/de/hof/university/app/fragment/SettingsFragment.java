@@ -20,22 +20,21 @@ package de.hof.university.app.fragment;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.preference.CheckBoxPreference;
+import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceCategory;
 import android.support.v7.preference.PreferenceFragmentCompat;
-import android.preference.PreferenceManager;
-import android.support.design.widget.NavigationView;
 import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
@@ -43,36 +42,32 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.drive.DriveStatusCodes;
-
-import com.google.android.gms.gcm.Task;
-
 import java.util.HashMap;
 
 import de.hof.university.app.GDrive.GoogleDriveController;
 import de.hof.university.app.GDrive.NetworkUtil;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
+import de.hof.university.app.communication.RegisterLectures;
+import de.hof.university.app.data.DataManager;
 import de.hof.university.app.data.SettingsController;
 import de.hof.university.app.data.TaskComplete;
+import de.hof.university.app.experimental.LoginController;
+import de.hof.university.app.model.settings.StudyCourse;
 import de.hof.university.app.onboarding.Fragments.OnboardingWelcomeFragment;
 import de.hof.university.app.onboarding.OnboardingController;
 import de.hof.university.app.util.Define;
-import de.hof.university.app.communication.RegisterLectures;
-import de.hof.university.app.data.DataManager;
-import de.hof.university.app.experimental.LoginController;
-import de.hof.university.app.model.settings.StudyCourse;
 
 
 /**
  * Created by Lukas on 24.11.2015.
  */
+@SuppressWarnings({"ALL", "Convert2Lambda"})
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener, TaskComplete {
 
     public final static String TAG = "SettingsFragment";
 
-    private ProgressDialog progressDialog;
+    //private ProgressDialog progressDialog;
     //private LoginController loginController = null;
     //private CalendarSynchronization calendarSynchronization = null;
 
