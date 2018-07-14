@@ -46,6 +46,7 @@
         android:layout_marginStart="16dp"
         android:background="@color/Secondary_text"
         android:textColor="@color/colorBlack"
+        android:text="@string/continue_onboarding"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"

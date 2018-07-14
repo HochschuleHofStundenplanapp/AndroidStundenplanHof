@@ -7,9 +7,6 @@
     android:clickable="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="de.hof.university.app.onboarding.Fragments.OnboardingMenuPlanFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="0dp"
@@ -110,7 +107,7 @@
         app:layout_constraintTop_toBottomOf="@+id/onboarding_menu_plan_salad_checkbox" />
 
     <Button
-        android:id="@+id/onboarding_menu_plan_cateen_button"
+        android:id="@+id/onboarding_menu_plan_canteen_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -136,6 +133,8 @@
         android:layout_marginStart="16dp"
         android:background="@color/Secondary_text"
         android:textColor="@color/colorBlack"
+        android:gravity="center"
+		android:text="@string/continue_onboarding"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
