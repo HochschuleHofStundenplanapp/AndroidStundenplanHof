@@ -69,7 +69,7 @@ public class GoogleDriveController {
 
     public final String TAG = "GoogleDriveController";
 
-    protected static final String ACCOUNT_NAME_KEY = "account_name";
+    //not used: protected static final String PREF_ACCOUNT_NAME_KEY = "account_name";
     public boolean restoreActive = false;
 
 
@@ -101,7 +101,7 @@ public class GoogleDriveController {
     /**
      * Selected account name to authorize the app for and authenticate the client with.
      */
-    protected String mAccountName;
+    //never used: protected String mAccountName;
 
     private Function<Void, Void> onSignInSuccesful;
 
@@ -278,7 +278,7 @@ public class GoogleDriveController {
         Date myScheduleDate = new Date();
         //Save current Date of MySchedule in SharedPrefs for later update checks
         this.restoreActive = true;
-        prefs.edit().putLong(context.getString(R.string.PREF_KEY_MYSCHEDULE_DATE), myScheduleDate.getTime()).commit();
+        prefs.edit().putLong(context.getString(R.string.PREF_KEY_MYSCHEDULE_DATE), myScheduleDate.getTime()).apply();
         this.restoreActive = false;
 
 
@@ -365,7 +365,7 @@ public class GoogleDriveController {
         //Save current Date of MySchedule in SharedPrefs for later update checks
         final Date myScheduleDate = new Date();
         this.restoreActive = true;
-        prefs.edit().putLong(context.getString(R.string.PREF_KEY_MYSCHEDULE_DATE), myScheduleDate.getTime()).commit();
+        prefs.edit().putLong(context.getString(R.string.PREF_KEY_MYSCHEDULE_DATE), myScheduleDate.getTime()).apply();
         this.restoreActive = false;
         MySchedule lectures = DataManager.getInstance().getMySchedule(context);
         this.updateInDrive(context.getString(R.string.myschedule), lectures, myScheduleDate);
@@ -446,7 +446,7 @@ public class GoogleDriveController {
                         editor.putString(key, (String) value);
                     }
                 }
-                editor.commit();
+                editor.apply();
         });
     }
 
@@ -465,7 +465,7 @@ public class GoogleDriveController {
         this.signInIfNeeded(input -> {
             //Request a Sync for Google Drive because this is a known bug to ensure App Folder content is synced before attempting to restore
             //https://stackoverflow.com/questions/23755346/android-google-drive-app-data-folder-not-listing-all-childrens
-            this.getInstance(getActivity()).getDriveClient().requestSync().addOnSuccessListener(aVoid -> {
+            getInstance(getActivity()).getDriveClient().requestSync().addOnSuccessListener(aVoid -> {
                 //sync(isChecked);
                 performSync(isChecked);
             }).addOnFailureListener((e) -> {
@@ -526,7 +526,7 @@ public class GoogleDriveController {
     }
 
     private void setGDrivePreference(boolean value){
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(context.getString(R.string.PREF_KEY_GDRIVE_SYNC), value).commit();
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(context.getString(R.string.PREF_KEY_GDRIVE_SYNC), value).apply();
     }
 
 }

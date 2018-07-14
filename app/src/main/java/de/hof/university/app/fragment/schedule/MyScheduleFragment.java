@@ -119,7 +119,7 @@ public class MyScheduleFragment extends ScheduleFragment {
             adapter.notifyDataSetChanged();
             Toast.makeText(getView().getContext(), getString(R.string.deleted), Toast.LENGTH_SHORT).show();
             // Stundenplan auf GDrive syncen
-            DataManager.getInstance().updateGDrive(MainActivity.getAppContext());
+            DataManager.getInstance().updateGDrive();
             if (DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) == 0) {
                 Toast.makeText(getView().getContext(), getString(R.string.changesScheduleText), Toast.LENGTH_LONG).show();
             }
@@ -155,7 +155,7 @@ public class MyScheduleFragment extends ScheduleFragment {
         switch (item.getItemId()) {
             case R.id.action_delete_all:
                 DataManager.getInstance().deleteAllFromMySchedule(getActivity().getApplicationContext());
-                DataManager.getInstance().updateGDrive(MainActivity.getAppContext());
+                DataManager.getInstance().updateGDrive();
                 dataList.clear();
                 adapter.notifyDataSetChanged();
                 Toast.makeText(getView().getContext(), getString(R.string.changesScheduleText), Toast.LENGTH_LONG).show();

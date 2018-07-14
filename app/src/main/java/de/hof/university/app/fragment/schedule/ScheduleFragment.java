@@ -20,6 +20,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.util.Log;
@@ -54,10 +55,6 @@ import de.hof.university.app.fragment.AbstractListFragment;
 import de.hof.university.app.model.BigListItem;
 import de.hof.university.app.model.LastUpdated;
 import de.hof.university.app.model.schedule.LectureItem;
-
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction ;
 
 public class ScheduleFragment extends AbstractListFragment {
 
@@ -141,7 +138,7 @@ public class ScheduleFragment extends AbstractListFragment {
             DataManager.getInstance().addToMySchedule(info.targetView.getContext().getApplicationContext(), lectureItem);
             Toast.makeText(getView().getContext(), getString(R.string.added), Toast.LENGTH_SHORT).show();
             // Stundenplan auf GDrive syncen
-            DataManager.getInstance().updateGDrive(MainActivity.getAppContext());
+            DataManager.getInstance().updateGDrive();
             if (DataManager.getInstance().getMyScheduleSize(getActivity().getApplicationContext()) == 1) {
                 Toast.makeText(getView().getContext(), getString(R.string.changesMyScheduleText), Toast.LENGTH_LONG).show();
             }
@@ -328,7 +325,7 @@ public class ScheduleFragment extends AbstractListFragment {
                 }
             }
             DataManager.getInstance().addAllToMySchedule(getActivity().getApplicationContext(), schedulesIds);
-            DataManager.getInstance().updateGDrive(MainActivity.getAppContext());
+            DataManager.getInstance().updateGDrive();
 
             Toast.makeText(getView().getContext(), getString(R.string.changesMyScheduleText), Toast.LENGTH_LONG).show();
         }

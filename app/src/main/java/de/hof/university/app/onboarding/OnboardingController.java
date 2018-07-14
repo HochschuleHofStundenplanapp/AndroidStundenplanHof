@@ -21,7 +21,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import de.hof.university.app.MainActivity;
 import de.hof.university.app.data.SettingsController;
 
 /**
@@ -70,6 +69,6 @@ public class OnboardingController {
         editor.clear();
 
         editor.putBoolean(ONBOARDING_KEY, startedOnce);
-        editor.commit();
+        editor.apply();
     }
 }
