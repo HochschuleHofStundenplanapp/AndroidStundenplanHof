@@ -186,21 +186,21 @@
     <string name="onboarding_welcome_text_title">Schnell und einfach</string>
     <string name="onboarding_welcome_text_message">Folge den Anweisungen, um deinen persönlichen Stundenplan anzulegen</string>
     <string name="onboarding_error_text">Hinweis</string>
-    <string name="gdrive_restore_question">Es gibt Stundenplan-Dateien in deinem GDrive, möchtest du diese wiederherstellen?</string>
-    <string name="gdrive_use_remote">GDrive Stundenplan verwenden</string>
-    <string name="gdrive_use_local">Lokalen Stundenplan verwenden</string>
+
+    <string name="gdrive_restore_question">Es gibt Backup-Dateien (\'Stundenplan und Einstellungen\') in deinem GDrive. Möchtest du diese wiederherstellen?</string>
+    <string name="gdrive_use_remote">Backup vom GDrive verwenden</string>
+    <string name="gdrive_use_local">Mit lokalem Stundenplan fortfahren</string>
     <string name="gdrive_files_online">Dateien auf GDrive</string>
-    <string name="cancel">Abbrechen</string>
-    <string name="gdrive_delete_drive_files">Dateien auf Drive löschen</string>
-    <string name="gdrive_delete_drive_files_question">Möchtest du den Stundenplan auf Google Drive löschen?</string>
+    <string name="gdrive_delete_drive_files">Dateien auf GDrive löschen</string>
+    <string name="gdrive_delete_drive_files_question">Den Stundenplan auf Google Drive löschen?</string>
     <string name="DRIVE_SYNC">Google Drive Synchronisation</string>
-    <string name="schedule_will_be_synchronized">Stundenplan wird mit Google Drive synchronisiert</string>
+    <string name="schedule_will_be_synchronized">Stundenplan und Einstellungen wird mit Google Drive (GDrive) synchronisiert</string>
     <string name="schedule_deleted">Stundenplan wird gelöscht</string>
     <string name="cloudOverride">Cloud Daten werden überschrieben</string>
 
-    <string name="chat_no_internet">Du benötigst eine funktionierende Internetverbindnung um ein Chat beitreten zu können</string>
-    <string name="chat_offline">Du bist nicht mit den Internet verbunden</string>
-    <string name="send">Send</string>
+    <string name="chat_no_internet">Bist Du online?</string>
+    <string name="chat_offline">Du bist nicht online.</string>
+    <string name="send">Senden</string>
     <string name="chat">Chat....</string>
 
 

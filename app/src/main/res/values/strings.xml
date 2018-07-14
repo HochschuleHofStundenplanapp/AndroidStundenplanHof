@@ -205,15 +205,14 @@
     <string name="notification_channel_schedule_changes_description">Get notifications about schedule changes</string>
 
     <!-- GDrive -->
+	<string name="PREF_KEY_GDRIVE_SYNC" translatable="false">drive_sync</string>
     <string name="preferences_file" translatable="false">Preferences</string>
-    <string name="gdrive_restore_question">There are schedule files in your GDrive, would you like to restore them?</string>
-    <string name="gdrive_use_remote">Use GDrive schedule</string>
-    <string name="gdrive_use_local">Use local schedule</string>
+    <string name="gdrive_restore_question">There are backuped \'schedules and settings\' in your GDrive backup location. Do you want to restore them?</string>
+    <string name="gdrive_use_remote">Restore settings from GDrive</string>
+    <string name="gdrive_use_local">Continue with your local settings</string>
     <string name="gdrive_files_online">Files in GDrive</string>
-    <string name="cancel">Cancel</string>
     <string name="gdrive_delete_drive_files">Delete Drive Files</string>
-    <string name="gdrive_delete_drive_files_question">Do you want to delete the schedule in your Google Drive?</string>
-    <string name="PREF_KEY_GDRIVE_SYNC" translatable="false">drive_sync</string>
+    <string name="gdrive_delete_drive_files_question">Do you want to delete the backup in your Google Drive?</string>
     <string name="gdrive_unexpected_callback_manager" translatable="false">Unexpected CallbackManager, please use the provided CallbackManager Factory</string>
     <string name="gdrive_signed_in_successfully" translatable="false">Signed in successfully</string>
 
@@ -251,8 +250,8 @@
     <string name="cloudOverride">Cloud Data will be overwritten</string>
 
 <string name="chatfragment">chatfragment</string>
-    <string name="chat_no_internet">Please make sure that you are connected to the internet</string>
-    <string name="chat_offline">You are offline</string>
+    <string name="chat_no_internet">Are you connected to the internet?</string>
+    <string name="chat_offline">You are offline.</string>
     <string name="send">Send</string>
     <string name="chat">Chat....</string>
 
