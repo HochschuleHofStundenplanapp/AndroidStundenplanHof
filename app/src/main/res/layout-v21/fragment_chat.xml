@@ -15,6 +15,7 @@
 
         <Button
             android:id="@+id/sendMessageButton"
+            style="@android:style/Widget.Material.Light.Button.Borderless.Colored"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
