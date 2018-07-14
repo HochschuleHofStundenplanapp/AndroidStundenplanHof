@@ -16,9 +16,7 @@
 
 package de.hof.university.app.data;
 
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.util.Base64;
 import android.util.Log;
 
@@ -32,7 +30,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import de.hof.university.app.MainActivity;
 import de.hof.university.app.util.Define;
 
 /**
@@ -41,7 +38,6 @@ import de.hof.university.app.util.Define;
 public class DataConnector extends AsyncTask<String, Void, String> {
 
     private static final String TAG = "DataConnector";
-    private final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.getAppContext().getApplicationContext());
 
     final String readStringFromUrl(final String strUrl) {
         InputStream inputStream;
