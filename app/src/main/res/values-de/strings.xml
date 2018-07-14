@@ -80,25 +80,9 @@
     <string name="experimental_features">Experimentelle Funktionen</string>
     <string name="enableExperimentalSure">Experimentelle Funktionen können zum Absturz der App führen. Nutzung auf eigene Gefahr! Passwörter werden in Klartext gespeichert!</string>
     <string name="gewaehrAusschluss">Für die Korrektheit der bereitgestellten Daten wird keinerlei Verantwortung übernommen. Bitte wenden Sie sich für verbindliche Informationen an die jeweils zuständige Stelle.</string>
-    <string name="danksagung">Die Hochschule Hof sagt Dankeschön an die folgenden Mitwirkenden bei der Erstellung der App für Android sowie der Zuarbeit bei den Webservices, Layout, Design und Ratgeber: \n \n
-                               - Lukas Mahr\n
-                               - Lars Gaidzik\n
-                               - Peter Rill\n
-                               - Victor Dienstbier\n
-                               - Michael Stepping\n
-                               - Theresa Vogel\n
-                               - Daniel Glaser\n
-                               - Christian Pfeiffer\n
-                               - Jonas Beetz\n
-                               - Angelina Scheler\n
-                               - Bastian Kusserow\n
-                               - Johannes Franz\n
-                               - Marcel Hagmann\n
-                               - Maxi Sonntag\n
-                               - Normen Krugl\n
-                               - Patrick Niepel\n
-                               - Phillipp Dümleim\n
-                               - Phillipp Knoblauch\n</string>
+    <string name="danksagung">Die Hochschule Hof sagt Dankeschön an die folgenden Mitwirkenden bei der Erstellung, Wartung, Weiterentwicklung der
+        App für Android sowie der Zuarbeit bei den Webservices, Layout, Design und als Ratgeber: </string>
+
     <!--URLs -->
     <string name="doubleBackOnClose">Zum Beenden erneut Zurück tippen</string>
     <string name="noChanges">Es gibt keine Änderungen</string>

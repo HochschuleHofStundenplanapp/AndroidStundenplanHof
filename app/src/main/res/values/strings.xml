@@ -19,6 +19,28 @@
 
     <string name="DEFAULT_NOTIFICATION_CHANNEL_ID" translatable="false">notification_channel_schedule_changes</string>
 
+    <string name="contributors" translatable="false">
+                               - Lukas Mahr (1. Version)\n
+                               - Lars Gaidzik (1. Version)\n
+                               - Peter Rill (Schnittstellen)\n
+                               - Victor Dienstbier (Schnittstellen)\n
+                               - Michael Stepping (DER Aufpasser)\n
+                               - Theresa Vogel (CI)\n
+                               - Daniel Glaser\n
+                               - Jonas Beetz\n
+                               - Christian Pfeiffer (Material Design)\n
+                               - Angelina Scheler (Maps)\n
+                               - Bastian Kusserow (GDrive Sync)\n
+                               - Maxi Sonntag (GDrive Sync)\n
+                               - Johannes Franz (Chat)\n
+                               - Normen Krug (Chat)\n
+                               - Marcel Hagmann\n
+                               - Phillipp Knoblauch\n
+                               - Patrick Niepel (Onboarding)\n
+                               - Phillipp Dümleim (Onboarding)\n
+    </string>
+
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
@@ -80,25 +102,7 @@
     <string name="experimental_features">Experimental features</string>
     <string name="enableExperimentalSure">Experimental features may cause the app to crash. Use at your own risk! Passwords are saved in clear text!</string>
     <string name="gewaehrAusschluss">For the correctness of the provided data no responsibility is taken. Please contact for reliable information to the official body or institution.</string>
-    <string name="danksagung">Hof University says thank you to the following contributors in the creation of the app for Android as well the preparatory work in web service, layout, design and consultance: \n \n
-                               - Lukas Mahr\n
-                               - Lars Gaidzik\n
-                               - Peter Rill\n
-                               - Victor Dienstbier\n
-                               - Michael Stepping\n
-                               - Theresa Vogel\n
-                               - Daniel Glaser\n
-                               - Christian Pfeiffer\n
-                               - Jonas Beetz\n
-                               - Angelina Scheler\n
-                               - Bastian Kusserow\n
-                               - Johannes Franz\n
-                               - Marcel Hagmann\n
-                               - Maxi Sonntag\n
-                               - Normen Krug\n
-                               - Patrick Niepel\n
-                               - Phillipp Dümleim\n
-                               - Phillipp Knoblauch\n</string>
+    <string name="danksagung">Hof University says thank you to the following contributors in the creation of the app for Android as well the preparatory work in web service, layout, design and consultance:</string>
     <string name="noCourseSelected">No course of studies selected!</string>
     <string name="to">To:</string>
     <string name="doubleBackOnClose">To close press back twice</string>
@@ -224,7 +228,7 @@
 
     <string name="onboarding_study_info">Choose your semester and degree program</string>
     <string name="onboarding_menu_plan_info">Choose your menu plan</string>
-    <string name="onboarding_notifications_info">Turn on notifications \n Recieve Push Notifications of current changes</string>
+    <string name="onboarding_notifications_info">Turn on notifications \n Receive Push Notifications of current changes</string>
     <string name="onboarding_experimental_info">Turn on experimental features \n Enable sync to see your schedule in your calendar</string>
 
     <string name="onboarding_error_text">Attention</string>
