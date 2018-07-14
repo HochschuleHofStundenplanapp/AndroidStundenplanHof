@@ -504,7 +504,7 @@ public class GoogleDriveController {
                                 this.updateSharedPreferences();
                                 Snackbar.make(getActivity().getCurrentFocus(), R.string.cloudOverride, Snackbar.LENGTH_SHORT).show();
                             })
-                            .setNeutralButton(context.getString(R.string.cancel), (dialog, which) -> {
+                            .setNeutralButton(context.getString( android.R.string.cancel), (dialog, which) -> {
                                 setGDrivePreference(false);
                             })
                             .show();
