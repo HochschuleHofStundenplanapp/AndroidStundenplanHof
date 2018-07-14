@@ -463,7 +463,6 @@ class CalendarInterface {
 		}
 
 		junit.framework.Assert.assertTrue( !"".equals(title) );
-//TODO		Assert.assertTrue( !"".equals(description)) ;
 		junit.framework.Assert.assertTrue( startDate != null ) ;  // > 2016 && < 2030
 		junit.framework.Assert.assertTrue( endDate != null ) ;
 		junit.framework.Assert.assertTrue( !"".equals( location )) ;
