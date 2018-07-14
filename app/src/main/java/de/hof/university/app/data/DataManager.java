@@ -75,7 +75,7 @@ public class DataManager {
     private Changes changes;
     private Meals meals;
     private StudyCourses studyCourses;
-    private boolean [] weekreloaded = {false,false,false};
+    private final boolean [] weekreloaded = {false,false,false};
 
     private final SharedPreferences sharedPreferences;
 
@@ -588,13 +588,14 @@ public class DataManager {
 
     public Locale getLocale() {
         final Context context = MainActivity.getAppContext().getApplicationContext();
-
-        if (context.getString(R.string.language).equals("de")) {
-            return Locale.GERMANY;
-        } else if (context.getString(R.string.language).equals("en")) {
-            return Locale.ENGLISH;
-        } else {
-            return Locale.GERMANY;
+    
+        switch (context.getString(R.string.language)) {
+            case "de":
+                return Locale.GERMANY;
+            case "en":
+                return Locale.ENGLISH;
+            default:
+                return Locale.GERMANY;
         }
     }
 
@@ -627,7 +628,7 @@ public class DataManager {
     }
 
     //TODO: Was ist wenn GDrive Sync an ist aber readObject gecalled wurde?!
-    public void updateGDrive(Context context){
+    public void updateGDrive(){
 
         final boolean gdriveSynchronization = sharedPreferences.getBoolean("drive_sync", false);
 
