@@ -16,9 +16,9 @@
 
 package de.hof.university.app;
 
-import org.junit.Test;
+import junit.framework.Assert;
 
-import de.hof.university.app.util.Assert;
+import org.junit.Test;
 
 /**
  * To work on unit tests, switch the Test Artifact in the Build Variants view.
