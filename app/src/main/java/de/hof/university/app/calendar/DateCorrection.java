@@ -140,54 +140,59 @@ public class DateCorrection {
 
     private Date getSemesterEndDate(int year, String semester) {
         Date correctEndDate = new Date();
-
-        if ("SS".equals(semester)) {
-
-            final Calendar summerEndDateCalendar = GregorianCalendar.getInstance();
-            summerEndDateCalendar.set(GregorianCalendar.YEAR, year);
-            summerEndDateCalendar.set(GregorianCalendar.MONTH, summerEndMonth);
-            summerEndDateCalendar.set(GregorianCalendar.DATE, summerEndDay);
-
-            // Wenn der 10.7 ein Samstag/Sonntag/Montag ist endet der Vorlesungszeitraum am vorausgehenden Freitag
-
-            switch (summerEndDateCalendar.get(GregorianCalendar.DAY_OF_WEEK)) {
-                case GregorianCalendar.SATURDAY:
-                    summerEndDateCalendar.add(GregorianCalendar.DATE, -1);
-                    break;
-                case GregorianCalendar.SUNDAY:
-                    summerEndDateCalendar.add(GregorianCalendar.DATE, -2);
-                    break;
-                case GregorianCalendar.MONDAY:
-                    summerEndDateCalendar.add(GregorianCalendar.DATE, -3);
-                    break;
-            }
-
-            correctEndDate = summerEndDateCalendar.getTime();
-        } else if ("WS".equals(semester)) {
-
-            final Calendar winterEndDateCalendar = GregorianCalendar.getInstance();
-            winterEndDateCalendar.set(GregorianCalendar.YEAR, year);
-            winterEndDateCalendar.set(GregorianCalendar.MONTH, winterEndMonth);
-            winterEndDateCalendar.set(GregorianCalendar.DATE, winterEndDay);
-
-            // Wenn der 25.1 ein Samstag/Sonntag/Montag ist endet der Vorlesungszeitraum am vorausgehenden Freitag
-
-            switch (winterEndDateCalendar.get(GregorianCalendar.DAY_OF_WEEK)) {
-                case GregorianCalendar.SATURDAY:
-                    winterEndDateCalendar.add(GregorianCalendar.DATE, -1);
-                    break;
-                case GregorianCalendar.SUNDAY:
-                    winterEndDateCalendar.add(GregorianCalendar.DATE, -2);
-                    break;
-                case GregorianCalendar.MONDAY:
-                    winterEndDateCalendar.add(GregorianCalendar.DATE, -3);
-                    break;
-            }
-
-            correctEndDate = winterEndDateCalendar.getTime();
+    
+        switch (semester) {
+            case "SS":
+            
+                final Calendar summerEndDateCalendar = GregorianCalendar.getInstance();
+                summerEndDateCalendar.set(GregorianCalendar.YEAR, year);
+                summerEndDateCalendar.set(GregorianCalendar.MONTH, summerEndMonth);
+                summerEndDateCalendar.set(GregorianCalendar.DATE, summerEndDay);
+            
+                // Wenn der 10.7 ein Samstag/Sonntag/Montag ist endet der Vorlesungszeitraum am vorausgehenden Freitag
+            
+                switch (summerEndDateCalendar.get(GregorianCalendar.DAY_OF_WEEK)) {
+                    case GregorianCalendar.SATURDAY:
+                        summerEndDateCalendar.add(GregorianCalendar.DATE, -1);
+                        break;
+                    case GregorianCalendar.SUNDAY:
+                        summerEndDateCalendar.add(GregorianCalendar.DATE, -2);
+                        break;
+                    case GregorianCalendar.MONDAY:
+                        summerEndDateCalendar.add(GregorianCalendar.DATE, -3);
+                        break;
+                }
+            
+                correctEndDate = summerEndDateCalendar.getTime();
+                break;
+            case "WS":
+            
+                final Calendar winterEndDateCalendar = GregorianCalendar.getInstance();
+                winterEndDateCalendar.set(GregorianCalendar.YEAR, year);
+                winterEndDateCalendar.set(GregorianCalendar.MONTH, winterEndMonth);
+                winterEndDateCalendar.set(GregorianCalendar.DATE, winterEndDay);
+            
+                // Wenn der 25.1 ein Samstag/Sonntag/Montag ist endet der Vorlesungszeitraum am vorausgehenden Freitag
+            
+                switch (winterEndDateCalendar.get(GregorianCalendar.DAY_OF_WEEK)) {
+                    case GregorianCalendar.SATURDAY:
+                        winterEndDateCalendar.add(GregorianCalendar.DATE, -1);
+                        break;
+                    case GregorianCalendar.SUNDAY:
+                        winterEndDateCalendar.add(GregorianCalendar.DATE, -2);
+                        break;
+                    case GregorianCalendar.MONDAY:
+                        winterEndDateCalendar.add(GregorianCalendar.DATE, -3);
+                        break;
+                }
+            
+                correctEndDate = winterEndDateCalendar.getTime();
+                break;
+            default:
+//noinspection ConstantConditions
+                junit.framework.Assert.assertTrue(false);
+                break;
         }
-        else //noinspection ConstantConditions
-            junit.framework.Assert.assertTrue( false );
 
         return correctEndDate;
     }
