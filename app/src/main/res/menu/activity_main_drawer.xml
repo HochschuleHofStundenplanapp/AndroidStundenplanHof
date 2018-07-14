@@ -15,7 +15,7 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<menu
+<menu xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group
@@ -35,18 +35,11 @@
             android:id="@+id/nav_aenderung"
             android:icon="@drawable/ic_view_list_black_24dp"
             android:title="@string/aenderung" />
-        <TextView
-            android:id="@+id/nav_footer_version"
-            android:title="Version"
-            >
-        </TextView>
 
-    </group>
+	</group>
 
 
-
-
-    <group
+	<group
         android:id="@+id/menu_middle"
         android:checkableBehavior="single" >
 
