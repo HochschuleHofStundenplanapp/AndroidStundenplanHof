@@ -36,6 +36,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import de.hof.university.app.MainActivity;
@@ -63,7 +64,7 @@ public class OnboardingStudyFragment extends Fragment implements TaskComplete {
     private int lastRBIndex = -1;
 
     //Keys for saving settings
-    private ArrayList<String> termShort, degreeProgramShort, semesterShort;
+    private ArrayList<String> termShort;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,8 +80,6 @@ public class OnboardingStudyFragment extends Fragment implements TaskComplete {
 
         //keys
         termShort = new ArrayList<>();
-        degreeProgramShort = new ArrayList<>();
-        semesterShort = new ArrayList<>();
     }
 
     @Override
@@ -251,14 +250,10 @@ public class OnboardingStudyFragment extends Fragment implements TaskComplete {
 
     private void fillTermList() {
         String[] termArray = MainActivity.getAppContext().getResources().getStringArray(R.array.term_time);
-        for (String t : termArray) {
-            termList.add(t);
-        }
+		Collections.addAll(termList, termArray);
 
         String[] termShortArray = MainActivity.getAppContext().getResources().getStringArray(R.array.term_time_values);
-        for (String t : termShortArray) {
-            termShort.add(t);
-        }
+        Collections.addAll(termShort, termShortArray);
     }
 
     private void updateSemesterData(String selectedTag) {
@@ -273,9 +268,7 @@ public class OnboardingStudyFragment extends Fragment implements TaskComplete {
 
                 final ArrayList<String> entryValues = new ArrayList<>();
                 semesterList.clear();
-                for ( int j = 0; j < studyCourse.getTerms().size(); ++j ) {
-                    semesterList.add(studyCourse.getTerms().get(j));
-                }
+                semesterList.addAll(studyCourse.getTerms());
 
                 if ( semesterList != null ) {
                     if ( semesterList.size() > 0 ) {

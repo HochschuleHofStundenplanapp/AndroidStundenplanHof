@@ -35,6 +35,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
@@ -225,26 +226,18 @@ public class OnboardingMenuPlanFragment extends Fragment {
 
     private void fillTariffList() {
         String[] tariffArray = MainActivity.getAppContext().getResources().getStringArray(R.array.speiseplan_tarife);
-        for (String t : tariffArray) {
-            tariffList.add(t);
-        }
+        Collections.addAll(tariffList, tariffArray);
 
         String[] tariffShortArray = MainActivity.getAppContext().getResources().getStringArray(R.array.speiseplan_tarife_values);
-        for (String t : tariffShortArray) {
-            tariffShort.add(t);
-        }
+        Collections.addAll(tariffShort, tariffShortArray);
     }
 
     private void fillCanteenList() {
         String[] canteenArray = MainActivity.getAppContext().getResources().getStringArray(R.array.canteen);
-        for (String t : canteenArray) {
-            canteenList.add(t);
-        }
+        Collections.addAll(canteenList, canteenArray);
 
         String[] canteenShortArray = MainActivity.getAppContext().getResources().getStringArray(R.array.canteen_values);
-        for (String t : canteenShortArray) {
-            canteenShort.add(t);
-        }
+        Collections.addAll(canteenShort, canteenShortArray);
     }
 
     private void createDialog(final String valueKey) {
