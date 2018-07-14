@@ -99,7 +99,7 @@ public class OnboardingMenuPlanFragment extends Fragment {
     private void setupLayout() {
         continueBtn = getActivity().findViewById(R.id.onboarding_menu_plan_continue_button);
         tariffBtn = getActivity().findViewById(R.id.onboarding_menu_plan_tariff_button);
-        canteenBtn = getActivity().findViewById(R.id.onboarding_menu_plan_cateen_button);
+        canteenBtn = getActivity().findViewById(R.id.onboarding_menu_plan_canteen_button);
 
         mainCourseCb = getActivity().findViewById(R.id.onboarding_menu_plan_main_course_checkbox);
         sideDishesCb = getActivity().findViewById(R.id.onboarding_menu_plan_side_dishes_checkbox);
@@ -225,10 +225,10 @@ public class OnboardingMenuPlanFragment extends Fragment {
     }
 
     private void fillTariffList() {
-        String[] tariffArray = MainActivity.getAppContext().getResources().getStringArray(R.array.speiseplan_tarife);
+        final String[] tariffArray = MainActivity.getAppContext().getResources().getStringArray(R.array.speiseplan_tarife);
         Collections.addAll(tariffList, tariffArray);
 
-        String[] tariffShortArray = MainActivity.getAppContext().getResources().getStringArray(R.array.speiseplan_tarife_values);
+        final String[] tariffShortArray = MainActivity.getAppContext().getResources().getStringArray(R.array.speiseplan_tarife_values);
         Collections.addAll(tariffShort, tariffShortArray);
     }
 
@@ -247,9 +247,13 @@ public class OnboardingMenuPlanFragment extends Fragment {
         final ArrayAdapter<String> valueAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.select_dialog_item);
 
         if (valueKey.equals("tariff")) {
+        	//otherwise the Adapter gets filled more and more
+            valueAdapter.clear();
             valueAdapter.addAll(tariffList);
         }
         else if (valueKey.equals("canteen")) {
+			//otherwise the Adapter gets filled more and more
+			valueAdapter.clear();
             valueAdapter.addAll(canteenList);
         }
 
