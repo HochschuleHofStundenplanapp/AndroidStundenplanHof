@@ -101,7 +101,7 @@ public class RegisterLectures {
             }
             HttpURLConnection client = null;
             try {
-                junit.framework.Assert.assertTrue( url != null ) ;
+                org.junit.Assert.assertTrue( url != null ) ;
                 client = (HttpURLConnection) url.openConnection();
 
                 String data = URLEncoder.encode("fcm_token", "UTF-8")

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:configure="de.hof.university.app.widget.AppWidgetConfigureActivity"
+
+	android:updatePeriodMillis="0"
+	android:widgetCategory="home_screen"
+
+	android:previewImage="@drawable/widget_preview_400x307"
+	android:initialLayout="@layout/widget_initial_layout"
+	android:initialKeyguardLayout="@layout/widget_initial_layout"
+
+	android:minWidth="180dp"
+	android:minHeight="110dp"
+
+	android:resizeMode="horizontal|vertical"
+
+	tools:ignore="UnusedAttribute" />
+<!--
+	formula for minWidth/minHeight: #Cells * 70 - 30
+		-> 4 Cells * 70 - 30 = 250 dp
+		-> 3 Cells * 70 - 30 = 180 dp
+		-> 2 Cells * 70 - 30 = 110 dp
+
+	use initialLayout to indicate loading
+
+	notice: some attrs are api 17+ however api 16 is supported
+ -->

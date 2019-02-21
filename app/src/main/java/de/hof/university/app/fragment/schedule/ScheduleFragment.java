@@ -129,7 +129,7 @@ public class ScheduleFragment extends AbstractListFragment {
     @Override
     public boolean onContextItemSelected(final MenuItem item) {
 
-        junit.framework.Assert.assertTrue( item != null );
+        org.junit.Assert.assertTrue( item != null );
 
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         final LectureItem lectureItem = (LectureItem) listView.getItemAtPosition(info.position);
@@ -297,7 +297,7 @@ public class ScheduleFragment extends AbstractListFragment {
         final MainActivity mainActivity = (MainActivity) getActivity();
         final CharSequence title = mainActivity.getSupportActionBar().getTitle();
 
-        junit.framework.Assert.assertTrue( title.length() > 0 );
+        org.junit.Assert.assertTrue( title.length() > 0 );
 
         if (getString(R.string.stundenplan).contentEquals(title)) {
             inflater.inflate(R.menu.schedule_main, menu);
@@ -320,7 +320,7 @@ public class ScheduleFragment extends AbstractListFragment {
                     final LectureItem lectureItem = (LectureItem) object;
                     final String scheduleID = String.valueOf(lectureItem.getId());
                     // Haben wir eine ID erhalten oder doch nur eine "null"
-                    junit.framework.Assert.assertTrue( ! "null".equals(scheduleID) );
+                    org.junit.Assert.assertTrue( ! "null".equals(scheduleID) );
                     schedulesIds.add( scheduleID );
                 }
             }

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/widget_header"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:padding="7dp">
+
+        <ImageView
+            android:id="@+id/widget_header_prev"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/ic_baseline_navigate_before_24" />
+
+
+        <ImageView
+            android:id="@+id/widget_header_next"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/ic_baseline_navigate_next_24" />
+
+        <ImageView
+            android:id="@+id/widget_header_haw_hof_dpts"
+            android:layout_width="8dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="50dp"
+            android:layout_marginLeft="50dp"
+            android:background="@drawable/ic_hs_hof_dots" />
+
+        <TextView
+            android:id="@+id/widget_header_section_title"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_toEndOf="@+id/widget_header_haw_hof_dpts"
+            android:layout_toRightOf="@+id/widget_header_haw_hof_dpts"
+            android:gravity="center|start"
+            android:maxLines="2"
+            android:text="@string/myschedule"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            tools:ignore="UnusedAttribute" />
+        <!-- not working for RemoteViews > Api ~27
+            app:autoSizeMaxTextSize="22sp"
+            app:autoSizeMinTextSize="12sp"
+            app:autoSizeStepGranularity="2sp"
+            app:autoSizeTextType="uniform"
+            android:autoSizeMaxTextSize="100sp"
+            android:autoSizeMinTextSize="12sp"
+            android:autoSizeStepGranularity="2sp"
+            android:autoSizeTextType="uniform"
+            -->
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/widget_body"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/widget_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:cacheColorHint="#00000000"
+            android:overScrollMode="never"
+            android:paddingLeft="5dp"
+            android:paddingTop="2dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp" />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -43,6 +43,7 @@ import android.widget.Toast;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
+import java.util.Objects;
 
 import de.hof.university.app.GDrive.GDriveCallbackManager;
 import de.hof.university.app.GDrive.GoogleDriveController;
@@ -299,6 +300,23 @@ public class MainActivity extends AppCompatActivity
 				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_aenderung));
 			} else if (Define.SHORTCUT_INTENT_MEAL.equals( action )) {
 				onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_speiseplan));
+			} else if(Define.WIDGET_INTENT_SHOW_FRAGMENT.equals(action)) { /* == A Widget send this Intent -> get the WidgetMode and show the corresponding Fragment */
+				// check which fragment should be shown
+				switch (Objects.requireNonNull(getIntent().getExtras()).getInt(Define.INTENT_EXTRA_WIDGET_MODE, Define.WIDGET_MODE_INVALID)) {
+					case Define.WIDGET_MODE_CHANGES: {
+						onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_aenderung));
+						break;
+					}
+					case Define.WIDGET_MODE_SCHEDULE: {
+						onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_stundenplan));
+						break;
+					}
+					case Define.WIDGET_MODE_MY_SCHEDULE: {
+						onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_mySchedule));
+						break;
+					}
+					default: // could throw an exception but doing nothing is also fine
+				}
 			}
 		}
 	}

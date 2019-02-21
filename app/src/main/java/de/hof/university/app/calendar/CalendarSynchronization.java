@@ -125,7 +125,7 @@ public class CalendarSynchronization {
             newEndDateCalendar.set(Calendar.HOUR_OF_DAY, endDateCalendar.get(Calendar.HOUR_OF_DAY));
             newEndDateCalendar.set(Calendar.MINUTE, endDateCalendar.get(Calendar.MINUTE));
 
-            junit.framework.Assert.assertTrue( calendarInterface != null );
+            org.junit.Assert.assertTrue( calendarInterface != null );
             calendarInterface.createLectureEvent(lectureItem.getId(), lectureItem.getLabel(), "",
                     tmpStartDate, newEndDateCalendar.getTime(), CalendarInterface.getLocation(lectureItem.getRoom()));
 

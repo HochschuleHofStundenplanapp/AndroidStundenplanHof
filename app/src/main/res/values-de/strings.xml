@@ -202,7 +202,34 @@
     <string name="chat_offline">Du bist nicht online.</string>
     <string name="send">Senden</string>
     <string name="chat">Chat....</string>
+    <string name="chatcommunicator_on_exception">[Der Service hat nicht geantwortet. Versuchen Sie es später noch einmal.]</string>
 
-
+    <!-- AppWidget -->
+    <string name="appwidget_is_loading">Lade Widget …</string>
+    <string name="appwidget_configure_title">Widget Konfiguration</string>
+    <string name="appwidget_list_item_empty_schedule">Kein Eintrag.\n\nIst ein Stundenplan eingestellt?\n\nTipp:\nDer Einrichtungsprozess kann neugestartet werden unter <i>\"Einstellungen > Einrichtungs-Assistent neustarten\"</i></string>
+    <string name="appwidget_list_item_empty_my_schedule">Kein Eintrag.\n\nIst ein persönlicher Stundenplan erstellt worden?\n\nTipp:\nAlle Einträge des Stundenplans können zu den persönlichen Studenplan hinzugefügt werden unter <i>\"Stundenplan > Optionen > Alle hinzufügen\"</i></string>
+    <string name="appwidget_list_item_empty_changes">Kein Eintrag.\n</string>
+    <string name="appwidget_list_item_loading">Lade …</string>
+    <string name="appwidget_list_item_changes_error">Oopps… etwas lief schief!\nBitte informiere dich in der App über Stundenplanänderungen.</string>
+    <string name="appwidget_schedule_changes">Änderungen</string>
+    <string name="appwidget_schedule">Stundenplan</string>
+    <string name="appwidget_my_schedule">Mein Stundenplan</string>
+    <string name="appwidget_update_instructions_changes">Zum aktualliseren kann der Widget-Titel gedrückt werden.</string>
+    <string name="appwidget_configure_sample_day">FREITAG</string>
+    <string name="appwidget_configure_preview">Preview:</string>
+    <string name="appwidget_configure_disclaimer">Haftungsausschluss:</string>
+    <string name="appwidget_configure_disclaimer_agreement">Ich habe verstanden \n&amp; stimme zu</string>
+    <string name="appwidget_configure_disclaimer_content">Dieses Widget ist aktuell ein <b>experimentelles Feature</b>.\n\nIn dieser Version werden <b>keine Stundenplan-Daten automatisch</b> aktualisiert.\n\nFür die Korrektheit der bereitgestellten Daten wird keinerlei Verantwortung übernommen. Bitte wenden Sie sich für verbindliche Informationen an die jeweils zuständige Stelle.</string>
+    <string name="appwidget_configure_configuration">Konfiguration:</string>
+    <string name="appwidget_configure_design">Design:</string>
+    <string name="appwidget_configure_corner">Winkel:</string>
+    <string name="appwidget_configure_light">Hell</string>
+    <string name="appwidget_configure_dark">Dunkel</string>
+    <string name="appwidget_configure_angular">Kantig</string>
+    <string name="appwidget_configure_rounded">Rund</string>
+    <string name="appwidget_configure_apply">Anwenden</string>
+    <string name="appwidget_configure_cancel">Abbrechen</string>
+    <string name="appwidget_configure_toast_disclaimer_false">Um fortzufahren muss der Haftungsausschluss akzeptiert werden.</string>
 
 </resources>

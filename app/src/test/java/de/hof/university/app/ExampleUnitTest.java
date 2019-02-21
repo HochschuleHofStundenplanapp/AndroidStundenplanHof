@@ -26,6 +26,6 @@ import org.junit.Test;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
-        Assert.assertTrue(4 == 2 + 2);
+        org.junit.Assert.assertTrue(4 == 2 + 2);
     }
 }

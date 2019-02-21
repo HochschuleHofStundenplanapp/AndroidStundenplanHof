@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:top="@dimen/AppWidget_Stroke_Width_Minus">
+        <shape android:shape="rectangle">
+            <stroke android:width="@dimen/AppWidget_Stroke_Width" android:color="@color/AppWidget_Stroke_Background_Color" />
+            <solid android:color="@color/AppWidget_Body_Background_Color_ForDarkStyle" />
+        </shape>
+    </item>
+</layer-list>

@@ -15,12 +15,14 @@
  */
 
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
-	compileSdkVersion 27
+	compileSdkVersion 28
 	defaultConfig {
 		applicationId 'de.hof.university.app'
-		targetSdkVersion 27
+		targetSdkVersion 28
 		versionCode 37
 		versionName '4.8'
 		minSdkVersion 16
@@ -82,7 +84,7 @@ android {
 
 		//disable 'MissingTranslation'
 	}
-	buildToolsVersion '28.0.1'
+	buildToolsVersion '28.0.3'
 	compileOptions {
 		sourceCompatibility JavaVersion.VERSION_1_8
 		targetCompatibility JavaVersion.VERSION_1_8
@@ -93,20 +95,20 @@ android {
 dependencies {
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
 	// Die Versionsnummer sollte die gleiche sein
-	implementation 'com.android.support:design:27.+'
-	implementation 'com.android.support:support-v4:27.+'
-	implementation 'com.android.support:support-compat:27.+'
-	implementation 'com.android.support:support-core-utils:27.+'
-	implementation 'com.android.support:support-core-ui:27.+'
-	implementation 'com.android.support:support-media-compat:27.+'
-	implementation 'com.android.support:support-fragment:27.+'
+	implementation 'com.android.support:design:28.+'
+	implementation 'com.android.support:support-v4:28.+'
+	implementation 'com.android.support:support-compat:28.+'
+	implementation 'com.android.support:support-core-utils:28.+'
+	implementation 'com.android.support:support-core-ui:28.+'
+	implementation 'com.android.support:support-media-compat:28.+'
+	implementation 'com.android.support:support-fragment:28.+'
 
-	implementation 'com.android.support:appcompat-v7:27.+'
-	implementation 'com.android.support:gridlayout-v7:27.+'
-	implementation 'com.android.support:recyclerview-v7:27.+'
-	implementation 'com.android.support:preference-v7:27.+'
+	implementation 'com.android.support:appcompat-v7:28.+'
+	implementation 'com.android.support:gridlayout-v7:28.+'
+	implementation 'com.android.support:recyclerview-v7:28.+'
+	implementation 'com.android.support:preference-v7:28.+'
 
-	implementation 'com.android.support:preference-v14:27.+'
+	implementation 'com.android.support:preference-v14:28.+'
 
 	//smack
 	implementation 'org.igniterealtime.smack:smack-android-extensions:4.2.0'
@@ -119,17 +121,22 @@ dependencies {
 	implementation 'org.jsoup:jsoup:1.11.3'
 	// Die Versionsnummer sollte die gleiche sein
 	//implementation 'com.google.android.gms:play-services:12.+'
-	implementation 'com.google.android.gms:play-services-gcm:15.+'
-	implementation 'com.google.android.gms:play-services-auth:15.+'
-	implementation 'com.google.android.gms:play-services-drive:15.+'
+	implementation 'com.google.android.gms:play-services-gcm:16.+'
+	implementation 'com.google.android.gms:play-services-auth:16.+'
+	implementation 'com.google.android.gms:play-services-drive:16.+'
 
-	implementation 'com.google.firebase:firebase-messaging:15.+'
+	implementation 'com.google.firebase:firebase-messaging:17.+'
 	implementation 'android.arch.lifecycle:extensions:1.1.1'
 	implementation 'org.osmdroid:osmdroid-android:5.+'
-	testImplementation 'junit:junit:4.+'
+	implementation 'junit:junit:4.12'
 	//if using constraint-layout above 2.+ the minSdkVersion must be 18
 	implementation 'com.android.support.constraint:constraint-layout:1.+'
 
+	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
 apply plugin: 'com.google.gms.google-services'
+
+repositories {
+	mavenCentral()
+}

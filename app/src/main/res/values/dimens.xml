@@ -20,4 +20,9 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- AppWidget -->
+    <dimen name="AppWidget_Stroke_Width">2dp</dimen>
+    <dimen name="AppWidget_Stroke_Width_Minus">-3dp</dimen> <!-- == AppWidget_Stroke_Width + 1 * -1 -->
+    <dimen name="AppWidget_Corner_Radius">15dp</dimen>
 </resources>

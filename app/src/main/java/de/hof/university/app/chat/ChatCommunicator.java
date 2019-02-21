@@ -145,6 +145,23 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } catch (NullPointerException e) {
+            /* TODO: --> https://app.hof-university.de:433/ tells me it works ? and then blocks my ip ? :D
+             * Here's my original error:
+             * Connection XMPPBOSHConnection[not-authenticated] (0) closed with error org.igniterealtime.jbosh.BOSHException: Could not parse body:
+                <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+                <html><head>
+                <title>503 Service Unavailable</title>
+                </head><body>
+                <h1>Service Unavailable</h1>
+                <p>The server is temporarily unable to service your request due to maintenance downtime or capacity problems. Please try again later.</p>
+                <hr>
+                <address>Apache/2.4.18 (Ubuntu) Server at app.hof-university.de Port 443</address>
+                </body></html>
+             */
+            disconnect();
+            Log.e("ChatCommunicator", "Connection XMPPBOSHConnection[not-authenticated] closed with error", e);
+            return null;
         }
         multiChatManager = MultiUserChatManager.getInstanceFor(conn1);
         try {

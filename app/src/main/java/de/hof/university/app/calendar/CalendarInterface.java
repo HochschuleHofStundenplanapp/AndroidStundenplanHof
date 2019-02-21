@@ -391,12 +391,12 @@ class CalendarInterface {
 
 		if (DEBUG_CALENDAR_INTERFACE) Log.d( TAG, "createLectureEvent in CalendarInterface" );
 
-		junit.framework.Assert.assertTrue( !"".equals(lectureID) );
-		junit.framework.Assert.assertTrue( !"".equals(title) );
+		org.junit.Assert.assertTrue( !"".equals(lectureID) );
+		org.junit.Assert.assertTrue( !"".equals(title) );
 //TODO		Assert.assertTrue( !"".equals(description) );
-		junit.framework.Assert.assertTrue( startTime != null );
-		junit.framework.Assert.assertTrue( endTime != null );
-		junit.framework.Assert.assertTrue( !"".equals(location) );
+		org.junit.Assert.assertTrue( startTime != null );
+		org.junit.Assert.assertTrue( endTime != null );
+		org.junit.Assert.assertTrue( !"".equals(location) );
 
 		// checks if exists, if true than update event otherwise create event
 		ArrayList<Long> eventIDs = getEventIDs(lectureID, title, startTime, endTime );
@@ -462,10 +462,10 @@ class CalendarInterface {
 			return null;
 		}
 
-		junit.framework.Assert.assertTrue( !"".equals(title) );
-		junit.framework.Assert.assertTrue( startDate != null ) ;  // > 2016 && < 2030
-		junit.framework.Assert.assertTrue( endDate != null ) ;
-		junit.framework.Assert.assertTrue( !"".equals( location )) ;
+		org.junit.Assert.assertTrue( !"".equals(title) );
+		org.junit.Assert.assertTrue( startDate != null ) ;  // > 2016 && < 2030
+		org.junit.Assert.assertTrue( endDate != null ) ;
+		org.junit.Assert.assertTrue( !"".equals( location )) ;
 
 		final ContentValues values = new ContentValues();
 		values.put(Events.DTSTART, startDate.getTime());

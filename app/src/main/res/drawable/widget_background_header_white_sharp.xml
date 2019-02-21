@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle" >
+    <stroke android:width="@dimen/AppWidget_Stroke_Width" android:color="@color/AppWidget_Stroke_Background_Color" />
+    <solid android:color="@color/AppWidget_Header_Background_Color_For_LightStyle" />
+</shape>

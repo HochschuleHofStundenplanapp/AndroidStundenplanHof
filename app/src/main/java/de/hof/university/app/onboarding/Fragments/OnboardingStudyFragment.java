@@ -326,13 +326,9 @@ public class OnboardingStudyFragment extends Fragment implements TaskComplete {
     }
 
     private void downloadDegreeProgramList() {
-        String termValue = "";
-
-        termValue = selectedTerm.toLowerCase().startsWith("w") ? "WS" : "SS";
-
         final String[] params = new String[2];
-        params[0] = termValue;
-        params[1] = String.valueOf(false);
+        params[0] = selectedTerm.toLowerCase().startsWith("w") ? "WS" : "SS";
+        params[1] = String.valueOf(true); // forceRefresh on DataManager.getCourses()
         settingsCtrl.executeSemesterTask(this, params);
     }
 

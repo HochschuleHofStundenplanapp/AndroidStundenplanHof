@@ -48,8 +48,8 @@ public class MyScheduleParser extends ScheduleParser {
         }
         language = params[1];
 
-        junit.framework.Assert.assertTrue( ! jsonString.isEmpty() );
-        junit.framework.Assert.assertTrue( ! language.isEmpty() );
+        org.junit.Assert.assertTrue( ! jsonString.isEmpty() );
+        org.junit.Assert.assertTrue( ! language.isEmpty() );
         
         JSONArray jsonArray = null;
         try {

@@ -158,13 +158,17 @@ public class ChatFragment extends Fragment implements Observer {
             else {
                 mySendButton.setActivated(true);
                 mySendButton.setTextColor(Color.BLACK);
-                Log.d("send Message: ", myEditTextView.getText().toString());
-                ChatMessage msg = new ChatMessage(chatAdapter.thisUser, myEditTextView.getText().toString());
-                chatlist.add(msg);
-
-                chatAdapter.notifyDataSetChanged();
-                recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
-                chatCtrl.sendMessage(msg.getMessage());
+                try { //TODO: see ChatCommunicator.doInBackground
+                    Log.d("send Message: ", myEditTextView.getText().toString());
+                    ChatMessage msg = new ChatMessage(chatAdapter.thisUser, myEditTextView.getText().toString());
+                    chatCtrl.sendMessage(msg.getMessage());
+                    chatlist.add(msg);
+                    chatAdapter.notifyDataSetChanged();
+                    recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount() - 1);
+                } catch (NullPointerException e) {
+                    Log.e("ChatFragment","sendMessage failed since ChatController seems unavailable", e);
+                    chatlist.add(new ChatMessage("Error:", getContext().getString(R.string.chatcommunicator_on_exception)));
+                }
                 chatAdapter.notifyDataSetChanged();
                 myEditTextView.setText("");
             }

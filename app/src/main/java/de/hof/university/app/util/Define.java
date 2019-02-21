@@ -194,8 +194,15 @@ public final class Define {
 	public final static String NOTIFICATION_TYPE_CHANGE = "change";
 	public final static String SHORTCUT_INTENT_CHANGES = "de.hof.university.app.CHANGES";
 	public final static String SHORTCUT_INTENT_MEAL = "de.hof.university.app.MEAL";
+	public final static String WIDGET_INTENT_SHOW_FRAGMENT = "de.hof.university.app.WIDGET_SHOW_FRAGMENT";
+	public final static String INTENT_EXTRA_WIDGET_MODE = "EXTRA_WIDGET_MODE";
 
 	// Notifications Channels
 	public final static String NOTIFICATION_CHANNEL_SCHEDULE_CHANGES_ID = "notification_channel_schedule_changes";
 
+	// WidgetModes
+	public final static int WIDGET_MODE_INVALID = -1;
+	public final static int WIDGET_MODE_SCHEDULE = 0;
+	public final static int WIDGET_MODE_CHANGES = 1;
+	public final static int WIDGET_MODE_MY_SCHEDULE = 2;
 }

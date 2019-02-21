@@ -37,7 +37,7 @@ public final class ParserFactory {
         }
     
         //noinspection ConstantConditions
-        junit.framework.Assert.assertTrue(false);
+        org.junit.Assert.assertTrue(false);
 
         return null;
     }

@@ -254,6 +254,39 @@
     <string name="chat_offline">You are offline.</string>
     <string name="send">Send</string>
     <string name="chat">Chat....</string>
+    <string name="chatcommunicator_on_exception">[Service did not respond. Try again later.]</string>
+
+    <!-- AppWidget -->
+    <string name="appwidget_is_loading">Widget is loading …</string>
+    <string name="appwidget_configure_title">Widget Configuration</string>
+    <string name="appwidget_list_item_empty_schedule">No entry found.\nDid you set up a schedule?\n\nHint:\nYou can restart the configuration-process in <i>\"settings > Restart Assistant\"</i></string>
+    <string name="appwidget_list_item_empty_my_schedule">No entry found.\nDid you set up a personal schedule?\n\nHint:\nYou can add all entrys of your schedule to your personal schedule in <i>\"schedule > options > add all\"</i></string>
+    <string name="appwidget_list_item_empty_changes">No entry found.\n</string>
+    <string name="appwidget_list_item_loading">Loading …</string>
+    <string name="appwidget_list_item_changes_error">Oopps.. something went wrong!\nPlease check the app about your schedule changes.</string>
+    <string name="appwidget_schedule_changes">Changes</string>
+    <string name="appwidget_schedule">Schedule</string>
+    <string name="appwidget_my_schedule">My Schedule</string>
+    <string name="appwidget_update_instructions_changes">Update by clicking the widget-title.</string>
+
+    <string name="appwidget_configure_sample_day">FRIDAY</string>
+    <string name="appwidget_configure_sample_time" translatable="false">9:45 – 11:15</string>
+    <string name="appwidget_configure_sample_room" translatable="false">FA0000</string>
+    <string name="appwidget_configure_sample_details" translatable="false">Praktikum Programmieren Mobiler Endgeräte</string>
+    <string name="appwidget_configure_preview">Preview:</string>
+    <string name="appwidget_configure_disclaimer">Disclaimer:</string>
+    <string name="appwidget_configure_disclaimer_agreement">I understand &amp; agree</string>
+    <string name="appwidget_configure_disclaimer_content">This widget is currently an <b>experimental feature</b>.\n\nIt will <b>not automatically update</b> any data in its current form.\n\nFor the correctness of the provided data no responsibility is taken. Please contact for reliable information the official body or institution.</string>
+    <string name="appwidget_configure_configuration">Configuration:</string>
+    <string name="appwidget_configure_design">Design:</string>
+    <string name="appwidget_configure_corner">Corners:</string>
+    <string name="appwidget_configure_light">Light</string>
+    <string name="appwidget_configure_dark">Dark</string>
+    <string name="appwidget_configure_angular">Angular</string>
+    <string name="appwidget_configure_rounded">Rounded</string>
+    <string name="appwidget_configure_apply">Apply</string>
+    <string name="appwidget_configure_cancel">Cancel</string>
+    <string name="appwidget_configure_toast_disclaimer_false">To continue you need to accept the disclaimer.</string>
 
 
 </resources>

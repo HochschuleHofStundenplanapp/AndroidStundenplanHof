@@ -36,4 +36,8 @@
     <style name="MyOverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
         <item name="android:tint">@color/Accent</item>
     </style>
+
+    <style name="WidgetInitialLoading" parent="@style/Theme.AppCompat">
+        <item name="colorAccent">@color/AppWidget_Initial_Loading_Color</item>
+    </style>
 </resources>

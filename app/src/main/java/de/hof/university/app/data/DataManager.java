@@ -58,6 +58,7 @@ import de.hof.university.app.model.settings.StudyCourse;
 import de.hof.university.app.model.settings.StudyCourses;
 import de.hof.university.app.util.Define;
 import de.hof.university.app.util.MyString;
+import de.hof.university.app.widget.data.AppWidgetDataCache;
 
 /**
  *
@@ -136,7 +137,7 @@ public class DataManager {
             }
 
             final String[] params = {xmlString, sharedPreferences.getString( MainActivity.getAppContext().getString( R.string.PREF_KEY_MEAL_TARIFF ), "1")};
-            junit.framework.Assert.assertTrue(parser != null);
+            org.junit.Assert.assertTrue(parser != null);
 
             switch (forWeek){
                 case 0:
@@ -202,7 +203,7 @@ public class DataManager {
             }
 
             final String[] params = {jsonString, language};
-            junit.framework.Assert.assertTrue( parser != null );
+            org.junit.Assert.assertTrue( parser != null );
 
             ArrayList<LectureItem> tmpScheduleLectureItems = (ArrayList<LectureItem>) parser.parse(params);
 
@@ -231,10 +232,16 @@ public class DataManager {
                 }
             }
             // Zuletzt aktualisert setzen
-            this.getSchedule(context).setLastSaved(new Date());
+            final Date tmpLastSaved = new Date();
+            this.getSchedule(context).setLastSaved(tmpLastSaved);
 
             // Speichern
             saveObject(context, this.getSchedule(context), Define.scheduleFilename);
+
+            // Daten mit Widget teilen
+            if(AppWidgetDataCache.Companion.hasInstance()) {
+                AppWidgetDataCache.Companion.getInstance().shareScheduleData(context, tmpScheduleLectureItems, tmpLastSaved);
+            }
         }
 
         return this.getSchedule(context).getLectures();
@@ -278,7 +285,7 @@ public class DataManager {
 
             final String[] params = {jsonString, language};
 
-            junit.framework.Assert.assertTrue(parser != null );
+            org.junit.Assert.assertTrue(parser != null );
             ArrayList<LectureItem> tmpMyScheduleLectureItems = (ArrayList<LectureItem>) parser.parse(params);
 
             // Wenn der Server einen unvollständigen Stundenplan (nur halb so groß oder kleiner) liefert bringe die Fehlermedlung "Aktualisierung fehlgeschlagen"
@@ -299,10 +306,16 @@ public class DataManager {
                 this.updateCalendar(newLectureItems);
             }
             // Zuletzt aktualisiert setzen
-            this.getMySchedule(context).setLastSaved(new Date());
+            final Date tmpLastSaved = new Date();
+            this.getMySchedule(context).setLastSaved(tmpLastSaved);
 
             // Speichern
             this.saveObject(context, getMySchedule(context), Define.myScheduleFilename);
+
+            // Daten mit Widget teilen
+            if(AppWidgetDataCache.Companion.hasInstance()) {
+                AppWidgetDataCache.Companion.getInstance().shareMyScheduleData(context, tmpMyScheduleLectureItems, tmpLastSaved);
+            }
         }
 
         return this.getMySchedule(context).getLectures();
@@ -355,7 +368,7 @@ public class DataManager {
             }
 
             final String[] params = {jsonString};
-            junit.framework.Assert.assertTrue( parser != null );
+            org.junit.Assert.assertTrue( parser != null );
 
             ArrayList<Object> tmpChanges = (ArrayList<Object>) parser.parse(params);
 
@@ -363,9 +376,17 @@ public class DataManager {
             this.getChanges(context).setChanges(tmpChanges);
 
             // Zuletzt aktualisiert setzen
-            this.getChanges(context).setLastSaved(new Date());
+            final Date tmpLastSaved = new Date();
+            this.getChanges(context).setLastSaved(tmpLastSaved);
+
             // Speichern
             saveObject(context, this.getChanges(context), Define.changesFilename);
+
+            // Daten mit Widget teilen
+            if(AppWidgetDataCache.Companion.hasInstance()) {
+                AppWidgetDataCache.Companion.getInstance().shareChangesData(context, tmpChanges, tmpLastSaved);
+            }
+
             // Kalender aktualisieren
             this.updateChangesInCalendar();
         }
@@ -406,7 +427,7 @@ public class DataManager {
             }
 
             final String[] params = {jsonString, language};
-            junit.framework.Assert.assertTrue( parser != null );
+            org.junit.Assert.assertTrue( parser != null );
 
             ArrayList<StudyCourse> tmpCourses = (ArrayList<StudyCourse>) parser.parse(params);
 
@@ -436,6 +457,9 @@ public class DataManager {
         this.getMySchedule(context).getIds().add(String.valueOf(lectureItem.getId()));
         this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
         this.addLectureToCalendar(context, lectureItem);
+        if(AppWidgetDataCache.Companion.hasInstance()) {
+            AppWidgetDataCache.Companion.getInstance().shareMyScheduleData(context, this.getMySchedule(context).getLectures(), this.getMySchedule(context).getLastSaved());
+        }
     }
 
     public final void deleteFromMySchedule(final Context context, final LectureItem lectureItem) {
@@ -451,7 +475,9 @@ public class DataManager {
         }
         this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
         this.deleteLectureFromCalendar(context, lectureItem.getId());
-
+        if(AppWidgetDataCache.Companion.hasInstance()) {
+            AppWidgetDataCache.Companion.getInstance().shareMyScheduleData(context, this.getMySchedule(context).getLectures(), this.getMySchedule(context).getLastSaved());
+        }
         // falls MySchedule leer füge den Schedule zum Kalender hinzu
         if (this.getMySchedule(context).getLectures().isEmpty()) {
             this.updateCalendar();
@@ -462,6 +488,9 @@ public class DataManager {
         this.getMySchedule(context).getIds().addAll(schedulesIds);
         this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
         this.addAllToCalendar(context, this.getSchedule(context).getLectures());
+        if(AppWidgetDataCache.Companion.hasInstance()) {
+            AppWidgetDataCache.Companion.getInstance().shareMyScheduleData(context, this.getMySchedule(context).getLectures(), this.getMySchedule(context).getLastSaved());
+        }
     }
 
     public final void deleteAllFromMySchedule(final Context context) {
@@ -469,6 +498,9 @@ public class DataManager {
         this.getMySchedule(context).getLectures().clear();
         this.saveObject(context, this.getMySchedule(context), Define.myScheduleFilename);
         this.updateCalendar();
+        if(AppWidgetDataCache.Companion.hasInstance()) {
+            AppWidgetDataCache.Companion.getInstance().shareMyScheduleData(context, null, null);
+        }
     }
 
     // Getters

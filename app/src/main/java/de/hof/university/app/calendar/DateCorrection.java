@@ -190,7 +190,7 @@ public class DateCorrection {
                 break;
             default:
 //noinspection ConstantConditions
-                junit.framework.Assert.assertTrue(false);
+                org.junit.Assert.assertTrue(false);
                 break;
         }
 

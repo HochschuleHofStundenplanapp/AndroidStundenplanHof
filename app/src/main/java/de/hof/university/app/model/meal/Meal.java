@@ -49,9 +49,9 @@ public class Meal implements Serializable {
 	public Meal(final Date tag, final String weekDay, final String category, final String name) {
 		super();
 		
-		junit.framework.Assert.assertTrue( !weekDay.isEmpty() );
-		junit.framework.Assert.assertTrue( !category.isEmpty() );
-		junit.framework.Assert.assertTrue( !name.isEmpty() );
+		org.junit.Assert.assertTrue( !weekDay.isEmpty() );
+		org.junit.Assert.assertTrue( !category.isEmpty() );
+		org.junit.Assert.assertTrue( !name.isEmpty() );
 		
 		this.weekDay = weekDay;
 		this.day = tag;

@@ -70,4 +70,17 @@
     <color name="Secondary_text_backup">#757575</color>
     <color name="icons_backup">#FFFFFF</color>
     <color name="divider_backup">#BDBDBD</color>
+
+
+    <!-- AppWidget -->
+    <color name="AppWidget_Text_Color_Primary_For_LightStyle">#212121</color>
+    <color name="AppWidget_Text_Color_Primary_For_DarkStyle">#FFFFFF</color>
+    <color name="AppWidget_Text_Color_Secondary_For_LightStyle">#0031CA</color>
+    <color name="AppWidget_Text_Color_Secondary_For_DarkStyle">#4B79FF</color>
+    <color name="AppWidget_Stroke_Background_Color">#0A0A0A</color>
+    <color name="AppWidget_Header_Background_Color_For_LightStyle">#EFEFEF</color>
+    <color name="AppWidget_Header_Background_Color_ForDarkStyle">#191919</color>
+    <color name="AppWidget_Body_Background_Color_For_LightStyle">#F7F7F7</color>
+    <color name="AppWidget_Body_Background_Color_ForDarkStyle">#252525</color>
+    <color name="AppWidget_Initial_Loading_Color">#505050</color>
 </resources>
