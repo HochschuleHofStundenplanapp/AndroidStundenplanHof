@@ -19,7 +19,8 @@ import java.util.ArrayList
  * @since Version 4.8(37)
  * @date 18.02.2018
  */
-internal class AppWidgetRemoteViewsFactoryMySchedule(context: Context, lightStyleIsSelected: Boolean): GenericRemoteViewsFactory<Any>(context, lightStyleIsSelected, 3){
+internal class AppWidgetRemoteViewsFactoryMySchedule(context: Context, lightStyleIsSelected: Boolean)
+	: GenericRemoteViewsFactory<Any>(context, lightStyleIsSelected, 3){
 
 	override fun setData(dataCache: AppWidgetDataCache): ArrayList<Any> {
 		var tmpWeekDayString = ""

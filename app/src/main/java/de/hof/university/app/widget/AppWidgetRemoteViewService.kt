@@ -19,7 +19,7 @@ import java.lang.Exception
 /**
  * The service to be connected to for a remote adapter to request RemoteViews.
  * Users should extend the RemoteViewsService to provide the appropriate RemoteViewsFactory's used to populate the remote collection view (ListView, GridView, etc).
- * @see RemoteViewsService - https://developer.android.com/reference/android/widget/RemoteViewsService
+ * @see RemoteViewsService - [developer.android: https://developer.android.com/reference/android/widget/RemoteViewsService]
  *
  * @author Jan Gaida
  * @since Version 4.8(37)
@@ -28,12 +28,12 @@ import java.lang.Exception
 class AppWidgetRemoteViewService : RemoteViewsService() {
 
 	/**
-	 * This is called by the System & this Services will be created or destroyed by the System asap (usualy after n-Seconds where this is not in use)
-	 * --> produces some Lag infavor of RAM/CPU
+	 * This is called by the system & this services will be created or destroyed by the system asap (usualy after n-Seconds where this is not in use)
+	 * --> produces some lag infavor of RAM/CPU
 	 *
-	 * @param intent - The Intent fired from the Widget when it needs a Adapter, set by the [AppWidgetBroadcastReceiver]
+	 * @param intent - The intent fired from the widget when it needs a adapter, set by the [AppWidgetBroadcastReceiver]
+     *
 	 * @see AppWidgetBroadcastReceiver.updateAppWidget
-	 *
 	 * @see de.hof.university.app.util.Define for constants, for better readability directly imported
 	 */
 	override fun onGetViewFactory(intent: Intent): RemoteViewsFactory

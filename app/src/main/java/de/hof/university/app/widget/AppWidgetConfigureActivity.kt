@@ -5,6 +5,7 @@ package de.hof.university.app.widget
 
 import android.app.Activity
 import android.appwidget.AppWidgetManager
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -12,6 +13,7 @@ import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.text.Html
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.RadioGroup
@@ -21,8 +23,11 @@ import de.hof.university.app.widget.data.AppWidgetSettingsHolder
 import kotlinx.android.synthetic.main.widget_configure_layout.*
 
 /**
- * The Activity running immediately after a Widget has been initialized (with the initial Layout only),
+ * The activity running immediately after a widget has been initialized (with the initial layout only: [de.hof.university.app.R.layout.widget_initial_layout]),
  * and should be styled by the options the user took here.
+ *
+ * @see [AppWidgetSettingsHolder] - the object holding the settings for a widget
+ * @see [AppWidgetBroadcastReceiver] - the object called by [AppWidgetManager] to update the widget
  *
  * @author Jan Gaida
  * @since Version 4.8(37)
@@ -56,7 +61,6 @@ class AppWidgetConfigureActivity : AppCompatActivity() {
 	private lateinit var previewTime: TextView
 	private lateinit var previewHeader: View
 	private lateinit var previewBody: View
-
 	/**
 	 * OVERRIDES
 	 */
@@ -87,8 +91,8 @@ class AppWidgetConfigureActivity : AppCompatActivity() {
 			show()
 		}
 
-		// content
-		setContentView(R.layout.widget_configure_layout)
+        // content
+        setContentView(R.layout.widget_configure_layout)
 
 		// init
 		previewHeader = findViewById(R.id.widget_configure_preview_header)
@@ -118,7 +122,7 @@ class AppWidgetConfigureActivity : AppCompatActivity() {
 
 		// style-radio-group
 		widget_configure_design_radiogroup.setOnCheckedChangeListener(
-			ColorTextChangingOnCheckChangeListener(arrayOf(widget_configure_design_radiobutton_light, widget_configure_design_radiobutton_dark), secondaryColorLightStyle, primaryColorLightStyle,
+			ColorTextChangingOnCheckChangeListener(arrayOf(widget_configure_design_radiobutton_light, widget_configure_design_radiobutton_dark),
 				onPostChange = {
 					when(it) {
 						R.id.widget_configure_design_radiobutton_light -> applyLightDesignToPreview()
@@ -129,14 +133,13 @@ class AppWidgetConfigureActivity : AppCompatActivity() {
 		)
 
 		widget_configure_corners_radiogroup.setOnCheckedChangeListener(
-			ColorTextChangingOnCheckChangeListener(arrayOf(widget_configure_corners_radiobutton_angular, widget_configure_corners_radiobutton_rounded), secondaryColorLightStyle, primaryColorLightStyle,
+			ColorTextChangingOnCheckChangeListener(arrayOf(widget_configure_corners_radiobutton_angular, widget_configure_corners_radiobutton_rounded),
 				onPostChange = {
-					widget_configure_design_radiobutton_light.isChecked.also {lightStyleIsSelected ->
-						when(it){
-							R.id.widget_configure_corners_radiobutton_angular -> applyAngularCornersToPreview(lightStyleIsSelected)
-							R.id.widget_configure_corners_radiobutton_rounded -> applyRoundedCornersToPreview(lightStyleIsSelected)
-						}
-					}
+                    when(it){
+                        R.id.widget_configure_corners_radiobutton_angular -> applyAngularCornersToPreview()
+                        R.id.widget_configure_corners_radiobutton_rounded -> applyRoundedCornersToPreview()
+                    }
+
 				}
 			)
 		)
@@ -159,30 +162,33 @@ class AppWidgetConfigureActivity : AppCompatActivity() {
 				}
 				finish()
 			} else {
-				Snackbar.make(widget_configure_root, R.string.appwidget_configure_toast_disclaimer_false, Snackbar.LENGTH_LONG).show()
+				Snackbar.make(widget_configure_root, R.string.appwidget_configure_snackbar_disclaimer_false, Snackbar.LENGTH_LONG).apply {
+					setActionTextColor(ContextCompat.getColor(context, R.color.AppWidget_Text_Color_Secondary_For_DarkStyle))
+                    setAction(R.string.appwidget_configure_snackbar_ok) { dismiss() }
+				}.show()
 			}
 		}
 	}
 
 	/**
-	 * COMPANION for onSaveInstanceState && onRestoreInstanceState
+	 * COMPANION for [onRestoreInstanceState] && [onRestoreInstanceState]
 	 */
 	private companion object {
-		private const val outStateLightIsSelected = "LIGHT_SELECTED"
-		private const val outStateAngularIsSelected = "ANGULAR_SELECTED"
+		private const val OUTSTATE_KEY_LIGHT_IS_SELECTED = "LIGHT_SELECTED"
+		private const val OUTSTATE_KEY_ANGULAR_IS_SELECTED = "ANGULAR_SELECTED"
 	}
 
 	override fun onSaveInstanceState(outState: Bundle) {
 		super.onSaveInstanceState(outState)
-		outState.putBoolean(outStateLightIsSelected, widget_configure_design_radiobutton_light.isChecked)
-		outState.putBoolean(outStateAngularIsSelected, widget_configure_corners_radiobutton_angular.isChecked)
+		outState.putBoolean(OUTSTATE_KEY_LIGHT_IS_SELECTED, widget_configure_design_radiobutton_light.isChecked)
+		outState.putBoolean(OUTSTATE_KEY_ANGULAR_IS_SELECTED, widget_configure_corners_radiobutton_angular.isChecked)
 	}
 
 	override fun onRestoreInstanceState(savedInstanceState: Bundle) {
 		super.onRestoreInstanceState(savedInstanceState)
 		// reapply preview-configuration
-		savedInstanceState.getBoolean(outStateLightIsSelected).let { lightSelected ->
-			savedInstanceState.getBoolean(outStateAngularIsSelected).let {angularSelected ->
+		savedInstanceState.getBoolean(OUTSTATE_KEY_LIGHT_IS_SELECTED).let { lightSelected ->
+			savedInstanceState.getBoolean(OUTSTATE_KEY_ANGULAR_IS_SELECTED).let { angularSelected ->
 				if (lightSelected) { applyLightDesignToPreview(angularSelected) }
 				else { applyDarkDesignToPreview(angularSelected) }
 				if(angularSelected) { applyAngularCornersToPreview(lightSelected) }
@@ -225,7 +231,7 @@ class AppWidgetConfigureActivity : AppCompatActivity() {
 		}
 	}
 
-	private fun applyRoundedCornersToPreview(lightDesignIsSelected: Boolean)
+	private fun applyRoundedCornersToPreview(lightDesignIsSelected: Boolean = widget_configure_design_radiobutton_light.isChecked)
 		= if (lightDesignIsSelected) {
 			previewHeader.setBackgroundResource(backgroundHeaderLightStyleRound)
 			previewBody.setBackgroundResource(backgroundBodyLightStyleRound)
@@ -235,7 +241,7 @@ class AppWidgetConfigureActivity : AppCompatActivity() {
 		}
 
 
-	private fun applyAngularCornersToPreview(lightDesignIsSelected: Boolean)
+	private fun applyAngularCornersToPreview(lightDesignIsSelected: Boolean = widget_configure_design_radiobutton_light.isChecked)
 		= if (lightDesignIsSelected) {
 			previewHeader.setBackgroundResource(backgroundHeaderLightStyleSharp)
 			previewBody.setBackgroundResource(backgroundBodyLightStyleSharp)
@@ -245,27 +251,24 @@ class AppWidgetConfigureActivity : AppCompatActivity() {
 		}
 
 	/**
-	 * BASE-IMPLEMENTATION of the OnCheckedChangeListener
+	 * BASE-IMPLEMENTATION of the [RadioGroup.OnCheckedChangeListener]
 	 */
 	private inner class ColorTextChangingOnCheckChangeListener(
-			private val buttons: Array<RadioButton>,
-			private val highlight: Int,
-			private val default: Int,
-			private val onPostChange: (Int) -> (Unit)
+        private val buttons: Array<RadioButton>,
+        private val onPostChange: (Int) -> (Unit)
 	): RadioGroup.OnCheckedChangeListener {
 
-		init { onPreChange() }
+		init { changeTextColorForRadioButtons() }
 
 		//changes the text-color for the radiobuttons
-		//Sidenote: this is rather onPrePostChange
-		private fun onPreChange() = buttons.forEach {
-			if (it.isChecked) it.setTextColor(highlight)
-			else it.setTextColor(default)
+		private fun changeTextColorForRadioButtons() = buttons.forEach {
+			if (it.isChecked) it.setTextColor(secondaryColorDarkStyle)
+			else it.setTextColor(primaryColorLightStyle)
 		}
 
 		//changes the text-color and calls the Lambda after it
 		override fun onCheckedChanged(group: RadioGroup, checkedId: Int) {
-			onPreChange()
+			changeTextColorForRadioButtons()
 			return onPostChange(checkedId)
 		}
 	}

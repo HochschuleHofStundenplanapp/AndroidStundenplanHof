@@ -9,7 +9,7 @@ import de.hof.university.app.R
 import de.hof.university.app.model.schedule.LectureChange
 import de.hof.university.app.widget.AppWidgetBroadcastReceiver
 import de.hof.university.app.widget.data.AppWidgetDataCache
-import java.util.*
+import java.util.ArrayList
 
 /**
  * @see [GenericRemoteViewsFactory] for description
@@ -18,7 +18,8 @@ import java.util.*
  * @since Version 4.8(37)
  * @date 18.02.2018
  */
-internal class AppWidgetRemoteViewsFactoryChanges(context: Context, lightStyleIsSelected: Boolean): GenericRemoteViewsFactory<Any>(context, lightStyleIsSelected, 3) {
+internal class AppWidgetRemoteViewsFactoryChanges(context: Context, lightStyleIsSelected: Boolean)
+	: GenericRemoteViewsFactory<Any>(context, lightStyleIsSelected, 3) {
 
 	override fun setData(dataCache: AppWidgetDataCache): ArrayList<Any> = dataCache.getChangesData(context)
 

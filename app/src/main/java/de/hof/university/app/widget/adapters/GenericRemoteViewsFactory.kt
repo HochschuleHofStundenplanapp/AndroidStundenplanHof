@@ -42,10 +42,10 @@ import java.util.Date
  * @date 18.02.2018
  */
 internal abstract class GenericRemoteViewsFactory<DATATYPE>(
-		internal val context: Context,
-		lightStyleIsSelected: Boolean,
-		private val amountOfViewTypes: Int)
-	: RemoteViewsService.RemoteViewsFactory {
+	internal val context: Context,
+	lightStyleIsSelected: Boolean,
+	private val amountOfViewTypes: Int
+	): RemoteViewsService.RemoteViewsFactory {
 
 	/**
 	 * HELPER-VARS
@@ -62,11 +62,11 @@ internal abstract class GenericRemoteViewsFactory<DATATYPE>(
 		if(lightStyleIsSelected) {
 			primaryTextColor = ContextCompat.getColor(context, R.color.AppWidget_Text_Color_Primary_For_LightStyle)
 			secondaryTextColor = ContextCompat.getColor(context, R.color.AppWidget_Text_Color_Secondary_For_LightStyle)
-			dissatisfiedIcon = R.drawable.ic_baseline_sentiment_dissatisfied_light_styled_24
+			dissatisfiedIcon = R.drawable.ic_baseline_search_light_24
 		} else {
 			primaryTextColor = ContextCompat.getColor(context, R.color.AppWidget_Text_Color_Primary_For_DarkStyle)
 			secondaryTextColor = ContextCompat.getColor(context, R.color.AppWidget_Text_Color_Secondary_For_DarkStyle)
-			dissatisfiedIcon = R.drawable.ic_baseline_sentiment_dissatisfied_dark_styled_24
+			dissatisfiedIcon = R.drawable.ic_baseline_search_dark_24
 		}
 	}
 

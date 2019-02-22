@@ -22,11 +22,11 @@ import de.hof.university.app.util.Define.WIDGET_MODE_SCHEDULE
  * @date 18.02.2018
  */
 data class AppWidgetSettingsHolder(
-		val lightStyleIsSelected: Boolean,
-		val sharpStyleIsSelected: Boolean,
-		var widgetMode: Int = WIDGET_MODE_SCHEDULE,
-		var titleSize: Float? = null
-) : Serializable {
+        val lightStyleIsSelected: Boolean,
+        val angularStyleIsSelected: Boolean,
+        var widgetMode: Int = WIDGET_MODE_SCHEDULE,
+        var titleSize: Float? = null
+	) : Serializable {
 
 	// ..when a WidgetMode gets changed the TitleSize shall be calculated
 	fun replaceWidgetMode(mode: Int) {

@@ -13,10 +13,11 @@ import android.util.Log
 import android.content.Context
 import de.hof.university.app.widget.AppWidgetBroadcastReceiver
 import java.io.File
-import java.io.FileInputStream
-import java.io.ObjectInputStream
-import java.io.FileOutputStream
 import java.io.ObjectOutputStream
+import java.io.ObjectInputStream
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.InvalidClassException
 import java.lang.Exception
 
 /**
@@ -38,7 +39,7 @@ import java.lang.Exception
  *
  * What does this?
  * Caching any Data needed to display a Widget including WidgetSettings ( which gets fully managed by this - including creation / saving / deleting / mapping ).
- * No Schedule, MySchedule, Changes -Data will and should be written by this - only read-access on these.
+ * No Schedule, MySchedule, Changes - Data will and should be written by this - only read-access on these.
  *
  * @reacts_on [android.content.Intent.ACTION_SHUTDOWN] - see for more [AppWidgetBroadcastReceiver]
  * @reacts_on [android.content.Intent.ACTION_BOOT_COMPLETED] - see for more [AppWidgetBroadcastReceiver]
@@ -134,20 +135,20 @@ class AppWidgetDataCache private constructor() {
 
 	private fun grabMyScheduleData(context: Context): ArrayList<LectureItem>
 		= grabData < MySchedule, ArrayList<LectureItem> > ( context, Define.myScheduleFilename,
-				success = { it.run{ myScheduleLastSaved = it.lastSaved; it.lectures }},
-				failure = { ArrayList() }
+			success = { it.run{ myScheduleLastSaved = it.lastSaved; it.lectures }},
+			failure = { ArrayList() }
 		)
 
 	private fun grabScheduleData(context: Context): ArrayList<LectureItem>
 		= grabData < Schedule, ArrayList<LectureItem> > ( context, Define.scheduleFilename,
-				success = { it.run{ scheduleLastSaved = it.lastSaved; it.lectures }},
-				failure = { ArrayList() }
+			success = { it.run{ scheduleLastSaved = it.lastSaved; it.lectures }},
+			failure = { ArrayList() }
 		)
 
 	private fun grabChangesData(context: Context): ArrayList<Any>
 		= grabData < Changes, ArrayList<Any> > ( context, Define.changesFilename,
-				success = { it.run{ changesLastSaved = it.lastSaved; it.changes }},
-				failure = { ArrayList() }
+			success = { it.run{ changesLastSaved = it.lastSaved; it.changes }},
+			failure = { ArrayList() }
 		)
 
 	/**
@@ -178,24 +179,46 @@ class AppWidgetDataCache private constructor() {
 	private fun initWidgetSettingsIfNotAlreadyDone(context: Context) {
 		if (!::widgetSettings.isInitialized || widgetSettings.isEmpty())
 			widgetSettings = grabData < MutableMap<Int,AppWidgetSettingsHolder> , MutableMap<Int,AppWidgetSettingsHolder> > ( context, CONFIG_FILE_NAME,
-					success = { it },
-					failure = { mutableMapOf() }
+				success = { it },
+				failure = { mutableMapOf() }
 			)
 	}
 
 	/**
 	 * HELPER-FUN
 	 */
+    /**
+     * Helper-Method to read a [File] from the [Context.getFilesDir].
+     *
+     * @param context - The Context from which the requested file can be read
+     * @param fileName - The name of the file
+     * @param success - The function called if the read data is of [TARGET]
+     * @param failure - The function called if the read data isn't [TARGET]
+     * @param TARGET - The targetted Type to read
+     * @param RESULT - The resulting Type of [success] and [failure]
+     */
 	private inline fun <reified TARGET, RESULT> grabData(context: Context, fileName: String, success: (TARGET) -> RESULT, failure: () -> RESULT): RESULT{
 		try {
-			File(context.filesDir, fileName).apply {
-				if (exists()) FileInputStream(this).use { fis -> ObjectInputStream(fis).use { ois ->
-					ois.readObject()?.let {
-						if (it is TARGET) { return success(it) }
-					}
-				} }
-			}
-		} catch (e: Exception) { Log.e(TAG, "Failed reading $fileName", e)}
+            File(context.filesDir, fileName).apply {
+                if (exists()) FileInputStream(this).use { fis ->
+                    ObjectInputStream(fis).use { ois ->
+                        ois.readObject()?.let {
+                            if (it is TARGET) {
+                                return success(it)
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (invalid: InvalidClassException) {
+            Log.e(TAG, "Failed identifying $fileName", invalid)
+            if (fileName == CONFIG_FILE_NAME) {
+                File(context.filesDir, fileName).delete()
+                saveWidgetSettings(context)
+            }
+		} catch (e: Exception) {
+            Log.e(TAG, "Failed reading $fileName", e)
+        }
 		return failure()
 	}
 

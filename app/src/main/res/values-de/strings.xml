@@ -230,6 +230,6 @@
     <string name="appwidget_configure_rounded">Rund</string>
     <string name="appwidget_configure_apply">Anwenden</string>
     <string name="appwidget_configure_cancel">Abbrechen</string>
-    <string name="appwidget_configure_toast_disclaimer_false">Um fortzufahren muss der Haftungsausschluss akzeptiert werden.</string>
+    <string name="appwidget_configure_snackbar_disclaimer_false">Um fortzufahren muss der Haftungsausschluss akzeptiert werden.</string>
 
 </resources>

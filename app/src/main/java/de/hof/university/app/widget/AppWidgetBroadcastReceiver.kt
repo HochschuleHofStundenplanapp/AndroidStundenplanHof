@@ -22,6 +22,7 @@ import android.content.res.Configuration
 import android.graphics.Paint
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.util.Log
 import android.util.TypedValue
 import de.hof.university.app.R
 import de.hof.university.app.util.Define.WIDGET_INTENT_SHOW_FRAGMENT
@@ -42,9 +43,7 @@ import de.hof.university.app.util.Define.WIDGET_MODE_SCHEDULE
  *
  * See descriptions for some insights.
  *
- * @is bootaware
- *
- * @defined [xml] > app_widget_info.xml
+ * @see [de.hof.university.app.R.xml.widget_definition]
  *
  * @reactsTo ACTION_SHUTDOWN (also HTC-Devices)
  * @reactsTo ACTION_WIDGET_BUTTON_CLICKED
@@ -61,9 +60,9 @@ class AppWidgetBroadcastReceiver : AppWidgetProvider() {
 	 */
 	@SuppressLint("InlinedApi")
 	/**
-	 * The OnReceive-Method
+	 * The onReceive-Method
 	 * Notice: All usual Widget-Related-Intents will be received by super to call this overridden-functions (with some functionality to get params for each)
-	 * --> see super-implementation for background information about where to look in intent
+	 * @see [AppWidgetProvider.onReceive]
 	 *
 	 * @param context - The Context in which the receiver is running.
 	 * @param intent - The Intent being received.
@@ -76,17 +75,17 @@ class AppWidgetBroadcastReceiver : AppWidgetProvider() {
 			ACTION_SHUTDOWN, "android.intent.action.QUICKBOOT_POWEROFF" // time to save widget-settings // didn't find another suitable solution w/o wasting write-cycles
 				-> appWidgetDataCache.saveWidgetSettings(context)
 
-			// only Api 24+ -> for lower regular "ACTION_BOOT_COMPLETED" which itself results eventually in "ACTION_APPWIDGET_UPDATE" #sorry-not-sorry
+			// only Api 24+ -> for lower regular "ACTION_BOOT_COMPLETED" which itself results eventually in "ACTION_APPWIDGET_UPDATE"
 			ACTION_LOCKED_BOOT_COMPLETED
 				-> with(AppWidgetManager.getInstance(context)) {onUpdate(context, this, getAllWidgetIds(context, this))}
 
-			else -> super.onReceive(context, intent) // see AppWidgetProvider.onReceive
+			else -> super.onReceive(context, intent)
 		}
 
 	/**
 	 * Called in response to ACTION_APPWIDGET_UPDATE && ACTION_APPWIDGET_RESTORED
-	 * --> AppWidgetManager.updateAppWidget is the targeted function after this, in between do your RemoteView-setup stuff
-	 * --> preferably in a static-function !! == DO IT STATIC !! TRUST ME !!
+	 * --> [AppWidgetManager.updateAppWidget] is the targeted function after this, in between the [RemoteViews] will be set up using [updateAppWidget]
+	 * --> preferably in a static-function
 	 *
 	 * @param context - The Context in which this receiver is running.
 	 * @param appWidgetManager - A AppWidgetManager-object you can call AppWidgetManager.updateAppWidget on.
@@ -109,10 +108,10 @@ class AppWidgetBroadcastReceiver : AppWidgetProvider() {
 	 *
 	 * @param context - The Context in which this receiver is running.
 	 */
-	override fun onEnabled(context: Context) { /* nothing to do*/ }
+	override fun onEnabled(context: Context) { /* nothing to do */ }
 
 	/**
-	 * Called in response to ACTION_APPWIDGET_DISABLED when the Last Widget using this Provider was deleted
+	 * Called in response to ACTION_APPWIDGET_DISABLED when the last Widget using this Provider was deleted
 	 *
 	 * @param context - The Context in which this receiver is running.
 	 */
@@ -120,7 +119,7 @@ class AppWidgetBroadcastReceiver : AppWidgetProvider() {
 
 	/**
 	 * Called in response to ACTION_APPWIDGET_RESTORED when instances of this Provider has been restored from backup
-	 * --> will be followed immediately by a call to onUpdate()
+	 * --> will be followed immediately by a call to [AppWidgetBroadcastReceiver.onUpdate]
 	 *
 	 * @param context - The Context in which this receiver is running.
 	 */
@@ -129,8 +128,7 @@ class AppWidgetBroadcastReceiver : AppWidgetProvider() {
 
 	/**
 	 * Called in response to ACTION_APPWIDGET_OPTIONS_CHANGED when this widget has been layed out at a new size.
-	 * --> AppWidgetManager.updateAppWidget is the targeted function after this, in between do your RemoteView
-	 * --> to use the Bundle you need to dive deeper than just reading this function-comments ;-)
+	 * --> [AppWidgetManager.updateAppWidget] is the targeted function after this
 	 *
 	 * @param context - The Context in which this receiver is running.
 	 * @param appWidgetManager - A AppWidgetManager object you can call AppWidgetManager#updateAppWidget on.
@@ -140,15 +138,14 @@ class AppWidgetBroadcastReceiver : AppWidgetProvider() {
 	override fun onAppWidgetOptionsChanged(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int, options: Bundle)
 		= updateAppWidget(context, appWidgetId, appWidgetManager, options)
 
-
 	/**
 	 * HELPER-FUNS
 	 */
 	/**
-	 * Changes the WidgetMode in the Model & updates the Widget
+	 * Changes the [AppWidgetSettingsHolder.widgetMode] & calls [updateAppWidget]
 	 *
 	 * @param context - The Context in which this receiver is running.
-	 * @param intent - The Intent fired by a WidgetButton (next or prev)
+	 * @param intent - The Intent fired by a WidgetButton ([R.id.widget_header_next] with buttonId [BUTTON_NEXT] or [R.id.widget_header_prev] wiht buttonId [BUTTON_PREV])
 	 */
 	private fun onWidgetButtonClicked(context: Context, intent: Intent) {
 		intent.extras?.run {
@@ -162,12 +159,12 @@ class AppWidgetBroadcastReceiver : AppWidgetProvider() {
 	}
 
 	/**
-	 * Changes the WidgetMode in the Model to the correct Value,
-	 * by Default WIDGET_MODE_SCHEDULE shall be taken (or an Exception thrown)
-	 *
+	 * Changes the [AppWidgetSettingsHolder.widgetMode] to the correct value using [AppWidgetSettingsHolder.replaceWidgetMode],
+	 * will change the WidgetMode by default to [WIDGET_MODE_SCHEDULE].
+     *
 	 * @param context - The Context in which this receiver is running.
-	 * @param appWidgetId - The WidgetId for which the WidgetMode should be changed
-	 * @param appWidgetButtonId - The ButtonId which was pressed in the Widget
+	 * @param appWidgetId - The WidgetId to change the WidgetMode for.
+	 * @param appWidgetButtonId - The ButtonId which was pressed in the Widget.
 	 */
 	private fun changeWidgetModeFor(context: Context, appWidgetId: Int, appWidgetButtonId: Int)
 		= appWidgetDataCache.run{ getWidgetSettingsFor(context, appWidgetId) ?: return }.run {
@@ -209,28 +206,30 @@ class AppWidgetBroadcastReceiver : AppWidgetProvider() {
 		 * COMPANION-FUNS
 		 */
 		/**
-		 * Will return a IntArray of all WidgetIds which are controlled by This class
+		 * Will return a IntArray of all AppWidgetId's which are controlled by [AppWidgetManager].
 		 *
 		 * @param context - A Context
 		 * @param appWidgetManager - The AppWidgetManager-Instance which is used by Android to controll Widgets
+         *
+         * @return a IntArray of AppWidgetId's
 		 */
 		private fun getAllWidgetIds(context: Context, appWidgetManager: AppWidgetManager): IntArray
 			= appWidgetManager.getAppWidgetIds(ComponentName(context, AppWidgetBroadcastReceiver::class.java))
 
 		/**
-		 * Will notify all Widgets-ListViews to update their Data
+		 * Will notify all Widgets-ListViews to update their Data using [AppWidgetManager.notifyAppWidgetViewDataChanged] on all AppWidget's.
 		 *
-		 * @param context - You guessed it a Context
+		 * @param context - A Context
 		 */
 		internal fun informAllWidgetsDataChanged(context: Context)
 			= with(AppWidgetManager.getInstance(context)) { notifyAppWidgetViewDataChanged(getAllWidgetIds(context, this), R.id.widget_listview) }
 
 		/**
-		 * Will call updateAppWidget() after initially saving the settings for it in [AppWidgetDataCache]
+         * Will initialy save the [AppWidgetSettingsHolder] for the AppWidget and afterwards will [updateAppWidget].
 		 *
 		 * @param context - The Context where the [AppWidgetConfigureActivity] runs
 		 * @param appWidgetId - The appWidgetId which settings where created
-		 * @param settings - The [AppWidgetSettingsHolder] containing the settings which should be applied to the Widget
+		 * @param settings - The [AppWidgetSettingsHolder] containing the settings which should be applied to the AppWidget
 		 */
 		internal fun updateNewAppWidget(context: Context, appWidgetId: Int, settings: AppWidgetSettingsHolder) {
 			appWidgetDataCache.putWidgetSettingsFor(context, appWidgetId, settings)
@@ -238,22 +237,22 @@ class AppWidgetBroadcastReceiver : AppWidgetProvider() {
 		}
 
 		/**
-		 * THE UpdateAppWidget-Function you are probably looking for!
+		 * THE UpdateAppWidget-Function !
 		 *
 		 * Will require a corresponding [AppWidgetSettingsHolder] for styling. --> [applyWidgetStyle]
 		 * Will be a [de.hof.university.app.widget.adapters] set on with the help of the [AppWidgetRemoteViewService].
-		 * Will calculate the WidgetHeader-Title-Size if needed. --> [calculateTextSize]
-		 * Will be set on any OnClick-Thing's using PendingIntents.
-		 * Has to FINALLY call [AppWidgetManager] to update the Widget.
+		 * Will calculate the WidgetHeader-Title-Size ([R.id.widget_header_section_title]) if needed. --> [calculateTextSize]
+		 * Will be set on any OnClick's using PendingIntents.
 		 *
+         * @see [R.layout.widget_base_layout]
+         *
 		 * @param context - A Context
 		 * @param appWidgetId - The appWidgetId identifying the Widget which should be updated
-		 * @param appWidgetManager (optional) - The AppWidgetManager instance used to finally call updateAppWidget on
-		 * @param options (optional) - The options-Bundle which contains the new Sizes the Widget took (in dip)
+		 * @param appWidgetManager (optional) - The AppWidgetManager instance used to finally call [AppWidgetManager.updateAppWidget] on
+		 * @param options (optional) - The options-Bundle which contains the new Sizes the Widget took
 		 *
 		 * @return A [RemoteViews] reflecting the View which should be shown where the Widget took place
-		 *  --> THIS IS NOT A VIEW !!
-		 *  --> READ "https://developer.android.com/guide/topics/appwidgets/" to partially understand this object and what it can and especially can-not !!
+		 *  --> see [developer.andorid: https://developer.android.com/guide/topics/appwidgets/]
 		 */
 		internal fun updateAppWidget(context: Context, appWidgetId: Int, appWidgetManager: AppWidgetManager = AppWidgetManager.getInstance(context), options: Bundle? = null) {
 			RemoteViews(context.packageName, R.layout.widget_base_layout).let {
@@ -261,7 +260,7 @@ class AppWidgetBroadcastReceiver : AppWidgetProvider() {
 				val settings = appWidgetDataCache.getWidgetSettingsFor(context, appWidgetId) ?: return
 
 				// style it
-				applyWidgetStyle(it, settings.lightStyleIsSelected, settings.sharpStyleIsSelected,
+				applyWidgetStyle(it, settings.lightStyleIsSelected, settings.angularStyleIsSelected,
 					if(settings.lightStyleIsSelected) {ContextCompat.getColor(context, R.color.AppWidget_Text_Color_Primary_For_LightStyle) }
 					else { ContextCompat.getColor(context, R.color.AppWidget_Text_Color_Primary_For_DarkStyle) }
 				)
@@ -292,7 +291,8 @@ class AppWidgetBroadcastReceiver : AppWidgetProvider() {
 					Intent(context, MainActivity::class.java).apply {
 						putExtra(INTENT_EXTRA_WIDGET_MODE, settings.widgetMode)
 						action = WIDGET_INTENT_SHOW_FRAGMENT
-					}, PendingIntent.FLAG_UPDATE_CURRENT))
+                        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+					}, PendingIntent.FLAG_CANCEL_CURRENT))
 
 				// set next & prev buttons
 				it.setOnClickPendingIntent(R.id.widget_header_next, getPendingSelfIntentForWidgetButton(context, BUTTON_NEXT, appWidgetId))
@@ -308,22 +308,22 @@ class AppWidgetBroadcastReceiver : AppWidgetProvider() {
 		private const val FOR_TEXT_COLOR = "setTextColor"
 
 		/**
-		 * Will apply a 'Style' to the RemoteView based on the params (extracted from a [AppWidgetSettingsHolder])
-		 * Notice: This will only style the Widget not any ListItems or stuff
-		 * --> for when styling for ListItems happens check [de.hof.university.app.widget.adapters] these will be based on the same [AppWidgetSettingsHolder]
+		 * Will apply a 'Style' to the RemoteView based on the params [AppWidgetSettingsHolder.lightStyleIsSelected] & [AppWidgetSettingsHolder.angularStyleIsSelected]]
+		 * Notice: This will only style the Widget's [R.layout.widget_base_layout].
+		 * --> ListItems will be styled in the corresponding [de.hof.university.app.widget.adapters] and will be based on the same [AppWidgetSettingsHolder]
 		 *
 		 * @param rv - The RemoteView which should get styled
-		 * @param lightStyleIsSelected - If LightStyle/LightDesign shall be used
-		 * @param sharpStyleIsSelected - If sharp corners shall be used
-		 * @param primaryTextColor - The TextColor to style the WidgetHeaderTitle
+		 * @param lightStyleIsSelected - If light style shall be used
+		 * @param angularStyleIsSelected - If angular corners shall be used
+		 * @param primaryTextColor - The TextColor to style the [R.id.widget_header_section_title]
 		 */
-		private fun applyWidgetStyle(rv: RemoteViews, lightStyleIsSelected: Boolean, sharpStyleIsSelected: Boolean, primaryTextColor: Int)
+		private fun applyWidgetStyle(rv: RemoteViews, lightStyleIsSelected: Boolean, angularStyleIsSelected: Boolean, primaryTextColor: Int)
 			= rv.apply {
 				//style title-textView
 				setInt(R.id.widget_header_section_title, FOR_TEXT_COLOR, primaryTextColor)
 				//style the backgrounds
 				if(lightStyleIsSelected) {
-					if(sharpStyleIsSelected) {
+					if(angularStyleIsSelected) {
 						setInt(R.id.widget_header, FOR_BACKGROUND, R.drawable.widget_background_header_white_sharp)
 						setInt(R.id.widget_body, FOR_BACKGROUND, R.drawable.widget_background_body_white_sharp)
 					} else {
@@ -331,7 +331,7 @@ class AppWidgetBroadcastReceiver : AppWidgetProvider() {
 						setInt(R.id.widget_body, FOR_BACKGROUND, R.drawable.widget_background_body_white_round)
 					}
 				} else {
-					if(sharpStyleIsSelected) {
+					if(angularStyleIsSelected) {
 						setInt(R.id.widget_header, FOR_BACKGROUND, R.drawable.widget_background_header_dark_sharp)
 						setInt(R.id.widget_body, FOR_BACKGROUND, R.drawable.widget_background_body_dark_sharp)
 					} else {
@@ -342,21 +342,20 @@ class AppWidgetBroadcastReceiver : AppWidgetProvider() {
 			}
 
 		/**
-		 * Ok this is a little more complex...
-		 * will calculate the TextSize for R.id.widget_header_section_title based on the WidgetSizes in short...
-		 * which is a heavy Task... which is why the actual calculation should be avoided.
+		 * Will calculate the TextSize for [R.id.widget_header_section_title] based on the WidgetSizes
+         * in it's current orientation: [Configuration.ORIENTATION_LANDSCAPE] || by default [Configuration.ORIENTATION_PORTRAIT]
 		 *
-		 * Will calculate the Size by taking the Middle (instead of stepping N-dips) until a accuracy is reached
-		 * --> AutoSize for AppCompatTextViews does not work on API 25 / 26 / <more> which is what i am using ;) super stupid but kinda old (already reported) bug since Support-v4 26+
+		 * Will calculate the Size by taking the center of a minimum and maximum (instead of stepping N-dips) until a accuracy is reached
+		 * --> AutoSize for AppCompatTextViews does not work on API 25 / 26 / <more> ; bug since Support-v4 26+
 		 *
-		 * @param titleString - The AppWidgetHeaderSection-Title (R.id.widget_header_section_title) which should be displayed
+		 * @param titleString - The text of [R.id.widget_header_section_title] which should be displayed, selected in [updateAppWidget]
 		 * @param context - A Context
-		 * @param options - The Bundles passed to this method from onAppWidgetOptionsChanged containing WidgetSizes in dip
+		 * @param options - The Bundles passed to this method from [onAppWidgetOptionsChanged] containing WidgetSizes in [TypedValue.COMPLEX_UNIT_DIP]
 		 * @param settings - The [AppWidgetSettingsHolder] for the Widget (only used to cache the TextSize)
 		 * @param appWidgetManager - The AppWidgetManager-Instance
 		 * @param appWidgetId - The AppWidgetId for the Widget which TextSize should be calculated
 		 *
-		 * @return should be the TextSize in PX which should actually fit
+		 * @return should be the TextSize in [TypedValue.COMPLEX_UNIT_PX] which should actually fit
 		 */
 		private fun calculateTextSize(titleString: String, context: Context, options: Bundle?, settings: AppWidgetSettingsHolder, appWidgetManager: AppWidgetManager, appWidgetId: Int): Float {
 			// stop if already cached only when not called from onAppWidgetOptionsChanged
@@ -404,22 +403,22 @@ class AppWidgetBroadcastReceiver : AppWidgetProvider() {
 		}
 
 		/**
-		 * Helper to get a PendingIntent for a WidgetButton targeting this-[AppWidgetBroadcastReceiver] since it is a BroadcastReceiver.
+		 * Helper to get a [PendingIntent] for a WidgetButton targeting this-[AppWidgetBroadcastReceiver].
 		 *
 		 * @param context - A Context
-		 * @param button - The ButtonId which should fire the PendingIntent
+		 * @param button - The ButtonId which should fire the PendingIntent ( == [BUTTON_PREV] or [BUTTON_NEXT])
 		 * @param appWidgetId - The AppWidgetId from which the PendingIntent is fired
 		 *
-		 * @return A [PendingIntent] aimed at this
+		 * @return A [PendingIntent] aimed at this-[AppWidgetBroadcastReceiver]
 		 */
 		private fun getPendingSelfIntentForWidgetButton(context: Context, button: Int, appWidgetId: Int): PendingIntent
-			= PendingIntent.getBroadcast(context, appWidgetId, // notice requestCode == unique per widget
+			= PendingIntent.getBroadcast(context, appWidgetId, // notice: requestCode == unique per widget
 				Intent(context, AppWidgetBroadcastReceiver::class.java).apply {
 					action = ACTION_WIDGET_BUTTON_CLICKED
 					putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
 					putExtra(INTENT_EXTRA_BUTTON_CLICKED, button)
 				},
-				PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_UPDATE_CURRENT
 			)
 	}
 }

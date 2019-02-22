@@ -15,7 +15,7 @@
         android:layout_height="40dp"
         android:layout_gravity="center"
         android:layout_weight="1"
-        android:background="@drawable/ic_baseline_sentiment_dissatisfied_dark_styled_24"
+        android:background="@drawable/ic_baseline_search_dark_24"
         tools:ignore="ContentDescription" />
 
     <TextView

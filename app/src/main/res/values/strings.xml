@@ -38,6 +38,7 @@
                                - Phillipp Knoblauch\n
                                - Patrick Niepel (Onboarding)\n
                                - Phillipp Dümleim (Onboarding)\n
+                               - Jan Gaida (Widget)\n
     </string>
 
 
@@ -286,7 +287,7 @@
     <string name="appwidget_configure_rounded">Rounded</string>
     <string name="appwidget_configure_apply">Apply</string>
     <string name="appwidget_configure_cancel">Cancel</string>
-    <string name="appwidget_configure_toast_disclaimer_false">To continue you need to accept the disclaimer.</string>
-
+    <string name="appwidget_configure_snackbar_disclaimer_false">To continue you need to accept the disclaimer.</string>
+    <string name="appwidget_configure_snackbar_ok" translatable="false">OK</string>
 
 </resources>
