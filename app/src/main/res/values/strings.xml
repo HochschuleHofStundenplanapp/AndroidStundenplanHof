@@ -265,6 +265,7 @@
     <string name="appwidget_list_item_empty_changes">No entry found.\n</string>
     <string name="appwidget_list_item_loading">Loading …</string>
     <string name="appwidget_list_item_changes_error">Oopps.. something went wrong!\nPlease check the app about your schedule changes.</string>
+    <string name="appwidget_list_item_default_empty_entry" translatable="false">- -</string>
     <string name="appwidget_schedule_changes">Changes</string>
     <string name="appwidget_schedule">Schedule</string>
     <string name="appwidget_my_schedule">My Schedule</string>

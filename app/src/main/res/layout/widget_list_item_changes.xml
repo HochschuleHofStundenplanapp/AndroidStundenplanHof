@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:clickable="true"
-    android:focusable="true">
+    android:paddingBottom="@dimen/activity_horizontal_margin">
 
     <TextView
         android:id="@+id/widget_list_item_changes_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:text="@string/details"
         android:paddingTop="10dp"
         android:paddingBottom="5dp"
+        android:text="@string/details"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="@color/colorBlack" />
 
     <TextView
         android:id="@+id/widget_list_item_changes_important"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="5dp"
         android:paddingTop="3dp"
+        android:paddingBottom="5dp"
         android:text="important_text "
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:textColor="@android:color/holo_red_light"
+        android:visibility="gone"
         tools:ignore="HardcodedText" />
 
     <TextView
@@ -37,10 +38,11 @@
         android:layout_height="wrap_content"
         android:paddingTop="3dp"
         android:paddingBottom="3dp"
-        android:text="OldDate"
+        android:text="@string/appwidget_list_item_default_empty_entry"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/colorBlack"
         android:textSize="14sp"
+        android:visibility="visible"
         tools:ignore="HardcodedText" />
 
     <TextView
@@ -48,9 +50,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="7dp"
-        android:text="NewDate"
+        android:text="@string/appwidget_list_item_default_empty_entry"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@android:color/holo_red_light"
         android:textSize="14sp"
+        android:visibility="visible"
         tools:ignore="HardcodedText" />
 </LinearLayout>

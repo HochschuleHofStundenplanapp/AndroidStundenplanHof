@@ -49,6 +49,25 @@ import de.hof.university.app.util.Define.WIDGET_MODE_SCHEDULE
  * @reactsTo ACTION_WIDGET_BUTTON_CLICKED
  * @reactsTo ACTION_LOCKED_BOOT_COMPLETED
  *
+ * - - - - -
+ *
+ * I might be able to do these next study vac, sadly i wont have enough free time in my current term to focus on android-programming at all.
+ *
+ * Open features / implementations:
+ * - add 2+ widget in the android-widget-list to representante the possible widgets (eventually calling the same [AppWidgetConfigureActivity])
+ * - add ListView for meal plan (requested) and maybe others as well
+ * - re-design widget layout (focus on contrast, ability to navigate even more user-friendly, ...)
+ * - add ability to request (manualy or automaticaly) schedule and schedule-changes updates (speak to a responsible persons to figure out in which time-span this should take place)
+ * - implement unit-test (to ensure future functionality for widget, this is actually top-priority)
+ * - update & redesign last-saved item
+ * - change visibility of [de.hof.university.app.model.schedule.LectureChange.room_old] & adjust [de.hof.university.app.widget.adapters.AppWidgetRemoteViewsFactoryChanges.getRemoteViewForLectureChange]
+ *
+ * Open bug:
+ * - after creating/changing lecture last-saved-item date is not represented probaly
+ * - ListView might not update in certain situations automaticaly ?! (didn't observed this phenomenon anymore while making some fixes/improvements, 09.04.2019)
+ *
+ * - - - - -
+ *
  * @author Jan Gaida
  * @since Version 4.8(37)
  * @date 18.02.2018
@@ -222,7 +241,11 @@ class AppWidgetBroadcastReceiver : AppWidgetProvider() {
 		 * @param context - A Context
 		 */
 		internal fun informAllWidgetsDataChanged(context: Context)
-			= with(AppWidgetManager.getInstance(context)) { notifyAppWidgetViewDataChanged(getAllWidgetIds(context, this), R.id.widget_listview) }
+			= with(AppWidgetManager.getInstance(context)) {
+                notifyAppWidgetViewDataChanged(getAllWidgetIds(context, this), R.id.widget_listview)
+                // this is the code to redraw all .. in case notifyAppWidgetViewDataChanged is not working probaly .. until its working again .. im very confused about that :D
+                //getAllWidgetIds(context, this).forEach { updateAppWidget(context, it, this) }
+            }
 
 		/**
          * Will initialy save the [AppWidgetSettingsHolder] for the AppWidget and afterwards will [updateAppWidget].

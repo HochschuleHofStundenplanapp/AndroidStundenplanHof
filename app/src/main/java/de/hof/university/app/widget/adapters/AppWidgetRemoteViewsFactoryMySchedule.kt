@@ -61,7 +61,7 @@ internal class AppWidgetRemoteViewsFactoryMySchedule(context: Context, lightStyl
 	override fun getRemoteViewForLastSaved(dataCache: AppWidgetDataCache): RemoteViews
 		= RemoteViews(packageName, R.layout.widget_list_item_last_saved).apply {
 			setTextViewText(R.id.widget_list_item_last_updated,
-					"${context.getString(R.string.lastUpdated)}: ${with(dataCache.getMyScheduleLastSaved(context)) { this?.toDayString() ?: "---" }}" +
+					"${context.getString(R.string.lastUpdated)}: ${with(dataCache.getMyScheduleLastSaved(context)) { this?.toDayString() ?: context.getString(R.string.appwidget_list_item_default_empty_entry) }}" +
 							"\n${context.getString(R.string.appwidget_update_instructions_changes)}"
 			)
 			setTextColor(R.id.widget_list_item_last_updated, primaryTextColor)

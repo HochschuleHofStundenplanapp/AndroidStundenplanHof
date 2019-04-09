@@ -4,6 +4,7 @@
 package de.hof.university.app.widget.adapters
 
 import android.content.Context
+import android.view.View
 import android.widget.RemoteViews
 import de.hof.university.app.R
 import de.hof.university.app.model.schedule.LectureChange
@@ -41,19 +42,31 @@ internal class AppWidgetRemoteViewsFactoryChanges(context: Context, lightStyleIs
 			with(data) {
 				setTextViewText(R.id.widget_list_item_changes_details, details)
 				setTextColor(R.id.widget_list_item_changes_details, primaryTextColor)
-				setTextViewText(R.id.widget_list_item_changes_important, text)
-				//setTextColor(R.id.widget_list_item_changes_important, secondaryTextColor)
-				setTextViewText(R.id.widget_list_item_changes_old_date, "${begin_old.toHourString()} - ${begin_old.toHourString()}")
-				setTextColor(R.id.widget_list_item_changes_old_date, primaryTextColor)
-				setTextViewText(R.id.widget_list_item_changes_new_date, "${begin_new.toHourString()} - ${begin_new.toHourString()}")
-				//setTextColor(R.id.widget_list_item_changes_new_date, secondaryTextColor)
+
+				text?.let {
+					if(it.isNotEmpty()) {
+						setViewVisibility(R.id.widget_list_item_changes_important, View.VISIBLE)
+						setTextViewText(R.id.widget_list_item_changes_important, it)
+						//setTextColor(R.id.widget_list_item_changes_important, secondaryTextColor)
+					}
+				}
+
+                begin_old?.let {
+                    setTextViewText(R.id.widget_list_item_changes_old_date, it.toDayString()) // todo: .. room_old is private in LectureChange, getOld() results in crash because of context-issue
+                    setTextColor(R.id.widget_list_item_changes_old_date, primaryTextColor)
+                }
+
+                begin_new?.let {
+                    setTextViewText(R.id.widget_list_item_changes_new_date, "${it.toDayString()}, $room_new")
+                    //setTextColor(R.id.widget_list_item_changes_new_date, primaryTextColor)
+                }
 			}
 		}
 
 	override fun getRemoteViewForLastSaved(dataCache: AppWidgetDataCache): RemoteViews
 		= RemoteViews(packageName, R.layout.widget_list_item_last_saved).apply {
 			setTextViewText(R.id.widget_list_item_last_updated,
-			"${context.getString(R.string.lastUpdated)}: ${with(dataCache.getChangesLastSaved(context)) { this?.toDayString() ?: "---" }}" +
+			"${context.getString(R.string.lastUpdated)}: ${with(dataCache.getChangesLastSaved(context)) { this?.toDayString() ?: context.getString(R.string.appwidget_list_item_default_empty_entry) }}" +
 				"\n${context.getString(R.string.appwidget_update_instructions_changes)}"
 			)
 			setTextColor(R.id.widget_list_item_last_updated, primaryTextColor)
