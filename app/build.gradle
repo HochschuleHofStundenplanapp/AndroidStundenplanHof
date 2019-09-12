@@ -19,19 +19,77 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 
 android {
+	/**
+	 * compileSdkVersion specifies the Android API level Gradle should use to
+	 * compile your app. This means your app can use the API features included in
+	 * this API level and lower.
+	 */
 	compileSdkVersion 28
+	
+	/**
+	 * buildToolsVersion specifies the version of the SDK build tools, command-line
+	 * utilities, and compiler that Gradle should use to build your app. You need to
+	 * download the build tools using the SDK Manager.
+	 *
+	 * This property is optional because the plugin uses a recommended version of
+	 * the build tools by default.
+	 */
+	buildToolsVersion '29.0.2'
+	
+	compileOptions {
+		// Error: Invoke-customs are only supported starting with Android O (--min-api 26)
+		// solution: Java 8
+		// Attention: desktop adds '' arround the string. Remove them
+		sourceCompatibility 1.8
+		targetCompatibility 1.8
+	}
+	
+	
+	/**
+	 * The defaultConfig block encapsulates default settings and entries for all
+	 * build variants, and can override some attributes in main/AndroidManifest.xml
+	 * dynamically from the build system. You can configure product flavors to override
+	 * these values for different versions of your app.
+	 */
 	defaultConfig {
 		applicationId 'de.hof.university.app'
 		targetSdkVersion 28
+		minSdkVersion 16
+
 		versionCode 37
 		versionName '4.8'
-		minSdkVersion 16
-		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-	}
-	packagingOptions {
-		exclude 'META-INF/DEPENDENCIES'
-	}
 
+		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+		multiDexEnabled = true
+	}
+	
+	// nötig ab AS 3 damit Flavors gehen
+	/**
+	 * The productFlavors block is where you can configure multiple product flavors.
+	 * This allows you to create different versions of your app that can
+	 * override the defaultConfig block with their own settings. Product flavors
+	 * are optional, and the build system does not create them by default.
+	 *
+	 * This example creates a free and paid product flavor. Each product flavor
+	 * then specifies its own application ID, so that they can exist on the Google
+	 * Play Store, or an Android device, simultaneously.
+	 *
+	 * If you declare product flavors, you must also declare flavor dimensions
+	 * and assign each flavor to a flavor dimension.
+	 */
+	flavorDimensions "useCase"
+	productFlavors {
+		
+		/**
+		 * applicationId uniquely identifies the package for publishing.
+		 * However, your source code should still reference the package name
+		 * defined by the package attribute in the main/AndroidManifest.xml file.
+		 */
+		StundenplanHofApp {
+			buildConfigField "boolean", "ALLOW_INVALID_CERTIFICATE", "true"
+			dimension "useCase"
+		}
+	}
 
 	signingConfigs {
 		release {
@@ -43,6 +101,7 @@ android {
 			//storePassword 'IUwbayNG54S5C4udGkjs'
 			storePassword 'IUwbayNG54S5C4udGkjs'
 			//storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
+			storeFile file('D:/Projekt/Mobile.AndroidStudio/Hof.Stundenplaner/fhhKey.jks')
 		}
 		debug {
 			// Ein fester debug keystore damit, wenn man mit verschiedenen Rechnern arbeitet, die APK updaten kann.
@@ -51,9 +110,27 @@ android {
 			storePassword 'android'
 		}
 	}
+	
+	/**
+	 * The buildTypes block is where you can configure multiple build types.
+	 * By default, the build system defines two build types: debug and release. The
+	 * debug build type is not explicitly shown in the default build configuration,
+	 * but it includes debugging tools and is signed with the debug key. The release
+	 * build type applies Proguard settings and is not signed by default.
+	 */
 	buildTypes {
+		/**
+		 * By default, Android Studio configures the release build type to enable code
+		 * shrinking, using minifyEnabled, and specifies the Proguard settings file.
+		 */
 		release {
+			// Enables code shrinking, obfuscation, and optimization for only
+			// your project's release build type.
 			minifyEnabled true
+			// Enables resource shrinking, which is performed by the
+			// Android Gradle plugin.
+			shrinkResources true
+
 			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
 			signingConfig signingConfigs.release
 			pseudoLocalesEnabled false
@@ -70,10 +147,10 @@ android {
 			archivesBaseName = 'Hochschule_Hof_Stundenplan_App'
 			// damit wir die debug Version parallel zu der release Version installieren können
 			applicationIdSuffix = ".debug"
+			versionNameSuffix "-dev"
 		}
 	}
-	productFlavors {
-	}
+	
 	// Lint found fatal errors while assembling a release target
 	lintOptions {
 		//checkReleaseBuilds false
@@ -81,44 +158,56 @@ android {
 		// Or, if you prefer, you can continue to check for errors in release builds,
 		// but continue the build even when errors are found:
 		abortOnError false
-
 		//disable 'MissingTranslation'
 	}
-	buildToolsVersion '28.0.3'
-	compileOptions {
-		sourceCompatibility JavaVersion.VERSION_1_8
-		targetCompatibility JavaVersion.VERSION_1_8
+	
+	packagingOptions {
+		exclude 'META-INF/DEPENDENCIES'
+	
+		//junit stuff, not necessary
+		exclude 'LICENCE.txt' // from old code
+		exclude 'junit/runner/smalllogo.gif'
+		exclude 'junit/runner/logo.gif'
+		exclude 'LICENSE-junit.txt'
+		
+		//Picasso uses OkHttp3 Classes and they use Database for Cookie prevention
+		exclude "okhttp3/internal/publicsuffix/publicsuffixes.gz"
 	}
 }
 
+/**
+ * The dependencies block in the module-level build configuration file
+ * specifies dependencies required to build only the module itself.
+ * To learn more, go to Add build dependencies.
+ */
 //NOTICE: Die Versionsnummer sollte pro Block gleich sein
 dependencies {
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
 	// Die Versionsnummer sollte die gleiche sein
-	implementation 'com.android.support:design:28.+'
-	implementation 'com.android.support:support-v4:28.+'
-	implementation 'com.android.support:support-compat:28.+'
-	implementation 'com.android.support:support-core-utils:28.+'
-	implementation 'com.android.support:support-core-ui:28.+'
-	implementation 'com.android.support:support-media-compat:28.+'
-	implementation 'com.android.support:support-fragment:28.+'
+	implementation 'com.google.android.material:material:1.0.0'
+	implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+	implementation 'androidx.core:core:1.1.0'
+	implementation 'androidx.legacy:legacy-support-core-utils:1.0.0'
+	implementation 'androidx.legacy:legacy-support-core-ui:1.0.0'
+	implementation 'androidx.media:media:1.1.0'
+	implementation 'androidx.fragment:fragment:1.1.0'
+	
+	implementation 'androidx.appcompat:appcompat:1.1.0'
+	implementation 'androidx.gridlayout:gridlayout:1.0.0'
+	implementation 'androidx.recyclerview:recyclerview:1.0.0'
+	implementation 'androidx.preference:preference:1.1.0'
 
-	implementation 'com.android.support:appcompat-v7:28.+'
-	implementation 'com.android.support:gridlayout-v7:28.+'
-	implementation 'com.android.support:recyclerview-v7:28.+'
-	implementation 'com.android.support:preference-v7:28.+'
-
-	implementation 'com.android.support:preference-v14:28.+'
+	implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
 
 	//smack
-	implementation 'org.igniterealtime.smack:smack-android-extensions:4.2.0'
-	implementation 'org.igniterealtime.smack:smack-tcp:4.2.0'
-	implementation 'org.igniterealtime.smack:smack-extensions:4.2.0'
-	implementation 'org.igniterealtime.smack:smack-bosh:4.2.0'
+	implementation 'org.igniterealtime.smack:smack-android-extensions:4.3.4'
+	implementation 'org.igniterealtime.smack:smack-tcp:4.3.4'
+	implementation 'org.igniterealtime.smack:smack-extensions:4.3.4'
+	implementation 'org.igniterealtime.smack:smack-bosh:4.3.4'
 
 
 	// jsoup HTML parser library @ http://jsoup.org/
-	implementation 'org.jsoup:jsoup:1.11.3'
+	implementation 'org.jsoup:jsoup:1.12.1'
 	// Die Versionsnummer sollte die gleiche sein
 	//implementation 'com.google.android.gms:play-services:12.+'
 	implementation 'com.google.android.gms:play-services-gcm:16.+'
@@ -126,17 +215,31 @@ dependencies {
 	implementation 'com.google.android.gms:play-services-drive:16.+'
 
 	implementation 'com.google.firebase:firebase-messaging:17.+'
-	implementation 'android.arch.lifecycle:extensions:1.1.1'
+	implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
 	implementation 'org.osmdroid:osmdroid-android:5.+'
-	implementation 'junit:junit:4.12'
+	implementation 'junit:junit:4.13-beta-3'
 	//if using constraint-layout above 2.+ the minSdkVersion must be 18
-	implementation 'com.android.support.constraint:constraint-layout:1.+'
+	implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 
 	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 
-apply plugin: 'com.google.gms.google-services'
 
-repositories {
-	mavenCentral()
+configurations.all {
+	// instead of adding all the excludes per module, and MS did no longer figure out this XML Parser stuff,
+	// we can exclude this Android mess from here for all configurations
+	//disadvantage: Source Code compatibility muss auf Java 8 / 1.8 angehoben werden.
+	//
+	// https://github.com/x-stream/xstream/issues/117
+	// Duplicate classes in xpp3_min and xmlpull #117
+	
+	//Duplicate class org.xmlpull.mxp1.MXParser found in modules xpp3-1.1.4c.jar (xpp3:xpp3:1.1.4c) and xpp3_min-1.1.4c.jar (xpp3:xpp3_min:1.1.4c)
+	//Duplicate class org.xmlpull.v1.XmlPullParserFactory found in modules kxml2-2.3.0.jar (net.sf.kxml:kxml2:2.3.0) and xpp3-1.1.4c.jar (xpp3:xpp3:1.1.4c)
+	//Duplicate class org.xmlpull.v1.XmlSerializer found in modules kxml2-2.3.0.jar (net.sf.kxml:kxml2:2.3.0) and xpp3-1.1.4c.jar (xpp3:xpp3:1.1.4c)
+	exclude group: 'net.sf.kxml', module: 'kxml2'
+	// exclude all from xpp3. Not only xpp3 or xpp3_min. '' is a wildcard
+	exclude group: 'xpp3', module: ''
+	
+	
+	exclude group: 'com.android.support', module: ''
 }
