@@ -21,7 +21,7 @@ import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
+import com.google.android.material.navigation.NavigationView;
 import android.text.Html;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -44,7 +44,7 @@ import java.util.Locale;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.experimental.LoginController;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,7 +53,7 @@ import android.support.v4.content.ContextCompat;
  * Use the {@link RaumsucheFragment#} factory method to
  * create an instance of this fragment.
  */
-public class RaumsucheFragment extends android.support.v4.app.Fragment {
+public class RaumsucheFragment extends androidx.fragment.app.Fragment {
 
     public final static String TAG = "RaumsucheFragment";
 

@@ -15,7 +15,7 @@
   -->
 
 
-<android.support.constraint.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -130,5 +130,5 @@
         app:layout_constraintStart_toStartOf="@+id/edt_date"
         app:layout_constraintTop_toBottomOf="@+id/cb_edv"/>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 

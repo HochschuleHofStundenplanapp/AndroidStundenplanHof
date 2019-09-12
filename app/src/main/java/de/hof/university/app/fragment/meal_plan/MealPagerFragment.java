@@ -19,11 +19,11 @@ package de.hof.university.app.fragment.meal_plan;
 
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
+import androidx.annotation.NonNull;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,7 +33,7 @@ import android.view.ViewGroup;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.fragment.MealFragment;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 /**
  * Created and © by Christian G. Pfeiffer on 21.12.17.
  */

@@ -20,7 +20,7 @@ package de.hof.university.app.fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.NavigationView;
+import com.google.android.material.navigation.NavigationView;
 import android.text.Html;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -39,7 +39,7 @@ import de.hof.university.app.model.BigListItem;
 import de.hof.university.app.model.LastUpdated;
 import de.hof.university.app.model.MediumListItem;
 import de.hof.university.app.model.meal.Meal;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 
 public class MealFragment extends AbstractListFragment {
 

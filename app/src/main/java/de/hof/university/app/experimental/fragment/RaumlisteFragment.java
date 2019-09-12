@@ -19,9 +19,9 @@ package de.hof.university.app.experimental.fragment;
 import android.app.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
+import com.google.android.material.navigation.NavigationView;
+import androidx.core.content.ContextCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -58,7 +58,7 @@ import de.hof.university.app.util.Define;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RaumlisteFragment extends android.support.v4.app.Fragment {
+public class RaumlisteFragment extends androidx.fragment.app.Fragment {
 
     private final static String TAG = "RaumlisteFragment";
 

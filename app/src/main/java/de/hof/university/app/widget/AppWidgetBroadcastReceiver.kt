@@ -21,7 +21,7 @@ import android.content.Intent.ACTION_SHUTDOWN
 import android.content.res.Configuration
 import android.graphics.Paint
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import android.util.Log
 import android.util.TypedValue
 import de.hof.university.app.R

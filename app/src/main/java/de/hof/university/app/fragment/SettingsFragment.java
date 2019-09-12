@@ -26,15 +26,15 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.preference.CheckBoxPreference;
-import android.support.v7.preference.ListPreference;
-import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceCategory;
-import android.support.v7.preference.PreferenceFragmentCompat;
+import com.google.android.material.navigation.NavigationView;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.core.content.ContextCompat;
+import androidx.preference.CheckBoxPreference;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
+import androidx.preference.PreferenceFragmentCompat;
 import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
@@ -193,7 +193,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 }
             });
         } else {
-            final android.support.v7.preference.PreferenceScreen preferenceScreen = getPreferenceScreen();
+            final androidx.preference.PreferenceScreen preferenceScreen = getPreferenceScreen();
             final PreferenceCategory category_notification = (PreferenceCategory) findPreference(getString(R.string.PREF_KEY_CATEGORY_NOTIFICATION));
 
             preferenceScreen.removePreference(category_notification);
@@ -233,7 +233,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             }
         });
 
-        final android.support.v7.preference.CheckBoxPreference experimentalFeatures = (android.support.v7.preference.CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES));
+        final androidx.preference.CheckBoxPreference experimentalFeatures = (androidx.preference.CheckBoxPreference) findPreference(getString(R.string.PREF_KEY_EXPERIMENTAL_FEATURES));
 
         if (experimentalFeatures.isChecked()) {
             edtLogin.setEnabled(true);
@@ -593,7 +593,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
         if (getString(R.string.PREF_KEY_CHANGES_NOTIFICATION).equals(key)) {
             Log.i(TAG, "CHANGES_NOTIFICATION has changed");
-            android.support.v7.preference.CheckBoxPreference changes_notification = (android.support.v7.preference.CheckBoxPreference) findPreference(key);
+            androidx.preference.CheckBoxPreference changes_notification = (androidx.preference.CheckBoxPreference) findPreference(key);
             changes_notification.setChecked(sharedPreferences.getBoolean(key, false));
         }
         //update Preferences if gdrive Sync is enabled

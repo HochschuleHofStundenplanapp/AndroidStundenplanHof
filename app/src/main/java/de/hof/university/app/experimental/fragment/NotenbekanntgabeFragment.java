@@ -22,9 +22,11 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v4.content.ContextCompat;
+import com.google.android.material.navigation.NavigationView;
+
+import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.core.content.ContextCompat;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -59,7 +61,7 @@ import de.hof.university.app.util.Define;
 
 
 @SuppressWarnings("ALL")
-public class NotenbekanntgabeFragment extends android.support.v4.app.Fragment {
+public class NotenbekanntgabeFragment extends Fragment {
 
     private final static String TAG = "NotenbekanntgabeFragm";
 

@@ -5,7 +5,7 @@ package de.hof.university.app.widget.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import de.hof.university.app.R

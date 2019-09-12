@@ -19,10 +19,12 @@ package de.hof.university.app.experimental.fragment;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.NonNull;
+import com.google.android.material.navigation.NavigationView;
+
+import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.core.content.ContextCompat;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,7 +49,7 @@ import de.hof.university.app.experimental.LoginController;
 import de.hof.university.app.util.Define;
 
 
-public class NotenblattFragment extends android.support.v4.app.Fragment {
+public class NotenblattFragment extends Fragment {
 
     private final static String TAG = "NotenblattFragment";
 

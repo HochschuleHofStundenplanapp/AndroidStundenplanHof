@@ -18,7 +18,7 @@ package de.hof.university.app.fragment.schedule;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.design.widget.NavigationView;
+import com.google.android.material.navigation.NavigationView;
 import android.text.Html;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
@@ -31,7 +31,7 @@ import de.hof.university.app.adapter.ChangesAdapter;
 import de.hof.university.app.data.DataManager;
 import de.hof.university.app.fragment.AbstractListFragment;
 import de.hof.university.app.model.LastUpdated;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 
 /**
  * Created by larsg_000 on 30.11.2015.

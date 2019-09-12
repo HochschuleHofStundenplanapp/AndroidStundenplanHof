@@ -16,11 +16,12 @@
 
 package de.hof.university.app.fragment;
 
-import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.SwipeRefreshLayout;
+import com.google.android.material.navigation.NavigationView;
+
+import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,13 +35,13 @@ import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.util.Define;
 import de.hof.university.app.experimental.LoginController;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 
 /**
  * Created by Christian Pfeiffer on 14.12.16.
  */
 
-public class PrimussTabFragment extends android.support.v4.app.Fragment {
+public class PrimussTabFragment extends Fragment {
 	public final static String TAG = "PrimussFragment";
 	private SwipeRefreshLayout swipeContainer;
 

@@ -16,7 +16,7 @@
 
 package de.hof.university.app.model.settings;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 import java.util.Collections;

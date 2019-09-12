@@ -24,17 +24,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.support.v4.app.FragmentManager;
+import androidx.fragment.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.preference.ListPreference;
-import android.support.v7.preference.Preference;
+import androidx.fragment.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -56,7 +56,7 @@ import de.hof.university.app.R;
 import de.hof.university.app.calendar.CalendarSynchronization;
 import de.hof.university.app.data.SettingsController;
 import de.hof.university.app.onboarding.OnboardingController;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 
 public class OnboardingExperimentalFragment extends Fragment {
 

@@ -16,11 +16,10 @@
 
 package de.hof.university.app.fragment;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
+import com.google.android.material.navigation.NavigationView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,12 +32,13 @@ import de.hof.university.app.BuildConfig;
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
 import de.hof.university.app.util.Define;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 /**
  * Created by larsg on 28.06.2016.
  */
-public class AboutusFragment extends android.support.v4.app.Fragment {
+public class AboutusFragment extends Fragment {
 
 	private final static String TAG = "AboutusFragment";
 

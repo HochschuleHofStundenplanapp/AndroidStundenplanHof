@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
@@ -16,7 +16,7 @@
             android:orientation="horizontal">
 
 
-            <android.support.design.widget.TabLayout
+            <com.google.android.material.tabs.TabLayout
                 android:id="@+id/my_tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -26,9 +26,9 @@
                 app:tabTextColor="@color/Primary_text" />
 
         </LinearLayout>
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-    <android.support.v4.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/my_viewpager"
         android:layout_width="match_parent"
         android:layout_height="fill_parent" />

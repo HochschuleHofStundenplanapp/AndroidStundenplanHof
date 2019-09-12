@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout"
@@ -51,4 +51,4 @@
         app:layout_constraintTop_toBottomOf="@+id/senderTextView" />
     <!-- android:text="Dies ist eine wichtige Chatnachricht und enthält sehr wichtige Informationen für den Nutzer. Zudem soll es möglich sein, dass die Nutzer sehr lange Nachrichten schreiben können damit ihnen bei der Kommilitonen mit ihren Kommukutionen keine Grenzen gesetzt sind" -->
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

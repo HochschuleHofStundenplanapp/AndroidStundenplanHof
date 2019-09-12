@@ -19,13 +19,13 @@ package de.hof.university.app.GDrive;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.arch.core.util.Function;
+import androidx.arch.core.util.Function;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
+import androidx.annotation.Nullable;
+import com.google.android.material.snackbar.Snackbar;
 import android.util.Log;
 import android.widget.Toast;
 
