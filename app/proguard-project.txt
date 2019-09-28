@@ -63,8 +63,8 @@
 # Smack specific configuration
 -keep class de.measite.smack.AndroidDebugger { *; }
 -keep class * implements org.jivesoftware.smack.initializer.SmackInitializer
--keep class * implements org.jivesoftware.smack.provider.IQProvider
--keep class * implements org.jivesoftware.smack.provider.PacketExtensionProvider
+-keep class * extends org.jivesoftware.smack.provider.IQProvider
+-keep class * extends org.jivesoftware.smack.provider.PacketExtensionProvider
 -keep class * extends org.jivesoftware.smack.packet.Packet
 
 -keep class org.jivesoftware.smack.** { *; }

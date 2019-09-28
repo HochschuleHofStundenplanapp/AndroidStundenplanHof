@@ -56,8 +56,8 @@ android {
 		targetSdkVersion 28
 		minSdkVersion 16
 
-		versionCode 37
-		versionName '4.8'
+		versionCode 38
+		versionName '4.9'
 
 		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 		multiDexEnabled = true
@@ -210,13 +210,14 @@ dependencies {
 	implementation 'org.jsoup:jsoup:1.12.1'
 	// Die Versionsnummer sollte die gleiche sein
 	//implementation 'com.google.android.gms:play-services:12.+'
-	implementation 'com.google.android.gms:play-services-gcm:16.+'
-	implementation 'com.google.android.gms:play-services-auth:16.+'
-	implementation 'com.google.android.gms:play-services-drive:16.+'
-
+	implementation 'com.google.android.gms:play-services-gcm:17.0.0'
+	implementation 'com.google.android.gms:play-services-auth:17.0.0'
+	implementation 'com.google.android.gms:play-services-drive:17.0.0'
+	
 	implementation 'com.google.firebase:firebase-messaging:17.+'
+	//implementation 'com.google.firebase:firebase-messaging:20.0.0'
 	implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
-	implementation 'org.osmdroid:osmdroid-android:5.+'
+	implementation 'org.osmdroid:osmdroid-android:6.1.0'
 	implementation 'junit:junit:4.13-beta-3'
 	//if using constraint-layout above 2.+ the minSdkVersion must be 18
 	implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
