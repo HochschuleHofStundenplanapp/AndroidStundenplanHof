@@ -30,10 +30,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.navigation.NavigationView;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,7 +38,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.material.navigation.NavigationView;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -67,250 +68,250 @@ import de.hof.university.app.R;
 
 public class MapFragment extends Fragment {
 
-    final private int REQUEST_CODE_ASK_PERMISSIONS = 1;
-    private final static String TAG = "MapFragment";
+	final private int REQUEST_CODE_ASK_PERMISSIONS = 1;
+	private final static String TAG = "MapFragment";
 
-    private MapView myOpenMapView;
-    private IMapController myMapController;
-    private LocationManager locationManager;
-    private LocationListener locationListener;
-    private Marker marker;
+	private MapView myOpenMapView;
+	private IMapController myMapController;
+	private LocationManager locationManager;
+	private LocationListener locationListener;
+	private Marker marker;
 
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Speicherort für OSMDroid auf persönlichen Ordner der App setzen
-        Configuration.getInstance().setOsmdroidBasePath(new File(getActivity().getFilesDir(), "OSMDroidBase"));
-        Configuration.getInstance().setOsmdroidTileCache(new File(getActivity().getFilesDir(), "OSMDroidTileCache"));
+	@Override
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		// Speicherort für OSMDroid auf persönlichen Ordner der App setzen
+		Configuration.getInstance().setOsmdroidBasePath(new File(getActivity().getFilesDir(), "OSMDroidBase"));
+		Configuration.getInstance().setOsmdroidTileCache(new File(getActivity().getFilesDir(), "OSMDroidTileCache"));
 
-        return inflater.inflate(R.layout.fragment_map, container, false);
-    }
+		return inflater.inflate(R.layout.fragment_map, container, false);
+	}
 
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+	@SuppressLint("MissingPermission")
+	@Override
+	public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
 
-        myOpenMapView = (MapView) view.findViewById(R.id.mapView);
-        myOpenMapView.setBuiltInZoomControls(true);
-        myOpenMapView.setMultiTouchControls(true);
-        // Falls man möchte das die Karte immmer zur aktuellen Position springt
-        //myOpenMapView.setFlingEnabled(true);
-        // Falls man möchte das man näher ran gezoomt ist
-        myOpenMapView.setTilesScaledToDpi(true);
-        myOpenMapView.getOverlays().add(new CopyrightOverlay(getActivity().getApplicationContext()));
+		myOpenMapView = (MapView) view.findViewById(R.id.mapView);
+		myOpenMapView.setBuiltInZoomControls(true);
+		myOpenMapView.setMultiTouchControls(true);
+		// Falls man möchte das die Karte immmer zur aktuellen Position springt
+		//myOpenMapView.setFlingEnabled(true);
+		// Falls man möchte das man näher ran gezoomt ist
+		myOpenMapView.setTilesScaledToDpi(true);
+		myOpenMapView.getOverlays().add(new CopyrightOverlay(getActivity().getApplicationContext()));
 
-        myMapController = myOpenMapView.getController();
-        myMapController.setZoom(40);
-        marker = new Marker(myOpenMapView);
+		myMapController = myOpenMapView.getController();
+		myMapController.setZoom(40);
+		marker = new Marker(myOpenMapView);
 
-        marker.setIcon(getResources().getDrawable(R.drawable.pin));
+		marker.setIcon(getResources().getDrawable(R.drawable.pin));
 
-        myOpenMapView.getOverlays().add(marker);
-
-
-        CloudmadeUtil.DEBUGMODE = true;
-
-        TilesOverlay x = this.myOpenMapView.getOverlayManager().getTilesOverlay();
-        x.setOvershootTileCache(x.getOvershootTileCache() * 2);
-
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                updateLoc(location);
-                updateLocationInfo(location);
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-            }
-        };
+		myOpenMapView.getOverlays().add(marker);
 
 
-        // Witch Android Version?
-        // before Android 6.0 Marshmallow
-        if (Build.VERSION.SDK_INT < 23) {
-            // überprüfen ob NETWORK_PROVIDER vorhanden ist sonst stützt die App ab
-            if (locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER) && locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-            }
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-            @SuppressLint("MissingPermission") Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            if (lastLocation != null) {
-                updateLoc(lastLocation);
-            }
-        } else {
-            // Android Marshmallow or higher
-            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // Einen Dialog bringen wenn der Nutzer den Haken bei "Nicht noch einmal anzeigen" setzt oder beim ersten Mal
-                if (!ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
-                    new AlertDialog.Builder(getView().getContext())
-                            .setTitle(getString(R.string.needPermissionTitle))
-                            .setMessage(getString(R.string.needPermissionText))
-                            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    //ask for permission
-                                    requestPermission();
-                                }
-                            })
-                            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    //nothing to do here. Just close the message
-                                }
-                            })
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
-                    return;
-                }
-                //ask for permission
-                requestPermission();
-            } else {
-                // we have permission
-                // überprüfen ob NETWORK_PROVIDER vorhanden ist sonst stützt die App ab
-                if (locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER) && locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-                }
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-                final Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                if (lastLocation != null) {
-                    updateLoc(lastLocation);
-                }
-            }
-        }
-    }
+		CloudmadeUtil.DEBUGMODE = true;
 
-    private void requestPermission() {
-        if (Build.VERSION.SDK_INT > 23) {
-            this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_CODE_ASK_PERMISSIONS);
-        }
-    }
+		TilesOverlay x = this.myOpenMapView.getOverlayManager().getTilesOverlay();
+		//deprecated? x.setOvershootTileCache(x.getOvershootTileCache() * 2);
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+		locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
-        if (requestCode == REQUEST_CODE_ASK_PERMISSIONS) {
-            if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+		locationListener = new LocationListener() {
+			@Override
+			public void onLocationChanged(Location location) {
+				updateLoc(location);
+				updateLocationInfo(location);
+			}
 
-                    // überprüfen ob NETWORK_PROVIDER vorhanden ist sonst stützt die App ab
-                    if (locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER) && locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-                        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-                    }
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-                }
-            }
-        }
-    }
+			@Override
+			public void onStatusChanged(String provider, int status, Bundle extras) {
+			}
 
-    @Override
-    public void onResume() {
-        super.onResume();
+			@Override
+			public void onProviderEnabled(String provider) {
+			}
 
-        MainActivity mainActivity = (MainActivity) getActivity();
-        mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='"+ ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack)+"'>"+ getString(R.string.myposition)+"</font>"));
-        mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_accent_24dp);
+			@Override
+			public void onProviderDisabled(String provider) {
+			}
+		};
 
-        NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
-        MenuItem item = navigationView.getMenu().findItem(R.id.nav_experimental);
-        //item.setChecked(true);
-        item.getSubMenu().findItem(R.id.nav_map).setChecked(true);
 
-        if ((ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-		        && (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        // TODO überprüfen ob NETWORK_PROVIDER vorhanden ist sonst stützt die App ab
-        if (locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER) && locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-        }
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-    }
+		// Witch Android Version?
+		// before Android 6.0 Marshmallow
+		if (Build.VERSION.SDK_INT < 23) {
+			// überprüfen ob NETWORK_PROVIDER vorhanden ist sonst stützt die App ab
+			if (locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER) && locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+				locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+			}
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+			@SuppressLint("MissingPermission") Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			if (lastLocation != null) {
+				updateLoc(lastLocation);
+			}
+		} else {
+			// Android Marshmallow or higher
+			if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+				// Einen Dialog bringen wenn der Nutzer den Haken bei "Nicht noch einmal anzeigen" setzt oder beim ersten Mal
+				if (!ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+					new AlertDialog.Builder(getView().getContext())
+							.setTitle(getString(R.string.needPermissionTitle))
+							.setMessage(getString(R.string.needPermissionText))
+							.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									//ask for permission
+									requestPermission();
+								}
+							})
+							.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									//nothing to do here. Just close the message
+								}
+							})
+							.setIcon(android.R.drawable.ic_dialog_alert)
+							.show();
+					return;
+				}
+				//ask for permission
+				requestPermission();
+			} else {
+				// we have permission
+				// überprüfen ob NETWORK_PROVIDER vorhanden ist sonst stützt die App ab
+				if (locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER) && locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+					locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+				}
+				locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+				final Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+				if (lastLocation != null) {
+					updateLoc(lastLocation);
+				}
+			}
+		}
+	}
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        MainActivity mainActivity = (MainActivity) getActivity();
-        NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
-        navigationView.getMenu().findItem(R.id.nav_experimental).getSubMenu().findItem(R.id.nav_map).setChecked(false);
+	private void requestPermission() {
+		if (Build.VERSION.SDK_INT > 23) {
+			this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+					REQUEST_CODE_ASK_PERMISSIONS);
+		}
+	}
 
-        if ((ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-		        && (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        locationManager.removeUpdates(locationListener);
-    }
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-    private void updateLoc(final Location loc) {
-        GeoPoint locGeoPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
-        myMapController.setCenter(locGeoPoint);
-        myOpenMapView.invalidate();
-        updateLocationInfo(loc);
-        marker.setPosition(locGeoPoint);
-    }
+		if (requestCode == REQUEST_CODE_ASK_PERMISSIONS) {
+			if ((grantResults.length > 0) && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+				if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+					locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
-    private void updateLocationInfo(final Location location) {
-        Log.i("LocationInfo", location.toString());
-        TextView addressTextView = (TextView) getView().findViewById(R.id.addressTextView);
+					// überprüfen ob NETWORK_PROVIDER vorhanden ist sonst stützt die App ab
+					if (locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER) && locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+						locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+					}
+					locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+				}
+			}
+		}
+	}
 
-        final Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+	@Override
+	public void onResume() {
+		super.onResume();
 
-        try {
-            String address = getString(R.string.no_address);
+		MainActivity mainActivity = (MainActivity) getActivity();
+		mainActivity.getSupportActionBar().setTitle(Html.fromHtml("<font color='"+ ContextCompat.getColor(MainActivity.getAppContext(), R.color.colorBlack)+"'>"+ getString(R.string.myposition)+"</font>"));
+		mainActivity.getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_accent_24dp);
 
-            final List<Address> listAddresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+		MenuItem item = navigationView.getMenu().findItem(R.id.nav_experimental);
+		//item.setChecked(true);
+		item.getSubMenu().findItem(R.id.nav_map).setChecked(true);
 
-            if ((listAddresses != null) && !listAddresses.isEmpty()) {
-                Log.i("PlaceInfo", listAddresses.get(0).toString());
+		if ((ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+				&& (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+			// TODO: Consider calling
+			//    ActivityCompat#requestPermissions
+			// here to request the missing permissions, and then overriding
+			//   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+			//                                          int[] grantResults)
+			// to handle the case where the user grants the permission. See the documentation
+			// for ActivityCompat#requestPermissions for more details.
+			return;
+		}
+		// TODO überprüfen ob NETWORK_PROVIDER vorhanden ist sonst stützt die App ab
+		if (locationManager.getAllProviders().contains(LocationManager.NETWORK_PROVIDER) && locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+		}
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+	}
 
-                address = getString(R.string.address) + "\n";
+	@Override
+	public void onPause() {
+		super.onPause();
+		MainActivity mainActivity = (MainActivity) getActivity();
+		NavigationView navigationView = (NavigationView) mainActivity.findViewById(R.id.nav_view);
+		navigationView.getMenu().findItem(R.id.nav_experimental).getSubMenu().findItem(R.id.nav_map).setChecked(false);
 
-                if (listAddresses.get(0).getThoroughfare() != null) {
-                    address += listAddresses.get(0).getThoroughfare() + " ";
-                }
-                if (listAddresses.get(0).getSubThoroughfare() != null) {
-                    address += listAddresses.get(0).getSubThoroughfare() + "\n";
-                }
-                if (listAddresses.get(0).getLocality() != null) {
-                    address += listAddresses.get(0).getLocality() + "\n";
-                }
-                if (listAddresses.get(0).getPostalCode() != null) {
-                    address += listAddresses.get(0).getPostalCode() + "\n";
-                }
-                if (listAddresses.get(0).getCountryName() != null) {
-                    address += listAddresses.get(0).getCountryName() + "\n";
-                }
-            }
-            addressTextView.setText(address);
-        } catch (IOException e) {
-            Log.e(TAG, "updateLocationInfo failed");
-        }
-    }
+		if ((ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+				&& (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
+			// TODO: Consider calling
+			//    ActivityCompat#requestPermissions
+			// here to request the missing permissions, and then overriding
+			//   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+			//                                          int[] grantResults)
+			// to handle the case where the user grants the permission. See the documentation
+			// for ActivityCompat#requestPermissions for more details.
+			return;
+		}
+		locationManager.removeUpdates(locationListener);
+	}
+
+	private void updateLoc(final Location loc) {
+		GeoPoint locGeoPoint = new GeoPoint(loc.getLatitude(), loc.getLongitude());
+		myMapController.setCenter(locGeoPoint);
+		myOpenMapView.invalidate();
+		updateLocationInfo(loc);
+		marker.setPosition(locGeoPoint);
+	}
+
+	private void updateLocationInfo(final Location location) {
+		Log.i("LocationInfo", location.toString());
+		TextView addressTextView = (TextView) getView().findViewById(R.id.addressTextView);
+
+		final Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+
+		try {
+			String address = getString(R.string.no_address);
+
+			final List<Address> listAddresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+
+			if ((listAddresses != null) && !listAddresses.isEmpty()) {
+				Log.i("PlaceInfo", listAddresses.get(0).toString());
+
+				address = getString(R.string.address) + "\n";
+
+				if (listAddresses.get(0).getThoroughfare() != null) {
+					address += listAddresses.get(0).getThoroughfare() + " ";
+				}
+				if (listAddresses.get(0).getSubThoroughfare() != null) {
+					address += listAddresses.get(0).getSubThoroughfare() + "\n";
+				}
+				if (listAddresses.get(0).getLocality() != null) {
+					address += listAddresses.get(0).getLocality() + "\n";
+				}
+				if (listAddresses.get(0).getPostalCode() != null) {
+					address += listAddresses.get(0).getPostalCode() + "\n";
+				}
+				if (listAddresses.get(0).getCountryName() != null) {
+					address += listAddresses.get(0).getCountryName() + "\n";
+				}
+			}
+			addressTextView.setText(address);
+		} catch (IOException e) {
+			Log.e(TAG, "updateLocationInfo failed");
+		}
+	}
 }

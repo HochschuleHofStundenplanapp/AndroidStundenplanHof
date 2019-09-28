@@ -27,6 +27,7 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.preference.PreferenceManager;
+
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
@@ -233,6 +234,18 @@ public class SettingsController  {
                     }
                 }
             }
+
+            /* TODO MS
+            (this.getActivity()).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getContext(), "Es gibt Probleme mit der Netzwerkverbindung. Bitte verbinde Dich neu, überprüfe die Zertifikate.",
+                            Toast.LENGTH_SHORT).show();
+                }
+            };
+            */
+
+
             return null;
         }
 

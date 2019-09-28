@@ -19,15 +19,15 @@ package de.hof.university.app.GDrive;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import androidx.arch.core.util.Function;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import androidx.annotation.Nullable;
-import com.google.android.material.snackbar.Snackbar;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.arch.core.util.Function;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -49,6 +49,7 @@ import com.google.android.gms.drive.query.Query;
 import com.google.android.gms.drive.query.SearchableField;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -350,7 +351,8 @@ public class GoogleDriveController {
                     getDriveClient().requestSync();
 
                 }).addOnFailureListener(e -> {
-                    e.printStackTrace();
+                    Log.e( TAG, "GoogleDriveController 1: addOnFailureListener successfull added", e);
+                    //e.printStackTrace();
                     //Toast.makeText(context, "Update " + filename + " failed", Toast.LENGTH_LONG).show();
                 });
             });
@@ -401,7 +403,10 @@ public class GoogleDriveController {
 
                 //We have to either commit or discard Changes Made to to Drive File, we only read from it so we can discard Changes. (There were none)
                 return getDriveResourceClient().discardContents(contents);
-            }).addOnFailureListener(e -> e.printStackTrace());
+            }).addOnFailureListener(e -> {
+                Log.e( TAG, "GoogleDriveController 2: addOnFailureListener successfull added", e);
+                //e.printStackTrace();
+            });
         });
     }
 

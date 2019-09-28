@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 Hof University
+ * Copyright (c) 2018-2019 Hof University
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -42,7 +42,9 @@ import java.io.IOException;
 import de.hof.university.app.util.Define;
 
 public class ChatCommunicator extends AsyncTask<String, String, String> implements MessageListener {
-    
+
+    private final static String TAG = "ChatCommunicator";
+
     private XMPPBOSHConnection conn1;
     private String nickname = ""; //"testuser2";
     private String password = ""; //"TestUser2";
@@ -104,16 +106,20 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
                 createUser(this.nickname,this.password);
                 newUser = false;
             } catch (XmppStringprepException e) {
-                e.printStackTrace();
+                Log.e( TAG, "BOSH connect error 1", e);
                 return "";
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Log.e( TAG, "BOSH connect error 2", e);
+                //e.printStackTrace();
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e( TAG, "BOSH connect error 3", e);
+                //e.printStackTrace();
             } catch (SmackException e) {
-                e.printStackTrace();
+                Log.e( TAG, "BOSH connect error 4", e);
+                //e.printStackTrace();
             } catch (XMPPException e) {
-                e.printStackTrace();
+                Log.e( TAG, "BOSH connect error 5", e);
+                //e.printStackTrace();
             }
         }
         try {
@@ -127,10 +133,10 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
                         .build();
         }
         catch (XmppStringprepException e) {
-                e.printStackTrace();
-                return "";
+            Log.e( TAG, "BOSH connect error 6", e);
+            //e.printStackTrace();
+            return "";
         }
-
 
         conn1 = new XMPPBOSHConnection(config);
 
@@ -138,13 +144,19 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
             conn1.connect();
             conn1.login();
         } catch (XMPPException e) {
-            e.printStackTrace();
+            Log.e( TAG, "BOSH connect error 7", e);
+            //e.printStackTrace();
+            disconnect();
+            return "";
         } catch (SmackException e) {
-            e.printStackTrace();
+            Log.e( TAG, "BOSH connect error 8", e);
+            //e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e( TAG, "BOSH connect error 9", e);
+            //e.printStackTrace();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Log.e( TAG, "BOSH connect error 10", e);
+            //e.printStackTrace();
         } catch (NullPointerException e) {
             /* TODO: --> https://app.hof-university.de:433/ tells me it works ? and then blocks my ip ? :D
              * Here's my original error:
@@ -161,31 +173,41 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
              */
             disconnect();
             Log.e("ChatCommunicator", "Connection XMPPBOSHConnection[not-authenticated] closed with error", e);
-            return null;
+            return "";
         }
         multiChatManager = MultiUserChatManager.getInstanceFor(conn1);
         try {
             jid = JidCreate.entityBareFrom(roomname + "@" + "chat.sl-app01.hof-university.de");
-
-
-            multiChat = multiChatManager.getMultiUserChat(jid);
-            try {
-                joinOrCreate(jid);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (SmackException.NoResponseException e) {
-                e.printStackTrace();
-            } catch (MultiUserChatException.MucAlreadyJoinedException e) {
-                e.printStackTrace();
-            } catch (SmackException.NotConnectedException e) {
-                e.printStackTrace();
-            } catch (XMPPException.XMPPErrorException e) {
-                e.printStackTrace();
-            } catch (MultiUserChatException.NotAMucServiceException e) {
-                e.printStackTrace();
-            }
         } catch (XmppStringprepException e) {
-            e.printStackTrace();
+            Log.e(TAG, "BOSH connect error 17", e);
+            //e.printStackTrace();
+        }
+
+        multiChat = multiChatManager.getMultiUserChat(jid);
+        try {
+            joinOrCreate(jid);
+        } catch (InterruptedException e) {
+            Log.e( TAG, "BOSH connect error 11", e);
+            //e.printStackTrace();
+        } catch (SmackException.NoResponseException e) {
+            Log.e( TAG, "BOSH connect error 12", e);
+            //e.printStackTrace();
+        } catch (MultiUserChatException.MucAlreadyJoinedException e) {
+            Log.e( TAG, "BOSH connect error 13", e);
+            //e.printStackTrace();
+        } catch (SmackException.NotConnectedException e) {
+            Log.e( TAG, "BOSH connect error 14", e);
+            //e.printStackTrace();
+        } catch (XMPPException.XMPPErrorException e) {
+            Log.e( TAG, "BOSH connect error 15", e);
+            //e.printStackTrace();
+        } catch (MultiUserChatException.NotAMucServiceException e) {
+            Log.e( TAG, "BOSH connect error 16", e);
+            //e.printStackTrace();
+        } catch (final XmppStringprepException e) {
+            Log.e( TAG, "BOSH connect error 161", e);
+        } catch (final IllegalArgumentException e ) {
+            Log.e( TAG, "BOSH connect error 162", e);
         }
 
         return "";
@@ -207,39 +229,48 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
             Localpart localpart = Localpart.from(username);
             accMan.createAccount(localpart,password);
         } catch (XmppStringprepException e) {
-            e.printStackTrace();
+            Log.e( TAG, "BOSH connect error 20", e);
+            //e.printStackTrace();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Log.e( TAG, "BOSH connect error 21", e);
+            //e.printStackTrace();
         } catch (SmackException.NoResponseException e) {
-            e.printStackTrace();
+            Log.e( TAG, "BOSH connect error 22", e);
+            //e.printStackTrace();
         } catch (SmackException.NotConnectedException e) {
-            e.printStackTrace();
+            Log.e( TAG, "BOSH connect error 23", e);
+            //e.printStackTrace();
         } catch (XMPPException.XMPPErrorException e) {
-            e.printStackTrace();
+            Log.e( TAG, "BOSH connect error 24", e);
+            //e.printStackTrace();
         }
     }
 
-    private void joinOrCreate(final EntityBareJid jid) throws XmppStringprepException, InterruptedException, SmackException.NoResponseException, MultiUserChatException.MucAlreadyJoinedException, SmackException.NotConnectedException, XMPPException.XMPPErrorException, MultiUserChatException.NotAMucServiceException {
-        Resourcepart nickname = Resourcepart.from(this.nickname);
-        MucEnterConfiguration.Builder mec = multiChat.getEnterConfigurationBuilder(nickname);
+    private void joinOrCreate(final EntityBareJid jid) throws XmppStringprepException, InterruptedException, SmackException.NoResponseException, MultiUserChatException.MucAlreadyJoinedException, SmackException.NotConnectedException, XMPPException.XMPPErrorException, MultiUserChatException.NotAMucServiceException, IllegalArgumentException {
+        final Resourcepart nickname = Resourcepart.from(this.nickname);
+        final MucEnterConfiguration.Builder mec = multiChat.getEnterConfigurationBuilder(nickname);
         mec.requestHistorySince(Define.CHAT_HISTORY_LENGTH);
-        MucEnterConfiguration mucEnterConf = mec.build();
+        final MucEnterConfiguration mucEnterConf = mec.build();
         try {
             multiChat.createOrJoin(mucEnterConf).makeInstant();
-            Form form = multiChat.getConfigurationForm();
-            Form answerForm = form.createAnswerForm();
+            final Form form = multiChat.getConfigurationForm();
+            final Form answerForm = form.createAnswerForm();
             answerForm.setAnswer("muc#roomconfig_roomdesc", subject);
             multiChat.sendConfigurationForm(answerForm);
-        }catch (NullPointerException e){
+        } catch (final NullPointerException e){
             multiChat.join(nickname);
-
         }
+        catch (final Exception e){
+            Log.e(TAG, "createOrJoin fails", e);
+            throw ( e ) ;
+        }
+
         if(multiChat.isJoined()){
             multiChat.addMessageListener(this);
         }
     }
 
-    public void sendMessage(String message){
+    public void sendMessage(final String message){
         try {
             if (conn1.isConnected()){
                 multiChat.sendMessage(message);
@@ -250,25 +281,41 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
                 multiChat.sendMessage(message);
             }
         } catch (SmackException.NotConnectedException e) {
-            e.printStackTrace();
+            Log.e( TAG, "BOSH connect error 30", e);
+            //e.printStackTrace();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Log.e( TAG, "BOSH connect error 31", e);
+            //e.printStackTrace();
         } catch (MultiUserChatException.MucAlreadyJoinedException e) {
-            e.printStackTrace();
+            Log.e( TAG, "BOSH connect error 32", e);
+            //e.printStackTrace();
         } catch (XMPPException.XMPPErrorException e) {
-            e.printStackTrace();
+            Log.e( TAG, "BOSH connect error 33", e);
+            //e.printStackTrace();
         } catch (XmppStringprepException e) {
-            e.printStackTrace();
+            Log.e( TAG, "BOSH connect error 34", e);
+            //e.printStackTrace();
         } catch (SmackException.NoResponseException e) {
-            e.printStackTrace();
+            Log.e( TAG, "BOSH connect error 35", e);
+            //e.printStackTrace();
         } catch (MultiUserChatException.NotAMucServiceException e) {
-            e.printStackTrace();
+            Log.e( TAG, "BOSH connect error 36", e);
+            //e.printStackTrace();
         } catch (XMPPException e) {
-            e.printStackTrace();
+            Log.e( TAG, "BOSH connect error 37", e);
+            //e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e( TAG, "BOSH connect error 38", e);
+            //e.printStackTrace();
         } catch (SmackException e) {
-            e.printStackTrace();
+            Log.e( TAG, "BOSH connect error 39", e);
+            //e.printStackTrace();
+        }
+        catch (final IllegalArgumentException e) {
+            Log.e( TAG, "BOSH connect error 398", e);
+        }
+        catch (final Exception e ) {
+            Log.e( TAG, "BOSH connect error 399", e);
         }
     }
 
@@ -280,14 +327,6 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
 
         MessageSingleton.getInstance().clear();
     }
-
-
-
-
-
-
-
-
 
 
 }
