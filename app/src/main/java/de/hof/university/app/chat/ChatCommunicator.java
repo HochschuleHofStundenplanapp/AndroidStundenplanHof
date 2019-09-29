@@ -120,6 +120,18 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
             } catch (XMPPException e) {
                 Log.e( TAG, "BOSH connect error 5", e);
                 //e.printStackTrace();
+            } catch ( final IllegalStateException e) {
+                Log.e( TAG, "BOSH connect error 50", e );
+
+            } catch ( final ClassCastException e ) {
+                // in case of error, the SSL Library wants to Log something. Since SDK28 onwards there is problem:
+                // The Logfactory changed somehow internal
+                Log.e( TAG, "BOSH connect error 51",e);
+                return "";
+            }
+            catch ( final Exception e ) {
+                Log.e( TAG, "BOSH connect error 52: general purpose handler", e );
+                return "";
             }
         }
         try {
@@ -131,12 +143,21 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
                         .setHost(Define.CHAT_SERVER_APP_HOF_UNIVERSITY_DE)
                         .setPort(Define.CHAT_SERVER_BOSH_PORT)
                         .build();
-        }
-        catch (XmppStringprepException e) {
+        } catch (XmppStringprepException e) {
             Log.e( TAG, "BOSH connect error 6", e);
             //e.printStackTrace();
             return "";
+        } catch ( final ClassCastException e ) {
+            // in case of error, the SSL Library wants to Log something. Since SDK28 onwards there is problem:
+            // The Logfactory changed somehow internal
+            Log.e( TAG, "BOSH connect error 51",e);
+            return "";
         }
+        catch ( final Exception e ) {
+            Log.e( TAG, "BOSH connect error 60: general purpose handler", e );
+            return "";
+        }
+
 
         conn1 = new XMPPBOSHConnection(config);
 
@@ -174,7 +195,17 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
             disconnect();
             Log.e("ChatCommunicator", "Connection XMPPBOSHConnection[not-authenticated] closed with error", e);
             return "";
+        } catch ( final ClassCastException e ) {
+            // in case of error, the SSL Library wants to Log something. Since SDK28 onwards there is problem:
+            // The Logfactory changed somehow internal
+            Log.e( TAG, "BOSH connect error 100",e);
+            return "";
+        } catch ( final Exception e ) {
+            Log.e( TAG, "BOSH connect error 101: general purpose handler", e );
+            return "";
         }
+
+
         multiChatManager = MultiUserChatManager.getInstanceFor(conn1);
         try {
             jid = JidCreate.entityBareFrom(roomname + "@" + "chat.sl-app01.hof-university.de");
@@ -208,6 +239,8 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
             Log.e( TAG, "BOSH connect error 161", e);
         } catch (final IllegalArgumentException e ) {
             Log.e( TAG, "BOSH connect error 162", e);
+        } catch (final Exception e ) {
+            Log.e( TAG, "BOSH connect error 163: general purpose handler", e);
         }
 
         return "";
@@ -224,9 +257,11 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
 
     public void createUser(String username, String password){
         AccountManager accMan = AccountManager.getInstance(conn1);
+        if (accMan == null )
+            return;
         accMan.sensitiveOperationOverInsecureConnection(true);
         try {
-            Localpart localpart = Localpart.from(username);
+            final Localpart localpart = Localpart.from(username);
             accMan.createAccount(localpart,password);
         } catch (XmppStringprepException e) {
             Log.e( TAG, "BOSH connect error 20", e);
@@ -243,12 +278,21 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
         } catch (XMPPException.XMPPErrorException e) {
             Log.e( TAG, "BOSH connect error 24", e);
             //e.printStackTrace();
+        } catch (final NullPointerException e ) {
+            Log.e( TAG, "BOSH no connection to server 241", e );
+        } catch (final Exception e) {
+            //general purpose catcher to avoid any thrown exception causing an app crash
+            Log.e( TAG, "BOSH general purpose exception catcher 242", e );
         }
+
+
     }
 
     private void joinOrCreate(final EntityBareJid jid) throws XmppStringprepException, InterruptedException, SmackException.NoResponseException, MultiUserChatException.MucAlreadyJoinedException, SmackException.NotConnectedException, XMPPException.XMPPErrorException, MultiUserChatException.NotAMucServiceException, IllegalArgumentException {
         final Resourcepart nickname = Resourcepart.from(this.nickname);
         final MucEnterConfiguration.Builder mec = multiChat.getEnterConfigurationBuilder(nickname);
+        if (mec == null)
+            return;
         mec.requestHistorySince(Define.CHAT_HISTORY_LENGTH);
         final MucEnterConfiguration mucEnterConf = mec.build();
         try {
