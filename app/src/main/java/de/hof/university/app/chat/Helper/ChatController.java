@@ -34,7 +34,14 @@ public class ChatController {
     private ChatCommunicator chatCommunicator;
     private SharedPreferences prefs;
 
+/*
+    static {
+        System.setProperty("org.apache.commons.logging.Log",
+                "org.apache.commons.logging.impl.NoOpLog");
+    }
+*/
     public ChatController(Context context, String splusname, String subject){
+
         userGen = new UserGenerator();
         conManager = new ConnectionMannager(context);
         this.splusname = splusname;
