@@ -20,11 +20,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,6 +30,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Observable;
@@ -82,15 +83,23 @@ public class ChatFragment extends Fragment implements Observer {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
+     * @param splusId Parameter 1.
+     * @param label Titel der Vorlesung
      * @return A new instance of fragment ChatFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ChatFragment newInstance(String param1, String param2) {
-        ChatFragment fragment = new ChatFragment();
+    public static ChatFragment newInstance(final String splusId, final String label) {
+
+
+        //TODO MS abschalten des Chats.
+        //Der Logger in SDK28 fliegt um die Ohren, wenn der Chat-Server nicht vorhanden ist.
+        //
+        if (true) return null;
+
+        final ChatFragment fragment = new ChatFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_SPLUS, param1);
-        args.putString(ARG_LECTURE,param2);
+        args.putString(ARG_SPLUS, splusId);
+        args.putString(ARG_LECTURE,label);
         fragment.setArguments(args);
         return fragment;
     }
@@ -98,6 +107,7 @@ public class ChatFragment extends Fragment implements Observer {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             MessageSingleton.getInstance().addObserver(this);
             mySplus = getArguments().getString(ARG_SPLUS);
