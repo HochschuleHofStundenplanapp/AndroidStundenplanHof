@@ -21,14 +21,18 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import androidx.core.app.NotificationCompat;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
+
+import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import de.hof.university.app.MainActivity;
 import de.hof.university.app.R;
+import de.hof.university.app.data.DataManager;
 import de.hof.university.app.util.Define;
 
 /*
@@ -95,4 +99,46 @@ public final class FcmMessagingService extends FirebaseMessagingService {
 		org.junit.Assert.assertTrue(notificationManager != null);
 		notificationManager.notify(0, notificationBuilder.build());
 	}
+
+
+	/*
+	On initial startup of your app, the FCM SDK generates a registration token for
+	the client app instance. If you want to target single devices, or create
+	device groups, you'll need to access this token.
+
+	You can access the token's value by creating a new class which extends FirebaseInstanceIdService.
+	In that class, call getToken within onTokenRefresh , and log the value as shown:
+
+	 The onTokenRefresh callback fires whenever a new token is generated,
+	 so calling getToken in its context ensures that you are accessing a current,
+	 available registration token. FirebaseInstanceID.getToken() returns null
+	 if the token has not yet been generated.
+	*/
+	@Override
+	public void onNewToken(String sNewToken) {
+		super.onNewToken(sNewToken);
+
+		// Get updated InstanceID token.
+		Log.d("New Token: ", sNewToken);
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+		// Für alten Token deregistrieren
+		new RegisterLectures().deRegisterLectures();
+
+		//SharedPreferences sharedPreferences = getApplicationContext().getApplicationContext().getSharedPreferences(getString(R.string.FCM_PREF), Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sharedPref.edit();
+		Log.d(TAG, "New TOKEN: " + sNewToken);
+		editor.putString( Define.FCM_TOKEN, sNewToken);
+		editor.apply();
+
+		//erneut Registrieren falls es einen neuen Token gibt
+		DataManager.getInstance().registerFCMServer(getApplicationContext());
+	}
+
+	// After you have obtained the token, you can send it to your app server.
+	// See the Instance ID API reference for full detail on the API.
+	//  Implement this method to send any registration to your app's servers.
+	//private void sendRegistrationToServer(final String refreshedToken) {
+	// Jonas :-)
+	//}
 }
