@@ -30,7 +30,8 @@ import org.jivesoftware.smackx.muc.MucEnterConfiguration;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.MultiUserChatException;
 import org.jivesoftware.smackx.muc.MultiUserChatManager;
-import org.jivesoftware.smackx.xdata.Form;
+import org.jivesoftware.smackx.xdata.form.FillableForm;
+import org.jivesoftware.smackx.xdata.form.Form;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Localpart;
@@ -298,7 +299,7 @@ public class ChatCommunicator extends AsyncTask<String, String, String> implemen
         try {
             multiChat.createOrJoin(mucEnterConf).makeInstant();
             final Form form = multiChat.getConfigurationForm();
-            final Form answerForm = form.createAnswerForm();
+            final FillableForm answerForm = form.getFillableForm();
             answerForm.setAnswer("muc#roomconfig_roomdesc", subject);
             multiChat.sendConfigurationForm(answerForm);
         } catch (final NullPointerException e){
