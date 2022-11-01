@@ -15,16 +15,17 @@
  */
 
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 
 android {
+	compileSdk 33
+	
 	/**
 	 * compileSdkVersion specifies the Android API level Gradle should use to
 	 * compile your app. This means your app can use the API features included in
 	 * this API level and lower.
 	 */
-	compileSdkVersion 29
 	
 	/**
 	 * buildToolsVersion specifies the version of the SDK build tools, command-line
@@ -34,7 +35,7 @@ android {
 	 * This property is optional because the plugin uses a recommended version of
 	 * the build tools by default.
 	 */
-	buildToolsVersion '29.0.2'
+	buildToolsVersion '33.0.0'
 	
 	compileOptions {
 		// Error: Invoke-customs are only supported starting with Android O (--min-api 26)
@@ -53,11 +54,11 @@ android {
 	 */
 	defaultConfig {
 		applicationId 'de.hof.university.app'
-		targetSdkVersion 29
-		minSdkVersion 16
-
-		versionCode 38
-		versionName '4.9'
+		targetSdk 33
+		minSdk 21
+		
+		versionCode 39
+		versionName '5.0'
 
 		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 		multiDexEnabled = true
@@ -140,6 +141,7 @@ android {
 			jniDebuggable false
 			//schöneren APK Namen
 			archivesBaseName = 'Hochschule_Hof_Stundenplan_App'
+			multiDexEnabled true
 		}
 		debug {
 			debuggable true
@@ -148,31 +150,27 @@ android {
 			// damit wir die debug Version parallel zu der release Version installieren können
 			applicationIdSuffix = ".debug"
 			versionNameSuffix "-dev"
+			multiDexEnabled true
+		}
+	}
+	packagingOptions {
+		resources {
+			excludes += ['META-INF/DEPENDENCIES', 'LICENCE.txt', 'junit/runner/smalllogo.gif', 'junit/runner/logo.gif', 'LICENSE-junit.txt', 'okhttp3/internal/publicsuffix/publicsuffixes.gz']
 		}
 	}
 	
 	// Lint found fatal errors while assembling a release target
-	lintOptions {
-		//checkReleaseBuilds false
-
-		// Or, if you prefer, you can continue to check for errors in release builds,
-		// but continue the build even when errors are found:
+	
+	lint {
 		abortOnError false
-		//disable 'MissingTranslation'
 	}
+	namespace 'de.hof.university.app'
 	
-	packagingOptions {
-		exclude 'META-INF/DEPENDENCIES'
+	// Kotlin
+	//buildFeatures {
+	//	viewBinding = true
+	//}
 	
-		//junit stuff, not necessary
-		exclude 'LICENCE.txt' // from old code
-		exclude 'junit/runner/smalllogo.gif'
-		exclude 'junit/runner/logo.gif'
-		exclude 'LICENSE-junit.txt'
-		
-		//Picasso uses OkHttp3 Classes and they use Database for Cookie prevention
-		exclude "okhttp3/internal/publicsuffix/publicsuffixes.gz"
-	}
 }
 
 /**
@@ -184,46 +182,46 @@ android {
 dependencies {
 	implementation fileTree(include: ['*.jar'], dir: 'libs')
 	// Die Versionsnummer sollte die gleiche sein
-	implementation 'com.google.android.material:material:1.0.0'
+	implementation 'com.google.android.material:material:1.7.0'
 	implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-	implementation 'androidx.core:core:1.1.0'
+	implementation 'androidx.core:core:1.9.0'
 	implementation 'androidx.legacy:legacy-support-core-utils:1.0.0'
 	implementation 'androidx.legacy:legacy-support-core-ui:1.0.0'
-	implementation 'androidx.media:media:1.1.0'
-	implementation 'androidx.fragment:fragment:1.1.0'
+	implementation 'androidx.media:media:1.6.0'
+	implementation 'androidx.fragment:fragment:1.5.4'
 	
-	implementation 'androidx.appcompat:appcompat:1.1.0'
+	implementation 'androidx.appcompat:appcompat:1.5.1'
 	implementation 'androidx.gridlayout:gridlayout:1.0.0'
-	implementation 'androidx.recyclerview:recyclerview:1.0.0'
-	implementation 'androidx.preference:preference:1.1.0'
+	implementation 'androidx.recyclerview:recyclerview:1.2.1'
+	implementation 'androidx.preference:preference:1.2.0'
 
 	implementation 'androidx.legacy:legacy-preference-v14:1.0.0'
 	
-	implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+	implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 	//if using constraint-layout above 2.+ the minSdkVersion must be 18
-	implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+	implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 	
 ////	implementation "commons-logging:commons-logging-api:1.1"
 	
 	//smack
-	implementation 'org.igniterealtime.smack:smack-android-extensions:4.3.4'
-	implementation 'org.igniterealtime.smack:smack-tcp:4.3.4'
-	implementation 'org.igniterealtime.smack:smack-extensions:4.3.4'
-	implementation 'org.igniterealtime.smack:smack-bosh:4.3.4'
+	implementation 'org.igniterealtime.smack:smack-java8:4.4.3'
+	implementation 'org.igniterealtime.smack:smack-android-extensions:4.4.3'
+	implementation 'org.igniterealtime.smack:smack-tcp:4.4.3'
+	implementation 'org.igniterealtime.smack:smack-extensions:4.4.3'
+	implementation 'org.igniterealtime.smack:smack-im:4.4.3'
+	implementation 'org.igniterealtime.smack:smack-bosh:4.4.3'
 
 
 	// jsoup HTML parser library @ http://jsoup.org/
-	implementation 'org.jsoup:jsoup:1.12.1'
+	implementation 'org.jsoup:jsoup:1.15.3'
 	// Die Versionsnummer sollte die gleiche sein
-	//implementation 'com.google.android.gms:play-services:12.+'
 	implementation 'com.google.android.gms:play-services-gcm:17.0.0'
-	implementation 'com.google.android.gms:play-services-auth:17.0.0'
+	implementation 'com.google.android.gms:play-services-auth:20.3.0'
 	implementation 'com.google.android.gms:play-services-drive:17.0.0'
 	
-	implementation 'com.google.firebase:firebase-messaging:17.6.0'
-	//implementation 'com.google.firebase:firebase-messaging:20.0.0'
-	implementation 'org.osmdroid:osmdroid-android:6.1.2'
-	implementation 'junit:junit:4.13-beta-3'
+	implementation 'com.google.firebase:firebase-messaging:23.1.0'
+	implementation 'org.osmdroid:osmdroid-android:6.1.14'
+	implementation 'junit:junit:4.13.2'
 
 	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
@@ -246,4 +244,7 @@ configurations.all {
 	
 	
 	exclude group: 'com.android.support', module: ''
+	
+	// Compile SDK 33
+	exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel-ktx'
 }

@@ -71,3 +71,5 @@ gradlew.bat
 
 app/release/output.json
 
+.idea/
+app/build/outputs/sdk-dependencies/StundenplanHofAppRelease/sdkDependencies.txt
