@@ -181,7 +181,6 @@
     <string name="onboarding_error_not_selected_message_menu">Tarif und Mensa müssen ausgewählt sein</string>
     <string name="onboarding_welcome_title">Willkommen</string>
     <string name="onboarding_welcome_button_text">Einrichtung starten</string>
-    <string name="onboarding_welcome_text">Schnell un</string>
     <string name="onboarding_login_info">Dieser Login wird genutzt, um dein Notenblatt/Notenbekanntgabe oder die Raum-Suche anzuzeigen (Experimentelle Features müssen aktiviert sein).</string>
     <string name="onboarding_welcome_text_title">Schnell und einfach</string>
     <string name="onboarding_welcome_text_message">Folge den Anweisungen, um deinen persönlichen Stundenplan anzulegen</string>

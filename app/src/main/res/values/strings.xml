@@ -250,7 +250,7 @@
     <string name="schedule_deleted">Schedule will be deleted</string>
     <string name="cloudOverride">Cloud Data will be overwritten</string>
 
-<string name="chatfragment">chatfragment</string>
+<string name="chatfragment" translatable="false">chatfragment</string>
     <string name="chat_no_internet">Are you connected to the internet?</string>
     <string name="chat_offline">You are offline.</string>
     <string name="send">Send</string>
